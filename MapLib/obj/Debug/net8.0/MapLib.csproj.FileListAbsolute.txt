@@ -1,0 +1,11 @@
+D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\MapLib.deps.json
+D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\MapLib.dll
+D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.AssemblyInfoInputs.cache
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.AssemblyInfo.cs
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.csproj.CoreCompileInputs.cache
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.dll
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\refint\MapLib.dll
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\ref\MapLib.dll

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34728.123
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game2_5D", "Game2_5D\Game2_5D.csproj", "{3C884D27-7917-49C3-895A-2D7C899AD9CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapLib", "MapLib\MapLib.csproj", "{4601A374-4850-4B05-86B4-0951A14055BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenLib", "ScreenLib\ScreenLib.csproj", "{3BED9508-16D4-40BD-B251-C21A0E621A7B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C884D27-7917-49C3-895A-2D7C899AD9CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C884D27-7917-49C3-895A-2D7C899AD9CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C884D27-7917-49C3-895A-2D7C899AD9CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C884D27-7917-49C3-895A-2D7C899AD9CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4601A374-4850-4B05-86B4-0951A14055BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4601A374-4850-4B05-86B4-0951A14055BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4601A374-4850-4B05-86B4-0951A14055BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4601A374-4850-4B05-86B4-0951A14055BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BED9508-16D4-40BD-B251-C21A0E621A7B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BED9508-16D4-40BD-B251-C21A0E621A7B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BED9508-16D4-40BD-B251-C21A0E621A7B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BED9508-16D4-40BD-B251-C21A0E621A7B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {674455B2-4847-4F14-BD3B-CF38EAA6C533}
+	EndGlobalSection
+EndGlobal
