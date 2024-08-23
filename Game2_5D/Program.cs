@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Runtime.InteropServices;
 using MapLib;
+using ScreenLib;
 
 [DllImport("user32.dll")]
 static extern short GetAsyncKeyState(int key);
@@ -19,9 +20,6 @@ const int VK_RIGHT = 0x27;
 
 
 
-
-const int ScreenWidth = 200;
-const int ScreenHeight = 50;
 double playerFov = Math.PI / 3;
 double playerY = 5;
 double playerX = 5;
@@ -35,11 +33,9 @@ map.addBlockToMap(2, 5);
 map.addBlockToMap(7, 7);
 
 
-char[]  Screen = new char[ScreenWidth * ScreenHeight];
+Screen screen = new Screen(200, 50);
 
-Console.SetWindowSize(ScreenWidth, ScreenHeight);
-Console.SetBufferSize(ScreenWidth, ScreenHeight);
-Console.CursorVisible =  false;
+
 
 char c = ' ';
 DateTime from = DateTime.Now;
@@ -89,9 +85,9 @@ while (true)
         playerA -= elapsed;
 
 
-    for (int x = 0; x < ScreenWidth; x++)
+    for (int x = 0; x < screen.ScreenWidth; x++)
     {
-        double player = playerA + (playerFov / 2) - ((x * playerFov) / ScreenWidth);
+        double player = playerA + (playerFov / 2) - ((x * playerFov) / screen.ScreenWidth);
 
         double rayX = Math.Sin(player);
         double rayY = Math.Cos(player);
@@ -118,27 +114,27 @@ while (true)
             }
         }
 
-        int ceiling = (int)(ScreenHeight / 2d - ScreenHeight / distanceWall);
-        int floor = ScreenHeight - ceiling;
-        for (int y = 0; y < ScreenHeight; y++)
+        int ceiling = (int)(screen.ScreenHeight / 2d - screen.ScreenHeight / distanceWall);
+        int floor = screen.ScreenHeight - ceiling;
+        for (int y = 0; y < screen.ScreenHeight; y++)
         {
             if (y <= ceiling)
             {
-                Screen[y * ScreenWidth + x] = ' ';
+                screen.ScreenChr[y * screen.ScreenWidth + x] = ' ';
             }
             else if (y > ceiling && y <= floor)
             {
-                Screen[y * ScreenWidth + x] = '#';
+                screen.ScreenChr[y * screen.ScreenWidth + x] = '#';
             }
             else
             {
-                Screen[y * ScreenWidth + x] = '.';
+                screen.ScreenChr[y * screen.ScreenWidth + x] = '.';
             }
         }
     }
 
     Console.SetCursorPosition(0, 0);
     // Console.WriteLine($"X: {playerX}  | Y: {playerY}  |  playerA: {playerA}");
-    Console.Write(Screen);
+    Console.Write(screen.ScreenChr);
 }
 map.printMap();

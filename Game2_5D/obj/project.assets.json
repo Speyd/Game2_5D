@@ -11,6 +11,16 @@
         "runtime": {
           "bin/placeholder/MapLib.dll": {}
         }
+      },
+      "ScreenLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ScreenLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ScreenLib.dll": {}
+        }
       }
     }
   },
@@ -19,11 +29,17 @@
       "type": "project",
       "path": "../MapLib/MapLib.csproj",
       "msbuildProject": "../MapLib/MapLib.csproj"
+    },
+    "ScreenLib/1.0.0": {
+      "type": "project",
+      "path": "../ScreenLib/ScreenLib.csproj",
+      "msbuildProject": "../ScreenLib/ScreenLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "MapLib >= 1.0.0"
+      "MapLib >= 1.0.0",
+      "ScreenLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -55,6 +71,9 @@
           "projectReferences": {
             "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
+            },
+            "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
             }
           }
         }

@@ -1,0 +1,11 @@
+D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\ScreenLib.deps.json
+D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\ScreenLib.dll
+D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\ScreenLib.pdb
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.AssemblyInfoInputs.cache
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.AssemblyInfo.cs
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.csproj.CoreCompileInputs.cache
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.dll
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\refint\ScreenLib.dll
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.pdb
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ref\ScreenLib.dll

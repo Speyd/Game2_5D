@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v8.0": {
       "Game2_5D/1.0.0": {
         "dependencies": {
-          "MapLib": "1.0.0"
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
         },
         "runtime": {
           "Game2_5D.dll": {}
@@ -17,6 +18,11 @@
       "MapLib/1.0.0": {
         "runtime": {
           "MapLib.dll": {}
+        }
+      },
+      "ScreenLib/1.0.0": {
+        "runtime": {
+          "ScreenLib.dll": {}
         }
       }
     }
@@ -28,6 +34,11 @@
       "sha512": ""
     },
     "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ScreenLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

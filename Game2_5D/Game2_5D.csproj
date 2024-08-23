@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
+    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 
 </Project>
