@@ -2,6 +2,16 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "ControlLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ControlLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ControlLib.dll": {}
+        }
+      },
       "MapLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -25,6 +35,11 @@
     }
   },
   "libraries": {
+    "ControlLib/1.0.0": {
+      "type": "project",
+      "path": "../ControlLib/ControlLib.csproj",
+      "msbuildProject": "../ControlLib/ControlLib.csproj"
+    },
     "MapLib/1.0.0": {
       "type": "project",
       "path": "../MapLib/MapLib.csproj",
@@ -38,6 +53,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "ControlLib >= 1.0.0",
       "MapLib >= 1.0.0",
       "ScreenLib >= 1.0.0"
     ]
@@ -69,6 +85,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj"
+            },
             "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
             },

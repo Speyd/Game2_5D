@@ -18,3 +18,5 @@ D:\C++ проекты\Game2_5D\Game2_5D\obj\Debug\net8.0\Game2_5D.csproj.Assembl
 D:\C++ проекты\Game2_5D\Game2_5D\obj\Debug\net8.0\Game2_5D.csproj.Up2Date
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ScreenLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ControlLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ControlLib.pdb

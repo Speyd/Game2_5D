@@ -1,0 +1,11 @@
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ControlLib.deps.json
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ControlLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ControlLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.AssemblyInfoInputs.cache
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.AssemblyInfo.cs
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.CoreCompileInputs.cache
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\refint\ControlLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ref\ControlLib.dll

@@ -4,17 +4,11 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using MapLib;
 using ScreenLib;
+using ControlLib;
 
-[DllImport("user32.dll")]
-static extern short GetAsyncKeyState(int key);
 
-// Коды клавиш
-const int VK_W = 0x57;
-const int VK_S = 0x53;
-const int VK_A = 0x41;
-const int VK_D = 0x44;
-const int VK_LEFT = 0x25;
-const int VK_RIGHT = 0x27;
+
+
 
 
 
@@ -34,55 +28,13 @@ map.addBlockToMap(7, 7);
 
 
 Screen screen = new Screen(200, 50);
-
+Control control = new Control();
 
 
 char c = ' ';
-DateTime from = DateTime.Now;
 while (true)
 {
-
-    DateTime dateTime = DateTime.Now;
-    double elapsed = (dateTime - from).TotalSeconds;
-    from = DateTime.Now;
-
-    bool isWPressed = (GetAsyncKeyState(VK_W) & 0x8000) != 0;
-    bool isSPressed = (GetAsyncKeyState(VK_S) & 0x8000) != 0;
-    bool isAPressed = (GetAsyncKeyState(VK_A) & 0x8000) != 0;
-    bool isDPressed = (GetAsyncKeyState(VK_D) & 0x8000) != 0;
-    bool isLeftArrowPressed = (GetAsyncKeyState(VK_LEFT) & 0x8000) != 0;
-    bool isRightArrowPressed = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
-
-
-
-    double moveSpeed = 0.003;
-    //double turnSpeed = 0.003;
-    if (isWPressed)
-    {
-        playerX += Math.Sin(playerA) * 3 * moveSpeed;
-        playerY += Math.Cos(playerA) * 3 * moveSpeed;
-    }
-    if (isSPressed)
-    {
-        playerX -= Math.Sin(playerA) * 3 * moveSpeed;
-        playerY -= Math.Cos(playerA) * 3 * moveSpeed;
-    }
-    if (isAPressed)
-    {
-        playerX += 2 * moveSpeed * Math.Sin(playerA + Math.PI / 2);
-        playerY += 2 * moveSpeed * Math.Cos(playerA + Math.PI / 2);
-    }
-    if (isDPressed)
-    {
-        playerX -= 2 * moveSpeed * Math.Sin(playerA + Math.PI / 2);
-        playerY -= 2 * moveSpeed * Math.Cos(playerA + Math.PI / 2);
-    }
-
-
-    if (isLeftArrowPressed)
-        playerA += elapsed;
-    if (isRightArrowPressed)
-        playerA -= elapsed;
+    control.makePressed(ref playerX, ref playerY, ref playerA);
 
 
     for (int x = 0; x < screen.ScreenWidth; x++)
@@ -134,7 +86,7 @@ while (true)
     }
 
     Console.SetCursorPosition(0, 0);
-    // Console.WriteLine($"X: {playerX}  | Y: {playerY}  |  playerA: {playerA}");
+    //Console.WriteLine($"X: {playerX}  | Y: {playerY}  |  playerA: {playerA}");
     Console.Write(screen.ScreenChr);
 }
 map.printMap();
