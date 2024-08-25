@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLib", "MapLib\MapLib.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenLib", "ScreenLib\ScreenLib.csproj", "{3BED9508-16D4-40BD-B251-C21A0E621A7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ControlLib", "ControlLib\ControlLib.csproj", "{5ADA6C9F-24BE-4962-BD5F-C383628A0669}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ControlLib", "ControlLib\ControlLib.csproj", "{5ADA6C9F-24BE-4962-BD5F-C383628A0669}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityLib", "EntityLib\EntityLib.csproj", "{D552CC9B-85D1-4349-8DE8-BA6BF4D3D136}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RenderLib", "RenderLib\RenderLib.csproj", "{4B117199-8F6E-4CAF-AC4D-400670F2F917}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{5ADA6C9F-24BE-4962-BD5F-C383628A0669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5ADA6C9F-24BE-4962-BD5F-C383628A0669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5ADA6C9F-24BE-4962-BD5F-C383628A0669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D552CC9B-85D1-4349-8DE8-BA6BF4D3D136}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D552CC9B-85D1-4349-8DE8-BA6BF4D3D136}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D552CC9B-85D1-4349-8DE8-BA6BF4D3D136}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D552CC9B-85D1-4349-8DE8-BA6BF4D3D136}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B117199-8F6E-4CAF-AC4D-400670F2F917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B117199-8F6E-4CAF-AC4D-400670F2F917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B117199-8F6E-4CAF-AC4D-400670F2F917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B117199-8F6E-4CAF-AC4D-400670F2F917}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

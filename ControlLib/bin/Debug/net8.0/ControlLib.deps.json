@@ -7,14 +7,27 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "ControlLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0"
+        },
         "runtime": {
           "ControlLib.dll": {}
+        }
+      },
+      "EntityLib/1.0.0": {
+        "runtime": {
+          "EntityLib.dll": {}
         }
       }
     }
   },
   "libraries": {
     "ControlLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EntityLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

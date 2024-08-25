@@ -10,6 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
+    <ProjectReference Include="..\RenderLib\RenderLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 

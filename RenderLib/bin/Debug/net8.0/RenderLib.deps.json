@@ -1,0 +1,62 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "RenderLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "RenderLib.dll": {}
+        }
+      },
+      "EntityLib/1.0.0": {
+        "runtime": {
+          "EntityLib.dll": {}
+        }
+      },
+      "MapLib/1.0.0": {
+        "runtime": {
+          "MapLib.dll": {}
+        }
+      },
+      "ScreenLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0"
+        },
+        "runtime": {
+          "ScreenLib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "RenderLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EntityLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ScreenLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

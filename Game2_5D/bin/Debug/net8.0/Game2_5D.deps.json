@@ -10,6 +10,7 @@
         "dependencies": {
           "ControlLib": "1.0.0",
           "MapLib": "1.0.0",
+          "RenderLib": "1.0.0",
           "ScreenLib": "1.0.0"
         },
         "runtime": {
@@ -17,8 +18,16 @@
         }
       },
       "ControlLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0"
+        },
         "runtime": {
           "ControlLib.dll": {}
+        }
+      },
+      "EntityLib/1.0.0": {
+        "runtime": {
+          "EntityLib.dll": {}
         }
       },
       "MapLib/1.0.0": {
@@ -26,7 +35,21 @@
           "MapLib.dll": {}
         }
       },
+      "RenderLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "RenderLib.dll": {}
+        }
+      },
       "ScreenLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0"
+        },
         "runtime": {
           "ScreenLib.dll": {}
         }
@@ -44,7 +67,17 @@
       "serviceable": false,
       "sha512": ""
     },
+    "EntityLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RenderLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

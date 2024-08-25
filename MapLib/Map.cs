@@ -7,26 +7,40 @@ namespace MapLib
         public int MapWidth { get; init; }
         public int MapHeight { get; init; }
         private int AppendLine { get; set; } = 0;
-
         public StringBuilder MapStr { get; init; } = new StringBuilder();
 
-        public char block;
-        public char empty;
-        public char player;
+        public readonly char block;
+        public readonly char empty;
+        public readonly char player;
+        public readonly char lineSight;
 
         public Map(int mapHeight, int mapWidth,
             char block = '#', 
             char empty = '.',
-            char player = 'P')
+            char player = 'P',
+            char lineSight = '*')
         {
             this.MapWidth = mapWidth > 0 ? mapWidth : throw new Exception("mapWidth <= 0");
             this.MapHeight = mapHeight > 0 ? mapHeight : throw new Exception("mapWidth <= 0");
             this.block = block;
             this.empty = empty;
             this.player = player;
+            this.lineSight = lineSight;
 
             creatMap();
         }
+
+        public void resetMap()
+        {
+            for(int i = 1; i < MapHeight - 1; i++)
+            {
+                for(int j = 1; j < MapWidth - 1; j++)
+                {
+                    if (MapStr[i * MapWidth + j] == lineSight)
+                        MapStr[i * MapWidth + j] = empty;
+                }
+            }
+        } 
 
         private string creatMap()
         {
@@ -65,6 +79,8 @@ namespace MapLib
 
             MapStr[line * MapWidth + column] = empty;
         }
+
+        
 
         public void printMap()
         {

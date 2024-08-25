@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>ScreenLib</id>
+    <version>1.0.0</version>
+    <authors>ScreenLib</authors>
+    <description>Package Description</description>
+    <repository type="git" commit="7e2479344125361caf3815fc22784fb60ea24b66" />
+    <dependencies>
+      <group targetFramework="net8.0" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\ScreenLib.dll" target="lib\net8.0\ScreenLib.dll" />
+  </files>
+</package>

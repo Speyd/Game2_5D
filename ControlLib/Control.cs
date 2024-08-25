@@ -1,61 +1,65 @@
-﻿namespace ControlLib
+﻿using EntityLib;
+
+namespace ControlLib
 {
     public class Control
     {
         private CheckPressed checkPressed = new CheckPressed();
 
         private double moveSpeed;
+        private readonly int speedMultiplier;
 
-        public Control(double moveSpeed = 0.009)
+        public Control(int screenWidth, int screenHeight, double moveSpeed = 0.009)
         {
             this.moveSpeed = moveSpeed;
+            speedMultiplier = screenWidth / 100;
         }
 
-        private void forwardPress(ref double playerX, ref double playerY, ref double playerA)
+        private void forwardPress(Entity entity)
         {
-            playerX += Math.Sin(playerA) * moveSpeed;
-            playerY += Math.Cos(playerA) * moveSpeed;
+            entity.EntityX += Math.Sin(entity.EntityA) * speedMultiplier * moveSpeed;
+            entity.EntityY += Math.Cos(entity.EntityA) * speedMultiplier * moveSpeed;
         }
-        private void backPress(ref double playerX, ref double playerY, ref double playerA)
+        private void backPress(Entity entity)
         {
-            playerX -= Math.Sin(playerA) * moveSpeed;
-            playerY -= Math.Cos(playerA) * moveSpeed;
+            entity.EntityX -= Math.Sin(entity.EntityA) * speedMultiplier * moveSpeed;
+            entity.EntityY -= Math.Cos(entity.EntityA) * speedMultiplier * moveSpeed;
         }
-        private void leftPress(ref double playerX, ref double playerY, ref double playerA)
+        private void leftPress(Entity entity)
         {
-            playerX += moveSpeed * Math.Sin(playerA + Math.PI / 2);
-            playerY += moveSpeed * Math.Cos(playerA + Math.PI / 2);
+            entity.EntityX += moveSpeed * Math.Sin(entity.EntityA + Math.PI / 2);
+            entity.EntityY += moveSpeed * Math.Cos(entity.EntityA + Math.PI / 2);
         }
-        private void rightPress(ref double playerX, ref double playerY, ref double playerA)
+        private void rightPress(Entity entity)
         {
-            playerX -= moveSpeed * Math.Sin(playerA + Math.PI / 2);
-            playerY -= moveSpeed * Math.Cos(playerA + Math.PI / 2);
+            entity.EntityX -= moveSpeed * Math.Sin(entity.EntityA + Math.PI / 2);
+            entity.EntityY -= moveSpeed * Math.Cos(entity.EntityA + Math.PI / 2);
         }
-        private void turnLeftPress(ref double playerA)
+        private void turnLeftPress(Entity entity)
         {
-            playerA += moveSpeed / 2;
+            entity.EntityA += moveSpeed;
         }
-        private void turnRightPress(ref double playerA)
+        private void turnRightPress(Entity entity)
         {
-            playerA -= moveSpeed / 2;
+            entity.EntityA -= moveSpeed;
         }
 
-        public void makePressed(ref double playerX, ref double playerY, ref double playerA)
+        public void makePressed(Entity entity)
         {
             checkPressed.check();
 
             if (checkPressed.isForwardPressed)
-                forwardPress(ref playerX, ref playerY, ref playerA);
+                forwardPress(entity);
             if (checkPressed.isBackPressed)
-                backPress(ref playerX, ref playerY, ref playerA);
+                backPress(entity);
             if (checkPressed.isLeftPressed)
-                leftPress(ref playerX, ref playerY, ref playerA);
+                leftPress(entity);
             if (checkPressed.isRightPressed)
-                rightPress(ref playerX, ref playerY, ref playerA);
+                rightPress(entity);
             if (checkPressed.isTurnLeftPressed)
-                turnLeftPress(ref playerA);
+                turnLeftPress(entity);
             if (checkPressed.isTurnRightPressed)
-                turnRightPress(ref playerA);
+                turnRightPress(entity);
         }
     }
 }

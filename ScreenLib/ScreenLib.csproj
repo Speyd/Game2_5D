@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="..\MapLib\MapLib.csproj" />
+  </ItemGroup>
+
 </Project>
