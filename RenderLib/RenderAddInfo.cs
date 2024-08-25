@@ -9,13 +9,12 @@ using System.Threading.Tasks;
 
 namespace RenderLib.AdditionalInformation
 {
-    internal class RenderAddInfo(Screen screen, Entity entity, Map map,bool renderMap, bool renderStatsEnity)
+    internal class RenderAddInfo(Screen screen, Entity entity, Map map, bool renderMap, bool renderStatsEnity)
     {
-
         private int modifiedLines = 0;
+
         private void renderingMap()
         {
-
             for (int i = 0; i < map.MapWidth; i++)
             {
                 for (int j = 0; j < map.MapHeight; j++)
@@ -24,22 +23,28 @@ namespace RenderLib.AdditionalInformation
                 }
             }
             screen.ScreenChr[((int)entity.EntityY + modifiedLines) * screen.ScreenWidth + (int)entity.EntityX] = map.player.Symbol;
+
+            modifiedLines += map.MapWidth;
         }
 
         private void renderingStatsEnity(double elapsedTime)
         {
+
             char[] stats = $"X: {entity.EntityX}, Y: {entity.EntityY}, A: {entity.EntityY}, FPS: {(int)(1 / elapsedTime)}"
                 .ToCharArray();
 
             stats.CopyTo(screen.ScreenChr, modifiedLines);
+            modifiedLines++;
         }
 
         public void render(double elapsedTime)
         {
-            if (renderMap == true)
-                renderingMap();
             if (renderStatsEnity == true)
                 renderingStatsEnity(elapsedTime);
+            if (renderMap == true)
+                renderingMap();
+
+            modifiedLines = 0;
         }
 
     }
