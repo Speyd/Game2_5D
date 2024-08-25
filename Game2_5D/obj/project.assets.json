@@ -6,7 +6,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "EntityLib": "1.0.0"
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0"
         },
         "compile": {
           "bin/placeholder/ControlLib.dll": {}

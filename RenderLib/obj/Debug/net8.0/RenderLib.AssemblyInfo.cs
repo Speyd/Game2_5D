@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RenderLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7e2479344125361caf3815fc22784fb60ea24b66")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+106f8fbbc2b1bf27726b5add3e4dfddbefdf6534")]
 [assembly: System.Reflection.AssemblyProductAttribute("RenderLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RenderLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

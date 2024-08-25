@@ -15,6 +15,7 @@ namespace ControlLib
         public const int VK_RIGHT = 0x44;       //D
         public const int VK_TURN_LEFT = 0x25;   //left arrow
         public const int VK_TURN_RIGHT = 0x27;  //right arrow
+        public const int VK_BOOST = 0x10;       //Shift
 
 
         [DllImport("user32.dll")]

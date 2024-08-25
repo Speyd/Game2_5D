@@ -13,3 +13,6 @@ D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EntityLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EntityLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.AssemblyReference.cache
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.Up2Date
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MapLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.sourcelink.json

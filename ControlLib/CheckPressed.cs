@@ -17,6 +17,7 @@ namespace ControlLib
         public bool isRightPressed;
         public bool isTurnLeftPressed;
         public bool isTurnRightPressed;
+        public bool isTurnBoost;
 
         public CheckPressed()
         { }
@@ -29,6 +30,7 @@ namespace ControlLib
             isRightPressed = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
             isTurnLeftPressed = (GetAsyncKeyState(VK_TURN_LEFT) & 0x8000) != 0;
             isTurnRightPressed = (GetAsyncKeyState(VK_TURN_RIGHT) & 0x8000) != 0;
+            isTurnBoost = (GetAsyncKeyState(VK_BOOST) & 0x8000) != 0;
         }
     }
 }

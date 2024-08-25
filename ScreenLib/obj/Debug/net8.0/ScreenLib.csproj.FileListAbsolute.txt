@@ -15,3 +15,4 @@ D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\MapLib.dll
 D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\EntityLib.pdb
 D:\C++ проекты\Game2_5D\ScreenLib\bin\Debug\net8.0\MapLib.pdb
 D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.csproj.Up2Date
+D:\C++ проекты\Game2_5D\ScreenLib\obj\Debug\net8.0\ScreenLib.sourcelink.json

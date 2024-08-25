@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using EntityLib;
@@ -29,17 +30,21 @@ namespace RenderLib
             this.entity = entity;
 
             rayLogic = new RenderRayLogic(entity, map, screen, true);
-            screenLogic = new RenderScreenLogic(screen, entity);
+            screenLogic = new RenderScreenLogic(screen, entity, map);
             renderAddInfo = new RenderAddInfo(screen, entity, map, renderMap, renderStatsEntity);
         }
 
         public void render(double elapsedTime)
         {
             double distanceToWall = 0;
+            bool isBound = false;
+            
+
             for (int x = 0; x < screen.ScreenWidth; x++)
             {
-                rayLogic.render(x, ref distanceToWall);
-                screenLogic.render(x, ref distanceToWall);
+                MapLib.Object? obj = null;
+                rayLogic.render(ref obj, x, ref isBound, ref distanceToWall);
+                screenLogic.render(ref obj, x, ref isBound, ref distanceToWall);
             }
 
             renderAddInfo.render(elapsedTime);

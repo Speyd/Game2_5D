@@ -30,6 +30,9 @@
             "projectReferences": {
               "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
               }
             }
           }

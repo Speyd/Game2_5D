@@ -23,7 +23,7 @@ namespace RenderLib.AdditionalInformation
                     screen.ScreenChr[(j + modifiedLines) * screen.ScreenWidth + i] = map.MapStr[j * map.MapWidth + i];
                 }
             }
-            screen.ScreenChr[((int)entity.EntityY + modifiedLines) * screen.ScreenWidth + (int)entity.EntityX] = map.player;
+            screen.ScreenChr[((int)entity.EntityY + modifiedLines) * screen.ScreenWidth + (int)entity.EntityX] = map.player.Symbol;
         }
 
         private void renderingStatsEnity(double elapsedTime)
