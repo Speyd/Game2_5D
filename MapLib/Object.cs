@@ -25,6 +25,7 @@ namespace MapLib
         {
             if (list.Count == 0 || !list.ContainsKey(objAdd.Symbol))
                 list.Add(objAdd.Symbol, objAdd);
+            
         }
     }
 }

@@ -30,7 +30,7 @@ namespace RenderLib
             this.entity = entity;
 
             rayLogic = new RenderRayLogic(entity, map, screen, true);
-            screenLogic = new RenderScreenLogic(screen, entity, map);
+            screenLogic = new RenderScreenLogic(screen, entity);
             renderAddInfo = new RenderAddInfo(screen, entity, map, renderMap, renderStatsEntity);
         }
 
@@ -42,7 +42,7 @@ namespace RenderLib
 
             for (int x = 0; x < screen.ScreenWidth; x++)
             {
-                MapLib.Object? obj = null;
+                Dictionary<double, MapLib.Object?> obj = new Dictionary<double, MapLib.Object?>();
                 rayLogic.render(ref obj, x, ref isBound, ref distanceToWall);
                 screenLogic.render(ref obj, x, ref isBound, ref distanceToWall);
             }

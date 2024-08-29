@@ -78,7 +78,52 @@ namespace RenderLib.LogicRender
             }
         }
 
-        private void rayLaunch(ref MapLib.Object? obj,
+        private void determiningCoordinatesRay(
+            in double rayX, in double rayY,
+            ref int tempX, ref int tempY, 
+            ref double distanceToWall)
+        {
+            distanceToWall += 0.1;
+            tempX = (int)(entity.EntityX + rayX * distanceToWall);
+            tempY = (int)(entity.EntityY + rayY * distanceToWall);
+        }
+        private void tracingAllObjects(ref Dictionary<double, MapLib.Object?> obj,
+            in double rayX, in double rayY,
+            int tempX, int tempY,
+            double distanceToWall)
+        {
+            obj.Add(distanceToWall, map.getObject(tempX, tempY));
+            double tempDistanceToWall = distanceToWall;
+
+            while (tempDistanceToWall < entity.Depth)
+            {
+                determiningCoordinatesRay(rayX, rayY, ref tempX, ref tempY, ref tempDistanceToWall);
+
+                if (tempX < 0 || tempX >= entity.Depth + entity.EntityX ||
+                    tempY < 0 || tempY >= entity.Depth + entity.EntityY)
+                {
+                    continue;
+                }
+                else
+                {
+                    if (tempY * map.MapWidth + tempX >= map.MapStr.Length || tempY * map.MapWidth + tempX < 0)
+                        continue;
+
+                    char testSell = map.MapStr[tempY * map.MapWidth + tempX];
+                    bool checkPassability = map.objects[testSell]?.Passability ?? false;
+
+
+                    if (checkPassability == false)
+                    {
+                        if (!obj.ContainsKey(tempDistanceToWall) && tempX >= 0 && tempX < map.MapHeight &&
+                            tempY >= 0 && tempY < map.MapWidth)
+                            obj.Add(tempDistanceToWall, map.getObject(tempX, tempY));
+                    }
+                }
+            }
+        }
+
+        private void rayLaunch(ref Dictionary<double, MapLib.Object?> obj,
             double rayX, double rayY,
             ref bool isBound, ref double distanceToWall)
         {
@@ -89,18 +134,15 @@ namespace RenderLib.LogicRender
 
             while (!hitWall && distanceToWall < entity.Depth)
             {
-                distanceToWall += 0.1;
-                tempX = (int)(entity.EntityX + rayX * distanceToWall);
-                tempY = (int)(entity.EntityY + rayY * distanceToWall);
-
+                determiningCoordinatesRay(rayX, rayY, ref tempX, ref tempY, ref distanceToWall);
                 rayCollision(tempX, tempY, rayX, rayY, ref isBound, ref hitWall, ref distanceToWall);            
             }
 
             if(hitWall == true)
-                obj = map.getObject(tempX, tempY);
+                tracingAllObjects(ref obj, rayX, rayY, tempX, tempY, distanceToWall);
         }
 
-        public void render(ref MapLib.Object? obj, int x, ref bool isBound, ref double distanceToWall)
+        public void render(ref Dictionary<double, MapLib.Object?> obj, int x, ref bool isBound, ref double distanceToWall)
         {
             double degreeRay = findDegreeRay(x, entity, screen);
 
