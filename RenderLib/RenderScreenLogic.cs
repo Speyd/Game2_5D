@@ -16,6 +16,8 @@ namespace RenderLib.LogicRender
 {
     internal class RenderScreenLogic(Screen screen, Entity entity)
     {
+        private const double perspectiveCoefficient = 1.5;
+
 
 
         private ValueTuple<double, char> definitionBlockChar(
@@ -70,9 +72,12 @@ namespace RenderLib.LogicRender
             }
         }
 
-        private int getHeight(int ceiling, double keyObject, MapLib.Object? value)
+        private int getHeight(int ceiling, double distanceToWall, MapLib.Object? renderObj)
         {
-            return ceiling - (value.HeightExceedingMiddle - (int)(keyObject / 1.5));
+            if (renderObj is not null)
+                return ceiling - (renderObj.HeightExceedingMiddle - (int)(distanceToWall / perspectiveCoefficient));
+            else 
+                return ceiling - (int)(distanceToWall / perspectiveCoefficient);
         }
 
         #region Sort
@@ -165,7 +170,7 @@ namespace RenderLib.LogicRender
         {
             if (coordinates.Count > 0)
             {
-                blockTop -= coordinates.First().Key.Item2.HeightExceedingMiddle - (int)(coordinates.First().Key.Item1 / 1.5);
+                blockTop = getHeight(ceiling, coordinates.First().Key.Item1, coordinates.First().Key.Item2);
                 renderObject = coordinates.First().Key;
             }
         }
@@ -182,6 +187,8 @@ namespace RenderLib.LogicRender
                 new Dictionary<ValueTuple<double, MapLib.Object?>, ValueTuple<int, int>>();
 
             Dictionary<double, MapLib.Object?> tempCoordinate = new Dictionary<double, MapLib.Object?>();
+
+
 
             ValueTuple<double, MapLib.Object?> renderObject = new(0, new MapLib.Object(0, 0, ' ', true));
             int blockTop = ceiling;
