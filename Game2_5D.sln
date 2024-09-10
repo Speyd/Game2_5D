@@ -5,9 +5,9 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Game2_5D", "Game2_5D\Game2_5D.csproj", "{3C884D27-7917-49C3-895A-2D7C899AD9CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapLib", "MapLib\MapLib.csproj", "{4601A374-4850-4B05-86B4-0951A14055BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapLib", "MapLib\MapLib.csproj", "{4601A374-4850-4B05-86B4-0951A14055BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenLib", "ScreenLib\ScreenLib.csproj", "{3BED9508-16D4-40BD-B251-C21A0E621A7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScreenLib", "ScreenLib\ScreenLib.csproj", "{3BED9508-16D4-40BD-B251-C21A0E621A7B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

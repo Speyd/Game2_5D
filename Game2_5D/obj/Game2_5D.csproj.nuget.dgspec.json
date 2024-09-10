@@ -48,6 +48,20 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Goblinfactory.Konsole": {
+              "target": "Package",
+              "version": "[6.2.2, )"
+            },
+            "SFML.Net": {
+              "target": "Package",
+              "version": "[2.6.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

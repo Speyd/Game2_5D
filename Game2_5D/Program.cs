@@ -3,6 +3,25 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Runtime.InteropServices;
 using MapLib;
+using System.ComponentModel;
+using System;
+using System.Text;
+using Konsole;
+using System.Security.Principal;
+using System.Linq;
+using SFML.Graphics;
+using SFML.Window;
+using SFML.System;
+using System.Numerics;
+
+ConsoleColor GetRandomConsoleColor(Random rand)
+{
+    // Список доступных цветов консоли
+    ConsoleColor[] colors = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
+
+    // Возвращаем случайный цвет
+    return colors[rand.Next(colors.Length)];
+}
 
 [DllImport("user32.dll")]
 static extern short GetAsyncKeyState(int key);
@@ -17,39 +36,82 @@ const int VK_RIGHT = 0x27;
 
 
 
+void getMapWorld(List<ValueTuple<int, int>> values, int TILE, Map map) 
+{
+    for(int i = 0; i < map.MapHeight; i++)
+    {
+        for(int j = 0; j < map.MapWidth; j++)
+        {
+            if (map.MapStr[i * map.MapWidth + j] == '#')
+                values.Add((i * TILE, j * TILE));
+        }
+        
+    }
+}
 
 
+const int ScreenWidth = 1900;
+const int ScreenHeight = 800;
+const int HELF_WIDTH = ScreenWidth / 2;
+const int HELF_HEIGHT = ScreenHeight / 2;
+const int TILE = 100; //РАЗМЕР КВАДРАТА КАРТЫ
+const int NUM_RAYS = ScreenWidth;
+const int MAX_DEPTH = 800;
+const int SCALE = ScreenWidth / NUM_RAYS;
 
-const int ScreenWidth = 200;
-const int ScreenHeight = 50;
-double playerFov = Math.PI / 3;
-double playerY = 5;
-double playerX = 5;
+const double playerFov = Math.PI / 3;
+const double HULF_FOV = playerFov / 2;
+const double DELTA_ANGLE = playerFov / NUM_RAYS;
+
+double DIST = NUM_RAYS / (2 * Math.Tan(HULF_FOV));
+double PROJ_COEFF = DIST * TILE * 0.5;
+
+
+double playerY = HELF_HEIGHT;
+double playerX = HELF_WIDTH;
 double playerA = 0;
+
 const double Depth = 16;
 
 
-Map map = new Map(32, 32);
+Map map = new Map(12, 12);
 map.addBlockToMap(2, 2);
 map.addBlockToMap(2, 5);
 map.addBlockToMap(7, 7);
+map.addBlockToMap(7, 8);
+map.addBlockToMap(7, 9);
+map.addBlockToMap(7, 10);
+
+map.addBlockToMap(9, 7);
+map.addBlockToMap(9, 8);
+map.addBlockToMap(9, 9);
+map.addBlockToMap(9, 10);
 
 
-char[]  Screen = new char[ScreenWidth * ScreenHeight];
 
-Console.SetWindowSize(ScreenWidth, ScreenHeight);
-Console.SetBufferSize(ScreenWidth, ScreenHeight);
-Console.CursorVisible =  false;
+List<ValueTuple<int, int>> values = new List<(int, int)>();
+getMapWorld(values, TILE, map);
 
-char c = ' ';
+//char[] Screen = new char[ScreenHeight * ScreenWidth];
+
+//Console.SetWindowSize(ScreenWidth, ScreenHeight);
+//Console.SetBufferSize(ScreenWidth, ScreenHeight);
+//Console.CursorVisible =  false;
+
+RenderWindow window = new RenderWindow(new VideoMode(ScreenWidth, ScreenHeight), "SFML Window");
+
 DateTime from = DateTime.Now;
-while (true)
+VertexArray vertexArray = new VertexArray(PrimitiveType.Quads);
+window.SetActive(true);
+while (window.IsOpen)
 {
+    // Обработка событий
+    window.DispatchEvents();
+
 
     DateTime dateTime = DateTime.Now;
     double elapsed = (dateTime - from).TotalSeconds;
     from = DateTime.Now;
-
     bool isWPressed = (GetAsyncKeyState(VK_W) & 0x8000) != 0;
     bool isSPressed = (GetAsyncKeyState(VK_S) & 0x8000) != 0;
     bool isAPressed = (GetAsyncKeyState(VK_A) & 0x8000) != 0;
@@ -59,86 +121,113 @@ while (true)
 
 
 
-    double moveSpeed = 0.003;
+    double moveSpeed = 0.2 * 20;
+    double moveSpeedAngel = 0.003 * 10;
+
     //double turnSpeed = 0.003;
+    double cos_A = Math.Cos(playerA);
+    double sin_A = Math.Sin(playerA);
+
     if (isWPressed)
     {
-        playerX += Math.Sin(playerA) * 3 * moveSpeed;
-        playerY += Math.Cos(playerA) * 3 * moveSpeed;
+        playerX += cos_A * moveSpeed;
+        playerY += sin_A * moveSpeed;
     }
     if (isSPressed)
     {
-        playerX -= Math.Sin(playerA) * 3 * moveSpeed;
-        playerY -= Math.Cos(playerA) * 3 * moveSpeed;
+        playerX += cos_A * -moveSpeed;
+        playerY += sin_A * -moveSpeed;
     }
     if (isAPressed)
     {
-        playerX += 2 * moveSpeed * Math.Sin(playerA + Math.PI / 2);
-        playerY += 2 * moveSpeed * Math.Cos(playerA + Math.PI / 2);
+        playerX += moveSpeed * sin_A;
+        playerY += -moveSpeed * cos_A;
     }
     if (isDPressed)
     {
-        playerX -= 2 * moveSpeed * Math.Sin(playerA + Math.PI / 2);
-        playerY -= 2 * moveSpeed * Math.Cos(playerA + Math.PI / 2);
+        playerX += -moveSpeed * sin_A;
+        playerY += moveSpeed * cos_A;
     }
-
 
     if (isLeftArrowPressed)
-        playerA += elapsed;
+        playerA -= moveSpeedAngel;
     if (isRightArrowPressed)
-        playerA -= elapsed;
+        playerA += moveSpeedAngel;
+
+    window.Clear(Color.Black);
 
 
-    for (int x = 0; x < ScreenWidth; x++)
+
+
+    Color BLUE = new Color(0, 0, 255);
+    Color DARKGRAY = new Color(25, 25, 25);
+
+    // Создание прямоугольника для верхней части экрана
+    RectangleShape topRect = new RectangleShape(new Vector2f(ScreenWidth, HELF_HEIGHT));
+    topRect.FillColor = Color.Blue;
+    topRect.Position = new Vector2f(0, 0);
+
+    // Создание прямоугольника для нижней части экрана
+    RectangleShape bottomRect = new RectangleShape(new Vector2f(ScreenWidth, HELF_HEIGHT));
+    bottomRect.FillColor = DARKGRAY;
+    bottomRect.Position = new Vector2f(0, HELF_HEIGHT);
+
+    // Отрисовка прямоугольников
+    window.Draw(topRect);
+    window.Draw(bottomRect);
+
+
+
+
+
+    double car_angle = playerA - HULF_FOV;
+    double x, y;
+    double sin_a, cos_a;
+    vertexArray.Clear();
+    for (int i = 0; i < NUM_RAYS; i++)
     {
-        double player = playerA + (playerFov / 2) - ((x * playerFov) / ScreenWidth);
+        sin_a = Math.Sin(car_angle);
+        cos_a = Math.Cos(car_angle);
 
-        double rayX = Math.Sin(player);
-        double rayY = Math.Cos(player);
-
-        double distanceWall = 0;
-        bool hitWall = false;
-
-        while (!hitWall && distanceWall < Depth)
+        for (double j = 0; j < MAX_DEPTH; j++)
         {
-            distanceWall += 0.1;
-            int testX = (int)(playerX + rayX * distanceWall);
-            int testY = (int)(playerY + rayY * distanceWall);
+            x = playerX + j * cos_a;
+            y = playerY + j * sin_a;
 
-            if (testX < 0 || testX >= Depth + playerX || testY < 0 || testY >= Depth + playerY)
+            if (values.Contains(((int)(x / TILE) * TILE, (int)(y / TILE) * TILE)) == true)
             {
-                hitWall = true;
-                distanceWall = Depth;
+
+                j *= Math.Cos(playerA - car_angle);
+                double proj_height = PROJ_COEFF / j;
+
+                byte c = (byte)Math.Min(255, 255 / (1 + j * j * 0.0001));
+                Color color = new Color((byte)(c / 2), c, (byte)(c / 3));
+
+
+                Vertex v1 = new Vertex(new Vector2f(i * SCALE, (float)(ScreenHeight / 2 - proj_height / 2)), color);
+                Vertex v2 = new Vertex(new Vector2f(i * SCALE, (float)(ScreenHeight / 2 + proj_height / 2)), color);
+                Vertex v3 = new Vertex(new Vector2f((i + 1) * SCALE, (float)(ScreenHeight / 2 + proj_height / 2)), color);
+                Vertex v4 = new Vertex(new Vector2f((i + 1) * SCALE, (float)(ScreenHeight / 2 - proj_height / 2)), color);
+
+                vertexArray.Append(v1);
+                vertexArray.Append(v2);
+                vertexArray.Append(v3);
+                vertexArray.Append(v4);
+
+
+                //window.Draw(vertexArray);
+                break;
             }
-            else
-            {
-                char testSell = map.MapStr[testY * map.MapWidth + testX];
-                if (testSell == '#')
-                    hitWall = true;
-            }
+
         }
 
-        int ceiling = (int)(ScreenHeight / 2d - ScreenHeight / distanceWall);
-        int floor = ScreenHeight - ceiling;
-        for (int y = 0; y < ScreenHeight; y++)
-        {
-            if (y <= ceiling)
-            {
-                Screen[y * ScreenWidth + x] = ' ';
-            }
-            else if (y > ceiling && y <= floor)
-            {
-                Screen[y * ScreenWidth + x] = '#';
-            }
-            else
-            {
-                Screen[y * ScreenWidth + x] = '.';
-            }
-        }
+        car_angle += DELTA_ANGLE;
+
     }
 
-    Console.SetCursorPosition(0, 0);
-    // Console.WriteLine($"X: {playerX}  | Y: {playerY}  |  playerA: {playerA}");
-    Console.Write(Screen);
+    if (vertexArray.VertexCount > 0)
+    {
+        window.Draw(vertexArray);
+    }
+    window.Display();
 }
-map.printMap();
