@@ -14,7 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
+    <ProjectReference Include="..\RenderLib\RenderLib.csproj" />
+    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 
 </Project>

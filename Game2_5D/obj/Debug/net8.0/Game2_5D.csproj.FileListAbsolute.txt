@@ -203,3 +203,13 @@ D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\runtimes\win-x86\native
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\runtimes\win-x86\native\csfml-system.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\runtimes\win-x86\native\csfml-window.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\runtimes\win-x86\native\openal32.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ControlLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\EntityLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\RenderLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ScreenLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\EntityLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\RenderLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ScreenLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ControlLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\FpsLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\FpsLib.pdb

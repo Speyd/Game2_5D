@@ -8,13 +8,16 @@ namespace MapLib
         public int MapHeight { get; init; }
         private int AppendLine { get; set; } = 0;
 
+        public int MapScale { get; init; } =  5;
+        public int MapTile { get; init; }
+
         public StringBuilder MapStr { get; init; } = new StringBuilder();
 
         public char block;
         public char empty;
         public char player;
 
-        public Map(int mapHeight, int mapWidth,
+        public Map(int mapHeight, int mapWidth, int Tile,
             char block = '#', 
             char empty = '.',
             char player = 'P')
@@ -24,6 +27,8 @@ namespace MapLib
             this.block = block;
             this.empty = empty;
             this.player = player;
+
+            MapTile = Tile / MapScale;
 
             creatMap();
         }
@@ -51,6 +56,8 @@ namespace MapLib
                 throw new Exception("Index out of range 'addBlockToMap'");
 
             MapStr[line * MapWidth + column] = block;
+            
+           
         }
         public void addEmptyToMap(int line, int column)
         {
@@ -65,7 +72,21 @@ namespace MapLib
 
             MapStr[line * MapWidth + column] = empty;
         }
-
+        public int mapping(double a, int Tile)
+        {
+            return (int)(a / Tile) * Tile;
+        }
+        public bool IsWall(int x, int y)
+        {
+            if (x >= 0 && y >= 0 && x < MapWidth && y < MapHeight)
+            {
+                return MapStr[x * MapWidth + y] == block;
+            }
+            else
+            {
+                throw new IndexOutOfRangeException();
+            }
+        }
         public void printMap()
         {
             for(int i = 0; i < MapHeight; i++)

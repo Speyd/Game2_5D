@@ -8,9 +8,13 @@
     ".NETCoreApp,Version=v8.0": {
       "Game2_5D/1.0.0": {
         "dependencies": {
+          "EntityLib": "1.0.0",
+          "FpsLib": "1.0.0",
           "Goblinfactory.Konsole": "6.2.2",
           "MapLib": "1.0.0",
+          "RenderLib": "1.0.0",
           "SFML.Net": "2.6.0",
+          "ScreenLib": "1.0.0",
           "System.Drawing.Common": "8.0.8"
         },
         "runtime": {
@@ -1002,9 +1006,57 @@
           }
         }
       },
+      "ControlLib/1.0.0": {
+        "dependencies": {
+          "MapLib": "1.0.0"
+        },
+        "runtime": {
+          "ControlLib.dll": {}
+        }
+      },
+      "EntityLib/1.0.0": {
+        "dependencies": {
+          "ControlLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "EntityLib.dll": {}
+        }
+      },
+      "FpsLib/1.0.0": {
+        "dependencies": {
+          "RenderLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "FpsLib.dll": {}
+        }
+      },
       "MapLib/1.0.0": {
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
         "runtime": {
           "MapLib.dll": {}
+        }
+      },
+      "RenderLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "RenderLib.dll": {}
+        }
+      },
+      "ScreenLib/1.0.0": {
+        "dependencies": {
+          "SFML.Net": "2.6.0"
+        },
+        "runtime": {
+          "ScreenLib.dll": {}
         }
       }
     }
@@ -1078,7 +1130,32 @@
       "path": "system.drawing.common/8.0.8",
       "hashPath": "system.drawing.common.8.0.8.nupkg.sha512"
     },
+    "ControlLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EntityLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "FpsLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RenderLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ScreenLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
