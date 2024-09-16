@@ -42,9 +42,9 @@ namespace RenderLib
 
             return color;
         }
-        public void renderVertex(ref Screen screen, double ray, double projHeight, double depth)
+        public void renderVertex(ref Screen screen, double ray, double projHeight, double depth, Color color)
         {
-            Color color = colorDefinition(30, 200, 30, depth);
+            //Color color = colorDefinition(30, 200, 30, depth);
 
             Vertex v1 = new Vertex(new Vector2f(calcCooX(ray , screen.setting.Scale), calcCooLowerY(screen.ScreenHeight, projHeight)), color);
             Vertex v2 = new Vertex(new Vector2f(calcCooX(ray, screen.setting.Scale), calcCooHightY(screen.ScreenHeight, projHeight)), color);

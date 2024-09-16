@@ -1,4 +1,5 @@
-﻿using EntityLib.Player;
+﻿using EntityLib;
+using EntityLib.Player;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
@@ -46,29 +47,36 @@ namespace RenderLib.RenderPartsWorld
             firstNum = (int)(screen.ScreenHeight * (1 - Math.Cos(player.entityVerticalAngle)));
             secondNum = screen.ScreenHeight - firstNum;
         }
-        public static void renderPartsWorld(Screen screen, Player player)
+        public static void renderPartsWorld(Render render, Screen screen, Player player)
         {
 
             int topRectHeight = 0;
             int bottomRectHeight = 0;
             if (topRect is not null && bottomRect is not null)
             {
-                if(player.entityVerticalAngle < 0)
+                if (player.entityVerticalAngle < 0)
                     calculatingCoordinatesY(screen, player, ref topRectHeight, ref bottomRectHeight);
-                else if(player.entityVerticalAngle > 0)
+                else if (player.entityVerticalAngle > 0)
                     calculatingCoordinatesX(screen, player, ref bottomRectHeight, ref topRectHeight);
             }
             else
                 throw new Exception("topRect or bottomRect is null");
 
 
+            topRect.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
+            //screen.Window.Draw(topRect);
 
-           topRect.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
-           screen.Window.Draw(topRect);
+            bottomRect.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
+            bottomRect.Position = new Vector2f(0, topRectHeight);
+            //screen.Window.Draw(bottomRect);
+            screen.Window.Draw(topRect);
+            screen.Window.Draw(bottomRect);
+            render.algorithmBrezenhama();
+            if (screen.vertexArray.VertexCount > 0)
+            {
+                screen.Window.Draw(screen.vertexArray);
+            }
 
-           bottomRect.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
-           bottomRect.Position = new Vector2f(0, topRectHeight);
-           screen.Window.Draw(bottomRect);
         }
     }
 }

@@ -92,18 +92,14 @@ while (screen.Window.IsOpen)
     fpsChecker.startRead();
 
     player.makePressed(fpsChecker.getDeltaTime());
-    RenderPartsWorld.renderPartsWorld(screen, player);
+    RenderPartsWorld.renderPartsWorld(render, screen, player);
 
 
-    render.algorithmBrezenhama();
+   // render.algorithmBrezenhama();
     mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
 
 
 
-    if (screen.vertexArray.VertexCount > 0)
-    {
-        screen.Window.Draw(screen.vertexArray);
-    }
 
     fpsChecker.endRead(screen);
 

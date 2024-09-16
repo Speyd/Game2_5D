@@ -75,7 +75,7 @@ namespace RenderLib
             screen.vertexArray.Clear();
 
             double car_angle = entity.getEntityA() - entity.HalfFov;
-            //double verticalAngle = entity.entityVerticalAngle;
+            double verticalAngle = entity.entityVerticalAngle;
 
             double entityX = entity.getEntityX();
             double entityY = entity.getEntityY();
@@ -135,21 +135,41 @@ namespace RenderLib
                 //double depth = calculationDepth(depth_v, depth_h, car_angle, verticalAngle);
                 //double projHeight = entity.ProjCoeff / depth;
 
-                //double depth = calculationDepth(depth_v, depth_h, car_angle, verticalAngle);
+                double depth = calculationDepth(depth_v, depth_h, car_angle, verticalAngle);
 
                 //// Учет вертикального угла при проекции высоты объекта
-                //double projHeight = entity.ProjCoeff / depth;
-                //double adjustedHeight = projHeight * Math.Cos(verticalAngle);
-                //double objectScreenPosition = screen.setting.HalfHeight + (verticalAngle * projHeight);
+                double projHeight = entity.ProjCoeff / depth;
+                double adjustedHeight = projHeight * Math.Cos(verticalAngle);
+                double objectScreenPositionY = screen.setting.HalfHeight - adjustedHeight / 2 + verticalAngle * projHeight;
 
-                //if (objectScreenPosition + adjustedHeight < 0 || objectScreenPosition > screen.ScreenHeight)
-                //{
-                //    // Если объект вышел за пределы экрана, не рисуем его
-                //    continue;
-                //}
+                if (objectScreenPositionY + adjustedHeight < 0 || objectScreenPositionY > screen.ScreenHeight)
+                {
+                    // Если объект вышел за пределы экрана по вертикали, не рисуем его
+                    continue;
+                }
 
-                // Если объект виден, то рисуем его с новой скорректированной высотой
-                renderObject.renderVertex(ref screen, ray, adjustedHeight, depth);
+                // Добавляем плавное затухание
+                float fadeFactor = 1.0f;
+
+                if (objectScreenPositionY < 0)
+                {
+                    fadeFactor = (float)((objectScreenPositionY + adjustedHeight) / adjustedHeight);
+                    adjustedHeight *= fadeFactor;
+                    objectScreenPositionY = 0;  // Ограничиваем объект на экране
+                }
+
+                // Если объект выходит за нижнюю границу экрана, аналогично делаем его прозрачнее
+                if (objectScreenPositionY + adjustedHeight > screen.ScreenHeight)
+                {
+                    fadeFactor = (float)((screen.ScreenHeight - objectScreenPositionY) / adjustedHeight);
+                    adjustedHeight *= fadeFactor;
+                }
+
+                // Устанавливаем прозрачность объекта на основе fadeFactor
+                Color objectColor = new Color(255, 255, 255, (byte)(fadeFactor * 255));
+
+                // Рисуем объект с учетом новых параметров
+                renderObject.renderVertex(ref screen, ray, adjustedHeight, depth, objectColor);
                 //if (ray > 0 && screen.setting.AmountRays < screen.ScreenWidth)
                 //    interpolateVertices(ref screen, ray, prevProjHeight, projHeight, prevDepth, depth);
                 //for (int i = 0; i < rayWidth; i++)
@@ -166,7 +186,7 @@ namespace RenderLib
                 //prevDepth = depth;
 
                 car_angle += entity.DeltaAngle;
-                verticalAngle += entity.DeltaVerAngle;
+                //verticalAngle += entity.DeltaVerAngle;
 
             }
         }
