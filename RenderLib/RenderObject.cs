@@ -31,7 +31,12 @@ namespace RenderLib
         {
             return (float)(ScreenHeight / 2 - projHeight / 2);
         }
-
+        public Texture GetTextureForDistance(List<Texture> textures, double distance)
+        {
+            // Определите, какая текстура использовать в зависимости от расстояния
+            int index = (int)Math.Min(4, Math.Max(0, distance / 200.0)); // Пример расчета индекса
+            return textures[index];
+        }
         Color colorDefinition(byte red, byte green, byte blue, double depth) // 255
         {
             byte colorByteRed = (byte)Math.Min(red, red / (1 + depth * depth * 0.0001));
@@ -56,7 +61,39 @@ namespace RenderLib
             screen.vertexArray.Append(v3);
             screen.vertexArray.Append(v4);
         }
+        public void renderTexturedColumn(ref Screen screen, double ray, double projHeight, double depth, double offset)
+        {
+            //Console.WriteLine($"Ray: {ray}, ProjHeight: {projHeight}, Depth: {depth}, Offset: {offset}");
+            // Получаем текстурную область
+           // uint textureWidth = screen.TextureWall.Size.X;
+           // uint textureHeight = screen.TextureWall.Size.Y;
 
+           // // Корректировка области текстуры на основании смещения
+           // IntRect textureRect = new IntRect(
+           //     (int)(offset * screen.TextureScale), // Смещение по X, какое смещение внутри текстуры использовать
+           //     0,                            // Старт по Y
+           //     (int)screen.TextureScale, // Ширина одной колонки текстуры
+           //     (int)textureHeight                  // Полная высота текстуры
+           // );
+
+           // // Создаём спрайт для текстурной колонки
+           // Sprite wallColumn = new Sprite(screen.TextureWall, textureRect);
+
+           // // Масштабирование спрайта по ширине и высоте
+           // wallColumn.Scale = new Vector2f(
+           //     screen.setting.Scale,             // Ширина колонки текстуры
+           //     (float)projHeight // Масштабируем текстуру по высоте проекции стены
+           // );
+
+           // // Установка позиции спрайта на экране
+           // wallColumn.Position = new Vector2f(
+           //     (float)ray * screen.setting.Scale,          // Координата X на экране
+           //     (screen.setting.HalfHeight - (int)(projHeight / 2)) // Верхняя координата Y
+           // );
+           //// screen.setting.HalfHeight - (int)(projHeight / 2))
+           // // Отрисовываем спрайт на экране
+           // screen.Window.Draw(wallColumn);
+        }
 
         public void renderTriangl(ref Screen screen, double ray, double projHeight, double depth)
         {

@@ -12,9 +12,9 @@ namespace ControlLib
         private double moveSpeed;
         private double moveSpeedAngel;
 
+        private double minDistanceFromWall = 2;
         private double mouseSensitivity = 0.001;
         private double angle = 0.0;
-        private double verticalAngle = 0.0;
 
         private CheckPressed checkPressed = new CheckPressed();
         private bool isMouseCaptured = true;
@@ -38,11 +38,8 @@ namespace ControlLib
                 Mouse.SetPosition(new Vector2i(screen.setting.HalfWidth, screen.setting.HalfHeight), screen.Window);
 
                 int actualMousePositionX = currentMousePosition.X - screen.setting.HalfWidth;
-                int actualMousePositionY = currentMousePosition.Y - screen.setting.HalfHeight;
-                verticalAngle = Math.Clamp(verticalAngle, -Math.PI / 2, Math.PI / 2);
-
+                
                 angle += actualMousePositionX * mouseSensitivity;
-                verticalAngle += actualMousePositionY * mouseSensitivity;
             }
         }
         private bool isCollision(double nextX, double nextY)
@@ -58,24 +55,27 @@ namespace ControlLib
             return false;
         }
 
-        void slidingOnWalls(ref double playerX, ref double playerY, double rx, double ry)
+        bool slidingOnWalls(ref double playerX, ref double playerY, double rx, double ry)
         {
             if (!isCollision(rx, ry))
             {
                 playerX = rx;
                 playerY = ry;
+                return true;
             }
             else if (!isCollision(rx, playerY))
             {
                 playerX = rx;
+                return true;
             }
             else if (!isCollision(playerX, ry))
             {
                 playerY = ry;
+                return true;
             }
-        }
 
-  
+            return false;
+        }
         private void forwardPress(ref double playerX, ref double playerY, ref double playerA)
         {
             double rx = playerX + Math.Cos(playerA) * moveSpeed;
@@ -113,14 +113,13 @@ namespace ControlLib
             playerA += moveSpeedAngel;
         }
 
-        public void makePressed(float deltaTime,  ref double entityX, ref double entityY, ref double playerA, ref double playerVerticalA)
+        public void makePressed(float deltaTime,  ref double entityX, ref double entityY, ref double playerA)
         {
-            //angle = playerA;
             double tempMoveSpeed = (100 * deltaTime);
-            playerA = angle;
-            playerVerticalA = verticalAngle;
 
-            moveSpeed = tempMoveSpeed - Math.Min(tempMoveSpeed - 0.5, (screen.setting.AmountRays / screen.ScreenWidth));
+
+            playerA = angle;
+            moveSpeed = tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.setting.AmountRays / screen.ScreenWidth));
             moveSpeedAngel = 1 * deltaTime;
 
             checkPressed.check();

@@ -35,40 +35,14 @@ namespace RenderLib.RenderPartsWorld
             else
                 bottomRect.Position = new Vector2f(0, halfHeight);
         }
-
-        private static void calculatingCoordinatesY(Screen screen, Player player, ref int firstNum, ref int secondNum)
-        {
-            firstNum = (int)(screen.ScreenHeight * (1 - Math.Sin(player.entityVerticalAngle)));
-            secondNum = screen.ScreenHeight - firstNum;
-        }
-        private static void calculatingCoordinatesX(Screen screen, Player player, ref int firstNum, ref int secondNum)
-        {
-            firstNum = (int)(screen.ScreenHeight * (1 - Math.Cos(player.entityVerticalAngle)));
-            secondNum = screen.ScreenHeight - firstNum;
-        }
         public static void renderPartsWorld(Screen screen, Player player)
         {
 
-            int topRectHeight = 0;
-            int bottomRectHeight = 0;
-            if (topRect is not null && bottomRect is not null)
-            {
-                if(player.entityVerticalAngle < 0)
-                    calculatingCoordinatesY(screen, player, ref topRectHeight, ref bottomRectHeight);
-                else if(player.entityVerticalAngle > 0)
-                    calculatingCoordinatesX(screen, player, ref bottomRectHeight, ref topRectHeight);
-            }
-            else
-                throw new Exception("topRect or bottomRect is null");
+           if(topRect is not null)
+                screen.Window.Draw(topRect);
 
-
-
-           topRect.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
-           screen.Window.Draw(topRect);
-
-           bottomRect.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
-           bottomRect.Position = new Vector2f(0, topRectHeight);
-           screen.Window.Draw(bottomRect);
+           if (bottomRect is not null)
+                screen.Window.Draw(bottomRect);
         }
     }
 }

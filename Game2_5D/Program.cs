@@ -34,7 +34,7 @@ List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)
         for(int j = 0; j < map.MapWidth; j++)
         {
             if (map.MapStr[i * map.MapWidth + j] == '#')
-                values.Add((i * TILE, j * TILE));
+                values.Add((j * TILE, i * TILE));
         }
         
     }
@@ -49,7 +49,7 @@ const int ScreenHeight = 800;
 const int mapScale = 5;
 
 
-Screen screen = new Screen(ScreenWidth, ScreenHeight, mapScale, true);
+Screen screen = new Screen(1500, 1000, mapScale, @"D:\C++ проекты\Game2_5D\Wall.png");
 screen.Window.SetActive(true);
 
 Map map = new Map(32, 32, screen.setting.Tile);
@@ -83,7 +83,6 @@ DateTime from = DateTime.Now;
 string path = @"ArialBold.ttf";
 FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), path, Color.White);
 
-
 while (screen.Window.IsOpen)
 {
     screen.Window.DispatchEvents();
@@ -102,7 +101,7 @@ while (screen.Window.IsOpen)
 
     if (screen.vertexArray.VertexCount > 0)
     {
-        screen.Window.Draw(screen.vertexArray);
+        //screen.Window.Draw(screen.vertexArray);
     }
 
     fpsChecker.endRead(screen);

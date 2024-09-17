@@ -6,11 +6,10 @@ namespace MapLib
     {
         public int MapWidth { get; init; }
         public int MapHeight { get; init; }
-        private int AppendLine { get; set; } = 0;
+        //private int AppendLine { get; set; } = 0;
 
         public int MapScale { get; init; } =  5;
         public int MapTile { get; init; }
-
         public StringBuilder MapStr { get; init; } = new StringBuilder();
 
         public char block;
@@ -29,7 +28,6 @@ namespace MapLib
             this.player = player;
 
             MapTile = Tile / MapScale;
-
             creatMap();
         }
 
@@ -80,7 +78,7 @@ namespace MapLib
         {
             if (x >= 0 && y >= 0 && x < MapWidth && y < MapHeight)
             {
-                return MapStr[x * MapWidth + y] == block;
+                return MapStr[y * MapWidth + x] == block;
             }
             else
             {

@@ -27,7 +27,7 @@ namespace EntityLib.Player
         }
         public void makePressed(float deltaTime)
         {
-            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA, ref entityVerticalAngle);
+            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA);
         }
     }
 }

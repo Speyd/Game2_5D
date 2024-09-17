@@ -13,12 +13,19 @@ namespace ScreenLib
         public int ScreenWidth { get; init; }
         public int ScreenHeight { get; init; }
 
+        public uint TextureWidth { get; init; }
+        public uint TextureHeight { get; init; }
+
+        public List<Texture> TextureWall { get; init; }
+
+        public int TextureScale { get; init; }
+
         public RenderTexture miniMapTexture;
 
         public VertexArray vertexArray = new VertexArray(PrimitiveType.Quads);
 
 
-        public Screen(int screenWidth, int screenHeight, int mapScale, bool fullScreen = false, string nameWindow = "Game")
+        public Screen(int screenWidth, int screenHeight, int mapScale, string path, bool fullScreen = false, string nameWindow = "Game")
         {
             ScreenWidth = screenWidth > 0 ? screenWidth : throw new Exception("Error value(screenWidth)");
             ScreenHeight = screenHeight > 0 ? screenHeight : throw new Exception("Error value(screenHeight)"); ;
@@ -35,6 +42,22 @@ namespace ScreenLib
             setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
 
             miniMapTexture = new RenderTexture((uint)(screenWidth / (mapScale * 1.57)), (uint)(screenHeight / (mapScale / 1.57)));
+
+            TextureWall = new List<Texture>();
+            for(int i = 1; i <= 5; i++)
+            {
+                string tempPath = path;
+                int dotIndex = tempPath.IndexOf('.');
+                string modifiedString = tempPath.Insert(dotIndex, i.ToString());
+
+                TextureWall.Add(new Texture(modifiedString));
+            }
+                
+
+            TextureWidth = TextureWall[0].Size.X;
+            TextureHeight = TextureWall[0].Size.Y;
+
+            TextureScale = (int)(TextureWidth / setting.Tile);
         }
 
         public void setSetting(int amountRays, int maxDepth, int tile)
