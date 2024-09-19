@@ -3,6 +3,7 @@ using ScreenLib;
 using SFML.System;
 using SFML.Window;
 using System;
+using System.Drawing;
 using System.Reflection.Metadata;
 
 namespace ControlLib
@@ -12,7 +13,7 @@ namespace ControlLib
         private double moveSpeed;
         private double moveSpeedAngel;
 
-        private double minDistanceFromWall = 2;
+        private double minDistanceFromWall = 1;
         private double mouseSensitivity = 0.001;
         private double angle = 0.0;
 
@@ -38,71 +39,114 @@ namespace ControlLib
                 Mouse.SetPosition(new Vector2i(screen.setting.HalfWidth, screen.setting.HalfHeight), screen.Window);
 
                 int actualMousePositionX = currentMousePosition.X - screen.setting.HalfWidth;
-                
+
                 angle += actualMousePositionX * mouseSensitivity;
             }
         }
-        private bool isCollision(double nextX, double nextY)
-        {
-            int mapTileX = (int)(nextX / screen.setting.Tile);
-            int mapTileY = (int)(nextY / screen.setting.Tile);
 
-            if (map.IsWall(mapTileX, mapTileY))
+        ValueTuple<int, int> mapping(double x, double y)
+        {
+            return new ValueTuple<int, int>(
+                (int)(x / screen.setting.Tile) * screen.setting.Tile, 
+                (int)(y / screen.setting.Tile) * screen.setting.Tile);
+        }
+        private void isCollision(double nextX, double nextY, ref double playerX, ref double playerY)
+        {
+            double delta_x = 0, delta_y = 0;
+            if(nextX != 0)
             {
-                return true;
+                delta_x = 50 / 2 * Math.Sign(nextX);//* Math.Abs(nextX) / nextX;
+                if (map.Obstacles.Contains(mapping(playerX + nextX + delta_x, playerY + delta_x)))
+                {
+                    nextX = 0;
+                }
+                if (map.Obstacles.Contains(mapping(playerX + nextX + delta_x, playerY - delta_x)))
+                {
+
+                    nextX = 0;
+                }
+            }
+            if (nextY != 0)
+            {
+                delta_y = 50 / 2 * Math.Sign(nextY);// * Math.Abs(nextY) / nextY;
+                if (map.Obstacles.Contains(mapping(playerX + delta_y, playerY + nextY + delta_y)))
+                {
+                    nextY = 0;
+                }
+                if (map.Obstacles.Contains(mapping(playerX - delta_y, playerY + nextY + delta_y)))
+                {
+                    nextY = 0;
+                }
             }
 
-            return false;
+            playerX += nextX;
+            playerY += nextY;
         }
 
-        bool slidingOnWalls(ref double playerX, ref double playerY, double rx, double ry)
-        {
-            if (!isCollision(rx, ry))
-            {
-                playerX = rx;
-                playerY = ry;
-                return true;
-            }
-            else if (!isCollision(rx, playerY))
-            {
-                playerX = rx;
-                return true;
-            }
-            else if (!isCollision(playerX, ry))
-            {
-                playerY = ry;
-                return true;
-            }
+        //bool slidingOnWalls(ref double playerX, ref double playerY, double rx, double ry)
+        //{
+        //    if (!isCollision(rx, ry))
+        //    {
+        //        playerX = rx;
+        //        playerY = ry;
+        //        return true;
+        //    }
+        //    else if (!isCollision(rx, playerY))
+        //    {
+        //        playerX = rx;
+        //        return true;
+        //    }
+        //    else if (!isCollision(playerX, ry))
+        //    {
+        //        playerY = ry;
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
         private void forwardPress(ref double playerX, ref double playerY, ref double playerA)
         {
-            double rx = playerX + Math.Cos(playerA) * moveSpeed;
-            double ry = playerY + Math.Sin(playerA) * moveSpeed;
+            //double rx = playerX + Math.Cos(playerA) * moveSpeed;
+            //double ry = playerY + Math.Sin(playerA) * moveSpeed;
 
-            slidingOnWalls(ref playerX, ref playerY, rx, ry);
+            double rx = Math.Cos(playerA) * moveSpeed;
+            double ry = Math.Sin(playerA) * moveSpeed;
+
+            isCollision(rx, ry, ref playerX, ref playerY);
+            //slidingOnWalls(ref playerX, ref playerY, rx, ry);
         }
         private void backPress(ref double playerX, ref double playerY, ref double playerA)
         {
-            double rx = playerX + Math.Cos(playerA) * -moveSpeed;
-            double ry = playerY + Math.Sin(playerA) * -moveSpeed;
+            //double rx = playerX + Math.Cos(playerA) * -moveSpeed;
+            //double ry = playerY + Math.Sin(playerA) * -moveSpeed;
+            double rx = Math.Cos(playerA) * -moveSpeed;
+            double ry = Math.Sin(playerA) * -moveSpeed;
 
-            slidingOnWalls(ref playerX, ref playerY, rx, ry);
+            isCollision(rx, ry, ref playerX, ref playerY);
+            // slidingOnWalls(ref playerX, ref playerY, rx, ry);
         }
         private void leftPress(ref double playerX, ref double playerY, ref double playerA)
         {
-            double rx = playerX + moveSpeed * Math.Sin(playerA);
-            double ry = playerY + - moveSpeed * Math.Cos(playerA);
+            //double rx = playerX + moveSpeed * Math.Sin(playerA);
+            //double ry = playerY + - moveSpeed * Math.Cos(playerA);
 
-            slidingOnWalls(ref playerX, ref playerY, rx, ry);
+            double rx =  moveSpeed * Math.Sin(playerA);
+            double ry =  -moveSpeed * Math.Cos(playerA);
+
+            isCollision(rx, ry, ref playerX, ref playerY);
+
+            //slidingOnWalls(ref playerX, ref playerY, rx, ry);
         }
         private void rightPress(ref double playerX, ref double playerY, ref double playerA)
         {
-            double rx = playerX + - moveSpeed * Math.Sin(playerA);
-            double ry = playerY + moveSpeed * Math.Cos(playerA);
+            //double rx = playerX + - moveSpeed * Math.Sin(playerA);
+            //double ry = playerY + moveSpeed * Math.Cos(playerA);
 
-            slidingOnWalls(ref playerX, ref playerY, rx, ry);
+            double rx =  -moveSpeed * Math.Sin(playerA);
+            double ry =  moveSpeed * Math.Cos(playerA);
+
+            isCollision(rx, ry, ref playerX, ref playerY);
+            //slidingOnWalls(ref playerX, ref playerY, rx, ry);
         }
         private void turnLeftPress(ref double playerA)
         {

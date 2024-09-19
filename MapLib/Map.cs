@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using ScreenLib;
+using System.Text;
 
 namespace MapLib
 {
@@ -10,7 +11,10 @@ namespace MapLib
 
         public int MapScale { get; init; } =  5;
         public int MapTile { get; init; }
+        private int Tile {  get; init; }
         public StringBuilder MapStr { get; init; } = new StringBuilder();
+
+        public List<ValueTuple<int, int>> Obstacles {  get; set; }
 
         public char block;
         public char empty;
@@ -27,10 +31,17 @@ namespace MapLib
             this.empty = empty;
             this.player = player;
 
+            this.Tile = Tile;
             MapTile = Tile / MapScale;
             creatMap();
+
+            Obstacles = getMapWorld(Tile, this);
         }
 
+        public void setObstacles()
+        {
+            Obstacles = getMapWorld(Tile, this);
+        }
         private string creatMap()
         {
             string tempMap = "";
@@ -70,9 +81,11 @@ namespace MapLib
 
             MapStr[line * MapWidth + column] = empty;
         }
-        public int mapping(double a, int Tile)
+        public ValueTuple<int, int> mapping(double x, double y, int tile)
         {
-            return (int)(a / Tile) * Tile;
+            return new ValueTuple<int, int>(
+            (int)(x / tile) * tile,
+            (int)(y / tile) * tile);
         }
         public bool IsWall(int x, int y)
         {
@@ -80,10 +93,27 @@ namespace MapLib
             {
                 return MapStr[y * MapWidth + x] == block;
             }
-            else
+            //else
+            //{
+            //    throw new IndexOutOfRangeException();
+            //}
+
+            return false;
+        }
+        public List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)
+        {
+            List<ValueTuple<int, int>> values = new List<(int, int)>();
+            for (int i = 0; i < map.MapHeight; i++)
             {
-                throw new IndexOutOfRangeException();
+                for (int j = 0; j < map.MapWidth; j++)
+                {
+                    if (map.MapStr[i * map.MapWidth + j] == '#')
+                        values.Add((j * TILE, i * TILE));
+                }
+
             }
+
+            return values;
         }
         public void printMap()
         {

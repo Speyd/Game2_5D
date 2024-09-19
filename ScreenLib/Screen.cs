@@ -16,7 +16,8 @@ namespace ScreenLib
         public uint TextureWidth { get; init; }
         public uint TextureHeight { get; init; }
 
-        public List<Texture> TextureWall { get; init; }
+        public Texture TextureWall { get; init; }
+        //public List<Texture> TextureWall { get; init; }
 
         public int TextureScale { get; init; }
 
@@ -43,19 +44,20 @@ namespace ScreenLib
 
             miniMapTexture = new RenderTexture((uint)(screenWidth / (mapScale * 1.57)), (uint)(screenHeight / (mapScale / 1.57)));
 
-            TextureWall = new List<Texture>();
-            for(int i = 1; i <= 5; i++)
-            {
-                string tempPath = path;
-                int dotIndex = tempPath.IndexOf('.');
-                string modifiedString = tempPath.Insert(dotIndex, i.ToString());
+            TextureWall = new Texture(path);
+            //TextureWall = new List<Texture>();
+            //for(int i = 1; i <= 100; i++)
+            //{
+            //    string tempPath = path;
+            //    int dotIndex = tempPath.IndexOf('.');
+            //    string modifiedString = tempPath.Insert(dotIndex, i.ToString());
 
-                TextureWall.Add(new Texture(modifiedString));
-            }
-                
+            //    TextureWall.Add(new Texture(modifiedString));
+            //}
 
-            TextureWidth = TextureWall[0].Size.X;
-            TextureHeight = TextureWall[0].Size.Y;
+
+            TextureWidth = TextureWall.Size.X;
+            TextureHeight = TextureWall.Size.Y;
 
             TextureScale = (int)(TextureWidth / setting.Tile);
         }

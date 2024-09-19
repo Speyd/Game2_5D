@@ -34,7 +34,7 @@ namespace RenderLib
         public Texture GetTextureForDistance(List<Texture> textures, double distance)
         {
             // Определите, какая текстура использовать в зависимости от расстояния
-            int index = (int)Math.Min(4, Math.Max(0, distance / 200.0)); // Пример расчета индекса
+            int index = (int)Math.Min(99, Math.Max(0, distance / 10.0)); // Пример расчета индекса
             return textures[index];
         }
         Color colorDefinition(byte red, byte green, byte blue, double depth) // 255

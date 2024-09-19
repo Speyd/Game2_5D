@@ -45,7 +45,7 @@ namespace EntityLib
             DeltaAngle = entityFov / setting.AmountRays;
 
             Dist = setting.AmountRays / (2 * Math.Tan(HalfFov));
-            ProjCoeff =  Dist * setting.Tile;
+            ProjCoeff = Dist * setting.Tile;
         }
 
         

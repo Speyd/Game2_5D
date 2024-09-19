@@ -49,7 +49,7 @@ const int ScreenHeight = 800;
 const int mapScale = 5;
 
 
-Screen screen = new Screen(1500, 1000, mapScale, @"D:\C++ проекты\Game2_5D\Wall.png");
+Screen screen = new Screen(1500, 1000, mapScale, @"D:\C++ проекты\Game2_5D\Wall1.png");
 screen.Window.SetActive(true);
 
 Map map = new Map(32, 32, screen.setting.Tile);
@@ -65,6 +65,7 @@ map.addBlockToMap(9, 7);
 map.addBlockToMap(9, 8);
 map.addBlockToMap(9, 9);
 map.addBlockToMap(9, 10);
+map.setObstacles();
 MiniMap mapMini = new MiniMap(screen, getMapWorld(map.MapTile, map), Color.Blue);
 
 
