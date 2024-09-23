@@ -16,7 +16,7 @@ namespace EntityLib.Player
     public class Player : Entity
     {
         private readonly Control Control;
-         
+        
         public Player(Screen screen, Map map,
             double entityFov = Math.PI / 3,
             double entityX = 0, double entityY = 0,
@@ -28,7 +28,7 @@ namespace EntityLib.Player
         }
         public void makePressed(float deltaTime)
         {
-            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA);
+            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA, ref playerVerticalA);
         }
     }
 }

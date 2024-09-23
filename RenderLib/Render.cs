@@ -9,6 +9,7 @@ using System;
 using static System.Formats.Asn1.AsnWriter;
 using SFML.Window;
 using static System.Net.Mime.MediaTypeNames;
+using System.Numerics;
 
 namespace RenderLib
 {
@@ -18,6 +19,10 @@ namespace RenderLib
 
         private RectangleShape? topRect;
         private RectangleShape? bottomRect;
+
+        float temp = 0;
+
+        private double tempVert = 0;
 
         private void checkVericals(ref double a, ref double auxiliaryA, double mapA, double ratio)
         {
@@ -133,11 +138,12 @@ namespace RenderLib
 
 
                 offset = (int)offset % screen.setting.Tile;
-                depth = Math.Max(depth, 0.00001);
+                depth = Math.Max(depth, 0.1);
 
-                float projHeight = Math.Min((int)(entity.ProjCoeff / depth), 2 * screen.ScreenHeight);
+                double angleDifference = entity.getEntityA() - car_angle;
+                float projHeight = Math.Min((int)(entity.ProjCoeff / depth), 6 * screen.ScreenHeight);
 
-                
+
 
 
                 IntRect textureRect = new IntRect((int)offset * screen.TextureScale, 0, screen.setting.Tile, (int)screen.TextureHeight);
@@ -147,16 +153,41 @@ namespace RenderLib
                 wallColumn.Color = new Color(darknessFactor, darknessFactor, darknessFactor);
 
                 float scaleX = (float)screen.TextureScale / screen.TextureWidth;
+                //float scaleX = (float)screen.setting.Scale / screen.TextureWidth;
                 float scaleY = (float)projHeight / screen.TextureHeight;
                 wallColumn.Scale = new Vector2f(scaleX, scaleY);
 
-                wallColumn.Position = new Vector2f(ray * screen.setting.Scale, screen.setting.HalfHeight - projHeight / 2);
+                //if (entity.playerVerticalA < tempVert)
+                //{
+                //    temp = screen.ScreenHeight - (int)(screen.ScreenHeight * (1 - Math.Cos(entity.playerVerticalA)));
+                //}
+                //else if (entity.playerVerticalA > tempVert)
+                //{
+                //    temp = screen.ScreenHeight - (int)(screen.ScreenHeight * (1 - Math.Sin(entity.playerVerticalA)));
+                //}
+
+                if (entity.playerVerticalA > 0)
+                {
+                    temp = (float)(screen.setting.HalfHeight / (1 + 1 * entity.playerVerticalA));
+                }
+                else if (entity.playerVerticalA < 0)
+                {
+                    temp = (float)(screen.setting.HalfHeight * (1 + 1 * -entity.playerVerticalA));
+                }
+                else
+                {
+                    temp = screen.setting.HalfHeight;
+                }
+
+                //temp = (float)(screen.setting.HalfHeight * -entity.playerVerticalA);
+
+                wallColumn.Position = new Vector2f(ray * screen.setting.Scale, temp - projHeight / 2);
 
                 screen.Window.Draw(wallColumn);
 
                 car_angle += entity.DeltaAngle;
-
             }
+            tempVert = entity.playerVerticalA;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using EntityLib.Player;
+﻿using EntityLib;
+using EntityLib.Player;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
@@ -15,7 +16,7 @@ namespace RenderLib.RenderPartsWorld
     {
         private static RectangleShape? topRect;
         private static RectangleShape? bottomRect;
-       // private static double tempA = 0;
+        // private static double tempA = 0;
 
         public static void setTopRect(int ScreenWidth, int halfHeight, Color color, Vector2f? vector = null)
         {
@@ -35,14 +36,46 @@ namespace RenderLib.RenderPartsWorld
             else
                 bottomRect.Position = new Vector2f(0, halfHeight);
         }
+
+        private static void calculatingCoordinatesY(Screen screen, Player player, ref int firstNum, ref int secondNum)
+        {
+            firstNum = (int)(screen.ScreenHeight * (1 - Math.Sin(player.playerVerticalA)));
+            secondNum = screen.ScreenHeight - firstNum;
+        }
+        private static void calculatingCoordinatesX(Screen screen, Player player, ref int firstNum, ref int secondNum)
+        {
+            firstNum = (int)(screen.ScreenHeight * (1 - Math.Cos(player.playerVerticalA)));
+            secondNum = screen.ScreenHeight - firstNum;
+        }
         public static void renderPartsWorld(Screen screen, Player player)
         {
 
-           if(topRect is not null)
-                screen.Window.Draw(topRect);
+            int topRectHeight = 0;
+            int bottomRectHeight = 0;
+            
+            if (player.playerVerticalA > 0)
+            {
+                topRectHeight = (int)(screen.setting.HalfHeight / (1 + 1 * player.playerVerticalA));
+                bottomRectHeight = screen.ScreenHeight - topRectHeight;
+            }
+            else if (player.playerVerticalA < 0)
+            {
+                topRectHeight = (int)(screen.setting.HalfHeight * (1 + 1 * -player.playerVerticalA));
+                bottomRectHeight = screen.ScreenHeight - bottomRectHeight;
+            }
+            else
+            {
+                topRectHeight = screen.setting.HalfHeight;
+                bottomRectHeight = screen.ScreenHeight - topRectHeight;
+            }
 
-           if (bottomRect is not null)
-                screen.Window.Draw(bottomRect);
+            topRect.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
+
+            bottomRect.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
+            bottomRect.Position = new Vector2f(0, topRectHeight);
+
+            screen.Window.Draw(topRect);
+            screen.Window.Draw(bottomRect);
         }
     }
 }

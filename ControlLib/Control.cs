@@ -15,6 +15,8 @@ namespace ControlLib
 
         private double minDistanceFromWall = 1;
         private double mouseSensitivity = 0.001;
+        private double verticalAngle = 0.0;
+       // private bool isMouseCaptured = true;
         private double angle = 0.0;
 
         private CheckPressed checkPressed = new CheckPressed();
@@ -39,8 +41,11 @@ namespace ControlLib
                 Mouse.SetPosition(new Vector2i(screen.setting.HalfWidth, screen.setting.HalfHeight), screen.Window);
 
                 int actualMousePositionX = currentMousePosition.X - screen.setting.HalfWidth;
+                int actualMousePositionY = currentMousePosition.Y - screen.setting.HalfHeight;
+                verticalAngle = Math.Clamp(verticalAngle, -Math.PI / 2, Math.PI / 2);
 
                 angle += actualMousePositionX * mouseSensitivity;
+                verticalAngle += actualMousePositionY * mouseSensitivity;
             }
         }
 
@@ -157,12 +162,13 @@ namespace ControlLib
             playerA += moveSpeedAngel;
         }
 
-        public void makePressed(float deltaTime,  ref double entityX, ref double entityY, ref double playerA)
+        public void makePressed(float deltaTime,  ref double entityX, ref double entityY, ref double playerA, ref double playerVerticalA)
         {
             double tempMoveSpeed = (100 * deltaTime);
 
 
             playerA = angle;
+            playerVerticalA = verticalAngle;
             moveSpeed = tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.setting.AmountRays / screen.ScreenWidth));
             moveSpeedAngel = 1 * deltaTime;
 

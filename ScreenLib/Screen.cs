@@ -5,6 +5,7 @@ using ScreenLib.SettingScreen;
 
 namespace ScreenLib
 {
+    
     public class Screen
     {
         private VideoMode videoMode = VideoMode.DesktopMode;

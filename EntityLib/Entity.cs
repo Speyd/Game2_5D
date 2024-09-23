@@ -28,6 +28,7 @@ namespace EntityLib
         protected double entityY;
         protected double entityX;
         protected double entityA;
+        public double playerVerticalA = 0;
 
         public Entity(Setting setting,
             double entityFov = Math.PI / 3,

@@ -49,10 +49,10 @@ const int ScreenHeight = 800;
 const int mapScale = 5;
 
 
-Screen screen = new Screen(1500, 1000, mapScale, @"D:\C++ проекты\Game2_5D\Wall1.png");
+Screen screen = new Screen(1500, 1000, mapScale, @"D:\C++ проекты\Game2_5D\Wall1.png", true);
 screen.Window.SetActive(true);
 
-Map map = new Map(32, 32, screen.setting.Tile);
+Map map = new Map(12, 12, screen.setting.Tile);
 map.addBlockToMap(2, 2);
 map.addBlockToMap(2, 5);
 
