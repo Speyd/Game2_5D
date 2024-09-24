@@ -1035,10 +1035,20 @@
       },
       "MapLib/1.0.0": {
         "dependencies": {
+          "ObstacleLib": "1.0.0",
+          "SFML.Graphics": "2.6.0",
           "ScreenLib": "1.0.0"
         },
         "runtime": {
           "MapLib.dll": {}
+        }
+      },
+      "ObstacleLib/1.0.0": {
+        "dependencies": {
+          "SFML.Graphics": "2.6.0"
+        },
+        "runtime": {
+          "ObstacleLib.dll": {}
         }
       },
       "RenderLib/1.0.0": {
@@ -1146,6 +1156,11 @@
       "sha512": ""
     },
     "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "ObstacleLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

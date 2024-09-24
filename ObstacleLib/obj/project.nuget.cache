@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "X/zF1XOIYAG0HPeArWvaoXQlJMiYPlmkXGpsJ9ILcANuRhTumO14MDAEUt9e4+cSm7xB0WBpARJdnLmKtrFFEQ==",
+  "success": true,
+  "projectFilePath": "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.0\\sfml.system.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512"
+  ],
+  "logs": []
+}

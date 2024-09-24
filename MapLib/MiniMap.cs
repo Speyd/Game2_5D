@@ -12,7 +12,7 @@ using SFML.System;
 
 namespace MapLib.MiniMapLib
 {
-    public class MiniMap(Screen screen, List<ValueTuple<int, int>> miniMap, Color fill)
+    public class MiniMap(Screen screen, Map map, Color fill)
     {
         const int miniMapSlowdownFactor = 19;
 
@@ -25,7 +25,7 @@ namespace MapLib.MiniMapLib
         readonly float centerX = screen.miniMapTexture.Size.X / 2;
         readonly float centerY = screen.miniMapTexture.Size.Y / 2;
         readonly int mapTile = screen.setting.Tile / (int)mapScale;
-        // int rayWidth = screen.ScreenWidth / screen.setting.AmountRays;
+
 
 
         VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
@@ -52,20 +52,23 @@ namespace MapLib.MiniMapLib
             return entityShape;
         }
 
-        void miniMapCameraMovement(double mapX, double mapY)
+        void renderObstacle(double mapX, double mapY)
         {
-            foreach (var coo in miniMap)
+            foreach (var coo in map.Obstacles)
             {
-                RectangleShape tile = new RectangleShape(new Vector2f(mapTile, mapTile))
-                {
-                    FillColor = Color.Green,
-                    OutlineThickness = 1,
-                    OutlineColor = Color.Black,
-                    Position = new Vector2f(
-                (float)(centerX - (coo.Item1 - mapX) - miniMapSlowdownFactor),
-                (float)(centerY - (coo.Item2 - mapY) - miniMapSlowdownFactor)
-            )
-                };
+                float x = (coo.Key.Item1 / map.Setting.ScreenTile) * mapTile;
+                float y = (coo.Key.Item2 / map.Setting.ScreenTile) * mapTile;
+
+                RectangleShape tile = new RectangleShape(new Vector2f(mapTile, mapTile));
+
+                tile.FillColor = coo.Value.Color;
+                tile.OutlineThickness = 1;
+                tile.OutlineColor = Color.Black;
+                tile.Position = new Vector2f
+                    (
+                        (float)(centerX - (x - mapX) - miniMapSlowdownFactor),
+                        (float)(centerY - (y - mapY) - miniMapSlowdownFactor)
+                    );
 
                 screen.miniMapTexture.Draw(tile);
             }
@@ -92,17 +95,14 @@ namespace MapLib.MiniMapLib
         {        
             screen.miniMapTexture.Clear(fill);
 
-
             int mapX = (int)(entityX / mapScale);
             int mapY = (int)(entityY / mapScale);
 
 
             screen.miniMapTexture.Draw(renderLineSight(mapX, mapY, entityA));
             screen.miniMapTexture.Draw(renderEntityShape(mapX, mapY));
+            renderObstacle(mapX, mapY);
 
-            miniMapCameraMovement(mapX, mapY);
-
-            //DrawDebugGrid();
             screen.miniMapTexture.Display();
 
 
@@ -110,7 +110,6 @@ namespace MapLib.MiniMapLib
             {
                 Position = new Vector2f(0, screen.ScreenHeight - (int)(screen.ScreenHeight / mapScale))
             };
-
         }
     }
 }

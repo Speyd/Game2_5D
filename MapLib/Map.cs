@@ -1,85 +1,94 @@
 ﻿using ScreenLib;
 using System.Text;
+using MapLib.SettingLib;
+using ObstacleLib;
+using SFML.Graphics;
+using System.Collections.Generic;
 
 namespace MapLib
 {
     public class Map
     {
-        public int MapWidth { get; init; }
-        public int MapHeight { get; init; }
-        //private int AppendLine { get; set; } = 0;
+        public Setting Setting { get; init; }
 
-        public int MapScale { get; init; } =  5;
-        public int MapTile { get; init; }
-        private int Tile {  get; init; }
         public StringBuilder MapStr { get; init; } = new StringBuilder();
 
-        public List<ValueTuple<int, int>> Obstacles {  get; set; }
+        public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public char block;
-        public char empty;
-        public char player;
+        public static Obstacle block = new Obstacle(@"D:\C++ проекты\Game2_5D\Wall1.png", '#', Color.Green);
+        public static char empty = ' ';
 
-        public Map(int mapHeight, int mapWidth, int Tile,
-            char block = '#', 
-            char empty = '.',
-            char player = 'P')
+        public Map(int mapHeight, int mapWidth, int Tile)
         {
-            this.MapWidth = mapWidth > 0 ? mapWidth : throw new Exception("mapWidth <= 0");
-            this.MapHeight = mapHeight > 0 ? mapHeight : throw new Exception("mapWidth <= 0");
-            this.block = block;
-            this.empty = empty;
-            this.player = player;
+            Setting = new Setting(mapHeight, mapWidth, Tile);
+            Obstacles = new Dictionary<(int, int), Obstacle>();
 
-            this.Tile = Tile;
-            MapTile = Tile / MapScale;
             creatMap();
-
-            Obstacles = getMapWorld(Tile, this);
         }
 
-        public void setObstacles()
+        private void refillingObstacles()
         {
-            Obstacles = getMapWorld(Tile, this);
+            var tempObstacles = new Dictionary<(int, int), Obstacle>();
+
+            for (int y = 0; y < Setting.MapHeight;  y++)
+            {
+                for(int x = 0;  x < Setting.MapWidth; x++)
+                {
+                    if (MapStr[y * Setting.MapWidth + x] != empty)
+                    {
+                        if(tempObstacles.ContainsKey((x, y)))
+                            addObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
+                        else
+                            addObstacleToMap(x, y, tempObstacles, block);
+                    }
+                        
+                }
+            }
+
+            Obstacles = new Dictionary<(int, int), Obstacle>(tempObstacles);
         }
         private string creatMap()
         {
             string tempMap = "";
 
-            MapStr.Append(new string(block, MapWidth));
+            MapStr.Append(new string(block.Symbol, Setting.MapWidth));
 
-            for(int i = 0; i < MapWidth - 2; i++)
+            for(int i = 0; i < Setting.MapWidth - 2; i++)
             {
-                MapStr.Append(block + new string(empty, MapWidth - 2) + block);
+                MapStr.Append(block.Symbol + new string(empty, Setting.MapWidth - 2) + block.Symbol);
             }
 
-            MapStr.Append(new string(block, MapWidth));
+            MapStr.Append(new string(block.Symbol, Setting.MapWidth));
+            refillingObstacles();
 
             return tempMap;
         }
 
-        public void addBlockToMap(int line, int column)
+        public void addObstacleToMap(int x, int y,
+            Dictionary<(int, int), Obstacle> obstacles, Obstacle obstacle)
         {
-            if (line < 0 || line >= MapHeight ||
-               column < 0 || column >= MapWidth)
-                throw new Exception("Index out of range 'addBlockToMap'");
-
-            MapStr[line * MapWidth + column] = block;
-            
-           
-        }
-        public void addEmptyToMap(int line, int column)
-        {
-            if (line < 0 || line >= MapHeight ||
-               column < 0 || column >= MapWidth)
+            if (y < 0 || y >= Setting.MapHeight ||
+               x < 0 || x >= Setting.MapWidth)
                 throw new Exception("Index out of range 'addEmptyToMap'");
+            else if (obstacle.Symbol == empty)
+                return;
 
-            if (line == 0 || line == MapHeight - 1 ||
-               column == 0 || column == MapWidth - 1)
-                throw new Exception("You are trying to change the map boundaries 'addEmptyToMap'");
+            MapStr[y * Setting.MapWidth + x] = obstacle.Symbol;
 
+            x *= Setting.ScreenTile;
+            y *= Setting.ScreenTile;
+            obstacles[(x, y)] = obstacle;
+         
+        }
+        public void deleteObstacleFromMap(int x, int y)
+        {
 
-            MapStr[line * MapWidth + column] = empty;
+            if (y <= 0 || y >= Setting.MapHeight - 1 ||
+               x <= 0 || x >= Setting.MapWidth - 1)
+                throw new Exception("You are trying to change the map boundaries or idnex out range 'addEmptyToMap'");
+
+            Obstacles.Remove((x * Setting.ScreenTile, y * Setting.ScreenTile));
+            MapStr[y * Setting.MapWidth + x] = empty;
         }
         public ValueTuple<int, int> mapping(double x, double y, int tile)
         {
@@ -89,9 +98,9 @@ namespace MapLib
         }
         public bool IsWall(int x, int y)
         {
-            if (x >= 0 && y >= 0 && x < MapWidth && y < MapHeight)
+            if (x >= 0 && y >= 0 && x < Setting.MapWidth && y < Setting.MapHeight)
             {
-                return MapStr[y * MapWidth + x] == block;
+                return Obstacles.ContainsKey((x, y));
             }
             //else
             //{
@@ -103,11 +112,11 @@ namespace MapLib
         public List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)
         {
             List<ValueTuple<int, int>> values = new List<(int, int)>();
-            for (int i = 0; i < map.MapHeight; i++)
+            for (int i = 0; i < map.Setting.MapHeight; i++)
             {
-                for (int j = 0; j < map.MapWidth; j++)
+                for (int j = 0; j < map.Setting.MapWidth; j++)
                 {
-                    if (map.MapStr[i * map.MapWidth + j] == '#')
+                    if (map.MapStr[i * map.Setting.MapWidth + j] == '#')
                         values.Add((j * TILE, i * TILE));
                 }
 
@@ -117,11 +126,11 @@ namespace MapLib
         }
         public void printMap()
         {
-            for(int i = 0; i < MapHeight; i++)
+            for(int i = 0; i < Setting.MapHeight; i++)
             {
-                for(int  j = 0; j < MapWidth; j++)
+                for(int  j = 0; j < Setting.MapWidth; j++)
                 {
-                    Console.Write(MapStr[i * MapWidth + j]);
+                    Console.Write(MapStr[i * Setting.MapWidth + j]);
                 }
                 Console.WriteLine();
             }

@@ -19,16 +19,16 @@ namespace EntityLib.Player
         
         public Player(Screen screen, Map map,
             double entityFov = Math.PI / 3,
-            double entityX = 0, double entityY = 0,
+            double entityX = 0, float entityY = 0,
             double entityA = 0)
 
             :base(screen.setting, entityFov, entityX, entityY, entityA)
         {
             Control = new Control(map, screen);
         }
-        public void makePressed(float deltaTime)
+        public void makePressed(double deltaTime)
         {
-            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA, ref playerVerticalA);
+            Control.makePressed(deltaTime, ref entityX, ref entityY, ref entityA, ref entityVerticalA);
         }
     }
 }

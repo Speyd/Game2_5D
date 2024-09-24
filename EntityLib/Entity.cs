@@ -28,42 +28,35 @@ namespace EntityLib
         protected double entityY;
         protected double entityX;
         protected double entityA;
-        public double playerVerticalA = 0;
+        protected double entityVerticalA;
 
         public Entity(Setting setting,
             double entityFov = Math.PI / 3,
-            double entityX = 0, double entityY = 0, 
-            double entityA = 0)
+            double entityX = 0, double entityY = 0,
+            double entityA = 0, double entityVerticalA = 0)
         {
             EntityFov = entityFov;
 
             this.entityX = entityX <= 0 ? setting.HalfWidth : entityX;
             this.entityY = entityY <= 0 ? setting.HalfHeight : entityY;
             this.entityA = entityA;
+            this.entityVerticalA = entityVerticalA;
 
 
-            HalfFov = entityFov / 2;
-            DeltaAngle = entityFov / setting.AmountRays;
+            HalfFov = (float)entityFov / 2;
+            DeltaAngle = (float)entityFov / setting.AmountRays;
 
-            Dist = setting.AmountRays / (2 * Math.Tan(HalfFov));
+            Dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
             ProjCoeff = Dist * setting.Tile;
         }
 
-        
-        public double getEntityY()
-        {
-            return entityY;
-        }
 
-        public double getEntityX()
-        {
-            return entityX;
-        }
+        public double getEntityY() => entityY;
 
-        public double getEntityA()
-        {
-            return entityA;
-        }
+        public double getEntityX() => entityX;
+
+        public double getEntityA() => entityA;
+        public double getEntityVerticalA() => entityVerticalA;
 
     }
 }

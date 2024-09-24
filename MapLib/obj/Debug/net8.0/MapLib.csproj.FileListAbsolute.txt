@@ -14,3 +14,5 @@ D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\ScreenLib.pdb
 D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.csproj.AssemblyReference.cache
 D:\C++ проекты\Game2_5D\MapLib\obj\Debug\net8.0\MapLib.csproj.Up2Date
+D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\ObstacleLib.dll
+D:\C++ проекты\Game2_5D\MapLib\bin\Debug\net8.0\ObstacleLib.pdb

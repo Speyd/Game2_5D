@@ -18,3 +18,5 @@ D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\EntityLib.pdb
 D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\ref\EntityLib.dll
 D:\C++ проекты\Game2_5D\EntityLib\bin\Debug\net8.0\MapLib.dll
 D:\C++ проекты\Game2_5D\EntityLib\bin\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\EntityLib\bin\Debug\net8.0\ObstacleLib.dll
+D:\C++ проекты\Game2_5D\EntityLib\bin\Debug\net8.0\ObstacleLib.pdb

@@ -895,6 +895,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "ObstacleLib": "1.0.0",
+          "SFML.Graphics": "2.6.0",
           "ScreenLib": "1.0.0"
         },
         "compile": {
@@ -902,6 +904,19 @@
         },
         "runtime": {
           "bin/placeholder/MapLib.dll": {}
+        }
+      },
+      "ObstacleLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SFML.Graphics": "2.6.0"
+        },
+        "compile": {
+          "bin/placeholder/ObstacleLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ObstacleLib.dll": {}
         }
       },
       "RenderLib/1.0.0": {
@@ -1309,6 +1324,11 @@
       "type": "project",
       "path": "../MapLib/MapLib.csproj",
       "msbuildProject": "../MapLib/MapLib.csproj"
+    },
+    "ObstacleLib/1.0.0": {
+      "type": "project",
+      "path": "../ObstacleLib/ObstacleLib.csproj",
+      "msbuildProject": "../ObstacleLib/ObstacleLib.csproj"
     },
     "RenderLib/1.0.0": {
       "type": "project",

@@ -20,3 +20,5 @@ D:\C++ проекты\Game2_5D\RenderLib\obj\Debug\net8.0\RenderLib.dll
 D:\C++ проекты\Game2_5D\RenderLib\obj\Debug\net8.0\refint\RenderLib.dll
 D:\C++ проекты\Game2_5D\RenderLib\obj\Debug\net8.0\RenderLib.pdb
 D:\C++ проекты\Game2_5D\RenderLib\obj\Debug\net8.0\ref\RenderLib.dll
+D:\C++ проекты\Game2_5D\RenderLib\bin\Debug\net8.0\ObstacleLib.dll
+D:\C++ проекты\Game2_5D\RenderLib\bin\Debug\net8.0\ObstacleLib.pdb

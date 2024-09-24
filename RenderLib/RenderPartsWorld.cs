@@ -7,60 +7,33 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace RenderLib.RenderPartsWorld
 {
+
     static public class RenderPartsWorld
     {
-        private static RectangleShape? topRect;
-        private static RectangleShape? bottomRect;
-        // private static double tempA = 0;
+        private static Texture? skyTexture = new Texture(@"D:\C++ проекты\Game2_5D\Sky.png");
+        private static Texture? bottomTexture = null;//new Texture(@"D:\C++ проекты\Game2_5D\Ground.png");
 
-        public static void setTopRect(int ScreenWidth, int halfHeight, Color color, Vector2f? vector = null)
-        {
-            topRect = new RectangleShape(new Vector2f(ScreenWidth, halfHeight));
-            topRect.FillColor = color;
-            if (vector is not null && vector is Vector2f tempVector)
-                topRect.Position = tempVector;
-            else
-                topRect.Position = new Vector2f(0, 0);
-        }
-        public static void setBottomRect(int ScreenWidth, int halfHeight, Color color, Vector2f? vector = null)
-        {
-            bottomRect = new RectangleShape(new Vector2f(ScreenWidth, halfHeight));
-            bottomRect.FillColor = color;
-            if (vector is not null && vector is Vector2f tempVector)
-                bottomRect.Position = tempVector;
-            else
-                bottomRect.Position = new Vector2f(0, halfHeight);
-        }
+        private const int stretchingTexture = -5;
 
-        private static void calculatingCoordinatesY(Screen screen, Player player, ref int firstNum, ref int secondNum)
-        {
-            firstNum = (int)(screen.ScreenHeight * (1 - Math.Sin(player.playerVerticalA)));
-            secondNum = screen.ScreenHeight - firstNum;
-        }
-        private static void calculatingCoordinatesX(Screen screen, Player player, ref int firstNum, ref int secondNum)
-        {
-            firstNum = (int)(screen.ScreenHeight * (1 - Math.Cos(player.playerVerticalA)));
-            secondNum = screen.ScreenHeight - firstNum;
-        }
-        public static void renderPartsWorld(Screen screen, Player player)
-        {
 
-            int topRectHeight = 0;
-            int bottomRectHeight = 0;
-            
-            if (player.playerVerticalA > 0)
+        private static void setCoordinate(ref int topRectHeight, ref int bottomRectHeight,
+            Screen screen, Player player)
+        {
+            if (player.getEntityVerticalA() > 0)
             {
-                topRectHeight = (int)(screen.setting.HalfHeight / (1 + 1 * player.playerVerticalA));
+                topRectHeight = (int)(screen.setting.HalfHeight / (1 + 1 * player.getEntityVerticalA()));
                 bottomRectHeight = screen.ScreenHeight - topRectHeight;
             }
-            else if (player.playerVerticalA < 0)
+            else if (player.getEntityVerticalA() < 0)
             {
-                topRectHeight = (int)(screen.setting.HalfHeight * (1 + 1 * -player.playerVerticalA));
+                topRectHeight = (int)(screen.setting.HalfHeight * (1 + 1 * -player.getEntityVerticalA()));
                 bottomRectHeight = screen.ScreenHeight - bottomRectHeight;
             }
             else
@@ -68,14 +41,73 @@ namespace RenderLib.RenderPartsWorld
                 topRectHeight = screen.setting.HalfHeight;
                 bottomRectHeight = screen.ScreenHeight - topRectHeight;
             }
+        }
 
-            topRect.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
+        private static void renderBottomRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
+        {
+            if (bottomTexture is not null)
+            {
+                Sprite bottomRect = new Sprite(bottomTexture);
 
-            bottomRect.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
-            bottomRect.Position = new Vector2f(0, topRectHeight);
+                bottomRect.Scale = new Vector2f(screen.ScreenWidth / (float)bottomTexture.Size.X, bottomRectHeight / (float)bottomTexture.Size.Y);
+                bottomRect.Position = new Vector2f(0, topRectHeight);
 
-            screen.Window.Draw(topRect);
-            screen.Window.Draw(bottomRect);
+                screen.Window.Draw(bottomRect);
+            }
+            else
+            {
+                RectangleShape filledRectangle = new RectangleShape(new Vector2f(screen.ScreenWidth, bottomRectHeight))
+                {
+                    FillColor = new Color(20, 20, 20),
+                    Size = new Vector2f(screen.ScreenWidth, bottomRectHeight),
+                    Position = new Vector2f(0, topRectHeight),
+                };
+                screen.Window.Draw(filledRectangle);
+            }
+        }
+
+        private static void renderTopRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
+        {
+            if (skyTexture is not null)
+            {
+                skyTexture.Repeated = true;
+                float skyOffset = (float)(stretchingTexture * (player.getEntityA() * (180 / (float)Math.PI)) % screen.ScreenWidth);
+
+                Sprite topRect = new Sprite(skyTexture);
+
+                float scaleX = screen.ScreenWidth / (float)skyTexture.Size.X;
+                float scaleY = screen.ScreenWidth / (float)skyTexture.Size.Y;
+                topRect.Scale = new Vector2f(scaleX, scaleY);
+
+                topRect.Position = new Vector2f(skyOffset, 0);
+                screen.Window.Draw(topRect);
+
+                topRect.Position = new Vector2f(skyOffset - screen.ScreenWidth, 0);
+                screen.Window.Draw(topRect);
+
+                topRect.Position = new Vector2f(skyOffset + screen.ScreenWidth, 0);
+                screen.Window.Draw(topRect);
+            }
+            else
+            {
+                RectangleShape filledRectangle = new RectangleShape(new Vector2f(screen.ScreenWidth, bottomRectHeight))
+                {
+                    FillColor = new Color(100, 149, 237),
+                    Size = new Vector2f(screen.ScreenWidth, topRectHeight),
+                };
+                screen.Window.Draw(filledRectangle);
+            }
+        }
+        public static void renderPartsWorld(Screen screen, Player player)
+        {
+            int topRectHeight = 0;
+            int bottomRectHeight = 0;
+
+            float skyOffset = (float)(stretchingTexture * (player.getEntityA() * (180 / (float)Math.PI)) % screen.ScreenWidth);
+            setCoordinate(ref topRectHeight, ref bottomRectHeight, screen, player);
+
+            renderTopRect(ref topRectHeight, ref bottomRectHeight, screen, player);
+            renderBottomRect(ref topRectHeight, ref bottomRectHeight, screen, player);
         }
     }
 }
