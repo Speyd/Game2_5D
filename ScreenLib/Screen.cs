@@ -22,7 +22,7 @@ namespace ScreenLib
 
         //public int TextureScale { get; init; }
 
-        public RenderTexture miniMapTexture;
+        //public RenderTexture miniMapTexture;
 
         public VertexArray vertexArray = new VertexArray(PrimitiveType.Quads);
 
@@ -43,7 +43,7 @@ namespace ScreenLib
 
             setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
 
-            miniMapTexture = new RenderTexture((uint)(screenWidth / (mapScale * 1.57)), (uint)(screenHeight / (mapScale / 1.57)));
+            //miniMapTexture = new RenderTexture((uint)(screenWidth / (mapScale * 1.57)), (uint)(screenHeight / (mapScale / 1.57)));
 
             //TextureWall = new Texture(path);
             ////TextureWall = new List<Texture>();

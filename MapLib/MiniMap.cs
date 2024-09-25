@@ -9,45 +9,61 @@ using ScreenLib;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
+using MapLib.MiniMapLib.Setting;
+using System.Threading;
 
 namespace MapLib.MiniMapLib
 {
-    public class MiniMap(Screen screen, Map map, Color fill)
+    public class MiniMap
     {
-        const int miniMapSlowdownFactor = 19;
+        private Screen screen;
+        private Map map;
+        private Color fill;
 
-        const double mapScale = 5;
-        const int radiusCircle = 6;
+        private RenderTexture Window { get; init; }
+        private readonly double mapScale = 5;
+        public Sprite MiniMapSprite { get; set; } = new Sprite();
 
-        const int sizeMainRayX = 50;
-        const int sizeMainRayY = 50;
+        public SettingMiniMap Setting { get; init; }
 
-        readonly float centerX = screen.miniMapTexture.Size.X / 2;
-        readonly float centerY = screen.miniMapTexture.Size.Y / 2;
-        readonly int mapTile = screen.setting.Tile / (int)mapScale;
+        private Texture? borderTexture;
+        private Sprite borderSprite = new Sprite();
 
+        public MiniMap(Screen screen, Map map, Color fill, string? path = null, double mapScale = 5)
+        {
+            this.mapScale = mapScale;
 
+            uint sizeX = (uint)(screen.ScreenWidth / (mapScale * (Math.PI / 2)));
+            uint sizeY = (uint)(screen.ScreenHeight / (mapScale / (Math.PI / 2)));
+            Window = new RenderTexture(sizeX, sizeY);
+            Setting = new SettingMiniMap(screen, Window, mapScale);
 
-        VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
-        public Sprite MiniMapSprite { get; set; }
+            this.screen = screen;
+            this.map = map;
+            this.fill = fill;
+
+            borderTexture = path is not null ? new Texture(path) : null;
+            if(borderTexture is not null)
+                borderTexture.Smooth = true;
+        }
 
         VertexArray renderLineSight(int mapX, int mapY, double entityA)
         {
-            line[0] = new Vertex(new Vector2f(centerX, centerY), Color.Green);
+            Setting.line[0] = new Vertex(new Vector2f(Setting.centerX, Setting.centerY), Color.Green);
 
 
-            float endX = (float)((centerX - sizeMainRayX * (Math.Cos(entityA))));
-            float endY = (float)((centerY - sizeMainRayY * (Math.Sin(entityA))));
-            line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
+            float endX = (float)(Setting.centerX - Setting.getSizeMainRayX() * Math.Cos(entityA));
+            float endY = (float)((Setting.centerY - Setting.getSizeMainRayY() * (Math.Sin(entityA))));
+            Setting.line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
 
-            return line;
+            return Setting.line;
         }
         CircleShape renderEntityShape(int mapX, int mapY)
         {
-            CircleShape entityShape = new CircleShape(radiusCircle)
+            CircleShape entityShape = new CircleShape(Setting.getRadiusCircle())
             {
                 FillColor = Color.Red,
-                Position = new Vector2f(centerX - radiusCircle, centerY - radiusCircle)
+                Position = new Vector2f(Setting.centerX - Setting.getRadiusCircle(), Setting.centerY - Setting.getRadiusCircle())
             };
             return entityShape;
         }
@@ -56,60 +72,124 @@ namespace MapLib.MiniMapLib
         {
             foreach (var coo in map.Obstacles)
             {
-                float x = (coo.Key.Item1 / map.Setting.ScreenTile) * mapTile;
-                float y = (coo.Key.Item2 / map.Setting.ScreenTile) * mapTile;
+                float x = (coo.Key.Item1 / map.Setting.ScreenTile) * Setting.mapTile;
+                float y = (coo.Key.Item2 / map.Setting.ScreenTile) * Setting.mapTile;
 
-                RectangleShape tile = new RectangleShape(new Vector2f(mapTile, mapTile));
+                RectangleShape tile = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
                 tile.FillColor = coo.Value.Color;
                 tile.OutlineThickness = 1;
                 tile.OutlineColor = Color.Black;
                 tile.Position = new Vector2f
                     (
-                        (float)(centerX - (x - mapX) - miniMapSlowdownFactor),
-                        (float)(centerY - (y - mapY) - miniMapSlowdownFactor)
+                        (float)(Setting.centerX - (x - mapX) - Setting.getMiniMapSlowdownFactor()),
+                        (float)(Setting.centerY - (y - mapY) - Setting.getMiniMapSlowdownFactor())
                     );
 
-                screen.miniMapTexture.Draw(tile);
+                Window.Draw(tile);
             }
         }
-        void DrawDebugGrid()
+        void drawDebugGrid()
         {
             int gridSize = 20;
-            for (int i = 0; i < screen.miniMapTexture.Size.X; i += gridSize)
+            for (int i = 0; i < Window.Size.X; i += gridSize)
             {
                 VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
                 line[0] = new Vertex(new Vector2f(i, 0), Color.White);
-                line[1] = new Vertex(new Vector2f(i, screen.miniMapTexture.Size.Y), Color.White);
-                screen.miniMapTexture.Draw(line);
+                line[1] = new Vertex(new Vector2f(i, Window.Size.Y), Color.White);
+                Window.Draw(line);
             }
-            for (int i = 0; i < screen.miniMapTexture.Size.Y; i += gridSize)
+            for (int i = 0; i < Window.Size.Y; i += gridSize)
             {
                 VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
                 line[0] = new Vertex(new Vector2f(0, i), Color.White);
-                line[1] = new Vertex(new Vector2f(screen.miniMapTexture.Size.X, i), Color.White);
-                screen.miniMapTexture.Draw(line);
+                line[1] = new Vertex(new Vector2f(Window.Size.X, i), Color.White);
+                Window.Draw(line);
             }
         }
+
+        private float getMultiY()
+        {
+            if (borderTexture is null)
+                return 0;
+
+            if (5000 / borderTexture.Size.Y > 1)
+            {
+                return 0.6f + ((float)Math.Floor(5000f / borderTexture.Size.Y) / 10) - 0.1f;
+            }
+            else if (5000 / borderTexture.Size.Y == 1)
+            {
+                return 5000f / borderTexture.Size.X;
+            }
+            else
+            {
+                return 0.8f + ((borderTexture.Size.Y / 5000) / 10) - 0.1f;
+            }
+        }
+        private float getMultiX()
+        {
+            if (borderTexture is null)
+                return 0;
+
+            if (5000 / borderTexture.Size.X > 1)
+            {
+                return 0.8f + ((float)Math.Floor(5000.0 / borderTexture.Size.X) / 10) - 0.1f;
+            }
+            else if (5000 / borderTexture.Size.X == 1)
+            {
+                return 5000f / borderTexture.Size.Y;
+            }
+            else
+            {
+                return 0.8f - ((5000 / borderTexture.Size.X) / 10) + 0.1f;
+            }
+        }
+
+        void drawMiniMapBorder()
+        {
+            if (borderTexture is null)
+                return;
+
+            float multiY = getMultiY();
+            float multiX = getMultiX();
+
+            float scaleX = (float)Window.Size.X / borderTexture.Size.X / multiX;
+            float scaleY = (float)Window.Size.Y / borderTexture.Size.Y * multiY;
+
+            borderSprite = new Sprite(borderTexture)
+            {
+                Scale = new Vector2f(scaleX, scaleY)
+            };
+
+
+            borderSprite.Position = new Vector2f(
+                (Window.Size.X - (borderTexture.Size.X * scaleX)) / 2,
+                (Window.Size.Y - (borderTexture.Size.Y * scaleY)) / 2 - 60
+            );
+
+            Window.Draw(borderSprite);
+        }
         public void render(double entityX, double entityY, double entityA)
-        {        
-            screen.miniMapTexture.Clear(fill);
+        {
+            Window.Clear(fill);
 
             int mapX = (int)(entityX / mapScale);
             int mapY = (int)(entityY / mapScale);
 
-
-            screen.miniMapTexture.Draw(renderLineSight(mapX, mapY, entityA));
-            screen.miniMapTexture.Draw(renderEntityShape(mapX, mapY));
+            Window.Draw(renderLineSight(mapX, mapY, entityA));
+            Window.Draw(renderEntityShape(mapX, mapY));
             renderObstacle(mapX, mapY);
+            drawMiniMapBorder();
 
-            screen.miniMapTexture.Display();
+            Window.Display();
 
 
-            MiniMapSprite = new Sprite(screen.miniMapTexture.Texture)
+            MiniMapSprite = new Sprite(Window.Texture)
             {
                 Position = new Vector2f(0, screen.ScreenHeight - (int)(screen.ScreenHeight / mapScale))
             };
+
+            screen.Window.Draw(MiniMapSprite);
         }
     }
 }

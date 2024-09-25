@@ -50,7 +50,8 @@ const int ScreenHeight = 800;
 const int mapScale = 5;
 
 
-Screen screen = new Screen(1500, 1000, mapScale);
+Screen screen = new Screen(1500, 1000, mapScale, true);
+
 screen.Window.SetActive(true);
 
 Map map = new Map(12, 12, screen.setting.Tile);
@@ -66,7 +67,7 @@ map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue);
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue);//, @"D:\C++ проекты\Game2_5D\Border.png");
 
 
 
@@ -90,11 +91,10 @@ while (screen.Window.IsOpen)
 
 
     render.algorithmBrezenhama();
-    mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
-
+   
 
     fpsChecker.endRead(screen);
 
-    screen.Window.Draw(mapMini.MiniMapSprite);
+    mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
     screen.Window.Display();
 }
