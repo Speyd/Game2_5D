@@ -24,7 +24,7 @@ using RenderLib.RenderPartsWorld;
 using FpsLib;
 using ObstacleLib;
 using System.Reflection.Metadata;
-
+using MapLib.MiniMapLib.Setting;
 
 
 List<ValueTuple<int, int>> getMapWorld(int TILE, Map map) 
@@ -67,7 +67,7 @@ map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue);//, @"D:\C++ проекты\Game2_5D\Border.png");
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MapLib.MiniMapLib.Setting.Positions.UpperRightCorner, @"D:\C++ проекты\Game2_5D\Border.png");
 
 
 

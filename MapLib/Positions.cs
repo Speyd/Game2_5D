@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace MapLib.MiniMapLib.Setting
 {
-    internal enum Positions
+    public enum Positions
     {
         UpperLeftCorner,
         LowerLeftCorner,
-        UpperRighCorner,
+        UpperRightCorner,
         LowerRightCorner,
     }
 }
