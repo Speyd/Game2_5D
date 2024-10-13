@@ -53,7 +53,7 @@ namespace MapLib
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
 
-            for(int i = 0; i < Setting.MapWidth - 2; i++)
+            for(int i = 0; i < Setting.MapHeight - 2; i++)
             {
                 MapStr.Append(block.Symbol + new string(empty, Setting.MapWidth - 2) + block.Symbol);
             }

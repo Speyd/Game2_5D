@@ -53,30 +53,41 @@ namespace ControlLib
         private void isCollision(double nextX, double nextY, ref double playerX, ref double playerY)
         {
             float delta_x = 0, delta_y = 0;
-
+            ValueTuple<int, int> tempCoo;
             if(nextX != 0)
             {
                 delta_x = (float)minDistanceFromWall / 2 * Math.Sign(nextX);
-                if (map.Obstacles.ContainsKey(map.mapping(playerX + nextX + delta_x, playerY + delta_x, screen.setting.Tile)))
-                {
-                    nextX = 0;
-                }
-                if (map.Obstacles.ContainsKey(map.mapping(playerX + nextX + delta_x, playerY - delta_x, screen.setting.Tile)))
-                {
 
-                    nextX = 0;
+                tempCoo = map.mapping(playerX + nextX + delta_x, playerY + delta_x, screen.setting.Tile);
+                if (map.Obstacles.ContainsKey(tempCoo))
+                {
+                    if (map.Obstacles[tempCoo].isPassability == false)
+                        nextX = 0;
+                }
+
+                tempCoo = map.mapping(playerX + nextX + delta_x, playerY - delta_x, screen.setting.Tile);
+                if (map.Obstacles.ContainsKey(tempCoo))
+                {
+                    if (map.Obstacles[tempCoo].isPassability == false)
+                        nextX = 0;
                 }
             }
             if (nextY != 0)
             {
                 delta_y = (float)minDistanceFromWall / 2 * Math.Sign(nextY);
-                if (map.Obstacles.ContainsKey(map.mapping(playerX + delta_y, playerY + nextY + delta_y, screen.setting.Tile)))
+
+                tempCoo = map.mapping(playerX + delta_y, playerY + nextY + delta_y, screen.setting.Tile);
+                if (map.Obstacles.ContainsKey(tempCoo))
                 {
-                    nextY = 0;
+                    if (map.Obstacles[tempCoo].isPassability == false)
+                        nextY = 0;
                 }
-                if (map.Obstacles.ContainsKey(map.mapping(playerX - delta_y, playerY + nextY + delta_y, screen.setting.Tile)))
+
+                tempCoo = map.mapping(playerX - delta_y, playerY + nextY + delta_y, screen.setting.Tile);
+                if (map.Obstacles.ContainsKey(tempCoo))
                 {
-                    nextY = 0;
+                    if (map.Obstacles[tempCoo].isPassability == false)
+                        nextY = 0;
                 }
             }
 

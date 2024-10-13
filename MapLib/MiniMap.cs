@@ -108,51 +108,11 @@ namespace MapLib.MiniMapLib
                 Window.Draw(line);
             }
         }
-
-        //private float getMultiY()
-        //{
-        //    if (borderTexture is null)
-        //        return 0;
-
-        //    if (5000 / borderTexture.Size.Y > 1)
-        //    {
-        //        return 0.6f + ((float)Math.Floor(5000f / borderTexture.Size.Y) / 10) - 0.1f;
-        //    }
-        //    else if (5000 / borderTexture.Size.Y == 1)
-        //    {
-        //        return 5000f / borderTexture.Size.X;
-        //    }
-        //    else
-        //    {
-        //        return 0.8f + ((borderTexture.Size.Y / 5000) / 10) - 0.1f;
-        //    }
-        //}
-        //private float getMultiX()
-        //{
-        //    if (borderTexture is null)
-        //        return 0;
-
-        //    if (5000 / borderTexture.Size.X > 1)
-        //    {
-        //        return 0.8f + ((float)Math.Floor(5000.0 / borderTexture.Size.X) / 10) - 0.1f;
-        //    }
-        //    else if (5000 / borderTexture.Size.X == 1)
-        //    {
-        //        return 5000f / borderTexture.Size.Y;
-        //    }
-        //    else
-        //    {
-        //        return 0.8f - ((5000 / borderTexture.Size.X) / 10) + 0.1f;
-        //    }
-        //}
-
         void drawMiniMapBorder()
         {
             if (borderTexture is null)
                 return;
 
-            float multiY = getMultiY();
-            float multiX = getMultiX();
 
             float scaleX = (float)Window.Size.X / borderTexture.Size.X * 1.1f;
             float scaleY = (float)Window.Size.Y / borderTexture.Size.Y * 1.1f;

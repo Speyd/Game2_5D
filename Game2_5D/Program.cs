@@ -23,6 +23,7 @@ using MapLib.MiniMapLib;
 using RenderLib.RenderPartsWorld;
 using FpsLib;
 using ObstacleLib;
+using ObstacleLib.SpriteLib;
 using System.Reflection.Metadata;
 using MapLib.MiniMapLib.Setting;
 
@@ -54,14 +55,16 @@ Screen screen = new Screen(1500, 1000, mapScale, true);
 
 screen.Window.SetActive(true);
 
-Map map = new Map(12, 12, screen.setting.Tile);
+Map map = new Map(24, 23, screen.setting.Tile);
 map.addObstacleToMap(2, 2, map.Obstacles, Map.block);
 map.addObstacleToMap(2, 5, map.Obstacles, Map.block);
 
-map.addObstacleToMap(7, 7, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall2.png", '$', Color.Red));
-map.addObstacleToMap(7, 8, map.Obstacles, Map.block);
-map.addObstacleToMap(7, 9, map.Obstacles, Map.block);
-map.addObstacleToMap(7, 10, map.Obstacles, Map.block);
+map.addObstacleToMap(7, 5, map.Obstacles, new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\Wall1.png", '$', Color.Black));
+map.addObstacleToMap(7, 7, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall2.png", '$', Color.Red, false, false));
+map.addObstacleToMap(7, 9, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall3.png", '$', Color.Yellow));
+map.addObstacleToMap(7, 11, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall4.png", '$', Color.Cyan));
+map.addObstacleToMap(7, 13, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall5.png", '$', Color.Black));
+map.addObstacleToMap(7, 2, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall8.png", '$', Color.Black, true));
 
 map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);

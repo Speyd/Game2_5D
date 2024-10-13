@@ -18,7 +18,7 @@ namespace RenderLib.RenderPartsWorld
     static public class RenderPartsWorld
     {
         private static Texture? skyTexture = new Texture(@"D:\C++ проекты\Game2_5D\Sky.png");
-        private static Texture? bottomTexture = null;//new Texture(@"D:\C++ проекты\Game2_5D\Ground.png");
+        private static Texture? bottomTexture = null;// new Texture(@"D:\C++ проекты\Game2_5D\Ground.png");
 
         private const int stretchingTexture = -5;
 

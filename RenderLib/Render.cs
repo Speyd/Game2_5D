@@ -20,18 +20,23 @@ namespace RenderLib
         private Map map;
         private Screen screen;
         private Entity entity;
-
+        ObstacleLib.SpriteLib.Sprite sprite =
+            new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\tn342.png", 'g', Color.White);
 
         private Setting setting;
 
         private readonly RenderObject renderObject;
 
         private ValueTuple<Texture?, Texture?> textures = (null, null);
+        private ValueTuple<bool, bool> renderWithTexture;
 
         private double angleVertical = 0;
 
         public Render(Map map, Screen screen, Entity entity)
         {
+            sprite.X = 400;
+            sprite.Y = 400;
+
             this.map = map;
             this.screen = screen;
             this.entity = entity;
@@ -99,6 +104,7 @@ namespace RenderLib
                     if (map.Obstacles.ContainsKey(map.mapping(x + auxiliaryX, vy, screen.setting.Tile)))
                     {
                         textures.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)].Texture;
+                        renderWithTexture.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)].RenderWithTexture;
                         break;
                     }
 
@@ -116,6 +122,7 @@ namespace RenderLib
                     if (map.Obstacles.ContainsKey(map.mapping(hx, y + auxiliaryY, screen.setting.Tile)))
                     {
                         textures.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)].Texture;
+                        renderWithTexture.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)].RenderWithTexture;
                         break;
                     }
 
@@ -123,13 +130,23 @@ namespace RenderLib
                 }
 
 
-                setting.calculationSettingRender(ref screen, ref entity, ref textures, depth_v, depth_h, hx, vy, car_angle);
-                renderObject.renderObstacle(ref screen, ref entity, ray, angleVertical);
+                setting.calculationSettingRender(ref screen, ref entity, ref textures, ref renderWithTexture, depth_v, depth_h, hx, vy, car_angle);
+
+                if (setting.RenderWithTexture)
+                    renderObject.renderObstacle(ref screen, ref entity, ray, angleVertical);
+                else
+                    renderObject.renderVertex(ref screen, ray, setting.ProjHeight, setting.Depth, angleVertical);
+
+                
+                
+                
 
                 car_angle += entity.DeltaAngle;
             }
 
             angleVertical = entity.getEntityVerticalA();
+            renderObject.renderSprites(screen, entity, new List<ObstacleLib.SpriteLib.Sprite>() { sprite });
         }
+
     }
 }
