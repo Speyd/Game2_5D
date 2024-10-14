@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using ObstacleLib;
 using ScreenLib;
 using SFML.Graphics;
 using System;
@@ -14,15 +15,12 @@ namespace RenderLib
         public double Depth { get; set; } = 0;
         public double Offset { get; set; } = 0;
         public double ProjHeight { get; set; } = 0;
-        public bool RenderWithTexture {  get; set; }
-
-        private int textureHeightMultiplierMear = 6;
-
-        public Texture? Texture { get; set; } = null;
+       
+        public Obstacle obstacle { get; set; } = null;
 
 
         private void redefinitionValues(
-            ref ValueTuple<Texture?, Texture?> textures, ref ValueTuple<bool, bool> renderWithTexture,
+            ref ValueTuple<Obstacle, Obstacle> obstacles,
             ref Entity entity,
             double depth_v, double depth_h,
             double hx, double vy,
@@ -33,27 +31,25 @@ namespace RenderLib
                 Offset = vy;
                 Depth = depth_v;
 
-                Texture = textures.Item1;
-                RenderWithTexture = renderWithTexture.Item1;
+                obstacle = obstacles.Item1;
             }
             else
             {
                 Offset = hx;
                 Depth = depth_h;
 
-                Texture = textures.Item2;
-                RenderWithTexture = renderWithTexture.Item2;
+                obstacle = obstacles.Item2;
             }
             Depth *= Math.Cos(entity.getEntityA() - car_angle);
         }
 
         public void calculationSettingRender(ref Screen screen, ref Entity entity,
-            ref ValueTuple<Texture?, Texture?> textures, ref ValueTuple<bool, bool> renderWithTexture,
+            ref ValueTuple<Obstacle, Obstacle> obstacles,
             double depth_v, double depth_h,
             double hx, double vy,
             double car_angle)
         {
-            redefinitionValues(ref textures, ref renderWithTexture, ref entity, depth_v, depth_h, hx, vy, car_angle);
+            redefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
             
 
             Offset = (int)Offset % screen.setting.Tile;

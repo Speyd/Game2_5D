@@ -15,7 +15,8 @@
           "RenderLib": "1.0.0",
           "SFML.Net": "2.6.0",
           "ScreenLib": "1.0.0",
-          "System.Drawing.Common": "8.0.8"
+          "SixLabors.ImageSharp": "3.1.5",
+          "System.Drawing.Common": "8.0.10"
         },
         "runtime": {
           "Game2_5D.dll": {}
@@ -995,14 +996,22 @@
           }
         }
       },
-      "System.Drawing.Common/8.0.8": {
+      "SixLabors.ImageSharp/3.1.5": {
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.1.5.0"
+          }
+        }
+      },
+      "System.Drawing.Common/8.0.10": {
         "dependencies": {
           "Microsoft.Win32.SystemEvents": "8.0.0"
         },
         "runtime": {
           "lib/net8.0/System.Drawing.Common.dll": {
             "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.0.824.36606"
+            "fileVersion": "8.0.1024.46803"
           }
         }
       },
@@ -1045,7 +1054,9 @@
       },
       "ObstacleLib/1.0.0": {
         "dependencies": {
-          "SFML.Graphics": "2.6.0"
+          "SFML.Graphics": "2.6.0",
+          "SixLabors.ImageSharp": "3.1.5",
+          "System.Drawing.Common": "8.0.10"
         },
         "runtime": {
           "ObstacleLib.dll": {}
@@ -1133,12 +1144,19 @@
       "path": "sfml.window/2.6.0",
       "hashPath": "sfml.window.2.6.0.nupkg.sha512"
     },
-    "System.Drawing.Common/8.0.8": {
+    "SixLabors.ImageSharp/3.1.5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-4ZM1wvLjz9nVVExsfPAaSl/qOvU+QNedJL5rQ+2Wbow+iGeyO0e7XN07707rMBgaffEeeLrCZBwC0oHUuvRdPw==",
-      "path": "system.drawing.common/8.0.8",
-      "hashPath": "system.drawing.common.8.0.8.nupkg.sha512"
+      "sha512": "sha512-lNtlq7dSI/QEbYey+A0xn48z5w4XHSffF8222cC4F4YwTXfEImuiBavQcWjr49LThT/pRmtWJRcqA/PlL+eJ6g==",
+      "path": "sixlabors.imagesharp/3.1.5",
+      "hashPath": "sixlabors.imagesharp.3.1.5.nupkg.sha512"
+    },
+    "System.Drawing.Common/8.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MdajRp3P+FOlThgY6FBjAqnmLiVl5t2yWEC/2AsDMqx1zYbJG3G5TnscFBQ4obqcaGqvN5UnhQHSFaJFG2HftQ==",
+      "path": "system.drawing.common/8.0.10",
+      "hashPath": "system.drawing.common.8.0.10.nupkg.sha512"
     },
     "ControlLib/1.0.0": {
       "type": "project",

@@ -11,6 +11,7 @@ using SFML.Window;
 using static System.Net.Mime.MediaTypeNames;
 using System.Numerics;
 using ObstacleLib;
+using ObstacleLib.SpriteLib;
 
 namespace RenderLib
 {
@@ -20,22 +21,22 @@ namespace RenderLib
         private Map map;
         private Screen screen;
         private Entity entity;
-        ObstacleLib.SpriteLib.Sprite sprite =
-            new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\tn342.png", 'g', Color.White);
+        //ObstacleLib.SpriteLib.Sprite sprite =
+        //    new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\tn342.png", 'g', Color.White);
 
         private Setting setting;
 
         private readonly RenderObject renderObject;
 
-        private ValueTuple<Texture?, Texture?> textures = (null, null);
+        private ValueTuple<Obstacle, Obstacle> obstacles = (null, null);
         private ValueTuple<bool, bool> renderWithTexture;
 
         private double angleVertical = 0;
 
         public Render(Map map, Screen screen, Entity entity)
         {
-            sprite.X = 400;
-            sprite.Y = 400;
+            //sprite.X = 400;
+            //sprite.Y = 400;
 
             this.map = map;
             this.screen = screen;
@@ -75,6 +76,7 @@ namespace RenderLib
         }
         public void algorithmBrezenhama()
         {
+            List<ObstacleLib.SpriteLib.Sprite> spritesToRender = new List<ObstacleLib.SpriteLib.Sprite>();
             screen.vertexArray.Clear();
 
             double car_angle = entity.getEntityA() - entity.HalfFov;
@@ -90,6 +92,8 @@ namespace RenderLib
 
 
             double sin_a, cos_a;
+           
+
             for (int ray = 0; ray < screen.setting.AmountRays; ray++)
             {
                 sin_a = Math.Sin(car_angle);
@@ -103,9 +107,14 @@ namespace RenderLib
 
                     if (map.Obstacles.ContainsKey(map.mapping(x + auxiliaryX, vy, screen.setting.Tile)))
                     {
-                        textures.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)].Texture;
-                        renderWithTexture.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)].RenderWithTexture;
-                        break;
+                        obstacles.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)];
+                        if (obstacles.Item1 is ObstacleLib.SpriteLib.Sprite p)
+                        {
+                            if (!spritesToRender.Contains(p))
+                                spritesToRender.Add(p);
+                        }
+                        else
+                            break;
                     }
 
                     x += auxiliaryX * screen.setting.Tile;
@@ -121,21 +130,26 @@ namespace RenderLib
 
                     if (map.Obstacles.ContainsKey(map.mapping(hx, y + auxiliaryY, screen.setting.Tile)))
                     {
-                        textures.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)].Texture;
-                        renderWithTexture.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)].RenderWithTexture;
-                        break;
+                        obstacles.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)];
+                        if (obstacles.Item2 is ObstacleLib.SpriteLib.Sprite p)
+                        {
+                            if (!spritesToRender.Contains(p))
+                                spritesToRender.Add(p);
+                        }
+                        else
+                            break;
                     }
 
                     y += auxiliaryY * screen.setting.Tile;
                 }
 
 
-                setting.calculationSettingRender(ref screen, ref entity, ref textures, ref renderWithTexture, depth_v, depth_h, hx, vy, car_angle);
+                setting.calculationSettingRender(ref screen, ref entity, ref obstacles, depth_v, depth_h, hx, vy, car_angle);
 
-                if (setting.RenderWithTexture)
-                    renderObject.renderObstacle(ref screen, ref entity, ray, angleVertical);
-                else
-                    renderObject.renderVertex(ref screen, ray, setting.ProjHeight, setting.Depth, angleVertical);
+                if (setting.obstacle is TexturedWall texturedWall)
+                    renderObject.renderObstacle(ref screen, ref entity, texturedWall.Texture, ray, angleVertical);
+                else if(setting.obstacle is BlankWall blankWall)
+                    renderObject.renderVertex(ref screen, blankWall.ColorFilling, ray, setting.ProjHeight, setting.Depth, angleVertical);
 
                 
                 
@@ -145,7 +159,10 @@ namespace RenderLib
             }
 
             angleVertical = entity.getEntityVerticalA();
-            renderObject.renderSprites(screen, entity, new List<ObstacleLib.SpriteLib.Sprite>() { sprite });
+
+            //Obstacle o = map.Obstacles[(4, 4)];
+            
+            renderObject.renderSprites(screen, entity, spritesToRender);
         }
 
     }

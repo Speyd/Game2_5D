@@ -131,13 +131,22 @@ namespace ControlLib
         {
             playerA += moveSpeedAngel;
         }
+        private double NormalizeAngle(double angle)
+        {
+            while (angle < 0)
+                angle += 2 * Math.PI;
+            while (angle >= 2 * Math.PI)
+                angle -= 2 * Math.PI;
+            return angle;
+        }
 
         public void makePressed(double deltaTime, ref double entityX, ref double entityY, ref double playerA, ref double playerVerticalA)
         {
             double tempMoveSpeed = (100 * deltaTime);
 
+            playerA = NormalizeAngle(angle);
+            angle = playerA;
 
-            playerA = angle;
             playerVerticalA = verticalAngle;
 
             moveSpeed = (float)(tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.setting.AmountRays / screen.ScreenWidth)));

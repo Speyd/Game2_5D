@@ -26,6 +26,7 @@ using ObstacleLib;
 using ObstacleLib.SpriteLib;
 using System.Reflection.Metadata;
 using MapLib.MiniMapLib.Setting;
+using ObstacleLib.Texture;
 
 
 List<ValueTuple<int, int>> getMapWorld(int TILE, Map map) 
@@ -46,8 +47,6 @@ List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)
 
 
 
-const int ScreenWidth = 1200;
-const int ScreenHeight = 800;
 const int mapScale = 5;
 
 
@@ -59,12 +58,24 @@ Map map = new Map(24, 23, screen.setting.Tile);
 map.addObstacleToMap(2, 2, map.Obstacles, Map.block);
 map.addObstacleToMap(2, 5, map.Obstacles, Map.block);
 
-map.addObstacleToMap(7, 5, map.Obstacles, new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\Wall1.png", '$', Color.Black));
-map.addObstacleToMap(7, 7, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall2.png", '$', Color.Red, false, false));
-map.addObstacleToMap(7, 9, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall3.png", '$', Color.Yellow));
-map.addObstacleToMap(7, 11, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall4.png", '$', Color.Cyan));
-map.addObstacleToMap(7, 13, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall5.png", '$', Color.Black));
-map.addObstacleToMap(7, 2, map.Obstacles, new Obstacle(@"D:\C++ проекты\Game2_5D\Wall8.png", '$', Color.Black, true));
+int t = screen.setting.Tile;
+List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
+{
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\1.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\2.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\3.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\4.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\5.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\6.png"),
+    new TextureObstacle( @"D:\C++ проекты\Game2_5D\7.png"),
+
+};
+map.addObstacleToMap(4, 4, map.Obstacles, new ObstacleLib.SpriteLib.Sprite(0, 0, 'S', Color.Red, textureObstacles));// @"D:\C++ проекты\Game2_5D\pokemon-8939_256.gif"));
+map.addObstacleToMap(7, 7, map.Obstacles, new TexturedWall(0, 0,'W', Color.Red, @"D:\C++ проекты\Game2_5D\Wall2.png", t));
+map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'W', Color.Yellow, Color.Green));
+map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'W', Color.Cyan, @"D:\C++ проекты\Game2_5D\Wall4.png", t));
+map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'W', Color.Black, @"D:\C++ проекты\Game2_5D\Wall5.png", t));
+map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'W', Color.Black, @"D:\C++ проекты\Game2_5D\Wall8.png", t));
 
 map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);

@@ -15,13 +15,14 @@ namespace MapLib
 
         public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public static Obstacle block = new Obstacle(@"D:\C++ проекты\Game2_5D\Wall1.png", '#', Color.Green);
+        public static TexturedWall block = new TexturedWall(0, 0, 'w', Color.Green, @"D:\C++ проекты\Game2_5D\Wall1.png", 0);
         public static char empty = ' ';
 
         public Map(int mapHeight, int mapWidth, int Tile)
         {
             Setting = new Setting(mapHeight, mapWidth, Tile);
             Obstacles = new Dictionary<(int, int), Obstacle>();
+            block.Texture.setTile(Tile);
 
             creatMap();
         }
@@ -77,6 +78,9 @@ namespace MapLib
 
             x *= Setting.ScreenTile;
             y *= Setting.ScreenTile;
+
+            obstacle.X = x;
+            obstacle.Y = y;
             obstacles[(x, y)] = obstacle;
          
         }
@@ -102,11 +106,6 @@ namespace MapLib
             {
                 return Obstacles.ContainsKey((x, y));
             }
-            //else
-            //{
-            //    throw new IndexOutOfRangeException();
-            //}
-
             return false;
         }
         public List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)

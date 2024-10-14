@@ -78,7 +78,7 @@ namespace MapLib.MiniMapLib
 
                 RectangleShape tile = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
-                tile.FillColor = coo.Value.Color;
+                tile.FillColor = coo.Value.ColorInMap;
                 tile.OutlineThickness = 1;
                 tile.OutlineColor = Color.Black;
                 tile.Position = new Vector2f

@@ -2,33 +2,27 @@
 
 namespace ObstacleLib
 {
-    public class Obstacle
+    public abstract class Obstacle
     {
-        //Render setting
-        public Texture Texture { get; set; }
-        public bool RenderWithTexture {  get; set; }
+        //Positioning
+        public double X;
+        public double Y;
 
         //Map setting
         public char Symbol {  get; set; }
-        public Color Color { get; set; }
+        public SFML.Graphics.Color ColorInMap { get; set; }
 
         //Controll setting
         public bool isPassability {  get; set; }
 
 
-        public Obstacle(string path, char symbol, Color color,
-            bool isPassability = false, bool renderWithTexture = true)
+        public Obstacle(double x, double y, char symbol, SFML.Graphics.Color colorInMap, bool isPassability)
         {
-            if (!File.Exists(path))
-                throw new Exception("Error path Texture Obstacle");
-
-            Texture = new Texture(path);
-            Texture.Smooth = true;
-
-            RenderWithTexture = renderWithTexture;
+            X = x;
+            Y = y;
 
             Symbol = symbol;
-            Color = color;
+            ColorInMap = colorInMap;
             this.isPassability = isPassability;
         }
     }

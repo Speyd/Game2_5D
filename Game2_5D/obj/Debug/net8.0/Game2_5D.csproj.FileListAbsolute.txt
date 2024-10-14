@@ -215,3 +215,4 @@ D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\FpsLib.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\FpsLib.pdb
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ObstacleLib.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\ObstacleLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\SixLabors.ImageSharp.dll

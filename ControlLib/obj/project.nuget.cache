@@ -1,15 +1,18 @@
 {
   "version": 2,
-  "dgSpecHash": "E79zFnxzAAi+6czas/M2wzg3Y8pSBCs0QEaVTCXleaWANxwu1LtkfB9MiC3OZ9qkQUadXbYXrZRloZC0VM8paA==",
+  "dgSpecHash": "Wx/2s3FFBMbRQnCcFBaU72yY0wZtcLehLUxowE8pd21kncM0c+HzcJmmFY1RF5OYL3zC6eqgzHn+tPDdfH5FNQ==",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.0\\sfml.system.2.6.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512"
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sixlabors.imagesharp\\3.1.5\\sixlabors.imagesharp.3.1.5.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\system.drawing.common\\8.0.10\\system.drawing.common.8.0.10.nupkg.sha512"
   ],
   "logs": []
 }
