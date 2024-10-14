@@ -4,6 +4,7 @@ using MapLib.SettingLib;
 using ObstacleLib;
 using SFML.Graphics;
 using System.Collections.Generic;
+using ObstacleLib.ItemObstacle;
 
 namespace MapLib
 {

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using SFML.Graphics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ObstacleLib.Texture
+namespace ObstacleLib.Render.Texture
 {
     public class TextureObstacle
     {
@@ -12,13 +13,14 @@ namespace ObstacleLib.Texture
         public uint TextureWidth { get; set; }
         public uint TextureHeight { get; set; }
         public int TextureScale { get; set; }
+        public uint PixelCount {  get; set; }
 
 
         private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
 
         private static bool IsImageFile(string path)
         {
-            string extension = Path.GetExtension(path)?.ToLower();
+            string extension = Path.GetExtension(path)?.ToLower() ?? "";
 
             return imageExtensions.Contains(extension);
         }
@@ -38,6 +40,8 @@ namespace ObstacleLib.Texture
             TextureWidth = Texture.Size.X;
             TextureHeight = Texture.Size.Y;
             setTile(screenTile);
+
+            PixelCount = TextureWidth * TextureHeight;
         }
 
         public TextureObstacle(string path)
@@ -48,6 +52,8 @@ namespace ObstacleLib.Texture
             TextureWidth = Texture.Size.X;
             TextureHeight = Texture.Size.Y;
             TextureScale = 1;
+
+            PixelCount = TextureWidth * TextureHeight;
         }
 
         public TextureObstacle(SFML.Graphics.Texture texture)
@@ -56,6 +62,8 @@ namespace ObstacleLib.Texture
             TextureWidth = texture.Size.X;
             TextureHeight = texture.Size.Y;
             TextureScale = 1;
+
+            PixelCount = TextureWidth * TextureHeight;
         }
 
         public void setTexture(string path, int screenTile)
@@ -82,11 +90,15 @@ namespace ObstacleLib.Texture
             else
                 TextureScale = 1;
         }
-
-        public static void blackoutTexture(ref SFML.Graphics.Sprite obstacle, double depth)
+        
+        public static SFML.Graphics.IntRect setOffset(int offset, int screenTile, TextureObstacle texture)
         {
-            byte darknessFactor = (byte)(255 / (1 + depth * depth * 0.00001));
-            obstacle.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+            int left = offset * texture.TextureScale;
+            int top = 0;
+            int width = screenTile;
+            int height = (int)texture.TextureHeight;
+
+            return new SFML.Graphics.IntRect(left, top, width, height);
         }
     }
 }

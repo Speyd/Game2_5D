@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ObstacleLib.ItemObstacle;
 
 namespace RenderLib
 {
@@ -33,14 +34,17 @@ namespace RenderLib
 
                 obstacle = obstacles.Item1;
             }
-            else
+            else if(depth_h < depth_v)
             {
                 Offset = hx;
                 Depth = depth_h;
 
                 obstacle = obstacles.Item2;
             }
+
+           
             Depth *= Math.Cos(entity.getEntityA() - car_angle);
+            Depth = Math.Max(Depth, 0.1);
         }
 
         public void calculationSettingRender(ref Screen screen, ref Entity entity,

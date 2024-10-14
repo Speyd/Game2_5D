@@ -17,7 +17,7 @@ namespace EntityLib
         public double EntityFov { get; init; }
         public double HalfFov { get; init; }
 
-
+        public double MaxDistance { get; private set; }
         public double DeltaAngle { get; init; }
 
 
@@ -30,7 +30,7 @@ namespace EntityLib
         protected double entityA;
         protected double entityVerticalA;
 
-        public Entity(Setting setting,
+        public Entity(Setting setting, double maxDistance,
             double entityFov = Math.PI / 3,
             double entityX = 0, double entityY = 0,
             double entityA = 0, double entityVerticalA = 0)
@@ -48,6 +48,7 @@ namespace EntityLib
 
             Dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
             ProjCoeff = Dist * setting.Tile;
+            MaxDistance = maxDistance;
         }
 
 

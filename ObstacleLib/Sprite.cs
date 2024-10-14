@@ -4,19 +4,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ObstacleLib.Texture;
+using ObstacleLib.Render.Texture;
 using System.Drawing;
 using System.Drawing.Imaging;
 using SixLabors.ImageSharp;
+using ObstacleLib.Render;
 
-namespace ObstacleLib.SpriteLib
+namespace ObstacleLib.ItemObstacle
 {
     public class Sprite : Obstacle
-    { 
+    {
+        public static List<ObstacleLib.ItemObstacle.Sprite> spritesToRender = new List<ObstacleLib.ItemObstacle.Sprite>();
+
+
         public double Distance { get; set; }
         public double Angle { get; set; }
         public List<TextureObstacle> Textures { get; init; }
-        public int CurrentTextureIndex { get; set; }
+        public TextureObstacle CurrentTexture { get; set; } = null;
+
+        public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
 
         #region SizeMultiplier
         private int _sizeMultiplier; 
@@ -107,6 +113,14 @@ namespace ObstacleLib.SpriteLib
                 addGif(path);               
             else
                 Textures.Add(new TextureObstacle(path));
+        }
+
+        public void blackoutObstacle(double depth)
+        {
+            byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
+
+            if (CurrentTexture != null && CurrentTexture.Texture != null)
+                SpriteObst.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
     }
 }

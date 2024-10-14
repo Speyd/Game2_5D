@@ -12,9 +12,9 @@ using ScreenLib;
 using EntityLib;
 using System.IO;
 using EntityLib.Player;
-using ObstacleLib.SpriteLib;
+using ObstacleLib.ItemObstacle;
 using System.Numerics;
-using ObstacleLib.Texture;
+using ObstacleLib.Render.Texture;
 using ObstacleLib;
 
 namespace RenderLib
@@ -40,88 +40,89 @@ namespace RenderLib
         }
 
         #region Render_Rectangle_Without_Texture
-        private void calculationBlockScale(ref Screen screen, ref double projHeight)
+        private void calculationBlockScale(ref Screen screen, BlankWall wall)
         {
-            float scaleX = (float)screen.setting.Scale;
-            float scaleY = (float)projHeight;
+            float scaleX = screen.setting.Scale;
+            float scaleY = (float)setting.ProjHeight;
 
-            block.Size = new Vector2f(scaleX, scaleY);
+            wall.Wall.Size = new Vector2f(scaleX, scaleY);
         }
-        private void calculationBlockPosition(ref Screen screen, ref int ray, ref double angleVertical)
+        private void calculationBlockPosition(ref Screen screen, BlankWall wall, ref int ray, ref double angleVertical)
         {
             float positionX = calcCooX(ray, screen);
             float positionY = normalize_Y_Position(screen, angleVertical, setting.ProjHeight / 2);
 
-            block.Position = new Vector2f(positionX, positionY);
+            wall.Wall.Position = new Vector2f(positionX, positionY);
         }
 
-        public void renderVertex(ref Screen screen, Color color, int ray, double projHeight, double depth, double angleVertical)
+        public void renderVertex(ref Screen screen, BlankWall wall, int ray, double angleVertical)
         {
             screen.vertexArray.Clear();
-            color = BlankWall.blackoutColor(color, depth);
 
-            calculationBlockScale(ref screen, ref projHeight);
-            calculationBlockPosition(ref screen, ref ray, ref angleVertical);
+            calculationBlockScale(ref screen, wall);
+            calculationBlockPosition(ref screen, wall, ref ray, ref angleVertical);
 
-            block.FillColor = color;
+            wall.blackoutObstacle(setting.Depth);
 
-            screen.Window.Draw(block);
+            screen.Window.Draw(wall.Wall);
         }
         #endregion
 
+
+
         #region Render_Rectangle_With_Texture
-        private void renderCameraRotation(ref Screen screen, ref Entity entity, ref double angleVertical)
+        #region Calculation
+        private void calculationCameraRotation(ref Screen screen, ref double angleVertical)
         {
-            if (entity.getEntityVerticalA() > 0)
+            if (angleVertical <= 0)
             {
-                angleVertical = (float)(screen.setting.HalfHeight / (1 + 1 * entity.getEntityVerticalA()));
-            }
-            else if (entity.getEntityVerticalA() < 0)
-            {
-                angleVertical = (float)(screen.setting.HalfHeight * (1 + 1 * -entity.getEntityVerticalA()));
+                angleVertical = (float)(screen.setting.HalfHeight * (1 + 1 * -angleVertical));
             }
             else
             {
-                angleVertical = screen.setting.HalfHeight;
+                angleVertical = (float)(screen.setting.HalfHeight / (1 + 1 * angleVertical));
             }
         }
-
-        private void calculationTextureScale(ref Screen screen, TextureObstacle texture, ref SFML.Graphics.Sprite obstacle, ref int textureScale)
+        private void calculationTextureScale(TexturedWall wall)
         {
-            if (texture.Texture is null)
+            if (wall.Texture is null)
                 return;
 
-            float scaleX = (float)textureScale / texture.TextureWidth;
-            float scaleY = (float)setting.ProjHeight / texture.TextureHeight;
-            obstacle.Scale = new Vector2f(scaleX, scaleY);
+            float scaleX = (float)wall.Texture.TextureScale / wall.Texture.TextureWidth;
+            float scaleY = (float)setting.ProjHeight / wall.Texture.TextureHeight;
+            wall.SpriteObst.Scale = new Vector2f(scaleX, scaleY);
         }
-
-        private void calculationTexturePosition(ref Screen screen, ref SFML.Graphics.Sprite obstacle, ref int ray, ref double angleVertical)
+        private void calculationTexturePosition(ref Screen screen, TexturedWall wall,
+            int ray, double angleVertical)
         {
             float positionX = calcCooX(ray, screen);
             float positionY = (float)((angleVertical) - setting.ProjHeight / 2);
 
-            obstacle.Position = new Vector2f(positionX, positionY);
+            wall.SpriteObst.Position = new Vector2f(positionX, positionY);
         }
 
-        public void renderObstacle(ref Screen screen, ref Entity entity, TextureObstacle texture, int ray, double angleVertical)
+        #endregion
+
+        public void renderObstacle(ref Screen screen, TexturedWall wall,
+            int ray, double angleVertical)
         {
-            if (texture.Texture is null)
+            if (wall.Texture.Texture is null)
                 return;
 
-            int textureScale = (int)(texture.TextureWidth / screen.setting.Tile);
-            IntRect textureRect = new IntRect((int)setting.Offset * textureScale, 0, screen.setting.Tile, (int)texture.TextureHeight);
+            IntRect textureRect = TextureObstacle.setOffset((int)setting.Offset, screen.setting.Tile, wall.Texture);
 
-            SFML.Graphics.Sprite obstacle = new SFML.Graphics.Sprite(texture.Texture, textureRect);
+            wall.SpriteObst = new SFML.Graphics.Sprite(wall.Texture.Texture, textureRect);
+            wall.blackoutObstacle(setting.Depth);
 
-            TextureObstacle.blackoutTexture(ref obstacle, setting.Depth);
-            calculationTextureScale(ref screen, texture, ref obstacle, ref textureScale);
-            renderCameraRotation(ref screen, ref entity, ref angleVertical);
-            calculationTexturePosition(ref screen, ref obstacle, ref ray, ref angleVertical);
+            calculationTextureScale(wall);
+            calculationCameraRotation(ref screen, ref angleVertical);
+            calculationTexturePosition(ref screen, wall, ray, angleVertical);
 
-            screen.Window.Draw(obstacle);
+            screen.Window.Draw(wall.SpriteObst);
         }
         #endregion
+
+
 
         #region Render_Sprite
         private double calculationSpriteAngle(double playerAngle, double spriteAngle) 
@@ -134,8 +135,7 @@ namespace RenderLib
 
             return angleDifference;
         }
-
-        private void definingDesiredSprite(ObstacleLib.SpriteLib.Sprite sprite, double spriteAngle)
+        private void definingDesiredSprite(ObstacleLib.ItemObstacle.Sprite sprite, double spriteAngle)
         {
             double spriteDegreeAngle = spriteAngle * (180.0 / Math.PI);
 
@@ -148,9 +148,9 @@ namespace RenderLib
             double sectorSize = 360.0 / totalDirections;
 
             int textureIndex = (int)(spriteDegreeAngle / sectorSize) % totalDirections;
-            sprite.CurrentTextureIndex = (totalDirections - 1 - textureIndex + totalDirections) % totalDirections;
+            sprite.CurrentTexture = sprite.Textures[(totalDirections - 1 - textureIndex + totalDirections) % totalDirections];
         }
-        private double calculationAngularDistance(ObstacleLib.SpriteLib.Sprite sprite, Entity player)
+        private double calculationAngularDistance(ObstacleLib.ItemObstacle.Sprite sprite, Entity player)
         {
             double dx = sprite.X - player.getEntityX();
             double dy = sprite.Y - player.getEntityY();
@@ -160,36 +160,46 @@ namespace RenderLib
 
             return spriteAngle;     
         }
-        public void renderSprites(Screen screen, Entity player, List<ObstacleLib.SpriteLib.Sprite> Sprites)
+        public void renderSprites(ref Screen screen, Entity player)
         {
-            foreach (var sprite in Sprites)
+            foreach (var sprite in ObstacleLib.ItemObstacle.Sprite.spritesToRender)
             {
                 double spriteAngle = calculationAngularDistance(sprite, player);
-                sprite.Angle = calculationSpriteAngle(player.getEntityA(), spriteAngle);
+                Console.WriteLine(sprite.Distance);
+                if (sprite.Distance > player.MaxDistance)
+                    continue;
 
-                definingDesiredSprite(sprite, spriteAngle);
+
+                sprite.Angle = calculationSpriteAngle(player.getEntityA(), spriteAngle);
 
                 if (sprite.Angle < player.EntityFov / 2)
                 {
+                    definingDesiredSprite(sprite, spriteAngle);
+
                     int sprite_X_Position = (int)((screen.ScreenWidth / 2) * (1 + sprite.Angle / (player.EntityFov / 2)));
                     int spriteHeight = (int)((sprite.SizeMultiplier * screen.ScreenHeight / sprite.Distance));
 
                     if (spriteHeight > 0 && spriteHeight < screen.ScreenHeight)
-                        drawSprite(screen, player.getEntityVerticalA(), 
-                            sprite.Textures[sprite.CurrentTextureIndex].Texture,
-                            sprite_X_Position, spriteHeight);
+                        drawSprite(screen, sprite, player.getEntityVerticalA(), sprite_X_Position, spriteHeight);
                 }
             }
         }
-        private void drawSprite(Screen screen, double verticalAngle, Texture texture, int x, int height)
+        private void drawSprite(Screen screen, ObstacleLib.ItemObstacle.Sprite sprite, double verticalAngle, int x, int height)
         {
             float y = normalize_Y_Position(screen, verticalAngle);
 
-            SFML.Graphics.Sprite sfmlSprite = new SFML.Graphics.Sprite(texture);
-            sfmlSprite.Position = new Vector2f(x, y);
-            sfmlSprite.Scale = new Vector2f((float)height / texture.Size.X, (float)height / texture.Size.Y);
+            sprite.SpriteObst = new SFML.Graphics.Sprite(sprite.CurrentTexture.Texture);
+            sprite.blackoutObstacle(sprite.Distance);
 
-            screen.Window.Draw(sfmlSprite);
+            sprite.SpriteObst.Position = new Vector2f(x, y);
+
+            sprite.SpriteObst.Scale = new Vector2f
+                (
+                (float)height / sprite.CurrentTexture.TextureWidth, 
+                (float)height / sprite.CurrentTexture.TextureHeight
+                );
+
+            screen.Window.Draw(sprite.SpriteObst);
         }
 
         #endregion

@@ -23,10 +23,10 @@ using MapLib.MiniMapLib;
 using RenderLib.RenderPartsWorld;
 using FpsLib;
 using ObstacleLib;
-using ObstacleLib.SpriteLib;
+using ObstacleLib.ItemObstacle;
 using System.Reflection.Metadata;
 using MapLib.MiniMapLib.Setting;
-using ObstacleLib.Texture;
+using ObstacleLib.Render.Texture;
 
 
 List<ValueTuple<int, int>> getMapWorld(int TILE, Map map) 
@@ -70,7 +70,7 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
     new TextureObstacle( @"D:\C++ проекты\Game2_5D\7.png"),
 
 };
-map.addObstacleToMap(4, 4, map.Obstacles, new ObstacleLib.SpriteLib.Sprite(0, 0, 'S', Color.Red, textureObstacles));// @"D:\C++ проекты\Game2_5D\pokemon-8939_256.gif"));
+map.addObstacleToMap(4, 4, map.Obstacles, new ObstacleLib.ItemObstacle.Sprite(0, 0, 'S', Color.Red, textureObstacles));// @"D:\C++ проекты\Game2_5D\pokemon-8939_256.gif"));
 map.addObstacleToMap(7, 7, map.Obstacles, new TexturedWall(0, 0,'W', Color.Red, @"D:\C++ проекты\Game2_5D\Wall2.png", t));
 map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'W', Color.Yellow, Color.Green));
 map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'W', Color.Cyan, @"D:\C++ проекты\Game2_5D\Wall4.png", t));
@@ -85,7 +85,7 @@ MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MapLib.MiniMapLib.Setting
 
 
 
-Player player = new Player(screen, map);
+Player player = new Player(screen, map, 1500);
 Render render = new Render(map, screen, player);
 
 
@@ -93,22 +93,29 @@ DateTime from = DateTime.Now;
 string path = @"ArialBold.ttf";
 FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), path, Color.White);
 
-while (screen.Window.IsOpen)
+try
 {
-    screen.Window.DispatchEvents();
-    screen.Window.Clear(Color.Black);
+    while (screen.Window.IsOpen)
+    {
+        screen.Window.DispatchEvents();
+        screen.Window.Clear(Color.Black);
 
-    fpsChecker.startRead();
+        fpsChecker.startRead();
 
-    player.makePressed(fpsChecker.getDeltaTime());
-    RenderPartsWorld.renderPartsWorld(screen, player);
+        player.makePressed(fpsChecker.getDeltaTime());
+        RenderPartsWorld.renderPartsWorld(screen, player);
 
 
-    render.algorithmBrezenhama();
-   
+        render.algorithmBrezenhama();
 
-    fpsChecker.endRead(screen);
 
-    mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
-    screen.Window.Display();
+        fpsChecker.endRead(screen);
+
+        mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
+        screen.Window.Display();
+    }
+}
+catch(Exception e)
+{
+    Console.WriteLine(e.Message);
 }

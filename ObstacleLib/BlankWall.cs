@@ -1,14 +1,16 @@
-﻿using System;
+﻿using ObstacleLib.Render;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ObstacleLib
+namespace ObstacleLib.ItemObstacle
 {
-    public class BlankWall : Obstacle
+    public class BlankWall : Obstacle, IRenderable
     {
         public SFML.Graphics.Color ColorFilling { get; set; }
+        public SFML.Graphics.RectangleShape Wall { get; private set; } = new SFML.Graphics.RectangleShape();
 
         public BlankWall(double x, double y,
             char symbol, SFML.Graphics.Color colorInMap,
@@ -28,15 +30,15 @@ namespace ObstacleLib
             ColorFilling = new SFML.Graphics.Color(r, g, b);
         }
 
-        static public SFML.Graphics.Color blackoutColor(SFML.Graphics.Color color, double depth)
+        public void blackoutObstacle(double depth)
         {
-            byte darkened = (byte)(255 / (1 + depth * depth * 0.00001));
+            byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            byte red = (byte)Math.Min(color.R * darkened / 255, 255);
-            byte green = (byte)Math.Min(color.G * darkened / 255, 255);
-            byte blue = (byte)Math.Min(color.B * darkened / 255, 255);
+            byte red = (byte)Math.Min(ColorFilling.R * darkened / 255, 255);
+            byte green = (byte)Math.Min(ColorFilling.G * darkened / 255, 255);
+            byte blue = (byte)Math.Min(ColorFilling.B * darkened / 255, 255);
 
-            return new SFML.Graphics.Color(red, green, blue);
+            Wall.FillColor = new SFML.Graphics.Color(red, green, blue);
         }
     }
 }

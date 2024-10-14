@@ -11,7 +11,7 @@ using SFML.Window;
 using static System.Net.Mime.MediaTypeNames;
 using System.Numerics;
 using ObstacleLib;
-using ObstacleLib.SpriteLib;
+using ObstacleLib.ItemObstacle;
 
 namespace RenderLib
 {
@@ -21,44 +21,23 @@ namespace RenderLib
         private Map map;
         private Screen screen;
         private Entity entity;
-        //ObstacleLib.SpriteLib.Sprite sprite =
-        //    new ObstacleLib.SpriteLib.Sprite(@"D:\C++ проекты\Game2_5D\tn342.png", 'g', Color.White);
 
         private Setting setting;
 
         private readonly RenderObject renderObject;
 
         private ValueTuple<Obstacle, Obstacle> obstacles = (null, null);
-        private ValueTuple<bool, bool> renderWithTexture;
 
-        private double angleVertical = 0;
+        private List<Type> types = new List<Type>() { typeof(ObstacleLib.ItemObstacle.Sprite) };
 
         public Render(Map map, Screen screen, Entity entity)
         {
-            //sprite.X = 400;
-            //sprite.Y = 400;
-
             this.map = map;
             this.screen = screen;
             this.entity = entity;
 
             setting = new Setting();
             renderObject = new RenderObject(setting);
-        }
-        private void calculationDepth(ref double depth, ref double offcet, double depth_v, double depth_h, double car_angle, double x, double y)
-        {
-            if (depth_v < depth_h)
-            {
-                offcet = y;
-                depth = depth_v;
-            }
-            else
-            {
-                offcet = x;
-                depth = depth_h;
-            }
-            depth *= Math.Cos(entity.getEntityA() - car_angle);
-            //return depth;
         }
         private void checkVericals(ref double a, ref double auxiliaryA, double mapA, double ratio)
         {
@@ -74,10 +53,50 @@ namespace RenderLib
                 auxiliaryA = -1;
             }
         }
+
+
+        private void isSymbol(Obstacle obstacle)
+        {
+            if (obstacle is ObstacleLib.ItemObstacle.Sprite sprite)
+            {
+                if (!ObstacleLib.ItemObstacle.Sprite.spritesToRender.Contains(sprite))
+                {
+                    ObstacleLib.ItemObstacle.Sprite.spritesToRender.Add(sprite);
+                }
+            }
+        }
+        private bool checkAndAddObstacle(double x, double y, double auxiliary, bool isVertical)
+        {
+            double mappedX = isVertical ? x + auxiliary : x;
+            double mappedY = isVertical ? y : y + auxiliary;
+
+            var key = map.mapping(mappedX, mappedY, screen.setting.Tile);
+            if (map.Obstacles.TryGetValue(key, out var obstacle))
+            {
+                isSymbol(obstacle);
+
+
+                if (types.Contains(obstacle.GetType()))
+                    return false;
+
+                if (isVertical)
+                {
+                    obstacles.Item1 = obstacle;
+                }
+                else
+                {
+                    obstacles.Item2 = obstacle;
+                }
+                return true;
+            }
+
+            return false;
+        }
+
+
+
         public void algorithmBrezenhama()
         {
-            List<ObstacleLib.SpriteLib.Sprite> spritesToRender = new List<ObstacleLib.SpriteLib.Sprite>();
-            screen.vertexArray.Clear();
 
             double car_angle = entity.getEntityA() - entity.HalfFov;
 
@@ -107,13 +126,7 @@ namespace RenderLib
 
                     if (map.Obstacles.ContainsKey(map.mapping(x + auxiliaryX, vy, screen.setting.Tile)))
                     {
-                        obstacles.Item1 = map.Obstacles[map.mapping(x + auxiliaryX, vy, screen.setting.Tile)];
-                        if (obstacles.Item1 is ObstacleLib.SpriteLib.Sprite p)
-                        {
-                            if (!spritesToRender.Contains(p))
-                                spritesToRender.Add(p);
-                        }
-                        else
+                        if (checkAndAddObstacle(x, vy, auxiliaryX, true))
                             break;
                     }
 
@@ -130,13 +143,7 @@ namespace RenderLib
 
                     if (map.Obstacles.ContainsKey(map.mapping(hx, y + auxiliaryY, screen.setting.Tile)))
                     {
-                        obstacles.Item2 = map.Obstacles[map.mapping(hx, y + auxiliaryY, screen.setting.Tile)];
-                        if (obstacles.Item2 is ObstacleLib.SpriteLib.Sprite p)
-                        {
-                            if (!spritesToRender.Contains(p))
-                                spritesToRender.Add(p);
-                        }
-                        else
+                        if (checkAndAddObstacle(hx, y, auxiliaryY, false))
                             break;
                     }
 
@@ -145,24 +152,24 @@ namespace RenderLib
 
 
                 setting.calculationSettingRender(ref screen, ref entity, ref obstacles, depth_v, depth_h, hx, vy, car_angle);
-
-                if (setting.obstacle is TexturedWall texturedWall)
-                    renderObject.renderObstacle(ref screen, ref entity, texturedWall.Texture, ray, angleVertical);
-                else if(setting.obstacle is BlankWall blankWall)
-                    renderObject.renderVertex(ref screen, blankWall.ColorFilling, ray, setting.ProjHeight, setting.Depth, angleVertical);
-
-                
-                
+               
+                if (setting.obstacle != null)
+                {
+                    if (setting.obstacle is TexturedWall texturedWall)
+                    {
+                        renderObject.renderObstacle(ref screen, texturedWall, ray, entity.getEntityVerticalA());
+                    }
+                    else if (setting.obstacle is BlankWall blankWall)
+                    {
+                        renderObject.renderVertex(ref screen, blankWall, ray, entity.getEntityVerticalA());
+                    }
+                }
                 
 
                 car_angle += entity.DeltaAngle;
             }
-
-            angleVertical = entity.getEntityVerticalA();
-
-            //Obstacle o = map.Obstacles[(4, 4)];
             
-            renderObject.renderSprites(screen, entity, spritesToRender);
+            renderObject.renderSprites(ref screen, entity);
         }
 
     }

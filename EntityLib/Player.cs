@@ -16,13 +16,13 @@ namespace EntityLib.Player
     public class Player : Entity
     {
         private readonly Control Control;
-        
-        public Player(Screen screen, Map map,
+
+        public Player(Screen screen, Map map, double maxDistance,
             double entityFov = Math.PI / 3,
             double entityX = 0, float entityY = 0,
             double entityA = 0)
 
-            :base(screen.setting, entityFov, entityX, entityY, entityA)
+            :base(screen.setting, maxDistance, entityFov, entityX, entityY, entityA)
         {
             Control = new Control(map, screen);
         }
