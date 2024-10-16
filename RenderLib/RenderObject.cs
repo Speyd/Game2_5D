@@ -16,6 +16,7 @@ using ObstacleLib.ItemObstacle;
 using System.Numerics;
 using ObstacleLib.Render.Texture;
 using ObstacleLib;
+using System.Reflection.Metadata;
 
 namespace RenderLib
 {
@@ -27,7 +28,7 @@ namespace RenderLib
             return (float)ray * screen.setting.Scale;
         }
 
-        private float normalize_Y_Position(Screen screen, double angleVertical, double addVariable = 0)
+        private float normalize_Y_Position(Screen screen,  double angleVertical, double addVariable = 0)
         {
             if (angleVertical <= 0)
                 return (float)(screen.setting.HalfHeight - (screen.setting.HalfHeight * angleVertical) - addVariable);
@@ -152,8 +153,8 @@ namespace RenderLib
         }
         private double calculationAngularDistance(ObstacleLib.ItemObstacle.Sprite sprite, Entity player)
         {
-            double dx = sprite.X - player.getEntityX();
-            double dy = sprite.Y - player.getEntityY();
+            double dx = sprite.WallX - player.getEntityX();
+            double dy = sprite.WallY - player.getEntityY();
             sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
 
             double spriteAngle = Math.Atan2(dy, dx);
@@ -162,13 +163,12 @@ namespace RenderLib
         }
         public void renderSprites(ref Screen screen, Entity player)
         {
+           
             foreach (var sprite in ObstacleLib.ItemObstacle.Sprite.spritesToRender)
             {
                 double spriteAngle = calculationAngularDistance(sprite, player);
-                Console.WriteLine(sprite.Distance);
                 if (sprite.Distance > player.MaxDistance)
                     continue;
-
 
                 sprite.Angle = calculationSpriteAngle(player.getEntityA(), spriteAngle);
 
@@ -177,16 +177,20 @@ namespace RenderLib
                     definingDesiredSprite(sprite, spriteAngle);
 
                     int sprite_X_Position = (int)((screen.ScreenWidth / 2) * (1 + sprite.Angle / (player.EntityFov / 2)));
-                    int spriteHeight = (int)((sprite.SizeMultiplier * screen.ScreenHeight / sprite.Distance));
 
-                    if (spriteHeight > 0 && spriteHeight < screen.ScreenHeight)
+                    double safeDistance = Math.Max(sprite.Distance, 0.1);
+                    int spriteHeight = (int)(screen.ScreenHeight / safeDistance * sprite.ScaleMultSprite);
+
+                    if (spriteHeight > 0)
                         drawSprite(screen, sprite, player.getEntityVerticalA(), sprite_X_Position, spriteHeight);
                 }
             }
         }
+
         private void drawSprite(Screen screen, ObstacleLib.ItemObstacle.Sprite sprite, double verticalAngle, int x, int height)
         {
-            float y = normalize_Y_Position(screen, verticalAngle);
+            float scaledHeight = sprite.SpriteObst.GetGlobalBounds().Height;
+            float y = normalize_Y_Position(screen, verticalAngle, scaledHeight / 2);
 
             sprite.SpriteObst = new SFML.Graphics.Sprite(sprite.CurrentTexture.Texture);
             sprite.blackoutObstacle(sprite.Distance);

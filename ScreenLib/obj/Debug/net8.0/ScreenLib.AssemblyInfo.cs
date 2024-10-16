@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ScreenLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+58e1a421bba7d965cb852e68af053539f745fbcc")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ce1c585d34a8acbdb4fc5152d666dec975056114")]
 [assembly: System.Reflection.AssemblyProductAttribute("ScreenLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ScreenLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -875,6 +875,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Render": "1.0.0",
           "SFML.Graphics": "2.6.0",
           "SixLabors.ImageSharp": "3.1.5",
           "System.Drawing.Common": "8.0.10"
@@ -884,6 +885,19 @@
         },
         "runtime": {
           "bin/placeholder/ObstacleLib.dll": {}
+        }
+      },
+      "Render/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Render.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Render.dll": {}
         }
       },
       "ScreenLib/1.0.0": {
@@ -1268,6 +1282,11 @@
       "type": "project",
       "path": "../ObstacleLib/ObstacleLib.csproj",
       "msbuildProject": "../ObstacleLib/ObstacleLib.csproj"
+    },
+    "Render/1.0.0": {
+      "type": "project",
+      "path": "../Render/Render.csproj",
+      "msbuildProject": "../Render/Render.csproj"
     },
     "ScreenLib/1.0.0": {
       "type": "project",

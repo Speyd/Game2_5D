@@ -13,6 +13,7 @@ namespace ObstacleLib.Render.Texture
         public uint TextureWidth { get; set; }
         public uint TextureHeight { get; set; }
         public int TextureScale { get; set; }
+        public int ScreenScale {  get; set; }
         public uint PixelCount {  get; set; }
 
 
@@ -36,6 +37,8 @@ namespace ObstacleLib.Render.Texture
         {
             isTruePath(path);
 
+            ScreenScale = screenTile;
+
             Texture = new SFML.Graphics.Texture(path);
             TextureWidth = Texture.Size.X;
             TextureHeight = Texture.Size.Y;
@@ -44,20 +47,24 @@ namespace ObstacleLib.Render.Texture
             PixelCount = TextureWidth * TextureHeight;
         }
 
-        public TextureObstacle(string path)
+        //public TextureObstacle(string path)
+        //{
+        //    isTruePath(path);
+
+        //    ScreenScale = 1;
+
+        //    Texture = new SFML.Graphics.Texture(path);
+        //    TextureWidth = Texture.Size.X;
+        //    TextureHeight = Texture.Size.Y;
+        //    TextureScale = 1;
+
+        //    PixelCount = TextureWidth * TextureHeight;
+        //}
+
+        public TextureObstacle(SFML.Graphics.Texture texture, int screenTile)
         {
-            isTruePath(path);
+            ScreenScale = screenTile;
 
-            Texture = new SFML.Graphics.Texture(path);
-            TextureWidth = Texture.Size.X;
-            TextureHeight = Texture.Size.Y;
-            TextureScale = 1;
-
-            PixelCount = TextureWidth * TextureHeight;
-        }
-
-        public TextureObstacle(SFML.Graphics.Texture texture)
-        {
             Texture = texture;
             TextureWidth = texture.Size.X;
             TextureHeight = texture.Size.Y;

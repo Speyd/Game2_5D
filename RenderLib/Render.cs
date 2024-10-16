@@ -28,7 +28,6 @@ namespace RenderLib
 
         private ValueTuple<Obstacle, Obstacle> obstacles = (null, null);
 
-        private List<Type> types = new List<Type>() { typeof(ObstacleLib.ItemObstacle.Sprite) };
 
         public Render(Map map, Screen screen, Entity entity)
         {
@@ -76,7 +75,7 @@ namespace RenderLib
                 isSymbol(obstacle);
 
 
-                if (types.Contains(obstacle.GetType()))
+                if (Obstacle.typesIgnoringRendering.Contains(obstacle.GetType()))
                     return false;
 
                 if (isVertical)

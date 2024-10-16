@@ -14,6 +14,7 @@ namespace ScreenLib.SettingScreen
         public int AmountRays { get; init; }
         public int MaxDepth { get; init; } // 800
         public int Scale { get; init; }
+        public int CenterRay { get; init; }
 
         public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800, int tile = 100)
         {
@@ -32,6 +33,8 @@ namespace ScreenLib.SettingScreen
             Tile = tile <= 0 ? 100 : tile;
             Scale = ScreenWidth / AmountRays;
             MaxDepth = maxDepth;
+
+            CenterRay = (int)(AmountRays / 2) - 1;
         }
     }
 }

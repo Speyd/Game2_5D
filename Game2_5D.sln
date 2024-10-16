@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RenderLib", "RenderLib\Rend
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FpsLib", "FpsLib\FpsLib.csproj", "{584FD4D7-9545-45BF-8F12-0CD802C918EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObstacleLib", "ObstacleLib\ObstacleLib.csproj", "{4AD79136-1481-42CA-B48F-A78B57925ADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ObstacleLib", "ObstacleLib\ObstacleLib.csproj", "{4AD79136-1481-42CA-B48F-A78B57925ADD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Render", "Render\Render.csproj", "{A62B5B87-5882-4A32-84BD-F19FBAED1B7D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{4AD79136-1481-42CA-B48F-A78B57925ADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AD79136-1481-42CA-B48F-A78B57925ADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AD79136-1481-42CA-B48F-A78B57925ADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A62B5B87-5882-4A32-84BD-F19FBAED1B7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A62B5B87-5882-4A32-84BD-F19FBAED1B7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A62B5B87-5882-4A32-84BD-F19FBAED1B7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A62B5B87-5882-4A32-84BD-F19FBAED1B7D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

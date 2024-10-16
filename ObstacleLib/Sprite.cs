@@ -9,6 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using SixLabors.ImageSharp;
 using ObstacleLib.Render;
+using System.Runtime.InteropServices;
 
 namespace ObstacleLib.ItemObstacle
 {
@@ -16,62 +17,118 @@ namespace ObstacleLib.ItemObstacle
     {
         public static List<ObstacleLib.ItemObstacle.Sprite> spritesToRender = new List<ObstacleLib.ItemObstacle.Sprite>();
 
+        #region Coordinates
+        public double WallX { get => setWallX(X); }
+        private double setWallX(double value)
+        {
+            if(CurrentTexture != null) 
+                return value + ((shiftCubedX / 100) * CurrentTexture.ScreenScale);
+            else
+                return  value;
+        }
+        public double WallY {  get => setWallY(Y); }
+        private double setWallY(double value)
+        {
+            if (CurrentTexture != null)
+                return value + ((shiftCubedY / 100) * CurrentTexture.ScreenScale);
+            else
+                return value;
+        }
+
+        #endregion
+
+        #region Shift
+        private double shiftCubedX = 50;
+        public double ShiftCubedX 
+        {  
+            get => shiftCubedX;
+            set =>
+                shiftCubedX = value < 0 ? 1 : value > 100 ? 100 : value;        
+        }
+
+        private double shiftCubedY = 50;
+        public double ShiftCubedY
+        {
+            get => shiftCubedY;
+            set =>
+                shiftCubedY = value < 0 ? 1 : value > 100 ? 100 : value;
+        }
+        #endregion
 
         public double Distance { get; set; }
         public double Angle { get; set; }
         public List<TextureObstacle> Textures { get; init; }
+
+        private TextureObstacle TextureInMap { get; set; } = null;
         public TextureObstacle CurrentTexture { get; set; } = null;
 
         public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
 
-        #region SizeMultiplier
-        private int _sizeMultiplier; 
-        public int SizeMultiplier
-        {
-            get => _sizeMultiplier;
-            set => setSizeMultiplier(value);
+        #region Scale
+        private float scaleMultSprite;
+        public float ScaleMultSprite
+        { 
+            get => scaleMultSprite;
+            set => scaleMultSprite = value == 0? 1 : value;
         }
-        private void setSizeMultiplier(int value)
-        {
-            if (value == 0) value = 1;
-            _sizeMultiplier = value;
-        }
+
         #endregion
 
-        public Sprite(double x, double y,
-            char symbol, SFML.Graphics.Color colorInMap,
-            List<TextureObstacle> textures, int sizeMultiplier = 64,
+        public Sprite(double x, double y, char symbol,
+            List<TextureObstacle> textures,
+            int shiftCubedX = 50, int shiftCubedY = 50,
+            float scaleMultSprite = 1,
             bool isPassability = false)
 
-            :base(x, y, symbol, colorInMap, isPassability)
+            :base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             Textures = textures;
-            SizeMultiplier = sizeMultiplier;
+
+            if (textures.Count > 0)
+                TextureInMap = textures[0];
+
+            ShiftCubedX = shiftCubedX;
+            ShiftCubedY = shiftCubedY;
+
+            ScaleMultSprite = scaleMultSprite;
         }
 
-        public Sprite(double x, double y,
-            char symbol, SFML.Graphics.Color colorInMap,
-            int sizeMultiplier = 64,bool isPassability = false)
+        public Sprite(double x, double y, char symbol,
+            int shiftCubedX = 50, int shiftCubedY = 50,
+            float scaleMultSprite = 1,
+            bool isPassability = false)
 
-            : base(x, y, symbol, colorInMap, isPassability)
+            : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             Textures = new List<TextureObstacle>();
-            SizeMultiplier = sizeMultiplier;
+
+            ShiftCubedX = shiftCubedX;
+            ShiftCubedY = shiftCubedY;
+
+            ScaleMultSprite = scaleMultSprite;
         }
 
-        public Sprite(double x, double y,
-           char symbol, SFML.Graphics.Color colorInMap,
-           string path, int sizeMultiplier = 64,
+        public Sprite(double x, double y, char symbol,
+           string path, int screenTile,
+           int shiftCubedX = 50, int shiftCubedY = 50,
+           float scaleMultSprite = 1,
            bool isPassability = false)
 
-           : base(x, y, symbol, colorInMap, isPassability)
+           : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
-            Textures = new List<TextureObstacle>();
-            addTexture(path);
 
-            SizeMultiplier = sizeMultiplier;
+            Textures = new List<TextureObstacle>();
+            addTexture(path, screenTile);
+
+            TextureInMap = Textures[0];
+
+            ShiftCubedX = shiftCubedX;
+            ShiftCubedY = shiftCubedY;
+
+            ScaleMultSprite = scaleMultSprite;
         }
-        private void addGif(string gifPath)
+
+        private void addGif(string gifPath, int screenTile)
         {
             try
             {
@@ -90,7 +147,7 @@ namespace ObstacleLib.ItemObstacle
 
                             // Создаем SFML текстуру из потока и добавляем в Textures
                             var texture = new SFML.Graphics.Texture(stream);
-                            Textures.Add(new TextureObstacle(texture));
+                            Textures.Add(new TextureObstacle(texture, screenTile));
 
                         }
                     }
@@ -101,26 +158,30 @@ namespace ObstacleLib.ItemObstacle
                 Console.WriteLine($"Error when enabling gif: {ex.Message}");
             }
         }
-
-
-
-
-        public void addTexture(string path)
+        public void addTexture(string path, int screenTile)
         {
             TextureObstacle.isTruePath(path);
 
             if (Path.GetExtension(path)?.ToLower() == ".gif")
-                addGif(path);               
+                addGif(path, screenTile);               
             else
-                Textures.Add(new TextureObstacle(path));
+                Textures.Add(new TextureObstacle(path, screenTile));
+
+            if (TextureInMap is null && Textures.Count > 0)
+                TextureInMap = Textures[0];
         }
 
-        public void blackoutObstacle(double depth)
+        public override void blackoutObstacle(double depth)
         {
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
             if (CurrentTexture != null && CurrentTexture.Texture != null)
                 SpriteObst.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+        }
+        public override void fillingMiniMapShape(RectangleShape rectangleShape)
+        {
+            rectangleShape.OutlineThickness = 0;
+            rectangleShape.Texture = Textures[0].Texture;
         }
     }
 }

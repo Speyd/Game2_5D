@@ -1,12 +1,29 @@
-﻿using SFML.Graphics;
+﻿using ObstacleLib.Render;
+using SFML.Graphics;
+using Ren
 
 namespace ObstacleLib
 {
-    public abstract class Obstacle
+    public abstract class Obstacle : IRenderable
     {
+
+        static public List<Type> typesIgnoringRendering = new List<Type>() { typeof(ObstacleLib.ItemObstacle.Sprite) };
+
+
         //Positioning
-        public double X;
-        public double Y;
+        private double x;
+        public virtual double X
+        {
+            get => x;
+            set => x = value;
+        }
+
+        private double y;
+        public virtual double Y
+        {
+            get => y;
+            set => y = value;
+        }
 
         //Map setting
         public char Symbol {  get; set; }
@@ -25,5 +42,8 @@ namespace ObstacleLib
             ColorInMap = colorInMap;
             this.isPassability = isPassability;
         }
+
+        public abstract void blackoutObstacle(double depth);
+        public abstract void fillingMiniMapShape(RectangleShape rectangleShape);
     }
 }

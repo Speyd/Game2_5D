@@ -744,6 +744,23 @@
           }
         }
       },
+      "SFML.Audio/2.6.0": {
+        "type": "package",
+        "dependencies": {
+          "CSFML": "[2.6.1, 2.7.0)",
+          "SFML.System": "2.6.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/SFML.Audio.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SFML.Audio.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SFML.Graphics/2.6.0": {
         "type": "package",
         "dependencies": {
@@ -760,6 +777,15 @@
           "lib/netstandard2.0/SFML.Graphics.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "SFML.Net/2.6.0": {
+        "type": "package",
+        "dependencies": {
+          "SFML.Audio": "2.6.0",
+          "SFML.Graphics": "2.6.0",
+          "SFML.System": "2.6.0",
+          "SFML.Window": "2.6.0"
         }
       },
       "SFML.System/2.6.0": {
@@ -828,6 +854,32 @@
         },
         "build": {
           "buildTransitive/net6.0/_._": {}
+        }
+      },
+      "Render/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Render.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Render.dll": {}
+        }
+      },
+      "ScreenLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SFML.Net": "2.6.0"
+        },
+        "compile": {
+          "bin/placeholder/ScreenLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ScreenLib.dll": {}
         }
       }
     }
@@ -1061,6 +1113,21 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "SFML.Audio/2.6.0": {
+      "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
+      "type": "package",
+      "path": "sfml.audio/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/SFML.Audio.dll",
+        "lib/netstandard2.0/SFML.Audio.xml",
+        "sfml-icon.png",
+        "sfml.audio.2.6.0.nupkg.sha512",
+        "sfml.audio.nuspec"
+      ]
+    },
     "SFML.Graphics/2.6.0": {
       "sha512": "bwYJT4siVta87d3ZaRN37FViOMAgiiYS9BYJOhHL70G9+KDtqbAl1LYg9hdEG8IHFSj55I7P8qkPL33KQ16RBg==",
       "type": "package",
@@ -1074,6 +1141,19 @@
         "sfml-icon.png",
         "sfml.graphics.2.6.0.nupkg.sha512",
         "sfml.graphics.nuspec"
+      ]
+    },
+    "SFML.Net/2.6.0": {
+      "sha512": "jnHJp7PPvZ0FdIZQZo63DW3ROrgVJktTzycjGzoX1HsZZTzj7ioMOXtsbR2AAggdTyk6vIhd61IqEpLO4DSd+Q==",
+      "type": "package",
+      "path": "sfml.net/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "sfml-icon.png",
+        "sfml.net.2.6.0.nupkg.sha512",
+        "sfml.net.nuspec"
       ]
     },
     "SFML.System/2.6.0": {
@@ -1161,10 +1241,21 @@
         "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Render/1.0.0": {
+      "type": "project",
+      "path": "../Render/Render.csproj",
+      "msbuildProject": "../Render/Render.csproj"
+    },
+    "ScreenLib/1.0.0": {
+      "type": "project",
+      "path": "../ScreenLib/ScreenLib.csproj",
+      "msbuildProject": "../ScreenLib/ScreenLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "Render >= 1.0.0",
       "SFML.Graphics >= 2.6.0",
       "SixLabors.ImageSharp >= 3.1.5",
       "System.Drawing.Common >= 8.0.10"
@@ -1196,7 +1287,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

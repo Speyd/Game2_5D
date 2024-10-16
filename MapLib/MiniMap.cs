@@ -71,23 +71,21 @@ namespace MapLib.MiniMapLib
 
         void renderObstacle(double mapX, double mapY)
         {
-            foreach (var coo in map.Obstacles)
+            foreach (var obstacle in map.Obstacles)
             {
-                float x = (coo.Key.Item1 / map.Setting.ScreenTile) * Setting.mapTile;
-                float y = (coo.Key.Item2 / map.Setting.ScreenTile) * Setting.mapTile;
+                float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * Setting.mapTile;
+                float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * Setting.mapTile;
 
-                RectangleShape tile = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
+                RectangleShape rectangleShape = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
-                tile.FillColor = coo.Value.ColorInMap;
-                tile.OutlineThickness = 1;
-                tile.OutlineColor = Color.Black;
-                tile.Position = new Vector2f
+                obstacle.Value.fillingMiniMapShape(rectangleShape);
+                rectangleShape.Position = new Vector2f
                     (
                         (float)(Setting.centerX - (x - mapX) - Setting.getMiniMapSlowdownFactor()),
                         (float)(Setting.centerY - (y - mapY) - Setting.getMiniMapSlowdownFactor())
                     );
 
-                Window.Draw(tile);
+                Window.Draw(rectangleShape);
             }
         }
         void drawDebugGrid()
