@@ -1,8 +1,9 @@
-﻿using RenderLib.RenderText;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
 using ScreenLib;
+using System.Drawing;
+using Render.RenderText;
 
 namespace FpsLib
 {
@@ -14,8 +15,10 @@ namespace FpsLib
         private float deltaTime = 0;
         DateTime fromNow;
 
-        public FPS(DateTime from, string text, uint size, Vector2f position, string pathToFont, Color color)
-            :base(text, size, position, pathToFont, color)
+        public FPS(DateTime from,
+            string text, uint size, Vector2f position,
+            string pathToFont, SFML.Graphics.Color color)
+            : base(text, size, position, pathToFont, color)
         {
             fromNow = from;
         }

@@ -7,8 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using ScreenLib;
-//using ObstacleLib;
-//using EntityLib;
+using EntityLib;
+using Render.ResultAlgorithm;
 
 namespace Render
 {
@@ -17,6 +17,7 @@ namespace Render
         public const double shadowMultiplier = 0.00001;
         void blackoutObstacle(double depth);
         void fillingMiniMapShape(RectangleShape rectangleShape);
-        void render(Screen screen, ScreenLib.SettingScreen.Setting setting, Entity entity);
+        void render(Screen screen, Result result, Entity entity);
+        float normalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
     }
 }

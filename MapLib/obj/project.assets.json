@@ -722,28 +722,6 @@
           }
         }
       },
-      "Microsoft.Win32.SystemEvents/8.0.0": {
-        "type": "package",
-        "compile": {
-          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "SFML.Audio/2.6.0": {
         "type": "package",
         "dependencies": {
@@ -834,48 +812,27 @@
           }
         },
         "build": {
-          "build/_._": {}
+          "build/SixLabors.ImageSharp.props": {}
         }
       },
-      "System.Drawing.Common/8.0.10": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Win32.SystemEvents": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/System.Drawing.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/System.Drawing.Common.dll": {
-            "related": ".pdb;.xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        }
-      },
-      "ObstacleLib/1.0.0": {
+      "EntityLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "Render": "1.0.0",
-          "SFML.Graphics": "2.6.0",
-          "SixLabors.ImageSharp": "3.1.5",
-          "System.Drawing.Common": "8.0.10"
+          "ScreenLib": "1.0.0"
         },
         "compile": {
-          "bin/placeholder/ObstacleLib.dll": {}
+          "bin/placeholder/EntityLib.dll": {}
         },
         "runtime": {
-          "bin/placeholder/ObstacleLib.dll": {}
+          "bin/placeholder/EntityLib.dll": {}
         }
       },
       "Render/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "EntityLib": "1.0.0",
           "ScreenLib": "1.0.0"
         },
         "compile": {
@@ -1094,41 +1051,6 @@
         "sfml-icon.png"
       ]
     },
-    "Microsoft.Win32.SystemEvents/8.0.0": {
-      "sha512": "9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw==",
-      "type": "package",
-      "path": "microsoft.win32.systemevents/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Win32.SystemEvents.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Win32.SystemEvents.targets",
-        "lib/net462/Microsoft.Win32.SystemEvents.dll",
-        "lib/net462/Microsoft.Win32.SystemEvents.xml",
-        "lib/net6.0/Microsoft.Win32.SystemEvents.dll",
-        "lib/net6.0/Microsoft.Win32.SystemEvents.xml",
-        "lib/net7.0/Microsoft.Win32.SystemEvents.dll",
-        "lib/net7.0/Microsoft.Win32.SystemEvents.xml",
-        "lib/net8.0/Microsoft.Win32.SystemEvents.dll",
-        "lib/net8.0/Microsoft.Win32.SystemEvents.xml",
-        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
-        "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.8.0.0.nupkg.sha512",
-        "microsoft.win32.systemevents.nuspec",
-        "runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll",
-        "runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.xml",
-        "runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.dll",
-        "runtimes/win/lib/net7.0/Microsoft.Win32.SystemEvents.xml",
-        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll",
-        "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.xml",
-        "useSharedDesignerContext.txt"
-      ]
-    },
     "SFML.Audio/2.6.0": {
       "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
       "type": "package",
@@ -1218,50 +1140,10 @@
         "sixlabors.imagesharp.nuspec"
       ]
     },
-    "System.Drawing.Common/8.0.10": {
-      "sha512": "MdajRp3P+FOlThgY6FBjAqnmLiVl5t2yWEC/2AsDMqx1zYbJG3G5TnscFBQ4obqcaGqvN5UnhQHSFaJFG2HftQ==",
-      "type": "package",
-      "path": "system.drawing.common/8.0.10",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/System.Drawing.Common.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/System.Drawing.Common.targets",
-        "lib/MonoAndroid10/_._",
-        "lib/MonoTouch10/_._",
-        "lib/net462/System.Drawing.Common.dll",
-        "lib/net462/System.Drawing.Common.pdb",
-        "lib/net462/System.Drawing.Common.xml",
-        "lib/net6.0/System.Drawing.Common.dll",
-        "lib/net6.0/System.Drawing.Common.pdb",
-        "lib/net6.0/System.Drawing.Common.xml",
-        "lib/net7.0/System.Drawing.Common.dll",
-        "lib/net7.0/System.Drawing.Common.pdb",
-        "lib/net7.0/System.Drawing.Common.xml",
-        "lib/net8.0/System.Drawing.Common.dll",
-        "lib/net8.0/System.Drawing.Common.pdb",
-        "lib/net8.0/System.Drawing.Common.xml",
-        "lib/netstandard2.0/System.Drawing.Common.dll",
-        "lib/netstandard2.0/System.Drawing.Common.pdb",
-        "lib/netstandard2.0/System.Drawing.Common.xml",
-        "lib/xamarinios10/_._",
-        "lib/xamarinmac20/_._",
-        "lib/xamarintvos10/_._",
-        "lib/xamarinwatchos10/_._",
-        "system.drawing.common.8.0.10.nupkg.sha512",
-        "system.drawing.common.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
-    "ObstacleLib/1.0.0": {
+    "EntityLib/1.0.0": {
       "type": "project",
-      "path": "../ObstacleLib/ObstacleLib.csproj",
-      "msbuildProject": "../ObstacleLib/ObstacleLib.csproj"
+      "path": "../EntityLib/EntityLib.csproj",
+      "msbuildProject": "../EntityLib/EntityLib.csproj"
     },
     "Render/1.0.0": {
       "type": "project",
@@ -1276,9 +1158,11 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "ObstacleLib >= 1.0.0",
+      "EntityLib >= 1.0.0",
+      "Render >= 1.0.0",
       "SFML.Graphics >= 2.6.0",
-      "ScreenLib >= 1.0.0"
+      "ScreenLib >= 1.0.0",
+      "SixLabors.ImageSharp >= 3.1.5"
     ]
   },
   "packageFolders": {
@@ -1308,8 +1192,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj": {
-              "projectPath": "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj"
+            "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+            },
+            "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
             },
             "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
@@ -1335,6 +1222,10 @@
           "SFML.Graphics": {
             "target": "Package",
             "version": "[2.6.0, )"
+          },
+          "SixLabors.ImageSharp": {
+            "target": "Package",
+            "version": "[3.1.5, )"
           }
         },
         "imports": [

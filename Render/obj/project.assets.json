@@ -799,6 +799,19 @@
           }
         }
       },
+      "EntityLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EntityLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EntityLib.dll": {}
+        }
+      },
       "ScreenLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -1081,6 +1094,11 @@
         "sfml.window.nuspec"
       ]
     },
+    "EntityLib/1.0.0": {
+      "type": "project",
+      "path": "../EntityLib/EntityLib.csproj",
+      "msbuildProject": "../EntityLib/EntityLib.csproj"
+    },
     "ScreenLib/1.0.0": {
       "type": "project",
       "path": "../ScreenLib/ScreenLib.csproj",
@@ -1089,6 +1107,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "EntityLib >= 1.0.0",
       "ScreenLib >= 1.0.0"
     ]
   },
@@ -1119,6 +1138,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+            },
             "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
             }

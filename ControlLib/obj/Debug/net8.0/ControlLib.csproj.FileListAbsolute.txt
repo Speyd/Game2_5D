@@ -16,5 +16,7 @@ D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.Ass
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.Up2Date
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ScreenLib.pdb
-D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ObstacleLib.dll
-D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ObstacleLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EntityLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\Render.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EntityLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\Render.pdb

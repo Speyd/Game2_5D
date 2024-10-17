@@ -52,12 +52,12 @@ namespace EntityLib
         }
 
 
-        public double getEntityY() => entityY;
+        public ref double getEntityY() => ref entityY;
 
-        public double getEntityX() => entityX;
+        public ref double getEntityX() => ref entityX;
 
-        public double getEntityA() => entityA;
-        public double getEntityVerticalA() => entityVerticalA;
+        public ref double getEntityA() => ref entityA;
+        public ref double getEntityVerticalA() => ref entityVerticalA;
 
     }
 }

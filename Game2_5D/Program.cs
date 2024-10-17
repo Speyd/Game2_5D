@@ -16,36 +16,21 @@ using System.Numerics;
 using ScreenLib;
 using EntityLib;
 using EntityLib.Player;
-using RenderLib;
+using Render;
+using Render.ResultAlgorithm;
+using Render.RenderPartsWorld;
+using Render.RenderText;
 using System.Collections.Generic;
 using System.Data.Common;
-using MapLib.MiniMapLib;
-using RenderLib.RenderPartsWorld;
+using MiniMapLib;
 using FpsLib;
 using ObstacleLib;
-using ObstacleLib.ItemObstacle;
+using MapLib.Obstacles.Diversity_Obstacle;
 using System.Reflection.Metadata;
-using MapLib.MiniMapLib.Setting;
+using MiniMapLib.SettingMap;
 using ObstacleLib.Render.Texture;
-
-
-List<ValueTuple<int, int>> getMapWorld(int TILE, Map map) 
-{
-    List<ValueTuple<int, int>> values = new List<(int, int)>();
-    for (int i = 0; i < map.Setting.MapHeight; i++)
-    {
-        for(int j = 0; j < map.Setting.MapWidth; j++)
-        {
-            if (map.MapStr[i * map.Setting.MapWidth + j] == '#')
-                values.Add((j * TILE, i * TILE));
-        }
-        
-    }
-
-    return values;
-}
-
-
+using ControlLib;
+using BresenhamAlgorithm;
 
 const int mapScale = 5;
 
@@ -53,48 +38,47 @@ const int mapScale = 5;
 Screen screen = new Screen(1500, 1000, mapScale, true);
 
 screen.Window.SetActive(true);
-
-Map map = new Map(24, 23, screen.setting.Tile);
+Map map = new Map(24, 23, screen.Setting.Tile);
 map.addObstacleToMap(2, 2, map.Obstacles, Map.block);
 map.addObstacleToMap(2, 5, map.Obstacles, Map.block);
 
-int t = screen.setting.Tile;
+int t = screen.Setting.Tile;
 List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
 {
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\1.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\2.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\3.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\4.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\5.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\6.png", screen.setting.Tile),
-    new TextureObstacle( @"D:\C++ проекты\Game2_5D\7.png", screen.setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\1.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\2.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\3.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\4.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\5.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\6.png", screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png", screen.Setting.Tile),
 
 };
-ObstacleLib.ItemObstacle.Sprite sprite = new ObstacleLib.ItemObstacle.Sprite(0, 0, 'S', textureObstacles);
+MapLib.Obstacles.Diversity_Obstacle.Sprite sprite = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
 sprite.ScaleMultSprite = 100;
 
 map.addObstacleToMap(4, 4, map.Obstacles, sprite);
-map.addObstacleToMap(7, 7, map.Obstacles, new TexturedWall(0, 0,'W', @"D:\C++ проекты\Game2_5D\Wall2.png", t));
+map.addObstacleToMap(7, 7, map.Obstacles, new TexturedWall(0, 0,'W', Path.Combine(@"Resources\Image\WallTexture\Wall2.png"), t));
 map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'W', Color.Yellow, Color.Green));
-map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'W', @"D:\C++ проекты\Game2_5D\Wall4.png", t));
-map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'W', @"D:\C++ проекты\Game2_5D\Wall5.png", t));
-map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'W', @"D:\C++ проекты\Game2_5D\Wall8.png", t));
+map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'W', Path.Combine(@"Resources\Image\WallTexture\Wall4.png"), t));
+map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'W', Path.Combine(@"Resources\Image\WallTexture\Wall5.png"), t));
+map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'W', Path.Combine(@"Resources\Image\WallTexture\Wall8.png"), t));
 
 map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MapLib.MiniMapLib.Setting.Positions.UpperRightCorner, @"D:\C++ проекты\Game2_5D\Border.png");
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
 
 
+Control control = new Control(map, screen);
+Player player = new Player(screen, 1500);
+player.OnControlAction = control.makePressed;
 
-Player player = new Player(screen, map, 1500);
-Render render = new Render(map, screen, player);
-
+Algorithm algorithm = new Algorithm(screen, map, player, new Render.ResultAlgorithm.Result());
 
 DateTime from = DateTime.Now;
-string path = @"ArialBold.ttf";
-FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), path, Color.White);
+FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\FontText\ArialBold.ttf", Color.White);
 
 try
 {
@@ -105,11 +89,11 @@ try
 
         fpsChecker.startRead();
 
-        player.makePressed(fpsChecker.getDeltaTime());
+        player.OnControlAction(fpsChecker.getDeltaTime(), player);
         RenderPartsWorld.renderPartsWorld(screen, player);
 
 
-        render.algorithmBrezenhama();
+        algorithm.calculationAlgorithm();
 
 
         fpsChecker.endRead(screen);

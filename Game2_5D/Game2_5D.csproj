@@ -15,10 +15,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BresenhamAlgorithm\BresenhamAlgorithm.csproj" />
+    <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\RenderLib\RenderLib.csproj" />
+    <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 

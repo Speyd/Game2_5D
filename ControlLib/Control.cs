@@ -5,30 +5,25 @@ using SFML.Window;
 using System;
 using System.Drawing;
 using System.Reflection.Metadata;
+using EntityLib;
 
 namespace ControlLib
 {
     public class Control
     {
-        private double moveSpeed;
-        private double moveSpeedAngel;
-
-        private double minDistanceFromWall = 50;
-
-        private double mouseSensitivity = 0.001;
-        private bool isMouseCaptured = true;
-
-        private double verticalAngle = 0.0;
-        private double angle = 0.0;
-
-        private CheckPressed checkPressed = new CheckPressed();
+        private Setting setting;
 
         private Map map;
         private Screen screen;
-        public Control(Map map, Screen screen)
+        private CheckPressed checkPressed = new CheckPressed();
+
+        public Control(Map map, Screen screen, 
+            float minDistanceFromWall = 50, float mouseSensitivity = 0.001f)
         {
             this.map = map;
             this.screen = screen;
+
+            setting = new Setting(minDistanceFromWall, mouseSensitivity);      
 
             screen.Window.SetMouseCursorVisible(false);
             screen.Window.MouseMoved += OnMouseMoved;
@@ -36,36 +31,36 @@ namespace ControlLib
 
         private void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
-            if (isMouseCaptured)
+            if (setting.isMouseCaptured)
             {
                 Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
-                Mouse.SetPosition(new Vector2i(screen.setting.HalfWidth, screen.setting.HalfHeight), screen.Window);
+                Mouse.SetPosition(new Vector2i(screen.Setting.HalfWidth, screen.Setting.HalfHeight), screen.Window);
 
-                int actualMousePositionX = currentMousePosition.X - screen.setting.HalfWidth;
-                int actualMousePositionY = currentMousePosition.Y - screen.setting.HalfHeight;
-                verticalAngle = (float)Math.Clamp(verticalAngle, -Math.PI / 2, Math.PI / 2);
+                int actualMousePositionX = currentMousePosition.X - screen.Setting.HalfWidth;
+                int actualMousePositionY = currentMousePosition.Y - screen.Setting.HalfHeight;
+                setting.verticalAngle = (float)Math.Clamp(setting.verticalAngle, -Math.PI / 2, Math.PI / 2);
 
-                angle += actualMousePositionX * mouseSensitivity;
-                verticalAngle += actualMousePositionY * mouseSensitivity;
+                setting.angle += actualMousePositionX * setting.mouseSensitivity;
+                setting.verticalAngle += actualMousePositionY * setting.mouseSensitivity;
             }
         }
 
         private void isCollision(double nextX, double nextY, ref double playerX, ref double playerY)
         {
-            float delta_x = 0, delta_y = 0;
+            float deltaX = 0, deltaY = 0;
             ValueTuple<int, int> tempCoo;
             if(nextX != 0)
             {
-                delta_x = (float)minDistanceFromWall / 2 * Math.Sign(nextX);
+                deltaX = setting.minDistanceFromWall / 2 * Math.Sign(nextX);
 
-                tempCoo = map.mapping(playerX + nextX + delta_x, playerY + delta_x, screen.setting.Tile);
+                tempCoo = map.mapping(playerX + nextX + deltaX, playerY + deltaX, screen.Setting.Tile);
                 if (map.Obstacles.ContainsKey(tempCoo))
                 {
                     if (map.Obstacles[tempCoo].isPassability == false)
                         nextX = 0;
                 }
 
-                tempCoo = map.mapping(playerX + nextX + delta_x, playerY - delta_x, screen.setting.Tile);
+                tempCoo = map.mapping(playerX + nextX + deltaX, playerY - deltaX, screen.Setting.Tile);
                 if (map.Obstacles.ContainsKey(tempCoo))
                 {
                     if (map.Obstacles[tempCoo].isPassability == false)
@@ -74,16 +69,16 @@ namespace ControlLib
             }
             if (nextY != 0)
             {
-                delta_y = (float)minDistanceFromWall / 2 * Math.Sign(nextY);
+                deltaY = setting.minDistanceFromWall / 2 * Math.Sign(nextY);
 
-                tempCoo = map.mapping(playerX + delta_y, playerY + nextY + delta_y, screen.setting.Tile);
+                tempCoo = map.mapping(playerX + deltaY, playerY + nextY + deltaY, screen.Setting.Tile);
                 if (map.Obstacles.ContainsKey(tempCoo))
                 {
                     if (map.Obstacles[tempCoo].isPassability == false)
                         nextY = 0;
                 }
 
-                tempCoo = map.mapping(playerX - delta_y, playerY + nextY + delta_y, screen.setting.Tile);
+                tempCoo = map.mapping(playerX - deltaY, playerY + nextY + deltaY, screen.Setting.Tile);
                 if (map.Obstacles.ContainsKey(tempCoo))
                 {
                     if (map.Obstacles[tempCoo].isPassability == false)
@@ -95,41 +90,41 @@ namespace ControlLib
             playerY += nextY;
         }
 
-        private void forwardPress(ref double playerX, ref double playerY, ref double playerA)
+        private void forwardPress(Entity entity)
         {
-            double rx = Math.Cos(playerA) * moveSpeed;
-            double ry = Math.Sin(playerA) * moveSpeed;
+            double rx = Math.Cos(entity.getEntityA()) * setting.moveSpeed;
+            double ry = Math.Sin(entity.getEntityA()) * setting.moveSpeed;
 
-            isCollision(rx, ry, ref playerX, ref playerY);
+            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
         }
-        private void backPress(ref double playerX, ref double playerY, ref double playerA)
+        private void backPress(Entity entity)
         {
-            double rx = Math.Cos(playerA) * -moveSpeed;
-            double ry = Math.Sin(playerA) * -moveSpeed;
+            double rx = Math.Cos(entity.getEntityA()) * -setting.moveSpeed;
+            double ry = Math.Sin(entity.getEntityA()) * -setting.moveSpeed;
 
-            isCollision(rx, ry, ref playerX, ref playerY);
+            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
         }
-        private void leftPress(ref double playerX, ref double playerY, ref double playerA)
+        private void leftPress(Entity entity)
         {
-            double rx =  moveSpeed * Math.Sin(playerA);
-            double ry =  -moveSpeed * Math.Cos(playerA);
+            double rx =  setting.moveSpeed * Math.Sin(entity.getEntityA());
+            double ry =  -setting.moveSpeed * Math.Cos(entity.getEntityA());
 
-            isCollision(rx, ry, ref playerX, ref playerY);
+            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
         }
-        private void rightPress(ref double playerX, ref double playerY, ref double playerA)
+        private void rightPress(Entity entity)
         {
-            double rx =  -moveSpeed * Math.Sin(playerA);
-            double ry =  moveSpeed * Math.Cos(playerA);
+            double rx =  -setting.moveSpeed * Math.Sin(entity.getEntityA());
+            double ry =  setting.moveSpeed * Math.Cos(entity.getEntityA());
 
-            isCollision(rx, ry, ref playerX, ref playerY);
+            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
         }
         private void turnLeftPress(ref double playerA)
         {
-            playerA -= moveSpeedAngel;
+            playerA -= setting.moveSpeedAngel;
         }
         private void turnRightPress(ref double playerA)
         {
-            playerA += moveSpeedAngel;
+            playerA += setting.moveSpeedAngel;
         }
         private double NormalizeAngle(double angle)
         {
@@ -140,31 +135,31 @@ namespace ControlLib
             return angle;
         }
 
-        public void makePressed(double deltaTime, ref double entityX, ref double entityY, ref double playerA, ref double playerVerticalA)
+        public void makePressed(double deltaTime, Entity entity)
         {
             double tempMoveSpeed = (100 * deltaTime);
 
-            playerA = NormalizeAngle(angle);
-            angle = playerA;
+            entity.getEntityA() = NormalizeAngle(setting.angle);
+            setting.angle = entity.getEntityA();
 
-            playerVerticalA = verticalAngle;
+            entity.getEntityVerticalA() = setting.verticalAngle;
 
-            moveSpeed = (float)(tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.setting.AmountRays / screen.ScreenWidth)));
-            moveSpeedAngel = 1 * deltaTime;
+            setting.moveSpeed = (float)(tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.Setting.AmountRays / screen.ScreenWidth)));
+            setting.moveSpeedAngel = 1 * deltaTime;
 
             checkPressed.check();
             if (checkPressed.isForwardPressed)
-                forwardPress(ref entityX, ref entityY, ref playerA);
+                forwardPress(entity);
             if (checkPressed.isBackPressed)
-                backPress(ref entityX, ref entityY, ref playerA);
+                backPress(entity);
             if (checkPressed.isLeftPressed)
-                leftPress(ref entityX, ref entityY, ref playerA);
+                leftPress(entity);
             if (checkPressed.isRightPressed)
-                rightPress(ref entityX, ref entityY, ref playerA);
+                rightPress(entity);
             if (checkPressed.isTurnLeftPressed)
-                turnLeftPress(ref angle);
+                turnLeftPress(ref setting.angle);
             if (checkPressed.isTurnRightPressed)
-                turnRightPress(ref angle);
+                turnRightPress(ref setting.angle);
             if(checkPressed.isTurnExit)
                 screen.Window.Close();
 

@@ -4,7 +4,8 @@ using MapLib.SettingLib;
 using ObstacleLib;
 using SFML.Graphics;
 using System.Collections.Generic;
-using ObstacleLib.ItemObstacle;
+using MapLib.Obstacles;
+using MapLib.Obstacles.Diversity_Obstacle;
 
 namespace MapLib
 {
@@ -16,7 +17,7 @@ namespace MapLib
 
         public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public static TexturedWall block = new TexturedWall(0, 0, 'w', Color.Green, @"D:\C++ проекты\Game2_5D\Wall1.png", 0);
+        public static TexturedWall block = new TexturedWall(0, 0, 'w', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
         public static char empty = ' ';
 
         public Map(int mapHeight, int mapWidth, int Tile)

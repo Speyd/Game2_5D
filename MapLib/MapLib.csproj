@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="SFML.Graphics" Version="2.6.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.5" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ObstacleLib\ObstacleLib.csproj" />
+    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 

@@ -10,7 +10,7 @@ namespace MapLib.SettingLib
     {
         public int MapWidth { get; init; }
         public int MapHeight { get; init; }
-        internal int ScreenTile { get; init; }
+        public int ScreenTile { get; init; }
 
         public Setting(int mapWidth, int mapHeight, int screenTile)
         {

@@ -1,16 +1,12 @@
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\FpsLib.deps.json
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\FpsLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\FpsLib.pdb
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ControlLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\EntityLib.dll
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\MapLib.dll
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\RenderLib.dll
+D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\Render.dll
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ScreenLib.dll
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\RenderLib.pdb
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ScreenLib.pdb
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ControlLib.pdb
+D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\Render.pdb
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\EntityLib.pdb
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ScreenLib.pdb
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.csproj.AssemblyReference.cache
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.GeneratedMSBuildEditorConfig.editorconfig
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.AssemblyInfoInputs.cache
@@ -22,5 +18,3 @@ D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\refint\FpsLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.pdb
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\ref\FpsLib.dll
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ObstacleLib.dll
-D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\ObstacleLib.pdb
