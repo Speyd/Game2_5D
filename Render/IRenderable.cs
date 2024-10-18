@@ -10,7 +10,7 @@ using ScreenLib;
 using EntityLib;
 using Render.ResultAlgorithm;
 
-namespace Render
+namespace Render.InterfaceRender
 {
     public interface IRenderable
     {

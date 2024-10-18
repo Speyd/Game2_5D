@@ -9,7 +9,8 @@ using ObstacleLib.Render;
 using ObstacleLib.Render.Texture;
 using SFML.Graphics;
 using SixLabors.ImageSharp.PixelFormats;
-using Render;
+using Render.InterfaceRender;
+using Render.ZBufferRender;
 using EntityLib;
 using ScreenLib;
 using Render.ResultAlgorithm;
@@ -97,7 +98,7 @@ namespace MapLib.Obstacles.Diversity_Obstacle
             calculationTextureScale(result);
             calculationTexturePosition(ref screen, result, entity.getEntityVerticalA());
 
-            screen.Window.Draw(SpriteObst);
+            ZBuffer.zBuffer.Add((SpriteObst, result.Depth));
         }
         #endregion
     }

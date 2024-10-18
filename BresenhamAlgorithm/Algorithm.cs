@@ -2,13 +2,14 @@
 using MapLib;
 using MapLib.Obstacles;
 using MapLib.Obstacles.Diversity_Obstacle;
-using Render;
+using Render.InterfaceRender;
+using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using ScreenLib;
 
 namespace BresenhamAlgorithm
 {
-    public class Algorithm(Screen screen, Map map, Entity entity, Result result)
+    public class Algorithm(Screen screen, Map map, Entity entity, Result result, ZBuffer zBuffer)
     {
         private ValueTuple<IRenderable, IRenderable> obstacles = (null, null);
 
@@ -137,6 +138,8 @@ namespace BresenhamAlgorithm
                 (
                 o => o.render(screen, result, entity)
                 );
+
+            zBuffer.render();
         }
     }
 }

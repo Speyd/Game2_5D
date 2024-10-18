@@ -9,9 +9,11 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Render;
+using Render.InterfaceRender;
+using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using SFML.System;
+using System.Numerics;
 
 namespace MapLib.Obstacles.Diversity_Obstacle
 {
@@ -19,7 +21,7 @@ namespace MapLib.Obstacles.Diversity_Obstacle
     {
 
         public Color ColorFilling { get; set; }
-        public RectangleShape Wall { get; private set; } = new RectangleShape();
+        public Color CurrentColorFilling { get; set; }
 
         public BlankWall(double x, double y,
             char symbol, Color colorInMap,
@@ -48,7 +50,7 @@ namespace MapLib.Obstacles.Diversity_Obstacle
             byte green = (byte)Math.Min(ColorFilling.G * darkened / 255, 255);
             byte blue = (byte)Math.Min(ColorFilling.B * darkened / 255, 255);
 
-            Wall.FillColor = new Color(red, green, blue);
+            CurrentColorFilling = new Color(red, green, blue);
         }
         public override void fillingMiniMapShape(RectangleShape rectangleShape)
         {
@@ -72,36 +74,49 @@ namespace MapLib.Obstacles.Diversity_Obstacle
         }
         public float calcCooX(double ray, Screen screen)
         {
-            return (float) ray * screen.Setting.Scale;
+            return (float)ray * screen.Setting.Scale;
         }
-        #endregion
 
-        private void calculationBlockScale(ref Screen screen, Result result)
+        private Vector2f calculationBlockScale(Screen screen, Result result)
         {
             float scaleX = screen.Setting.Scale;
             float scaleY = (float)result.ProjHeight;
 
-            Wall.Size = new Vector2f(scaleX, scaleY);
+            return new Vector2f(scaleX, scaleY);
         }
-        private void calculationBlockPosition(ref Screen screen, Result result, ref double angleVertical)
+
+        private Vector2f calculationBlockPosition(Screen screen, Result result, Entity entity)
         {
             float positionX = calcCooX(result.Ray, screen);
-            float positionY = normalizePositionY(screen, angleVertical, (float)result.ProjHeight / 2);
+            float positionY = normalizePositionY(screen, entity.getEntityVerticalA(), (float)result.ProjHeight / 2);
 
-            Wall.Position = new Vector2f(positionX, positionY);
+            return new Vector2f(positionX, positionY);
+        }
+        #endregion
+
+        private void UpdateVertices(VertexArray Wall, Vector2f scale, Vector2f position)
+        {
+            Wall[0] = new Vertex(position, CurrentColorFilling);                            
+            Wall[1] = new Vertex(position + new Vector2f(scale.X, 0), CurrentColorFilling); 
+            Wall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), CurrentColorFilling); 
+            Wall[3] = new Vertex(position + new Vector2f(0, scale.Y), CurrentColorFilling); 
         }
 
         public override void render(Screen screen, Result result, Entity entity)
         {
-            screen.vertexArray.Clear();
-
-            calculationBlockScale(ref screen, result);
-            calculationBlockPosition(ref screen, result, ref entity.getEntityVerticalA());
-
             blackoutObstacle(result.Depth);
 
-            screen.Window.Draw(Wall);
+            VertexArray Wall = new VertexArray(PrimitiveType.Quads, 4);
+            UpdateVertices(
+                Wall, 
+                calculationBlockScale(screen, result),
+                calculationBlockPosition(screen, result, entity)
+                );
+
+            ZBuffer.zBuffer.Add((Wall, result.Depth));
         }
+
+
         #endregion
     }
 }

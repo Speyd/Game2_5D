@@ -17,6 +17,7 @@ using ScreenLib;
 using EntityLib;
 using EntityLib.Player;
 using Render;
+using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using Render.RenderPartsWorld;
 using Render.RenderText;
@@ -55,9 +56,12 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
 
 };
 MapLib.Obstacles.Diversity_Obstacle.Sprite sprite = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
+MapLib.Obstacles.Diversity_Obstacle.Sprite sprite1 = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
 sprite.ScaleMultSprite = 100;
+sprite1.ScaleMultSprite = 100;
 
 map.addObstacleToMap(4, 4, map.Obstacles, sprite);
+map.addObstacleToMap(4, 6, map.Obstacles, sprite1);
 map.addObstacleToMap(7, 7, map.Obstacles, new TexturedWall(0, 0,'W', Path.Combine(@"Resources\Image\WallTexture\Wall2.png"), t));
 map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'W', Color.Yellow, Color.Green));
 map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'W', Path.Combine(@"Resources\Image\WallTexture\Wall4.png"), t));
@@ -75,7 +79,7 @@ Control control = new Control(map, screen);
 Player player = new Player(screen, 1500);
 player.OnControlAction = control.makePressed;
 
-Algorithm algorithm = new Algorithm(screen, map, player, new Render.ResultAlgorithm.Result());
+Algorithm algorithm = new Algorithm(screen, map, player, new Render.ResultAlgorithm.Result(), new ZBuffer(screen));
 
 DateTime from = DateTime.Now;
 FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\FontText\ArialBold.ttf", Color.White);

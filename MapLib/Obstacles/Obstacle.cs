@@ -1,6 +1,6 @@
 ﻿using ObstacleLib.Render;
 using SFML.Graphics;
-using Render;
+using Render.InterfaceRender;
 using Render.ResultAlgorithm;
 using EntityLib;
 using ScreenLib;

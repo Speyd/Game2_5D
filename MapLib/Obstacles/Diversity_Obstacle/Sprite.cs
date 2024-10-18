@@ -11,7 +11,8 @@ using SixLabors.ImageSharp;
 using ObstacleLib.Render;
 using System.Runtime.InteropServices;
 using ObstacleLib;
-using Render;
+using Render.InterfaceRender;
+using Render.ZBufferRender;
 using EntityLib;
 using ScreenLib;
 using Render.ResultAlgorithm;
@@ -62,8 +63,8 @@ namespace MapLib.Obstacles.Diversity_Obstacle
         }
         #endregion
 
-        public double Distance { get; set; }
         public double Angle { get; set; }
+        public double Distance {  get; set; }
         public List<TextureObstacle> Textures { get; init; }
 
         private TextureObstacle TextureInMap { get; set; } = null;
@@ -255,8 +256,12 @@ namespace MapLib.Obstacles.Diversity_Obstacle
         #endregion
         public override void render(Screen screen, Result result, Entity entity)
         {
-            foreach (var sprite in MapLib.Obstacles.Diversity_Obstacle.Sprite.spritesToRender)
+            var sortedSprites = spritesToRender
+                .OrderByDescending(sprite => sprite.Distance)
+                .ToList();
+            foreach (var sprite in sortedSprites)
             {
+
                 double spriteAngle = calculationAngularDistance(sprite, entity);
                 if (sprite.Distance > entity.MaxDistance)
                     continue;
@@ -294,7 +299,7 @@ namespace MapLib.Obstacles.Diversity_Obstacle
                 (float)height / sprite.CurrentTexture.TextureHeight
                 );
 
-            screen.Window.Draw(sprite.SpriteObst);
+            ZBuffer.zBuffer.Add((sprite.SpriteObst, sprite.Distance));
         }
         #endregion
     }
