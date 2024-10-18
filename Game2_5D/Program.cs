@@ -72,7 +72,7 @@ map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 10, @"Resources\Image\BorderMiniMap\Border.png");
 
 
 Control control = new Control(map, screen);

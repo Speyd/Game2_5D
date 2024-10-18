@@ -12,8 +12,8 @@ namespace MiniMapLib.SettingMap
 {
     public class Setting
     {
-        private const int miniMapSlowdownFactor = 19;   //slow movement on minimap
-        private const int radiusCircle = 6;
+        private float miniMapSlowdownFactor = 19;   //slow movement on minimap
+        private int radiusCircle = 6;
 
         private const int sizeMainRayX = 50;
         private const int sizeMainRayY = 50;
@@ -22,21 +22,27 @@ namespace MiniMapLib.SettingMap
         public readonly float centerY;
 
         public readonly int mapTile;
+        public float zoom;
 
         public VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
         public Positions Positions { get; set; }
         public Vector2f coorinatesPositionWindow;
 
-        public Setting(Screen screen, RenderTexture Window, Positions positions, double mapScale)
+        public Setting(Screen screen, RenderTexture Window, Positions positions, double mapScale, float zoom)
         {
             Positions = positions;
 
             centerX = Window.Size.X / 2;
             centerY = Window.Size.Y / 2;
 
-            mapTile = screen.Setting.Tile / (int)mapScale;
+            this.zoom = zoom;
+
+            mapTile = (screen.Setting.Tile / (int)mapScale) + (int)zoom;
+            radiusCircle = mapTile / 5;
+            miniMapSlowdownFactor = mapTile;
 
             coorinatesPositionWindow = getPosition(screen, mapScale);
+            this.zoom = zoom;
         }
 
         private float getLowerY(Screen screen, double mapScale)
@@ -99,7 +105,7 @@ namespace MiniMapLib.SettingMap
         public int getSizeMainRayX() => sizeMainRayX;
         public int getSizeMainRayY() => sizeMainRayY;
 
-        public int getMiniMapSlowdownFactor() => miniMapSlowdownFactor;
+        public float getMiniMapSlowdownFactor() => miniMapSlowdownFactor;
         public int getRadiusCircle() => radiusCircle;
 
     }

@@ -32,7 +32,8 @@ namespace MiniMapLib
 
         public MiniMap(Screen screen, Map map, Color fill,
             Positions position,
-            string? pathBorder = null, float mapScale = 5)
+            float mapScale = 5, float zoom = 0,
+            string? pathBorder = null)
         {
             this.mapScale = mapScale;
             this.screen = screen;
@@ -41,7 +42,7 @@ namespace MiniMapLib
 
 
             Window = new WindowRender(screen, mapScale);
-            Setting = new Setting(screen, Window.WindowMap, position, mapScale);
+            Setting = new Setting(screen, Window.WindowMap, position, mapScale, zoom);
             BorderMap = new Border(pathBorder);
         }
 
@@ -72,8 +73,8 @@ namespace MiniMapLib
         {
             foreach (var obstacle in map.Obstacles)
             {
-                float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * Setting.mapTile;
-                float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * Setting.mapTile;
+                float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * (Setting.mapTile - Setting.zoom);
+                float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * (Setting.mapTile - Setting.zoom);
 
                 RectangleShape rectangleShape = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
