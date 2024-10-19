@@ -55,7 +55,7 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
     new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png", screen.Setting.Tile),
 
 };
-MapLib.Obstacles.Diversity_Obstacle.Sprite sprite = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
+MapLib.Obstacles.Diversity_Obstacle.Sprite sprite = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t);
 MapLib.Obstacles.Diversity_Obstacle.Sprite sprite1 = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
 sprite.ScaleMultSprite = 100;
 sprite1.ScaleMultSprite = 100;
