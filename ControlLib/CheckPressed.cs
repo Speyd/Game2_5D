@@ -3,33 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static ControlLib.KeyCodes;
+using static ControlLib.Pressed.Key.KeyCodes;
 
-namespace ControlLib
+namespace ControlLib.Pressed
 {
     internal class CheckPressed
     {
-        public bool isForwardPressed;
-        public bool isBackPressed;
-        public bool isLeftPressed;
-        public bool isRightPressed;
-        public bool isTurnLeftPressed;
-        public bool isTurnRightPressed;
-        public bool isTurnExit;
+        public Direction CurrentDirection { get; private set; }
 
         public CheckPressed()
         { }
 
+        private bool IsKeyPressed(int keyCode)
+        {
+            return (GetAsyncKeyState(keyCode) & 0x8000) != 0;
+        }
         public void check()
         {
-            isForwardPressed = (GetAsyncKeyState(VK_FORWARD) & 0x8000) != 0;
-            isBackPressed = (GetAsyncKeyState(VK_BACK) & 0x8000) != 0;
-            isLeftPressed = (GetAsyncKeyState(VK_LEFT) & 0x8000) != 0;
-            isRightPressed = (GetAsyncKeyState(VK_RIGHT) & 0x8000) != 0;
-            isTurnLeftPressed = (GetAsyncKeyState(VK_TURN_LEFT) & 0x8000) != 0;
-            isTurnRightPressed = (GetAsyncKeyState(VK_TURN_RIGHT) & 0x8000) != 0;
-            isTurnExit = (GetAsyncKeyState(VK_EXIT) & 0x8000) != 0;
+            CurrentDirection = Direction.None;
 
+            if (IsKeyPressed(VK_FORWARD)) CurrentDirection |= Direction.Forward;
+            if (IsKeyPressed(VK_BACK)) CurrentDirection |= Direction.Backward;
+            if (IsKeyPressed(VK_LEFT)) CurrentDirection |= Direction.Left;
+            if (IsKeyPressed(VK_RIGHT)) CurrentDirection |= Direction.Right;
+            if (IsKeyPressed(VK_TURN_LEFT)) CurrentDirection |= Direction.TurnLeft;
+            if (IsKeyPressed(VK_TURN_RIGHT)) CurrentDirection |= Direction.TurnRight;
+            if (IsKeyPressed(VK_EXIT)) CurrentDirection |= Direction.Exit;
         }
     }
 }

@@ -6,161 +6,94 @@ using System;
 using System.Drawing;
 using System.Reflection.Metadata;
 using EntityLib;
+using ControlLib.Pressed;
 
 namespace ControlLib
 {
     public class Control
     {
         private Setting setting;
-
-        private Map map;
-        private Screen screen;
         private CheckPressed checkPressed = new CheckPressed();
+        private Collision collision;
+
+        private Screen screen;
 
         public Control(Map map, Screen screen, 
             float minDistanceFromWall = 50, float mouseSensitivity = 0.001f)
         {
-            this.map = map;
             this.screen = screen;
 
-            setting = new Setting(minDistanceFromWall, mouseSensitivity);      
+            setting = new Setting(minDistanceFromWall, mouseSensitivity);
+            collision = new Collision(screen, map, setting);
 
             screen.Window.SetMouseCursorVisible(false);
             screen.Window.MouseMoved += OnMouseMoved;
         }
 
+        #region Mouse
+        private void setAngleMouse(Vector2i currentMousePosition)
+        {
+            int actualMousePositionX = currentMousePosition.X - screen.Setting.HalfWidth;
+            setting.angle += actualMousePositionX * setting.mouseSensitivity;
+        }
+        private void setVerticalAngleMouse(Vector2i currentMousePosition)
+        {
+            int actualMousePositionY = currentMousePosition.Y - screen.Setting.HalfHeight;
+            setting.verticalAngle = (float)Math.Clamp(setting.verticalAngle, -Math.PI / 2, Math.PI / 2);
+            setting.verticalAngle += actualMousePositionY * setting.mouseSensitivity;
+        }
+
         private void OnMouseMoved(object sender, MouseMoveEventArgs e)
         {
-            if (setting.isMouseCaptured)
-            {
-                Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
-                Mouse.SetPosition(new Vector2i(screen.Setting.HalfWidth, screen.Setting.HalfHeight), screen.Window);
+            if (!setting.isMouseCaptured)
+                return;
 
-                int actualMousePositionX = currentMousePosition.X - screen.Setting.HalfWidth;
-                int actualMousePositionY = currentMousePosition.Y - screen.Setting.HalfHeight;
-                setting.verticalAngle = (float)Math.Clamp(setting.verticalAngle, -Math.PI / 2, Math.PI / 2);
+            Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
+            Mouse.SetPosition(new Vector2i(screen.Setting.HalfWidth, screen.Setting.HalfHeight), screen.Window);
 
-                setting.angle += actualMousePositionX * setting.mouseSensitivity;
-                setting.verticalAngle += actualMousePositionY * setting.mouseSensitivity;
-            }
+            setAngleMouse(currentMousePosition);
+            setVerticalAngleMouse(currentMousePosition);
         }
-
-        private void isCollision(double nextX, double nextY, ref double playerX, ref double playerY)
+        #endregion
+        private void move(Entity entity, double directionX, double directionY)
         {
-            float deltaX = 0, deltaY = 0;
-            ValueTuple<int, int> tempCoo;
-            if(nextX != 0)
-            {
-                deltaX = setting.minDistanceFromWall / 2 * Math.Sign(nextX);
+            double rx = Math.Cos(entity.getEntityA()) * directionX - Math.Sin(entity.getEntityA()) * directionY;
+            double ry = Math.Sin(entity.getEntityA()) * directionX + Math.Cos(entity.getEntityA()) * directionY;
 
-                tempCoo = map.mapping(playerX + nextX + deltaX, playerY + deltaX, screen.Setting.Tile);
-                if (map.Obstacles.ContainsKey(tempCoo))
-                {
-                    if (map.Obstacles[tempCoo].isPassability == false)
-                        nextX = 0;
-                }
-
-                tempCoo = map.mapping(playerX + nextX + deltaX, playerY - deltaX, screen.Setting.Tile);
-                if (map.Obstacles.ContainsKey(tempCoo))
-                {
-                    if (map.Obstacles[tempCoo].isPassability == false)
-                        nextX = 0;
-                }
-            }
-            if (nextY != 0)
-            {
-                deltaY = setting.minDistanceFromWall / 2 * Math.Sign(nextY);
-
-                tempCoo = map.mapping(playerX + deltaY, playerY + nextY + deltaY, screen.Setting.Tile);
-                if (map.Obstacles.ContainsKey(tempCoo))
-                {
-                    if (map.Obstacles[tempCoo].isPassability == false)
-                        nextY = 0;
-                }
-
-                tempCoo = map.mapping(playerX - deltaY, playerY + nextY + deltaY, screen.Setting.Tile);
-                if (map.Obstacles.ContainsKey(tempCoo))
-                {
-                    if (map.Obstacles[tempCoo].isPassability == false)
-                        nextY = 0;
-                }
-            }
-
-            playerX += nextX;
-            playerY += nextY;
+            collision.isCollision(rx * setting.moveSpeed, ry * setting.moveSpeed, entity);
         }
-
-        private void forwardPress(Entity entity)
+    
+        private void turnAngle(ref double playerA, int direction)
         {
-            double rx = Math.Cos(entity.getEntityA()) * setting.moveSpeed;
-            double ry = Math.Sin(entity.getEntityA()) * setting.moveSpeed;
-
-            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
-        }
-        private void backPress(Entity entity)
-        {
-            double rx = Math.Cos(entity.getEntityA()) * -setting.moveSpeed;
-            double ry = Math.Sin(entity.getEntityA()) * -setting.moveSpeed;
-
-            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
-        }
-        private void leftPress(Entity entity)
-        {
-            double rx =  setting.moveSpeed * Math.Sin(entity.getEntityA());
-            double ry =  -setting.moveSpeed * Math.Cos(entity.getEntityA());
-
-            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
-        }
-        private void rightPress(Entity entity)
-        {
-            double rx =  -setting.moveSpeed * Math.Sin(entity.getEntityA());
-            double ry =  setting.moveSpeed * Math.Cos(entity.getEntityA());
-
-            isCollision(rx, ry, ref entity.getEntityX(), ref entity.getEntityY());
-        }
-        private void turnLeftPress(ref double playerA)
-        {
-            playerA -= setting.moveSpeedAngel;
-        }
-        private void turnRightPress(ref double playerA)
-        {
-            playerA += setting.moveSpeedAngel;
-        }
-        private double NormalizeAngle(double angle)
-        {
-            while (angle < 0)
-                angle += 2 * Math.PI;
-            while (angle >= 2 * Math.PI)
-                angle -= 2 * Math.PI;
-            return angle;
+            playerA -= setting.moveSpeedAngel * direction;
         }
 
         public void makePressed(double deltaTime, Entity entity)
         {
             double tempMoveSpeed = (100 * deltaTime);
 
-            entity.getEntityA() = NormalizeAngle(setting.angle);
-            setting.angle = entity.getEntityA();
-
+            entity.getEntityA() = setting.angle % (2 * Math.PI);
             entity.getEntityVerticalA() = setting.verticalAngle;
 
             setting.moveSpeed = (float)(tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.Setting.AmountRays / screen.ScreenWidth)));
             setting.moveSpeedAngel = 1 * deltaTime;
 
             checkPressed.check();
-            if (checkPressed.isForwardPressed)
-                forwardPress(entity);
-            if (checkPressed.isBackPressed)
-                backPress(entity);
-            if (checkPressed.isLeftPressed)
-                leftPress(entity);
-            if (checkPressed.isRightPressed)
-                rightPress(entity);
-            if (checkPressed.isTurnLeftPressed)
-                turnLeftPress(ref setting.angle);
-            if (checkPressed.isTurnRightPressed)
-                turnRightPress(ref setting.angle);
-            if(checkPressed.isTurnExit)
+            if (checkPressed.CurrentDirection.HasFlag(Direction.Forward))
+                move(entity, 1, 0);
+            if (checkPressed.CurrentDirection.HasFlag(Direction.Backward))
+                move(entity, -1, 0);
+            if (checkPressed.CurrentDirection.HasFlag(Direction.Left))
+                move(entity, 0, -1);
+            if (checkPressed.CurrentDirection.HasFlag(Direction.Right))
+                move(entity, 0, 1);
+
+            if (checkPressed.CurrentDirection.HasFlag(Direction.TurnLeft))
+                turnAngle(ref setting.angle, -1);
+            if (checkPressed.CurrentDirection.HasFlag(Direction.TurnRight))
+                turnAngle(ref setting.angle, 1);
+
+            if (checkPressed.CurrentDirection.HasFlag(Direction.Exit))
                 screen.Window.Close();
 
         }
