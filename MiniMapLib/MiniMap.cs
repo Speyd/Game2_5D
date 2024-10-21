@@ -26,6 +26,7 @@ namespace MiniMapLib
 
 
         private WindowRender Window { get; init; }
+        private WindowRender BorderMapWindow { get; init; }
         public Setting Setting { get; init; }
         private Border BorderMap { get; init; }
 
@@ -42,6 +43,7 @@ namespace MiniMapLib
 
 
             Window = new WindowRender(screen, mapScale);
+            BorderMapWindow = new WindowRender(screen, mapScale);
             Setting = new Setting(screen, Window.WindowMap, position, mapScale, zoom);
             BorderMap = new Border(pathBorder);
         }
@@ -73,8 +75,8 @@ namespace MiniMapLib
         {
             foreach (var obstacle in map.Obstacles)
             {
-                float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * (Setting.mapTile - Setting.zoom);
-                float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * (Setting.mapTile - Setting.zoom);
+                float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * (Setting.mapTile);
+                float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * (Setting.mapTile);
 
                 RectangleShape rectangleShape = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
@@ -87,6 +89,20 @@ namespace MiniMapLib
 
                 Window.WindowMap.Draw(rectangleShape);
             }
+        }
+        public void ZoomToCoordinate(float targetX, float targetY)
+        {
+            // Создаём View с размерами окна для миникарты
+            View view = new View(new FloatRect(0, 0, Window.WindowMap.Size.X, Window.WindowMap.Size.Y));
+
+            // Устанавливаем центр View на целевую координату (targetX, targetY)
+            view.Center = new Vector2f(targetX, targetY);
+
+            // Применяем масштабирование (зум)
+            view.Zoom(Setting.Zoom);
+
+            // Устанавливаем этот View для окна отрисовки миникарты
+            Window.WindowMap.SetView(view);
         }
         void drawDebugGrid()
         {
@@ -111,6 +127,7 @@ namespace MiniMapLib
             if (BorderMap.borderTexture is null)
                 return;
 
+            BorderMapWindow.WindowMap.Clear(Color.Transparent);
 
             float scaleX = (float)Window.WindowMap.Size.X / BorderMap.borderTexture.Size.X * 1.1f;
             float scaleY = (float)Window.WindowMap.Size.Y / BorderMap.borderTexture.Size.Y * 1.1f;
@@ -126,7 +143,8 @@ namespace MiniMapLib
                 (Window.WindowMap.Size.Y - (BorderMap.borderTexture.Size.Y * scaleY)) / 2
             );
 
-            Window.WindowMap.Draw(BorderMap.borderSprite);
+            BorderMapWindow.WindowMap.Draw(BorderMap.borderSprite);
+            BorderMapWindow.WindowMap.Display();
         }
         public void render(double entityX, double entityY, double entityA)
         {
@@ -140,17 +158,23 @@ namespace MiniMapLib
             Window.WindowMap.Draw(renderLineSight(entityA));
             renderObstacle(mapX, mapY);
             Window.WindowMap.Draw(renderEntityShape());
+            ZoomToCoordinate(Setting.centerX, Setting.centerY);
             drawMiniMapBorder();
 
-
             Window.WindowMap.Display();
-
 
             Window.MiniMapSprite = new Sprite(Window.WindowMap.Texture)
             {
                 Position = Setting.coorinatesPositionWindow
             };
+
+            BorderMapWindow.MiniMapSprite = new Sprite(BorderMapWindow.WindowMap.Texture)
+            {
+                Position = Setting.coorinatesPositionWindow
+            };
+
             screen.Window.Draw(Window.MiniMapSprite);
+            screen.Window.Draw(BorderMapWindow.MiniMapSprite);
         }
     }
 }

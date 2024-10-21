@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 
 namespace ControlLib.Pressed
 {
-    [Flags]
-    public enum Direction
+    public class DirectionFlags
     {
-        None = 0,
-        Forward = 1,
-        Backward = 2,
-        Left = 4,
-        Right = 8,
-        TurnLeft = 16,
-        TurnRight = 32,
-        Exit = 64
+        public bool Forward { get; set; }
+        public bool Backward { get; set; }
+        public bool Left { get; set; }
+        public bool Right { get; set; }
+
+        public bool TurnLeft { get; set; }
+        public bool TurnRight { get; set; }
+
+        public bool ZoomMiniMap {  get; set; }
+        public bool ReduceMiniMap {  get; set; }
+
+        public bool Exit { get; set; }
     }
 }

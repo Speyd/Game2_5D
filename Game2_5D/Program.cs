@@ -89,10 +89,10 @@ map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 5, @"Resources\Image\BorderMiniMap\Border.png");
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 1, @"Resources\Image\BorderMiniMap\Border.png");
 
 
-Control control = new Control(map, screen);
+Control control = new Control(map, screen, mapMini.Setting);
 Player player = new Player(screen, 1500);
 player.OnControlAction = control.makePressed;
 

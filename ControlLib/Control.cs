@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Reflection.Metadata;
 using EntityLib;
 using ControlLib.Pressed;
+using MiniMapLib.SettingMap;
 
 namespace ControlLib
 {
@@ -17,11 +18,13 @@ namespace ControlLib
         private Collision collision;
 
         private Screen screen;
+        private MiniMapLib.SettingMap.Setting settingMiniMap;
 
-        public Control(Map map, Screen screen, 
+        public Control(Map map, Screen screen, MiniMapLib.SettingMap.Setting settingMiniMap,
             float minDistanceFromWall = 50, float mouseSensitivity = 0.001f)
         {
             this.screen = screen;
+            this.settingMiniMap = settingMiniMap;
 
             setting = new Setting(minDistanceFromWall, mouseSensitivity);
             collision = new Collision(screen, map, setting);
@@ -79,21 +82,26 @@ namespace ControlLib
             setting.moveSpeedAngel = 1 * deltaTime;
 
             checkPressed.check();
-            if (checkPressed.CurrentDirection.HasFlag(Direction.Forward))
+            if (checkPressed.CurrentDirection.Forward)
                 move(entity, 1, 0);
-            if (checkPressed.CurrentDirection.HasFlag(Direction.Backward))
+            if (checkPressed.CurrentDirection.Backward)
                 move(entity, -1, 0);
-            if (checkPressed.CurrentDirection.HasFlag(Direction.Left))
+            if (checkPressed.CurrentDirection.Left)
                 move(entity, 0, -1);
-            if (checkPressed.CurrentDirection.HasFlag(Direction.Right))
+            if (checkPressed.CurrentDirection.Right)
                 move(entity, 0, 1);
 
-            if (checkPressed.CurrentDirection.HasFlag(Direction.TurnLeft))
+            if (checkPressed.CurrentDirection.TurnLeft)
                 turnAngle(ref setting.angle, -1);
-            if (checkPressed.CurrentDirection.HasFlag(Direction.TurnRight))
+            if (checkPressed.CurrentDirection.TurnRight)
                 turnAngle(ref setting.angle, 1);
 
-            if (checkPressed.CurrentDirection.HasFlag(Direction.Exit))
+            if (checkPressed.CurrentDirection.ZoomMiniMap)
+                settingMiniMap.Zoom += 0.01f;
+            if (checkPressed.CurrentDirection.ReduceMiniMap)
+                settingMiniMap.Zoom -= 0.01f;
+
+            if (checkPressed.CurrentDirection.Exit)
                 screen.Window.Close();
 
         }

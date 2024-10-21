@@ -9,10 +9,7 @@ namespace ControlLib.Pressed
 {
     internal class CheckPressed
     {
-        public Direction CurrentDirection { get; private set; }
-
-        public CheckPressed()
-        { }
+        public DirectionFlags CurrentDirection { get; private set; } = new DirectionFlags();
 
         private bool IsKeyPressed(int keyCode)
         {
@@ -20,15 +17,18 @@ namespace ControlLib.Pressed
         }
         public void check()
         {
-            CurrentDirection = Direction.None;
 
-            if (IsKeyPressed(VK_FORWARD)) CurrentDirection |= Direction.Forward;
-            if (IsKeyPressed(VK_BACK)) CurrentDirection |= Direction.Backward;
-            if (IsKeyPressed(VK_LEFT)) CurrentDirection |= Direction.Left;
-            if (IsKeyPressed(VK_RIGHT)) CurrentDirection |= Direction.Right;
-            if (IsKeyPressed(VK_TURN_LEFT)) CurrentDirection |= Direction.TurnLeft;
-            if (IsKeyPressed(VK_TURN_RIGHT)) CurrentDirection |= Direction.TurnRight;
-            if (IsKeyPressed(VK_EXIT)) CurrentDirection |= Direction.Exit;
+            CurrentDirection.Forward = IsKeyPressed(VK_FORWARD);
+            CurrentDirection.Backward = IsKeyPressed(VK_BACK);
+            CurrentDirection.Left = IsKeyPressed(VK_LEFT);
+            CurrentDirection.Right = IsKeyPressed(VK_RIGHT);
+            CurrentDirection.TurnLeft = IsKeyPressed(VK_TURN_LEFT);
+            CurrentDirection.TurnRight = IsKeyPressed(VK_TURN_RIGHT);
+
+            CurrentDirection.ZoomMiniMap = IsKeyPressed(VK_ZOOM_MINIMAP);
+            CurrentDirection.ReduceMiniMap = IsKeyPressed(VK_REDUCE_MINIMAP);
+
+            CurrentDirection.Exit = IsKeyPressed(VK_EXIT);
         }
     }
 }

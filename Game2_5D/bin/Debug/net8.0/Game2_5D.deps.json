@@ -1029,7 +1029,8 @@
       "ControlLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0"
+          "MapLib": "1.0.0",
+          "MiniMapLib": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {}

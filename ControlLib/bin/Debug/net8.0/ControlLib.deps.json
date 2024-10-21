@@ -9,7 +9,8 @@
       "ControlLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0"
+          "MapLib": "1.0.0",
+          "MiniMapLib": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {}
@@ -993,6 +994,17 @@
           "MapLib.dll": {}
         }
       },
+      "MiniMapLib/1.0.0": {
+        "dependencies": {
+          "MapLib": "1.0.0",
+          "Render": "1.0.0",
+          "SFML.Net": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "MiniMapLib.dll": {}
+        }
+      },
       "Render/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
@@ -1073,6 +1085,11 @@
       "sha512": ""
     },
     "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MiniMapLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

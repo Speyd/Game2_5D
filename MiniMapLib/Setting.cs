@@ -13,7 +13,7 @@ namespace MiniMapLib.SettingMap
     public class Setting
     {
         private float miniMapSlowdownFactor = 19;   //slow movement on minimap
-        private int radiusCircle = 10;
+        private int radiusCircle = 5;
 
         private const int sizeMainRayX = 50;
         private const int sizeMainRayY = 50;
@@ -22,7 +22,27 @@ namespace MiniMapLib.SettingMap
         public readonly float centerY;
 
         public readonly int mapTile;
-        public float zoom;
+
+        #region Zoom
+        public readonly float minZoom = 0.1f;
+        public readonly float maxZoom = 2;
+
+        private float zoom = 1;
+        public float Zoom
+        {
+            get => zoom;
+            set
+            {
+                if (value < minZoom)
+                    zoom = minZoom;
+                else if(value > maxZoom)
+                    zoom = maxZoom;
+                else
+                    zoom = value;
+            }
+        }
+        #endregion
+
 
         public VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
         public Positions Positions { get; set; }
@@ -37,12 +57,12 @@ namespace MiniMapLib.SettingMap
 
             this.zoom = zoom;
 
-            mapTile = (screen.Setting.Tile / (int)mapScale) + (int)zoom;
-            radiusCircle = mapTile / radiusCircle + (radiusCircle / 4);
+            mapTile = (screen.Setting.Tile / (int)mapScale);
+            radiusCircle = radiusCircle;
             miniMapSlowdownFactor = mapTile;
 
             coorinatesPositionWindow = getPosition(screen, mapScale);
-            this.zoom = zoom;
+            Zoom = zoom;
         }
 
         private float getLowerY(Screen screen, double mapScale)
