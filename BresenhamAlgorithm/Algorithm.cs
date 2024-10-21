@@ -1,11 +1,12 @@
 ﻿using EntityLib;
 using MapLib;
 using MapLib.Obstacles;
-using MapLib.Obstacles.Diversity_Obstacle;
 using Render.InterfaceRender;
 using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using ScreenLib;
+using Render;
+using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 
 namespace BresenhamAlgorithm
 {
@@ -16,18 +17,18 @@ namespace BresenhamAlgorithm
         #region CheckedObstacle
         private void isSprite(IRenderable obstacle)
         {
-            if (obstacle is MapLib.Obstacles.Diversity_Obstacle.Sprite sprite)
+            if (obstacle is SpriteObstacle sprite)
             {
-                if (!MapLib.Obstacles.Diversity_Obstacle.Sprite.spritesToRender.Contains(sprite))
+                if (!SpriteObstacle.spritesToRender.Contains(sprite))
                 {
-                    MapLib.Obstacles.Diversity_Obstacle.Sprite.spritesToRender.Add(sprite);
+                    SpriteObstacle.spritesToRender.Add(sprite);
                 }
             }
         }
 
         private bool isRenderObstacle(IRenderable obstacle)
         {
-            return !Obstacle.obstaclesIgnoringRendering.Any(t => t.GetType() == obstacle.GetType());
+            return obstacle is not IRaylessRenderable;
         }
         private bool checkAndAddObstacle(double x, double y, double auxiliary, bool isVertical)
         {
@@ -134,11 +135,7 @@ namespace BresenhamAlgorithm
                 carAngle += entity.DeltaAngle;
             }
 
-            Obstacle.obstaclesIgnoringRendering.ToList().ForEach
-                (
-                o => o.render(screen, result, entity)
-                );
-
+            SpriteObstacle.renderSprites(screen, result, entity);
             zBuffer.render();
         }
     }

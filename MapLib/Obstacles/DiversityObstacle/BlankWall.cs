@@ -15,7 +15,7 @@ using Render.ResultAlgorithm;
 using SFML.System;
 using System.Numerics;
 
-namespace MapLib.Obstacles.Diversity_Obstacle
+namespace MapLib.Obstacles.DiversityObstacle
 {
     public class BlankWall : Obstacle, IWall
     {

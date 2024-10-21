@@ -26,12 +26,13 @@ using System.Data.Common;
 using MiniMapLib;
 using FpsLib;
 using ObstacleLib;
-using MapLib.Obstacles.Diversity_Obstacle;
+using MapLib.Obstacles.DiversityObstacle;
 using System.Reflection.Metadata;
 using MiniMapLib.SettingMap;
 using ObstacleLib.Render.Texture;
 using ControlLib;
 using BresenhamAlgorithm;
+using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 
 const int mapScale = 5;
 
@@ -55,10 +56,26 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
     new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png", screen.Setting.Tile),
 
 };
-MapLib.Obstacles.Diversity_Obstacle.Sprite sprite = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t);
-MapLib.Obstacles.Diversity_Obstacle.Sprite sprite1 = new MapLib.Obstacles.Diversity_Obstacle.Sprite(0, 0, 'S', textureObstacles);
-sprite.ScaleMultSprite = 100;
-sprite1.ScaleMultSprite = 100;
+
+
+SpriteObstacle sprite = new SpriteObstacle(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t)
+{
+    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+    {
+        ScaleMultSprite = 64,
+        IsAnimation = true,
+        AnimationSpeed = 30,     
+    }
+};
+SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
+{
+    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+    {
+        ScaleMultSprite = 100,
+        IsAnimation = false
+    }
+};
+
 
 map.addObstacleToMap(4, 4, map.Obstacles, sprite);
 map.addObstacleToMap(4, 6, map.Obstacles, sprite1);
@@ -72,7 +89,7 @@ map.addObstacleToMap(9, 7, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 8, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 9, map.Obstacles, Map.block);
 map.addObstacleToMap(9, 10, map.Obstacles, Map.block);
-MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 10, @"Resources\Image\BorderMiniMap\Border.png");
+MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 5, @"Resources\Image\BorderMiniMap\Border.png");
 
 
 Control control = new Control(map, screen);

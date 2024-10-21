@@ -5,7 +5,7 @@ using ObstacleLib;
 using SFML.Graphics;
 using System.Collections.Generic;
 using MapLib.Obstacles;
-using MapLib.Obstacles.Diversity_Obstacle;
+using MapLib.Obstacles.DiversityObstacle;
 
 namespace MapLib
 {
@@ -24,7 +24,7 @@ namespace MapLib
         {
             Setting = new Setting(mapHeight, mapWidth, Tile);
             Obstacles = new Dictionary<(int, int), Obstacle>();
-            block.Texture.setTile(Tile);
+            block.TextureObst.setTile(Tile);
 
             creatMap();
         }

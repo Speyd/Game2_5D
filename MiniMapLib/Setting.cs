@@ -13,7 +13,7 @@ namespace MiniMapLib.SettingMap
     public class Setting
     {
         private float miniMapSlowdownFactor = 19;   //slow movement on minimap
-        private int radiusCircle = 6;
+        private int radiusCircle = 10;
 
         private const int sizeMainRayX = 50;
         private const int sizeMainRayY = 50;
@@ -38,7 +38,7 @@ namespace MiniMapLib.SettingMap
             this.zoom = zoom;
 
             mapTile = (screen.Setting.Tile / (int)mapScale) + (int)zoom;
-            radiusCircle = mapTile / 5;
+            radiusCircle = mapTile / radiusCircle + (radiusCircle / 4);
             miniMapSlowdownFactor = mapTile;
 
             coorinatesPositionWindow = getPosition(screen, mapScale);

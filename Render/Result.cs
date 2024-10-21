@@ -12,6 +12,8 @@ namespace Render.ResultAlgorithm
 {
     public class Result
     {
+        private const int textureStretchingCloseUp = 8;
+
         public double Depth { get; set; } = 0;
         public double Offset { get; set; } = 0;
         public double ProjHeight { get; set; } = 0;
@@ -57,7 +59,7 @@ namespace Render.ResultAlgorithm
 
             Offset = (int)Offset % screen.Setting.Tile;
             Depth = Math.Max(Depth, 0.1);
-            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), 6 * screen.ScreenHeight);
+            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * screen.ScreenHeight);
         }
     }
 }

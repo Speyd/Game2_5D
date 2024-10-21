@@ -9,10 +9,9 @@ namespace MapLib.Obstacles
 {
     public abstract class Obstacle : IRenderable
     {
-
-        static public List<Obstacle> obstaclesIgnoringRendering = new List<Obstacle>()
+        static public List<Type> obstaclesRaylessRendering = new List<Type>()
         {
-            new MapLib.Obstacles.Diversity_Obstacle.Sprite()
+            typeof(Sprite)
         };
 
 

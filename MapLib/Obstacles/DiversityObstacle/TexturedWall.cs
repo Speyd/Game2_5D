@@ -16,11 +16,11 @@ using ScreenLib;
 using Render.ResultAlgorithm;
 using SFML.System;
 
-namespace MapLib.Obstacles.Diversity_Obstacle
+namespace MapLib.Obstacles.DiversityObstacle
 {
     public class TexturedWall : Obstacle, IWall
     {
-        public TextureObstacle Texture { get; init; }
+        public TextureObstacle TextureObst { get; init; }
         public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
 
         public TexturedWall(double x, double y,
@@ -29,7 +29,7 @@ namespace MapLib.Obstacles.Diversity_Obstacle
 
             : base(x, y, symbol, colorInMap, isPassability)
         {
-            Texture = new TextureObstacle(path, screenTile);
+            TextureObst = new TextureObstacle(path, screenTile);
         }
 
         public TexturedWall(double x, double y, char symbol,
@@ -37,20 +37,23 @@ namespace MapLib.Obstacles.Diversity_Obstacle
 
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
-            Texture = new TextureObstacle(path, screenTile);
+            TextureObst = new TextureObstacle(path, screenTile);
         }
 
         public override void blackoutObstacle(double depth)
         {
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            if (Texture != null && Texture.Texture != null && SpriteObst != null)
+            if (TextureObst != null && TextureObst.Texture != null && SpriteObst != null)
                 SpriteObst.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
         public override void fillingMiniMapShape(RectangleShape rectangleShape)
         {
             rectangleShape.OutlineThickness = 0;
-            rectangleShape.Texture = Texture.Texture;
+            if (TextureObst is not null && TextureObst.Texture is not null)
+                rectangleShape.Texture = TextureObst.Texture;
+            else
+                rectangleShape.FillColor = ColorInMap;
         }
 
 
@@ -70,11 +73,11 @@ namespace MapLib.Obstacles.Diversity_Obstacle
         }
         private void calculationTextureScale(Result result)
         {
-            if (Texture is null)
+            if (TextureObst is null)
                 return;
 
-            float scaleX = (float)Texture.TextureScale / Texture.TextureWidth;
-            float scaleY = (float)result.ProjHeight / Texture.TextureHeight;
+            float scaleX = (float)TextureObst.TextureScale / TextureObst.TextureWidth;
+            float scaleY = (float)result.ProjHeight / TextureObst.TextureHeight;
             SpriteObst.Scale = new Vector2f(scaleX, scaleY);
         }
         private void calculationTexturePosition(ref Screen screen, Result result, double angleVertical)
@@ -87,12 +90,12 @@ namespace MapLib.Obstacles.Diversity_Obstacle
         #endregion
         public override void render(Screen screen, Result result, Entity entity)
         {
-            if (Texture.Texture is null)
+            if (TextureObst.Texture is null)
                 return;
 
-            IntRect textureRect = TextureObstacle.setOffset((int)result.Offset, screen.Setting.Tile, Texture);
+            IntRect textureRect = TextureObstacle.setOffset((int)result.Offset, screen.Setting.Tile, TextureObst);
 
-            SpriteObst = new SFML.Graphics.Sprite(Texture.Texture, textureRect);
+            SpriteObst = new SFML.Graphics.Sprite(TextureObst.Texture, textureRect);
             blackoutObstacle(result.Depth);
 
             calculationTextureScale(result);
