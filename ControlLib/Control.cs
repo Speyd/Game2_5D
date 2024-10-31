@@ -15,9 +15,21 @@ using MapLib.Obstacles;
 using SixLabors.ImageSharp;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Render.ResultAlgorithm;
 
 namespace ControlLib
 {
+    public class HitPoint
+    {
+        public Vector2f UV { get; set; } // UV-координаты на текстуре
+        public double Distance { get; set; } // Расстояние до точки пересечения
+
+        public HitPoint(Vector2f uv, double distance)
+        {
+            UV = uv;
+            Distance = distance;
+        }
+    }
     public class Control
     {
         private Setting setting;
@@ -540,7 +552,7 @@ namespace ControlLib
             return new Vector2f(hitX, hitY);
         }
 
-        private Vector2f calculateTextureHitPoint(Entity player, TexturedWall wall)
+        private HitPoint calculateTextureHitPoint(Entity player, TexturedWall wall)
         {
             // Получаем координаты игрока и его угол направления
             double playerX = player.getEntityX();
@@ -599,7 +611,7 @@ namespace ControlLib
             // Приводим локальные координаты к диапазону [0, 1] для UV-координат
             float u = (localX / textureWidth);
             float v = (localY / textureHeight);
-
+           
             // В зависимости от стороны стены
             if (w == WallSide.Left)
             {
@@ -644,13 +656,13 @@ namespace ControlLib
                         r.Y = 0;
                     }
                 }
-                return r;
+                return new HitPoint(r, distanceToWall);
             }
 
 
 
-            Console.WriteLine(w.ToString());
-            return new Vector2f(u, v); // Возвращаем UV-координаты на текстуре
+            Console.WriteLine(w.ToString()); 
+            return new HitPoint(new Vector2f(u, v), distanceToWall); // Возвращаем UV-координаты на текстуре
         }
 
 
@@ -720,11 +732,52 @@ namespace ControlLib
                 //float textureX = vec.X;
                 //textureX *= (wall.TextureObst.TextureWidth) / (screen.Setting.Scale);
 
-                Vector2f vec = calculateTextureHitPoint(entity, wall);
-                Console.WriteLine($"X: {vec.X},  Y: {vec.Y}");
-                float textureX = vec.X > vec.Y ? vec.X : vec.Y;
+                HitPoint vec = calculateTextureHitPoint(entity, wall);
+                //Console.WriteLine($"X: {vec.X},  Y: {vec.Y}");
+
+                float textureX = vec.UV.X > vec.UV.Y ? vec.UV.X : vec.UV.Y;
                 textureX *= (wall.TextureObst.TextureWidth) / (screen.Setting.Scale);
-                Vector2f dotPosition = new Vector2f(textureX, wall.renderTexture.Texture.Size.Y / 2);
+
+
+                float deltaX = (float)wall.X - (float)playerX;
+                float deltaY = (float)wall.Y - (float)playerY;
+
+                float distanceToWall = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
+                // 2. Высота проекции на экране
+                float ProjHeight = Math.Min((float)(entity.ProjCoeff / vec.Distance), 8 * screen.ScreenHeight);
+
+                // 3. Коэффициент масштабирования для текстуры
+                float scaleY = ProjHeight / wall.TextureObst.TextureHeight;
+
+                float adjustedDistance = (float)vec.Distance / map.Setting.ScreenTile;
+                float mult = (adjustedDistance * adjustedDistance) / 2.5f;
+                float a = (float)entity.getEntityVerticalA();
+                if (a > 0)
+                {
+                    mult += 0.2f;
+                    mult /= a + (float)Math.Floor((Math.PI / 2) * 10) / 10;
+                }
+
+
+                float adjustedA = a / adjustedDistance;
+
+                float Y = ProjHeight * a * mult;
+
+                // Если нужно, можно добавить еще одно влияние от distanceToWall
+                /* Y *= (1.0f / (1 + adjustedDistance));*/ // Увеличиваем смещение
+
+                // Y += 45;
+
+
+                //if (a > 0 && a < 0.2f)
+                //    Y += 30 * a;
+                // 45 это радиус точки(30) + поовина от радиуса(15)
+                // 5. Вертикальная координата на текстуре с поправкой на масштаб
+                //float textureY = (wall.TextureObst.TextureHeight * (Y / ProjHeight));
+
+                Console.WriteLine(mult);
+                Vector2f dotPosition = new Vector2f(textureX, wall.TextureObst.TextureHeight / 2 + Y);
 
                 CircleShape dot = new CircleShape(30)
                 {
