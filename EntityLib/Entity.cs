@@ -24,6 +24,8 @@ namespace EntityLib
         public double Dist { get; init; }
         public double ProjCoeff { get; init; }
 
+        public int MidlRay {  get; init; }
+
 
         protected double entityY;
         protected double entityX;
@@ -42,6 +44,7 @@ namespace EntityLib
             this.entityA = entityA;
             this.entityVerticalA = entityVerticalA;
 
+            MidlRay = setting.AmountRays / 2;
 
             HalfFov = (float)entityFov / 2;
             DeltaAngle = (float)entityFov / setting.AmountRays;

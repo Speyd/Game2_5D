@@ -53,7 +53,19 @@ namespace ObstacleLib.Render.Texture
             Texture = texture;
             TextureWidth = texture.Size.X;
             TextureHeight = texture.Size.Y;
-            TextureScale = 1;
+            setTile(screenTile);
+
+            PixelCount = TextureWidth * TextureHeight;
+        }
+
+        public TextureObstacle(TextureObstacle textureObstacle)
+        {
+            ScreenScale = textureObstacle.ScreenScale;
+
+            Texture = textureObstacle.Texture;
+            TextureWidth = textureObstacle.TextureWidth;
+            TextureHeight = textureObstacle.TextureHeight;
+            TextureScale = textureObstacle.TextureScale;
 
             PixelCount = TextureWidth * TextureHeight;
         }

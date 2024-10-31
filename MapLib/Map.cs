@@ -17,7 +17,7 @@ namespace MapLib
 
         public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public static TexturedWall block = new TexturedWall(0, 0, 'w', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
+        public static TexturedWall block = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
         public static char empty = ' ';
 
         public Map(int mapHeight, int mapWidth, int Tile)
@@ -42,7 +42,7 @@ namespace MapLib
                         if(tempObstacles.ContainsKey((x, y)))
                             addObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
                         else
-                            addObstacleToMap(x, y, tempObstacles, block);
+                            addObstacleToMap(x, y, tempObstacles, new TexturedWall(block));
                     }
                         
                 }

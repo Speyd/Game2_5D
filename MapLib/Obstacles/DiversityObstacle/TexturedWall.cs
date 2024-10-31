@@ -21,7 +21,26 @@ namespace MapLib.Obstacles.DiversityObstacle
     public class TexturedWall : Obstacle, IWall
     {
         public TextureObstacle TextureObst { get; init; }
+        public RenderTexture renderTexture { get; set; }
         public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
+
+        public TexturedWall(TexturedWall textured)
+        : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.isPassability)
+        {
+            TextureObst = new TextureObstacle(textured.TextureObst);
+
+            renderTexture = new RenderTexture(TextureObst.TextureWidth, TextureObst.TextureHeight);
+            renderTexture.Draw(new Sprite(TextureObst.Texture));
+            renderTexture.Display();
+
+            SpriteObst = new SFML.Graphics.Sprite(textured.SpriteObst.Texture)
+            { 
+                Position = textured.SpriteObst.Position,
+                Scale = textured.SpriteObst.Scale,
+                Rotation = textured.SpriteObst.Rotation,
+                Color = textured.SpriteObst.Color
+            };
+        }
 
         public TexturedWall(double x, double y,
             char symbol, SFML.Graphics.Color colorInMap,
@@ -30,6 +49,12 @@ namespace MapLib.Obstacles.DiversityObstacle
             : base(x, y, symbol, colorInMap, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
+            renderTexture = new RenderTexture(TextureObst.TextureWidth, TextureObst.TextureHeight);
+            renderTexture.Texture.Smooth = false;
+            Console.WriteLine(symbol);
+            Console.WriteLine(TextureObst.TextureWidth);
+            renderTexture.Draw(new Sprite(TextureObst.Texture));
+            renderTexture.Display();
         }
 
         public TexturedWall(double x, double y, char symbol,
@@ -38,6 +63,12 @@ namespace MapLib.Obstacles.DiversityObstacle
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
+            renderTexture = new RenderTexture(TextureObst.TextureWidth, TextureObst.TextureHeight);
+            renderTexture.Texture.Smooth = false;
+            Console.WriteLine(symbol);
+            Console.WriteLine(TextureObst.TextureWidth);
+            renderTexture.Draw(new Sprite(TextureObst.Texture));
+            renderTexture.Display();
         }
 
         public override void blackoutObstacle(double depth)
@@ -95,7 +126,7 @@ namespace MapLib.Obstacles.DiversityObstacle
 
             IntRect textureRect = TextureObstacle.setOffset((int)result.Offset, screen.Setting.Tile, TextureObst);
 
-            SpriteObst = new SFML.Graphics.Sprite(TextureObst.Texture, textureRect);
+            SpriteObst = new SFML.Graphics.Sprite(renderTexture is not null ? renderTexture.Texture : TextureObst.Texture, textureRect);
             blackoutObstacle(result.Depth);
 
             calculationTextureScale(result);
