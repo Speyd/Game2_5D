@@ -76,7 +76,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
                             stream.Position = 0; // Сбрасываем указатель в начало
 
                             // Создаем SFML текстуру из потока и добавляем в Textures
-                            var texture = new Texture(stream);
+                            var texture = new SFML.Graphics.Texture(stream);
                             Textures.Add(new TextureObstacle(texture, screenTile));
 
                         }

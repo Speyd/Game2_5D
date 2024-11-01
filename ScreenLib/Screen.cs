@@ -9,6 +9,7 @@ namespace ScreenLib
     public class Screen
     {
         private VideoMode videoMode = VideoMode.DesktopMode;
+        public Styles Styles = Styles.Default; 
         public RenderWindow Window { get; init; }
         public Setting Setting { get; set; }
         public int ScreenWidth { get; init; }
@@ -26,7 +27,8 @@ namespace ScreenLib
                 Window = new RenderWindow(new VideoMode((uint)ScreenWidth, (uint)ScreenHeight), nameWindow);
             else
             {
-                Window = new RenderWindow(new VideoMode(videoMode.Width, videoMode.Height), nameWindow, Styles.Fullscreen);
+                Styles = Styles.Fullscreen;
+                Window = new RenderWindow(new VideoMode(videoMode.Width, videoMode.Height), nameWindow, Styles);
                 ScreenWidth = (int)videoMode.Width;
                 ScreenHeight = (int)videoMode.Height;
             }

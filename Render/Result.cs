@@ -17,6 +17,7 @@ namespace Render.ResultAlgorithm
         public double Depth { get; set; } = 0;
         public double Offset { get; set; } = 0;
         public double ProjHeight { get; set; } = 0;
+        public double CarAngle {  get; set; } = 0;
         public int Ray { get; set; } = 0;
         public IRenderable obstacle { get; set; }
 
@@ -56,6 +57,7 @@ namespace Render.ResultAlgorithm
             redefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
 
             Ray = ray;
+            CarAngle = car_angle;
 
             Offset = (int)Offset % screen.Setting.Tile;
             Depth = Math.Max(Depth, 0.1);

@@ -34,6 +34,8 @@ namespace ControlLib
     {
         private Setting setting;
         private CheckPressed checkPressed = new CheckPressed();
+        private CollisionDetection collisionDet;
+
         private Collision collision;
         private Screen screen;
         private Map map;
@@ -48,6 +50,7 @@ namespace ControlLib
 
             setting = new Setting(minDistanceFromWall, mouseSensitivity);
             collision = new Collision(screen, map, setting);
+            collisionDet = new CollisionDetection(screen, map);
 
             screen.Window.SetMouseCursorVisible(false);
             screen.Window.MouseMoved += OnMouseMoved;
@@ -90,348 +93,7 @@ namespace ControlLib
         {
             playerA -= setting.moveSpeedAngel * direction;
         }
-        //public (TexturedWall? wall, float textureX, float dist)? CastRay(float startX, float startY, float angle, Entity entity)
-        //{
-        //    // Направление луча
-        //    float dx = (float)Math.Cos(angle);
-        //    float dy = (float)Math.Sin(angle);
-
-        //    // Размер тайла (ScreenTile)
-        //    int tileSize = screen.Setting.Tile;
-        //   // Console.WriteLine(tileSize);
-
-        //    // Преобразуем координаты игрока в кратные размеру тайла
-        //    int x = (int)(startX / tileSize) * tileSize;
-        //    int y = (int)(startY / tileSize) * tileSize;
-
-        //    // Определяем шаги по X и Y
-        //    int stepX = (dx > 0) ? tileSize : -tileSize;
-        //    int stepY = (dy > 0) ? tileSize : -tileSize;
-
-        //    // tMaxX и tMaxY — время до первой границы тайла
-        //    float tMaxX = (stepX > 0 ? (x + tileSize - startX) : (startX - x)) / Math.Abs(dx);
-        //    float tMaxY = (stepY > 0 ? (y + tileSize - startY) : (startY - y)) / Math.Abs(dy);
-
-        //    // tDeltaX и tDeltaY — шаги времени для каждой оси
-        //    float tDeltaX = tileSize / Math.Abs(dx);
-        //    float tDeltaY = tileSize / Math.Abs(dy);
-
-        //    // Храним точку пересечения для вычисления текстурной координаты
-        //    float hitX = startX, hitY = startY;
-
-        //    // Трассировка луча
-        //    while (true)
-        //    {
-        //        // Проверяем, есть ли стена на текущих координатах
-        //        if (map.Obstacles.TryGetValue((x, y), out Obstacle obstacle))
-        //        {
-        //            if (obstacle is TexturedWall wall)
-        //            {
-        //                // Если попали в стену, вычисляем точку пересечения
-        //                if (tMaxX < tMaxY)
-        //                {
-        //                    hitX = x + (stepX > 0 ? 0 : tileSize);  // Левая или правая граница
-        //                    hitY = startY + (tMaxX * dy);
-        //                }
-        //                else
-        //                {
-        //                    hitX = startX + (tMaxY * dx);
-        //                    hitY = y + (stepY > 0 ? 0 : tileSize);  // Верхняя или нижняя граница
-        //                }
-
-        //                // Вычисляем текстурную координату X
-        //                float dist = (float)Math.Sqrt(Math.Pow(wall.X - (float)entity.getEntityX(), 2) + Math.Pow(wall.Y - (float)entity.getEntityY(), 2));
-        //                float textureX;
-        //                if (tMaxX < tMaxY)
-        //                {
-        //                    // Пересечение с вертикальной стеной
-        //                    textureX = ((hitY ) % tileSize) / tileSize;
-        //                    Console.WriteLine("$$");
-        //                    Console.WriteLine($"{textureX}");
-        //                    textureX *= wall.TextureObst.TextureWidth / screen.Setting.Scale;
-        //                    textureX = Math.Clamp(textureX, 0f, wall.TextureObst.TextureWidth);
-
-        //                   // textureX = wall.TextureObst.TextureWidth - textureX;
-
-        //                }
-        //                else
-        //                {
-        //                    // Пересечение с горизонтальной стеной
-        //                    textureX = ((hitX / 2.75f) % tileSize) / tileSize;
-        //                    textureX *= wall.TextureObst.TextureWidth / screen.Setting.Scale;
-        //                    textureX = Math.Clamp(textureX, 0f, wall.TextureObst.TextureWidth);
-        //                    Console.WriteLine("||");
-        //                    Console.WriteLine(dist);
-        //                }
-
-        //                // Преобразуем текстурную координату X в диапазон [0, TextureWidth]
-        //                //textureX *= wall.TextureObst.TextureWidth / screen.Setting.Scale;
-
-        //               // textureX = Math.Clamp(textureX, 0f, wall.TextureObst.TextureWidth);
-
-        //                //double dist = Math.Sqrt(Math.Pow(wall.X - (float)entity.getEntityX(), 2) + Math.Pow(wall.Y - (float)entity.getEntityY(), 2));
-        //                //Console.WriteLine($"Попали в стену на: ({x}, {y}), Текстурная X: {textureX}");
-
-        //                return (wall, textureX, (float)dist);
-        //            }
-        //        }
-
-        //        // Продвигаем луч
-        //        if (tMaxX < tMaxY)
-        //        {
-        //            tMaxX += tDeltaX;
-        //            x += stepX;
-        //        }
-        //        else
-        //        {
-        //            tMaxY += tDeltaY;
-        //            y += stepY;
-        //        }
-
-        //        // Проверяем выход за границы карты
-        //        if (x < 0 || y < 0 ||
-        //            x >= map.Setting.MapWidth * tileSize ||
-        //            y >= map.Setting.MapHeight * tileSize)
-        //        {
-        //            return null;  // Луч вышел за пределы карты
-        //        }
-        //    }
-        //}
-        static float xx = 0; 
-        static float yy = 0;
-        static float tY = 1;
-        static float ss = 1;
-        public static float Lerp(float a, float b, float t)
-        {
-            return a + (b - a) * t;
-        }
-        //public (TexturedWall? wall, float textureX, float dist)? CastRay(float startX, float startY, float angle, Entity entity)
-        //{
-        //    float dx = (float)Math.Cos(angle);
-        //    float dy = (float)Math.Sin(angle);
-
-        //    int tileSize = screen.Setting.Tile;
-        //    int x = (int)(startX / tileSize) * tileSize;
-        //    int y = (int)(startY / tileSize) * tileSize;
-
-        //    int stepX = (dx > 0) ? tileSize : -tileSize;
-        //    int stepY = (dy > 0) ? tileSize : -tileSize;
-
-        //    float tMaxX = (stepX > 0 ? (x + tileSize - startX) : (startX - x)) / Math.Abs(dx);
-        //    float tMaxY = (stepY > 0 ? (y + tileSize - startY) : (startY - y)) / Math.Abs(dy);
-
-        //    float tDeltaX = tileSize / Math.Abs(dx);
-        //    float tDeltaY = tileSize / Math.Abs(dy);
-
-        //    float hitX = startX, hitY = startY;
-
-        //    while (true)
-        //    {
-        //        if (map.Obstacles.TryGetValue((x, y), out Obstacle obstacle))
-        //        {
-        //            if (obstacle is TexturedWall wall)
-        //            {
-        //                float dist = (float)Math.Sqrt(Math.Pow(wall.X - entity.getEntityX(), 2) +
-        //                                              Math.Pow(wall.Y - entity.getEntityY(), 2));
-        //                float textureX;
-
-        //                if (tMaxX < tMaxY) // Пересечение с вертикальной стеной
-        //                {
-        //                    hitX = x + (stepX > 0 ? 0 : tileSize);     
-        //                    hitY = startY + (tMaxX * dy);
-        //                    yy = hitY;
-        //                    // Если луч идет справа налево, инвертируем текстурную координату
-        //                    //textureX = (dy > 0) ? 1 - ((hitY - xx) % tileSize) / tileSize
-        //                    //
-        //                    if (stepX > 0)
-        //                        textureX = 1 - (((hitY) % tileSize) / tileSize);
-        //                    else
-        //                        textureX = (((hitY - xx) % tileSize) / tileSize) / (dist / map.Setting.ScreenTile / 2);
-        //                    //if (textureX < 0.5f)
-        //                    //    textureX *= 2f;
-        //                    tY = textureX;
-        //                    Console.WriteLine("$$");
-
-        //                }
-        //                else // Пересечение с горизонтальной стеной
-        //                {
-        //                    hitX = startX + (tMaxY * dx);
-        //                    hitY = y + (stepY > 0 ? 0 : tileSize);
-
-        //                    xx = hitX;
-        //                    Console.WriteLine("||");
-        //                    ss = stepY;
-        //                    if (stepY > 0)
-        //                    {
-        //                        textureX = ((hitX - yy) % tileSize) / tileSize;
-        //                        if (yy > hitX)
-        //                            textureX = 1 - textureX;
-        //                    }
-        //                    else
-        //                        textureX = ((hitX - yy) % tileSize) / tileSize;
-        //                }
-
-        //                textureX *= wall.TextureObst.TextureWidth / screen.Setting.Scale;
-        //                textureX /= (dist / map.Setting.ScreenTile);
-        //                textureX = Math.Clamp(textureX, 0f, wall.TextureObst.TextureWidth);
-
-        //                return (wall, textureX, dist);
-        //            }
-        //        }
-
-        //        if (tMaxX < tMaxY)
-        //        {
-        //            tMaxX += tDeltaX;
-        //            x += stepX;
-        //        }
-        //        else
-        //        {
-        //            tMaxY += tDeltaY;
-        //            y += stepY;
-        //        }
-
-        //        if (x < 0 || y < 0 ||
-        //            x >= map.Setting.MapWidth * tileSize ||
-        //            y >= map.Setting.MapHeight * tileSize)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //}
-        //public (TexturedWall? wall, float textureX, float dist)? CastRay(float startX, float startY, float angle, Entity entity)
-        //{
-        //    float dx = (float)Math.Cos(angle);
-        //    float dy = (float)Math.Sin(angle);
-        //    float length = (float)Math.Sqrt(dx * dx + dy * dy);
-        //    dx /= length;
-        //    dy /= length;
-
-
-        //    int tileSize = screen.Setting.Tile;
-        //    int x = (int)(startX / tileSize) * tileSize;
-        //    int y = (int)(startY / tileSize) * tileSize;
-
-        //    int stepX = (dx > 0) ? tileSize : -tileSize;
-        //    int stepY = (dy > 0) ? tileSize : -tileSize;
-
-        //    float tMaxX = (stepX > 0 ? (x + tileSize - startX) : (startX - x)) / Math.Abs(dx);
-        //    float tMaxY = (stepY > 0 ? (y + tileSize - startY) : (startY - y)) / Math.Abs(dy);
-
-
-        //    float tDeltaX = tileSize / Math.Abs(dx);
-        //    float tDeltaY = tileSize / Math.Abs(dy);
-
-        //    float hitX = startX, hitY = startY;
-
-        //    while (true)
-        //    {
-        //        if (map.Obstacles.TryGetValue((x, y), out Obstacle obstacle))
-        //        {
-        //            if (obstacle is TexturedWall wall)
-        //            {
-        //                // Расчет точки пересечения и расстояния
-        //                float dist;
-        //                float textureX;
-
-        //                if (tMaxX < tMaxY) // Пересечение с вертикальной стеной
-        //                {
-        //                    hitX = x + (stepX > 0 ? 0 : tileSize);
-        //                    hitY = startY + tMaxX * dy;
-        //                    // Проекционное расстояние до пересечения с вертикальной стеной
-        //                    dist = Math.Abs((hitX - startX) / dx);
-
-        //                    // Текстурная координата по вертикальной границе
-        //                    textureX = (hitY % tileSize) / tileSize;
-        //                    if (stepX > 0) textureX = 1 - textureX;  // Инвертируем при необходимости
-
-        //                }
-        //                else // Пересечение с горизонтальной стеной
-        //                {
-        //                    hitX = startX + tMaxY * dx;
-        //                    hitY = y + (stepY > 0 ? 0 : tileSize);
-        //                    // Проекционное расстояние до пересечения с горизонтальной стеной
-        //                    dist = Math.Abs((hitY - startY) / dy);
-
-        //                    // Текстурная координата по горизонтальной границе
-        //                    textureX = (hitX % tileSize) / tileSize;
-        //                    if (stepY < 0) textureX = 1 - textureX;  // Инвертируем при необходимости
-
-        //                }
-        //                float a = dist / map.Setting.ScreenTile;
-        //                //textureX *= (wall.TextureObst.TextureWidth / a) / (screen.Setting.Scale / a);
-        //                textureX *= (wall.TextureObst.TextureWidth ) / (screen.Setting.Scale);
-        //                textureX = Math.Clamp(textureX, 0f, wall.TextureObst.TextureWidth);
-
-        //                Console.WriteLine($"Current Position: ({startX}, {startY})");
-        //                Console.WriteLine($"Direction: (dx: {dx}, dy: {dy})");
-        //                Console.WriteLine($"tMaxX: {tMaxX}, tMaxY: {tMaxY}");
-        //                Console.WriteLine($"Hit Position: ({hitX}, {hitY})");
-        //                Console.WriteLine($"Distance: {dist}");
-        //                Console.WriteLine($"Texture X: {textureX}");
-        //                return (wall, textureX, dist);
-        //            }
-        //        }
-
-        //        // Продолжаем следовать лучом
-        //        if (tMaxX < tMaxY)
-        //        {
-        //            tMaxX += tDeltaX;
-        //            x += stepX;
-        //        }
-        //        else
-        //        {
-        //            tMaxY += tDeltaY;
-        //            y += stepY;
-        //        }
-
-
-
-        //        // Проверка выхода за границы карты
-        //        if (x < 0 || y < 0 ||
-        //            x >= map.Setting.MapWidth * tileSize ||
-        //            y >= map.Setting.MapHeight * tileSize)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //}
-
-        //private Vector2f calculateTextureHitPoint(Entity player, TexturedWall wall)
-        //{
-        //    // Получаем координаты игрока и его угол направления
-        //    double playerX = player.getEntityX();
-        //    double playerY = player.getEntityY();
-        //    double playerAngle = player.getEntityA(); // Угол направления игрока в радианах
-
-        //    // Координаты стены
-        //    float wallX = (float)wall.X;
-        //    float wallY = (float)wall.Y;
-
-        //    // Вычисляем разницу между игроком и стеной
-        //    float deltaX = wallX - (float)playerX;
-        //    float deltaY = wallY - (float)playerY;
-
-        //    // Угол между направлением игрока и стеной
-        //    double angleToWall = Math.Atan2(deltaY, deltaX);
-        //    double relativeAngle = playerAngle - angleToWall;
-
-        //    // Находим дистанцию от игрока до точки пересечения с поверхностью стены
-        //    double distanceToWall = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-
-        //    // Находим точку пересечения на поверхности стены в мировых координатах
-        //    float hitX = (float)(playerX + Math.Cos(playerAngle) * distanceToWall);
-        //    float hitY = (float)(playerY + Math.Sin(playerAngle) * distanceToWall);
-
-        //    // Рассчитываем локальные координаты на текстуре
-        //    float localX = (hitX - wallX) / screen.Setting.Tile;
-        //    float localY = (hitY - wallY) / screen.Setting.Tile;
-
-        //    // Приводим к диапазону [0, 1] для координат текстуры (UV-координаты)
-        //    float u = Math.Clamp(localX, 0f, 1f);
-        //    float v = Math.Clamp(localY, 0f, 1f);
-
-        //    return new Vector2f(u, v); // Возвращаем UV-координаты на текстуре
-        //}
+      
         private enum WallSide
         {
             Error,
@@ -784,8 +446,8 @@ namespace ControlLib
                     FillColor = SFML.Graphics.Color.Black,
                     Position = dotPosition
                 };
-                wall.renderTexture.Draw(dot);
-                wall.renderTexture.Display();
+                //wall.renderTexture.Draw(dot);
+                //wall.renderTexture.Display();
                // Console.WriteLine(textureX);
             }
             //(TexturedWall? wall, float textureX, float dist)? temp = CastRay((float)playerX, (float)playerY, (float)angle, entity);
@@ -853,12 +515,12 @@ namespace ControlLib
                 Position = dotPosition
             };
 
-            wall.renderTexture.Draw(dot);
-            wall.renderTexture.Display();
+    //        wall.renderTexture.Draw(dot);
+    //        wall.renderTexture.Display();
 
             
         
-    }
+        }
 
 
 
@@ -893,9 +555,7 @@ namespace ControlLib
                 settingMiniMap.Zoom -= 0.01f;
 
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
-            {
-                calculateHitPoint(entity);
-            }
+                collisionDet.calculateHitPoint(entity);
 
             if (checkPressed.CurrentDirection.Exit)
                 screen.Window.Close();
