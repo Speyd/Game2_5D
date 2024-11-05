@@ -145,7 +145,7 @@ map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'d', @"Resource
 map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
 map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
 
-map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
+//map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
 map.addObstacleToMap(9, 8, map.Obstacles, new TexturedWall(Map.block));
 map.addObstacleToMap(9, 9, map.Obstacles, new TexturedWall(Map.block));
 map.addObstacleToMap(9, 10, map.Obstacles, new TexturedWall(Map.block));

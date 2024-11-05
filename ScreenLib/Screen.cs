@@ -24,7 +24,10 @@ namespace ScreenLib
             ScreenHeight = screenHeight > 0 ? screenHeight : throw new Exception("Error value(screenHeight)"); ;
 
             if (fullScreen == false)
+            {
                 Window = new RenderWindow(new VideoMode((uint)ScreenWidth, (uint)ScreenHeight), nameWindow);
+                Styles = Styles.Default;
+            }
             else
             {
                 Styles = Styles.Fullscreen;

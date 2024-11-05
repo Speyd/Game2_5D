@@ -14,6 +14,8 @@ using Render.InterfaceRender;
 using EntityLib.Player;
 using System.Reflection.Metadata;
 using MapLib.Obstacles.Texture;
+using System.Security.Cryptography;
+using System.Runtime.CompilerServices;
 
 namespace ControlLib
 {
@@ -28,7 +30,7 @@ namespace ControlLib
         float wallTop = 0;
         float wallBottom = 0;
 
-        int test = 1000;
+        float test = 1000f;
 
         Entity entity;
 
@@ -93,7 +95,27 @@ namespace ControlLib
 
             return new Vector2f(hitX, hitY);
         }
+        private TextureWallSide DetermineWallSide(Entity player, TexturedWall wall)
+        {
+            if (entityY < wallBottom && entityY > wallTop)
+            {
+                if (cosEntityAngle > 0 && entityX < wallRight) return TextureWallSide.Right; // Смотрит вправо
+                if (cosEntityAngle < 0 && entityX > wallLeft) return TextureWallSide.Left;   // Смотрит влево
+            }
 
+            // Если игрок смотрит в сторону Y
+            if (entityX < wallRight && entityX > wallLeft)
+            {
+                if (sinEntityAngle > 0 && entityY < wallBottom) return TextureWallSide.Bottom; // Смотрит вниз
+                if (sinEntityAngle < 0 && entityY > wallTop) return TextureWallSide.Top;       // Смотрит вверх
+            }
+            return TextureWallSide.Error;
+        }
+        private void setTextureWall(TextureWallSide wallTexture)
+        {
+            if (wallDetermine == TextureWallSide.Error)
+                wallDetermine = wallTexture;
+        }
         private HitPoint calculateTextureHitPoint(Entity player, TexturedWall wall)
         {
           
@@ -109,18 +131,20 @@ namespace ControlLib
 
 
             Vector2f cornerHit = CalculateTextureHitPoint(player, wall);
+
+            wallDetermine = DetermineWallSide(player, wall);
             if (cornerHit.X > cornerHit.Y)
             {
                 cornerHit.X = (cornerHit.X - 700) / 100;
                 cornerHit.Y = cornerHit.Y - 700;
 
-                wallDetermine = TextureWallSide.BottomCorner;
+                setTextureWall(TextureWallSide.BottomCorner);
                 textureWallDetermine = TextureWallSide.Bottom;
                 if (cornerHit.X < cornerHit.Y)
                 {
                     cornerHit.Y /= 100;
                     cornerHit.X = 0;
-                    wallDetermine = TextureWallSide.LeftCorner;
+                    setTextureWall(TextureWallSide.LeftCorner);
                     textureWallDetermine = TextureWallSide.Left;
                 }
             }
@@ -129,18 +153,19 @@ namespace ControlLib
                 cornerHit.Y = (cornerHit.Y - 700) / 100;
                 cornerHit.X = cornerHit.X - 700;
 
-                wallDetermine = TextureWallSide.RightCorner;
+                setTextureWall(TextureWallSide.RightCorner);
                 textureWallDetermine = TextureWallSide.Right;
                 if (cornerHit.X > cornerHit.Y)
                 {
                     cornerHit.X /= 100;
                     cornerHit.Y = 0;
-                    wallDetermine = TextureWallSide.TopCorner;
+                    setTextureWall(TextureWallSide.TopCorner);
                     textureWallDetermine = TextureWallSide.Top;
                 }
             }
 
             wall.CurrentTexture = wall.renderTextures.GetTexture(textureWallDetermine);
+            Console.WriteLine(wallDetermine);
             return new HitPoint(cornerHit, distanceToWall);
         }
 
@@ -151,31 +176,65 @@ namespace ControlLib
             
             return textureX;
         }
+        float correctedUV(float uvValue)
+        {
+            // Применяем косинусное сглаживание для равномерного изменения координат UV
+            return (float)(0.5 * (1 - Math.Cos(Math.PI * uvValue)));
+        }
+
+        private float calculateNegativeYCoo(HitPoint hitPoint, float adjustedDistance, float entityVertAngle)
+        {
+            float baseValue = (adjustedDistance * adjustedDistance) / 2.5f;
+
+            if (wallDetermine == TextureWallSide.LeftCorner || wallDetermine == TextureWallSide.RightCorner)
+            {
+                return (adjustedDistance * adjustedDistance) / (2.3f - (hitPoint.UV.Y / adjustedDistance));
+            }
+
+            if (wallDetermine == TextureWallSide.BottomCorner || wallDetermine == TextureWallSide.TopCorner)
+            {
+                return (adjustedDistance * adjustedDistance) / (2.4f - (hitPoint.UV.X / adjustedDistance));
+            }
+
+
+            return baseValue;
+        }
+
+
+
+        private float calculateMultY(HitPoint hitPoint, float adjustedDistance, float entityVertAngle)
+        {
+            if (entityVertAngle <= 0f)
+                return calculateNegativeYCoo(hitPoint, adjustedDistance, entityVertAngle);
+            else
+            {
+                float mult = (adjustedDistance * adjustedDistance) / 2.2f;
+                return mult / (entityVertAngle + (float)Math.Floor((Math.PI / 2) * 10) / 10);
+            }
+        }
+        private float calculateTextureY(TexturedWall wall, 
+            float ProjHeight, float entityVertAngle,
+            float adjustedDistance, float mult, float radius)
+        {
+            float textureY = ProjHeight * entityVertAngle * mult;
+
+            if(entityVertAngle <= 0f)
+                return wall.TextureObst.TextureHeight / 2 + textureY;
+            else
+                return wall.TextureObst.TextureHeight / 2 + textureY + ((radius / 4) * adjustedDistance);
+        }
         private float CalculateTextureY(HitPoint hitPoint, TexturedWall wall)
         {
             entityVertAngle = (float)entity.getEntityVerticalA();
 
-            float ProjHeight = Math.Min((float)(entity.ProjCoeff / hitPoint.Distance), 8 * screen.ScreenHeight);
+
             float adjustedDistance = (float)hitPoint.Distance / screen.Setting.Tile;
 
-            float mult = (adjustedDistance * adjustedDistance) / 2.5f;
+            float ProjHeight = (float)entity.ProjCoeff / (float)hitPoint.Distance;
 
-            if(screen.Styles == Styles.Fullscreen)
-                mult = (adjustedDistance * adjustedDistance) / 3.8f;
+            float mult = calculateMultY(hitPoint, adjustedDistance, entityVertAngle);
 
-            if (entityVertAngle > 0)
-            {
-                if (screen.Styles == Styles.Fullscreen)
-                    mult = (adjustedDistance * adjustedDistance) / 4f + 0.1f;
-                else
-                    mult += 0.2f;
-
-                mult /= entityVertAngle + (float)Math.Floor((Math.PI / 2) * 10) / 10;
-            }
-
-            float textureY = ProjHeight * entityVertAngle * mult;
-
-            return wall.TextureObst.TextureHeight / 2 + textureY;
+            return calculateTextureY(wall, ProjHeight, entityVertAngle, adjustedDistance, mult, 30);
         }
 
         public void calculateHitPoint(Entity entity)
@@ -200,7 +259,7 @@ namespace ControlLib
 
                 float textureX = CalculateTextureX(hitPoint, wall);
                 float textureY = CalculateTextureY(hitPoint, wall);
-
+               
                 Vector2f dotPosition = new Vector2f(textureX, textureY);
 
                 CircleShape dot = new CircleShape(30)
@@ -209,7 +268,7 @@ namespace ControlLib
                     Position = dotPosition
                 };
                 //Sprite s = new Sprite(new Texture(@"Resources\Image\Sprite\Devil\1.png"));
-                //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2 );
+                //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2);
                 //s.Position = dotPosition;
 
                 wall.CurrentTexture.Draw(dot);
