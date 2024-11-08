@@ -30,6 +30,8 @@ namespace ControlLib
         float wallTop = 0;
         float wallBottom = 0;
 
+        float distancePoint = 1;
+
         float test = 1000f;
 
         Entity entity;
@@ -92,6 +94,8 @@ namespace ControlLib
 
             float hitX = (float)(entityX + t * cosEntityAngle);
             float hitY = (float)(entityY + t * sinEntityAngle);
+
+            distancePoint = t;
 
             return new Vector2f(hitX, hitY);
         }
@@ -169,72 +173,79 @@ namespace ControlLib
             return new HitPoint(cornerHit, distanceToWall);
         }
 
-        private float CalculateTextureX(HitPoint hitPoint, TexturedWall wall)
+        private float getTextureX(HitPoint hitPoint, TexturedWall wall)
         {
             float textureX = hitPoint.UV.X > hitPoint.UV.Y ? hitPoint.UV.X : hitPoint.UV.Y;
             textureX *= (wall.TextureObst.TextureWidth) / (screen.Setting.Scale);
             
             return textureX;
         }
-        float correctedUV(float uvValue)
+
+
+
+        private bool IsCornerWall()
         {
-            // Применяем косинусное сглаживание для равномерного изменения координат UV
-            return (float)(0.5 * (1 - Math.Cos(Math.PI * uvValue)));
+            return wallDetermine == TextureWallSide.LeftCorner ||
+                   wallDetermine == TextureWallSide.RightCorner ||
+                   wallDetermine == TextureWallSide.BottomCorner ||
+                   wallDetermine == TextureWallSide.TopCorner;
         }
-
-        private float calculateNegativeYCoo(HitPoint hitPoint, float adjustedDistance, float entityVertAngle)
+        private float calculateNegativeYCoo(float adjustedDistance, float radius, ref float addCoordinates)
         {
-            float baseValue = (adjustedDistance * adjustedDistance) / 2.5f;
+            if (IsCornerWall())
+                return (adjustedDistance * adjustedDistance) / ((2.5f * adjustedDistance) * (1 / (distancePoint / screen.Setting.Tile)));
 
-            if (wallDetermine == TextureWallSide.LeftCorner || wallDetermine == TextureWallSide.RightCorner)
+            float baseValue = ((distancePoint / screen.Setting.Tile) * (distancePoint / screen.Setting.Tile)) / 2.5f;
+
+            addCoordinates = (radius / (distancePoint / screen.Setting.Tile));
+            return baseValue;
+        }
+        private float calculatePozititiveYCoo(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
+        {
+            if (IsCornerWall())
             {
-                return (adjustedDistance * adjustedDistance) / (2.3f - (hitPoint.UV.Y / adjustedDistance));
+                float temp = (adjustedDistance * adjustedDistance) / ((2f * adjustedDistance) * (1 / (distancePoint / screen.Setting.Tile)));
+                return temp / (entityVertAngle + (float)(Math.PI / 2));
             }
 
-            if (wallDetermine == TextureWallSide.BottomCorner || wallDetermine == TextureWallSide.TopCorner)
-            {
-                return (adjustedDistance * adjustedDistance) / (2.4f - (hitPoint.UV.X / adjustedDistance));
-            }
+            float baseValue = ((distancePoint / screen.Setting.Tile) * (distancePoint / screen.Setting.Tile)) / 2.5f;
+            baseValue /= entityVertAngle + 1;
 
-
+            addCoordinates = (radius / (distancePoint / screen.Setting.Tile));
             return baseValue;
         }
 
 
-
-        private float calculateMultY(HitPoint hitPoint, float adjustedDistance, float entityVertAngle)
+        private float calculateMultY(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
         {
             if (entityVertAngle <= 0f)
-                return calculateNegativeYCoo(hitPoint, adjustedDistance, entityVertAngle);
+                return calculateNegativeYCoo(adjustedDistance, radius, ref addCoordinates);
             else
-            {
-                float mult = (adjustedDistance * adjustedDistance) / 2.2f;
-                return mult / (entityVertAngle + (float)Math.Floor((Math.PI / 2) * 10) / 10);
-            }
+                return calculatePozititiveYCoo(adjustedDistance, entityVertAngle, radius, ref addCoordinates);
         }
+
+
         private float calculateTextureY(TexturedWall wall, 
             float ProjHeight, float entityVertAngle,
-            float adjustedDistance, float mult, float radius)
+            float mult, float addCoordinates)
         {
             float textureY = ProjHeight * entityVertAngle * mult;
 
-            if(entityVertAngle <= 0f)
-                return wall.TextureObst.TextureHeight / 2 + textureY;
-            else
-                return wall.TextureObst.TextureHeight / 2 + textureY + ((radius / 4) * adjustedDistance);
+            return wall.TextureObst.TextureHeight / 2 + textureY - addCoordinates;
         }
-        private float CalculateTextureY(HitPoint hitPoint, TexturedWall wall)
+        private float getTextureY(HitPoint hitPoint, TexturedWall wall)
         {
             entityVertAngle = (float)entity.getEntityVerticalA();
 
+            float addCoordinates = 0;
 
             float adjustedDistance = (float)hitPoint.Distance / screen.Setting.Tile;
 
             float ProjHeight = (float)entity.ProjCoeff / (float)hitPoint.Distance;
 
-            float mult = calculateMultY(hitPoint, adjustedDistance, entityVertAngle);
+            float mult = calculateMultY(adjustedDistance, entityVertAngle, 30, ref addCoordinates);
 
-            return calculateTextureY(wall, ProjHeight, entityVertAngle, adjustedDistance, mult, 30);
+            return calculateTextureY(wall, ProjHeight, entityVertAngle, mult, addCoordinates);
         }
 
         public void calculateHitPoint(Entity entity)
@@ -257,8 +268,8 @@ namespace ControlLib
 
                 HitPoint hitPoint = calculateTextureHitPoint(entity, wall);
 
-                float textureX = CalculateTextureX(hitPoint, wall);
-                float textureY = CalculateTextureY(hitPoint, wall);
+                float textureX = getTextureX(hitPoint, wall);
+                float textureY = getTextureY(hitPoint, wall);
                
                 Vector2f dotPosition = new Vector2f(textureX, textureY);
 
@@ -267,6 +278,7 @@ namespace ControlLib
                     FillColor = SFML.Graphics.Color.Black,
                     Position = dotPosition
                 };
+
                 //Sprite s = new Sprite(new Texture(@"Resources\Image\Sprite\Devil\1.png"));
                 //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2);
                 //s.Position = dotPosition;
