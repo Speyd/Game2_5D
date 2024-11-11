@@ -164,23 +164,21 @@ namespace MapLib.Obstacles.DiversityObstacle
                 return new Vector2f(-1, -1);
             }
 
-            float hitX = (float)(player.getEntityX() + t * Math.Cos(result.CarAngle));
-            float hitY = (float)(player.getEntityY() + t * Math.Sin(result.CarAngle));
+            float hitX = (float)(player.getEntityX() + t * Math.Cos(result.CarAngle)) - (int)X;
+            float hitY = (float)(player.getEntityY() + t * Math.Sin(result.CarAngle)) - (int)Y;
 
             return new Vector2f(hitX, hitY);
         }
+
         private TextureWallSide definitionWallSide(Entity player, Result result, Screen screen)
         {
 
             TextureWallSide wallDetermine = TextureWallSide.Error;
-
-
             Vector2f cornerHit = CalculateTextureHitPoint(player, result, screen);
 
             if (cornerHit.X > cornerHit.Y)
             {
-                cornerHit.X = (cornerHit.X - 700) / 100;
-                cornerHit.Y = cornerHit.Y - 700;
+                cornerHit.X = cornerHit.X / 100;
 
                 wallDetermine = TextureWallSide.Bottom;
                 if (cornerHit.X < cornerHit.Y)
@@ -188,14 +186,12 @@ namespace MapLib.Obstacles.DiversityObstacle
             }
             else
             {
-                cornerHit.Y = (cornerHit.Y - 700) / 100;
-                cornerHit.X = cornerHit.X - 700;
+                cornerHit.Y = cornerHit.Y / 100;
 
                 wallDetermine = TextureWallSide.Right;
                 if (cornerHit.X > cornerHit.Y)
                     wallDetermine = TextureWallSide.Top;
             }
-
             return wallDetermine;
         }
 

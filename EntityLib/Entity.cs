@@ -62,5 +62,13 @@ namespace EntityLib
         public ref double getEntityA() => ref entityA;
         public ref double getEntityVerticalA() => ref entityVerticalA;
 
+
+        public (float x1, float y1) CalculateEndPoint()
+        {
+            float x1 = (float)(entityX + MaxDistance * Math.Cos(entityA));
+            float y1 = (float)(entityY + MaxDistance * Math.Sin(entityA));
+
+            return (x1, y1);
+        }
     }
 }

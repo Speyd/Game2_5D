@@ -48,7 +48,7 @@ static void DrawPoint(RenderTexture renderTexture, Vector2f position, float radi
     renderTexture.Display();    // Обновляем RenderTexture для отображения изменений
 }
 
-Screen screen = new Screen(1500, 1000, mapScale);
+Screen screen = new Screen(1500, 1000);
 
 screen.Window.SetActive(true);
 Map map = new Map(24, 23, screen.Setting.Tile);

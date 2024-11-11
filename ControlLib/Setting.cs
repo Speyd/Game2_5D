@@ -21,6 +21,9 @@ namespace ControlLib
         public float mouseSensitivity;
         public bool isMouseCaptured = true;
 
+        //Settig Mouse
+        public double minVerticalAngle = -Math.PI / 2;
+        public double maxVerticalAngle = Math.PI / 2;
 
         public Setting(float minDistanceFromWall, float mouseSensitivity) 
         {

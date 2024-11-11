@@ -102,9 +102,9 @@ namespace MapLib
             (int)(x / tile) * tile,
             (int)(y / tile) * tile);
         }
-        public bool IsWall(int x, int y)
+        public bool IsWall(int x, int y)    //pass only values ​​that correspond to world coordinates (screen.Setting.Tile)
         {
-            if (x >= 0 && y >= 0 && x < Setting.MapWidth && y < Setting.MapHeight)
+            if (x >= 0 && y >= 0 && x < Setting.MapTileWidth && y < Setting.MapTileHeight)
             {
                 return Obstacles.ContainsKey((x, y));
             }
