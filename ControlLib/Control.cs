@@ -19,17 +19,6 @@ using Render.ResultAlgorithm;
 
 namespace ControlLib
 {
-    public class HitPoint
-    {
-        public Vector2f UV { get; set; } // UV-координаты на текстуре
-        public double Distance { get; set; } // Расстояние до точки пересечения
-
-        public HitPoint(Vector2f uv, double distance)
-        {
-            UV = uv;
-            Distance = distance;
-        }
-    }
     public class Control
     {
         private Setting setting;

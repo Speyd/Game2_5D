@@ -38,8 +38,6 @@ namespace ControlLib
 
         float distancePoint = 1;
 
-        float test = 1000f;
-
         Entity entity;
 
         float entityX = 0;
@@ -49,6 +47,11 @@ namespace ControlLib
         float sinEntityAngle = 0;
 
         float entityVertAngle = 0;
+
+        float baseScreenHeight = 1000;
+        float baseTextureHeight = 1308;
+
+        #region Calculate_X_Coordinate
 
         private Vector2f CalculateTextureHitPoint(TexturedWall wall)
         {
@@ -107,6 +110,7 @@ namespace ControlLib
         }
         private TextureWallSide DetermineWallSide(Entity player, TexturedWall wall)
         {
+            // Проверка по оси X
             if (entityY >= wallTop && entityY <= wallBottom)
             {
                 if (cosEntityAngle > 0 && entityX <= wallRight)
@@ -133,27 +137,19 @@ namespace ControlLib
         }
         private HitPoint calculateTextureHitPoint(Entity player, TexturedWall wall)
         {
-          
-
             float deltaX = (float)wall.X - entityX;
             float deltaY = (float)wall.Y - entityY;
-
             double distanceToWall = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (wallDetermine == TextureWallSide.Top || wallDetermine == TextureWallSide.Left)
-                distanceToWall -= map.Setting.ScreenTile;
-
-
+                distanceToWall -= -(map.Setting.ScreenTile * 3);
 
             Vector2f cornerHit = CalculateTextureHitPoint(wall);
 
             wallDetermine = DetermineWallSide(player, wall);
             if (cornerHit.X > cornerHit.Y)
             {
-                cornerHit.X = cornerHit.X / 100;
-
-                setTextureWall(TextureWallSide.BottomCorner);
-                textureWallDetermine = TextureWallSide.Bottom;
+                cornerHit.X /= 100;
                 if (cornerHit.X < cornerHit.Y)
                 {
                     cornerHit.Y /= 100;
@@ -161,19 +157,26 @@ namespace ControlLib
                     setTextureWall(TextureWallSide.LeftCorner);
                     textureWallDetermine = TextureWallSide.Left;
                 }
+                else
+                {
+                    setTextureWall(TextureWallSide.BottomCorner);
+                    textureWallDetermine = TextureWallSide.Bottom;
+                }
             }
             else
             {
-                cornerHit.Y = cornerHit.Y / 100;
-
-                setTextureWall(TextureWallSide.RightCorner);
-                textureWallDetermine = TextureWallSide.Right;
+                cornerHit.Y /= 100;               
                 if (cornerHit.X > cornerHit.Y)
                 {
                     cornerHit.X /= 100;
                     cornerHit.Y = 0;
                     setTextureWall(TextureWallSide.TopCorner);
                     textureWallDetermine = TextureWallSide.Top;
+                }
+                else
+                {
+                    setTextureWall(TextureWallSide.RightCorner);
+                    textureWallDetermine = TextureWallSide.Right;
                 }
             }
 
@@ -190,7 +193,7 @@ namespace ControlLib
             return textureX - (float)Math.Pow((wallTextureHeight / baseTextureHeight), 4.5f);
         }
 
-
+        #endregion
 
         private bool IsCornerWall()
         {
@@ -200,8 +203,6 @@ namespace ControlLib
                    wallDetermine == TextureWallSide.TopCorner;
         }
 
-        float baseScreenHeight = 1000;
-        float baseTextureHeight = 1308;
 
         private float getMult(float baseMult)
         {
@@ -217,32 +218,41 @@ namespace ControlLib
         {
             float baseMult = getMult(2.5f);
 
+
+            float safeDistance = Math.Max(adjustedDistance, 0.5f);
+
             if (IsCornerWall())
-                return (adjustedDistance * adjustedDistance) / ((baseMult * adjustedDistance) * (1 / distancePoint));
+                return (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
 
-            float baseValue = (distancePoint * distancePoint) / baseMult;
+            if(adjustedDistance >= 1)
+                addCoordinates = radius / safeDistance;
+            else
+                addCoordinates = getMult(radius);
 
-            addCoordinates = radius / distancePoint;
-            return baseValue;
+            return (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
         }
+
         private float calculatePozititiveYCoo(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
         {
+            float baseMult = getMult(2.7f);
+            float safeDistance = Math.Max(adjustedDistance, 0.5f);
+
             if (IsCornerWall())
             {
                 float baseCornerMult = getMult(2f);
-
-                float temp = (adjustedDistance * adjustedDistance) / ((baseCornerMult * adjustedDistance) * (1 / distancePoint));
-                return temp / (entityVertAngle + (float)(setting.maxVerticalAngle));
+                float temp = (safeDistance * safeDistance) / ((baseCornerMult * safeDistance) * (1 / distancePoint));
+                return temp / Math.Max(entityVertAngle + (float)(setting.maxVerticalAngle), 0.1f);
             }
 
-            float baseMult = getMult(2.7f);
+            if (adjustedDistance < 1)
+                addCoordinates = getMult(radius);
+            else
+                addCoordinates = radius / safeDistance;
 
-            float baseValue = (distancePoint  * distancePoint) / baseMult;
-            baseValue /= entityVertAngle + 1;
-
-            addCoordinates = radius / distancePoint;
-            return baseValue;
+            float baseValue = (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
+            return baseValue / Math.Max(entityVertAngle + 1, 0.1f);
         }
+
 
 
         private float calculateMultY(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
@@ -271,6 +281,7 @@ namespace ControlLib
             float adjustedDistance = (float)hitPoint.Distance / screen.Setting.Tile;
 
             float ProjHeight = (float)entity.ProjCoeff / (float)hitPoint.Distance;
+            
 
             float mult = calculateMultY(adjustedDistance, entityVertAngle, radius, ref addCoordinates);
 

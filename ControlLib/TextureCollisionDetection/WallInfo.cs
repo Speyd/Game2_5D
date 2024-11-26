@@ -1,0 +1,53 @@
+﻿using EntityLib;
+using MapLib.Obstacles.DiversityObstacle;
+using ScreenLib;
+using SFML.Graphics;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace ControlLib.TextureCollisionDetection
+{
+    public class WallInfo
+    {
+        public float X = 0;
+        public float Y = 0;
+
+        public float Left { get; set; } = 0;
+        public float Right { get; set; } = 0;
+        public float Top { get; set; } = 0;
+        public float Bottom { get; set; } = 0;
+
+        public float TextureHeight { get; set; } = 0;
+        public float BaseTextureHeight { get; } = 1308;
+
+        public WallInfo(Screen screen, TexturedWall wall)
+        {
+            Y = (float)wall.Y;
+            X = (float)wall.X;
+
+            Left = (float)wall.X;
+            Right = (float)wall.X + screen.Setting.Tile;
+            Top = (float)wall.Y;
+            Bottom = (float)wall.Y + screen.Setting.Tile;
+
+            TextureHeight = wall.TextureObst.TextureHeight;
+        }
+
+        public void RefreshData(Screen screen, TexturedWall wall)
+        {
+            Y = (float)wall.Y;
+            X = (float)wall.X;
+
+            Left = (float)wall.X;
+            Right = (float)wall.X + screen.Setting.Tile;
+            Top = (float)wall.Y;
+            Bottom = (float)wall.Y + screen.Setting.Tile;
+
+            TextureHeight = wall.TextureObst.TextureHeight;
+        }
+    }
+}

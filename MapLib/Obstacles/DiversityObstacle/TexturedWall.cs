@@ -23,7 +23,7 @@ namespace MapLib.Obstacles.DiversityObstacle
     public class TexturedWall : Obstacle, IWall
     {
         public TextureObstacle TextureObst { get; init; }
-        public UniqueDictionary<TextureWallSide, RenderTexture> renderTextures { get; set; }
+        public UniqueDictionary<TextureWallSide, RenderTexture> RenderTextures { get; set; }
         public RenderTexture? CurrentTexture { get; set; } = null;
         public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
 
@@ -55,7 +55,7 @@ namespace MapLib.Obstacles.DiversityObstacle
         {
             TextureObst = new TextureObstacle(textured.TextureObst);
 
-            renderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
 
 
             SpriteObst = new SFML.Graphics.Sprite(textured.SpriteObst.Texture)
@@ -73,7 +73,7 @@ namespace MapLib.Obstacles.DiversityObstacle
             : base(x, y, symbol, colorInMap, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
-            renderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures()); ;
+            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures()); ;
         }
         public TexturedWall(double x, double y, char symbol,
             string path, int screenTile, bool isPassability = false)
@@ -81,7 +81,7 @@ namespace MapLib.Obstacles.DiversityObstacle
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
-            renderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
         }
 
 
@@ -239,7 +239,7 @@ namespace MapLib.Obstacles.DiversityObstacle
 
             TextureWallSide wallSide = definitionWallSide(entity, result, screen);
 
-            CurrentTexture = renderTextures.GetTexture(wallSide);
+            CurrentTexture = RenderTextures.GetTexture(wallSide);
             IntRect textureRect = TextureObstacle.setOffset((int)result.Offset, screen.Setting.Tile, TextureObst);
 
             SpriteObst = new SFML.Graphics.Sprite(CurrentTexture is not null ? CurrentTexture.Texture : TextureObst.Texture, textureRect);
