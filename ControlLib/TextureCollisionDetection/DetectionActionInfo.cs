@@ -12,10 +12,18 @@ namespace ControlLib.TextureCollisionDetection
         public TextureWallSide WallDetermine { get; set; } = TextureWallSide.Error;
         public TextureWallSide TextureWallDetermine { get; set; } = TextureWallSide.Error;
 
-        public float Texture_Y_Coordinate { get; set; } = 0;
-        public float Texture_X_Coordinate { get; set; } = 0;
-
         public float DistanceToPoint { get; set; } = 0;
         public float DistanceToWall { get; set; } = 0;
+        public float DistanceToWallWithTile { get; set; } = 0;
+
+        public void RefreshData()
+        {
+            WallDetermine = TextureWallSide.Error;
+            TextureWallDetermine = TextureWallSide.Error;
+
+            DistanceToPoint = 0;
+            DistanceToWall = 0;
+            DistanceToWallWithTile = 0;
+        }
     }
 }

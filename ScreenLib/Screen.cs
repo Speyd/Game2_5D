@@ -13,6 +13,7 @@ namespace ScreenLib
         public Setting Setting { get; set; }
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
+        public int BaseScreenHeight { get; } = 1000;
 
         public VertexArray vertexArray = new VertexArray(PrimitiveType.Quads);
 

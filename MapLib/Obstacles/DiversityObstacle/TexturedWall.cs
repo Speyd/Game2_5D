@@ -17,6 +17,9 @@ using Render.ResultAlgorithm;
 using SFML.System;
 using MapLib.Obstacles.Texture;
 using EntityLib.Player;
+using MapLib.Obstacles.DiversityObstacle.DetermineParties;
+using MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine;
+using System.Reflection.Metadata;
 
 namespace MapLib.Obstacles.DiversityObstacle
 {
@@ -26,6 +29,8 @@ namespace MapLib.Obstacles.DiversityObstacle
         public UniqueDictionary<TextureWallSide, RenderTexture> RenderTextures { get; set; }
         public RenderTexture? CurrentTexture { get; set; } = null;
         public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
+
+        private DetermineWallParties determine;
 
         private List<(TextureWallSide, RenderTexture)> addRenderTextures()
         {
@@ -50,7 +55,7 @@ namespace MapLib.Obstacles.DiversityObstacle
 
 
 
-        public TexturedWall(TexturedWall textured)
+        public TexturedWall(Screen screen, TexturedWall textured)
         : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.isPassability)
         {
             TextureObst = new TextureObstacle(textured.TextureObst);
@@ -65,23 +70,31 @@ namespace MapLib.Obstacles.DiversityObstacle
                 Rotation = textured.SpriteObst.Rotation,
                 Color = textured.SpriteObst.Color
             };
+
+            determine = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
         }
-        public TexturedWall(double x, double y,
+        public TexturedWall(Screen screen, 
+            double x, double y,
             char symbol, SFML.Graphics.Color colorInMap,
             string path, int screenTile, bool isPassability = false)
 
             : base(x, y, symbol, colorInMap, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
-            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures()); ;
+            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+
+            determine = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
         }
-        public TexturedWall(double x, double y, char symbol,
+        public TexturedWall(Screen screen,
+            double x, double y, char symbol,
             string path, int screenTile, bool isPassability = false)
 
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             TextureObst = new TextureObstacle(path, screenTile);
             RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+
+            determine = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
         }
 
 
@@ -111,92 +124,7 @@ namespace MapLib.Obstacles.DiversityObstacle
 
         #region Render
 
-        #region RenderOperation
-        private Vector2f CalculateTextureHitPoint(Entity player, Result result, Screen screen)
-        {
-            float wallLeft = (float)X; // Левый край
-            float wallRight = (float)X + screen.Setting.Tile; // Правый край
-            float wallTop = (float)Y; // Верхний край
-            float wallBottom = (float)Y + screen.Setting.Tile; // Нижний край
-            float t = float.MaxValue;
-
-            if (Math.Cos(result.CarAngle) != 0)
-            {
-                float tVerticalLeft = (float)((wallLeft - player.getEntityX()) / Math.Cos(result.CarAngle));
-                float tVerticalRight = (float)((wallRight - player.getEntityX()) / Math.Cos(result.CarAngle));
-
-                float hitYLeft = (float)(player.getEntityY() + tVerticalLeft * Math.Sin(result.CarAngle));
-                float hitYRight = (float)(player.getEntityY() + tVerticalRight * Math.Sin(result.CarAngle));
-
-                if (hitYLeft >= wallTop && hitYLeft <= wallBottom && tVerticalLeft >= 0)
-                {
-                    t = tVerticalLeft;
-                }
-
-                if (hitYRight >= wallTop && hitYRight <= wallBottom && tVerticalRight >= 0)
-                {
-                    t = Math.Min(t, tVerticalRight);
-                }
-            }
-
-            if (Math.Sin(result.CarAngle) != 0)
-            {
-                float tHorizontalTop = (float)((wallTop - player.getEntityY()) / Math.Sin(result.CarAngle));
-                float tHorizontalBottom = (float)((wallBottom - player.getEntityY()) / Math.Sin(result.CarAngle));
-
-                float hitXTop = (float)(player.getEntityX() + tHorizontalTop * Math.Cos(result.CarAngle));
-                float hitXBottom = (float)(player.getEntityX() + tHorizontalBottom * Math.Cos(result.CarAngle));
-
-                if (hitXTop >= wallLeft && hitXTop <= wallRight && tHorizontalTop >= 0)
-                {
-                    t = Math.Min(t, tHorizontalTop);
-                }
-
-                if (hitXBottom >= wallLeft && hitXBottom <= wallRight && tHorizontalBottom >= 0)
-                {
-                    t = Math.Min(t, tHorizontalBottom);
-                }
-            }
-
-
-            if (t == float.MaxValue)
-            {
-                return new Vector2f(-1, -1);
-            }
-
-            float hitX = (float)(player.getEntityX() + t * Math.Cos(result.CarAngle)) - (int)X;
-            float hitY = (float)(player.getEntityY() + t * Math.Sin(result.CarAngle)) - (int)Y;
-
-            return new Vector2f(hitX, hitY);
-        }
-
-        private TextureWallSide definitionWallSide(Entity player, Result result, Screen screen)
-        {
-
-            TextureWallSide wallDetermine = TextureWallSide.Error;
-            Vector2f cornerHit = CalculateTextureHitPoint(player, result, screen);
-
-            if (cornerHit.X > cornerHit.Y)
-            {
-                cornerHit.X = cornerHit.X / 100;
-
-                wallDetermine = TextureWallSide.Bottom;
-                if (cornerHit.X < cornerHit.Y)
-                    wallDetermine = TextureWallSide.Left;
-            }
-            else
-            {
-                cornerHit.Y = cornerHit.Y / 100;
-
-                wallDetermine = TextureWallSide.Right;
-                if (cornerHit.X > cornerHit.Y)
-                    wallDetermine = TextureWallSide.Top;
-            }
-            return wallDetermine;
-        }
-
-
-
+        #region RenderOperation  
         public float calcCooX(double ray, Screen screen)
         {
             return (float)ray * screen.Setting.Scale;
@@ -237,9 +165,10 @@ namespace MapLib.Obstacles.DiversityObstacle
             if (TextureObst.Texture is null)
                 return;
 
-            TextureWallSide wallSide = definitionWallSide(entity, result, screen);
+            determine.refreshData(entity, result.CarAngle, this);
+            TextureWallSide wallDetermine = determine.DetermineWallAllSides(this).TextureWallDetermine;
 
-            CurrentTexture = RenderTextures.GetTexture(wallSide);
+            CurrentTexture = RenderTextures.GetTexture(wallDetermine);
             IntRect textureRect = TextureObstacle.setOffset((int)result.Offset, screen.Setting.Tile, TextureObst);
 
             SpriteObst = new SFML.Graphics.Sprite(CurrentTexture is not null ? CurrentTexture.Texture : TextureObst.Texture, textureRect);

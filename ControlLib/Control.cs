@@ -16,6 +16,7 @@ using SixLabors.ImageSharp;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Render.ResultAlgorithm;
+using ControlLib.TextureCollisionDetection;
 
 namespace ControlLib
 {

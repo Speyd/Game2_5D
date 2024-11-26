@@ -17,19 +17,21 @@ namespace MapLib
 
         public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public static TexturedWall block = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
+        public static TexturedWall block;// = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
         public static char empty = ' ';
 
-        public Map(int mapHeight, int mapWidth, int Tile)
+        public Map(Screen screen, int mapHeight, int mapWidth)
         {
-            Setting = new Setting(mapHeight, mapWidth, Tile);
+            Setting = new Setting(mapHeight, mapWidth, screen.Setting.Tile);
             Obstacles = new Dictionary<(int, int), Obstacle>();
-            block.TextureObst.setTile(Tile);
 
-            creatMap();
+            block = new TexturedWall(screen, 0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
+            block.TextureObst.setTile(screen.Setting.Tile);
+
+            creatMap(screen);
         }
 
-        private void refillingObstacles()
+        private void refillingObstacles(Screen screen)
         {
             var tempObstacles = new Dictionary<(int, int), Obstacle>();
 
@@ -42,7 +44,7 @@ namespace MapLib
                         if(tempObstacles.ContainsKey((x, y)))
                             addObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
                         else
-                            addObstacleToMap(x, y, tempObstacles, new TexturedWall(block));
+                            addObstacleToMap(x, y, tempObstacles, new TexturedWall(screen, block));
                     }
                         
                 }
@@ -50,7 +52,7 @@ namespace MapLib
 
             Obstacles = new Dictionary<(int, int), Obstacle>(tempObstacles);
         }
-        private string creatMap()
+        private string creatMap(Screen screen)
         {
             string tempMap = "";
 
@@ -62,7 +64,7 @@ namespace MapLib
             }
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
-            refillingObstacles();
+            refillingObstacles(screen);
 
             return tempMap;
         }

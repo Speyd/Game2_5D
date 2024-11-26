@@ -9,102 +9,108 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MapLib.Obstacles.DiversityObstacle.DetermineParties;
+using MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine;
+using SFML.Window;
+using SFML.System;
 
 namespace ControlLib.TextureCollisionDetection
 {
-    internal class DetectionY(Screen screen, WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
+    internal class DetectionY(Screen screen, ControlLib.Setting setting,
+        WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
     {
+        float addMultFullScreen = 1.3f;
+
+        float baseMultNegativeCoo = 2.5f;
+        float baseMultPozititiveCoo = 2.7f;
+        float baseMultPozititiveCornerCoo = 2f;
+
+        float distanceLimitation = 0.5f;
+
         private bool IsCornerWall()
         {
-            return wallDetermine == TextureWallSide.LeftCorner ||
-                   wallDetermine == TextureWallSide.RightCorner ||
-                   wallDetermine == TextureWallSide.BottomCorner ||
-                   wallDetermine == TextureWallSide.TopCorner;
+            return detectionInfo.WallDetermine == TextureWallSide.LeftCorner ||
+                   detectionInfo.WallDetermine == TextureWallSide.RightCorner ||
+                   detectionInfo.WallDetermine == TextureWallSide.BottomCorner ||
+                   detectionInfo.WallDetermine == TextureWallSide.TopCorner;
         }
-
-
-        private float getMult(float baseMult)
+        private float GetAveragedMult(float baseMult)
         {
-            float newMult = baseMult * (baseScreenHeight / screen.ScreenHeight) * (baseTextureHeight / wallTextureHeight);
+            float newMult = baseMult * (screen.BaseScreenHeight / screen.ScreenHeight);
+            newMult *= (wallInfo.BaseTextureHeight / wallInfo.TextureHeight);
 
             if (screen.Styles == Styles.Fullscreen)
-                return newMult + 1.3f;
+                return newMult + addMultFullScreen;
 
             return newMult;
         }
 
-        private float calculateNegativeYCoo(float adjustedDistance, float radius, ref float addCoordinates)
+        private float CalculateNegativeAngle(float radius, ref float addCoordinates)
         {
-            float baseMult = getMult(2.5f);
+            float safeDistance = Math.Max(detectionInfo.DistanceToWall, distanceLimitation);
+            float baseMult = GetAveragedMult(baseMultNegativeCoo);
 
+            if (!IsCornerWall())
+            {
+                if (detectionInfo.DistanceToWall >= 1)
+                    addCoordinates = radius / safeDistance;
+                else
+                    addCoordinates = GetAveragedMult(radius);
+            }
 
-            float safeDistance = Math.Max(adjustedDistance, 0.5f);
-
-            if (IsCornerWall())
-                return (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
-
-            if (adjustedDistance >= 1)
-                addCoordinates = radius / safeDistance;
-            else
-                addCoordinates = getMult(radius);
-
-            return (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
+            return (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / detectionInfo.DistanceToPoint));
         }
-
-        private float calculatePozititiveYCoo(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
+        private float CalculatePozititiveAngle(float radius, ref float addCoordinates)
         {
-            float baseMult = getMult(2.7f);
-            float safeDistance = Math.Max(adjustedDistance, 0.5f);
+            float safeDistance = Math.Max(detectionInfo.DistanceToWall, distanceLimitation);
 
             if (IsCornerWall())
             {
-                float baseCornerMult = getMult(2f);
-                float temp = (safeDistance * safeDistance) / ((baseCornerMult * safeDistance) * (1 / distancePoint));
-                return temp / Math.Max(entityVertAngle + (float)(setting.maxVerticalAngle), 0.1f);
+                float baseCornerMult = GetAveragedMult(baseMultPozititiveCornerCoo);
+
+                float baseCornerValue = (baseCornerMult * safeDistance) * (1 / detectionInfo.DistanceToPoint);
+                baseCornerValue = (safeDistance * safeDistance) / baseCornerValue;
+
+                return baseCornerValue / Math.Max(entityInfo.VertAngle + (float)(setting.maxVerticalAngle), 0.1f);
             }
 
-            if (adjustedDistance < 1)
-                addCoordinates = getMult(radius);
+
+            float baseMult = GetAveragedMult(baseMultPozititiveCoo);
+
+            if (detectionInfo.DistanceToWall < 1)
+                addCoordinates = GetAveragedMult(radius);
             else
                 addCoordinates = radius / safeDistance;
 
-            float baseValue = (safeDistance * safeDistance) / ((baseMult * safeDistance) * (1 / distancePoint));
-            return baseValue / Math.Max(entityVertAngle + 1, 0.1f);
+            float baseValue = (baseMult * safeDistance) * (1 / detectionInfo.DistanceToPoint);
+            baseValue = (safeDistance * safeDistance) / baseValue;
+
+            return baseValue / Math.Max(entityInfo.VertAngle + 1, 0.1f);
         }
-
-
-
-        private float calculateMultY(float adjustedDistance, float entityVertAngle, float radius, ref float addCoordinates)
+        private float CalculateMultY(float radius, ref float addCoordinates)
         {
-            if (entityVertAngle <= 0f)
-                return calculateNegativeYCoo(adjustedDistance, radius, ref addCoordinates);
+            if (entityInfo.VertAngle <= 0f)
+                return CalculateNegativeAngle(radius, ref addCoordinates);
             else
-                return calculatePozititiveYCoo(adjustedDistance, entityVertAngle, radius, ref addCoordinates);
+                return CalculatePozititiveAngle(radius, ref addCoordinates);
         }
 
 
-        private float calculateTextureY(TexturedWall wall,
-            float ProjHeight, float entityVertAngle,
-            float mult, float addCoordinates)
+        private float CalculateTextureY(TexturedWall wall,float ProjHeight, float mult, float addCoordinates)
         {
-            float textureY = ProjHeight * entityVertAngle * mult;
+            float textureY = ProjHeight * entityInfo.VertAngle * mult;
 
             return wall.TextureObst.TextureHeight / 2 + textureY - addCoordinates;
         }
-        private float getTextureY(HitPoint hitPoint, TexturedWall wall, float radius)
+        public float GetTextureCoordinate(TexturedWall wall, float radius)
         {
-            entityVertAngle = (float)entity.getEntityVerticalA();
-
             float addCoordinates = 0;
 
-            float adjustedDistance = (float)hitPoint.Distance / screen.Setting.Tile;
+            float ProjHeight = entityInfo.ProjCoeff / detectionInfo.DistanceToWallWithTile;
 
-            float ProjHeight = (float)entity.ProjCoeff / (float)hitPoint.Distance;
+            float mult = CalculateMultY(radius, ref addCoordinates);
 
-
-            float mult = calculateMultY(adjustedDistance, entityVertAngle, radius, ref addCoordinates);
-
-            return calculateTextureY(wall, ProjHeight, entityVertAngle, mult, addCoordinates);
+            return CalculateTextureY(wall, ProjHeight, mult, addCoordinates);
         }
     }
 }

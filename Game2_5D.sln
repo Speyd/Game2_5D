@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniMapLib", "MiniMapLib\Mi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BresenhamAlgorithm", "BresenhamAlgorithm\BresenhamAlgorithm.csproj", "{6C3F15AC-C5E5-47A9-A5AB-3040D9958B08}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FpsLib", "FpsLib\FpsLib.csproj", "{589256D3-7E3D-4774-B08C-E907356A44B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FpsLib", "FpsLib\FpsLib.csproj", "{589256D3-7E3D-4774-B08C-E907356A44B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

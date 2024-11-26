@@ -51,7 +51,7 @@ static void DrawPoint(RenderTexture renderTexture, Vector2f position, float radi
 Screen screen = new Screen(1500, 1000);
 
 screen.Window.SetActive(true);
-Map map = new Map(24, 23, screen.Setting.Tile);
+Map map = new Map(screen, 24, 23);
 map.addObstacleToMap(2, 2, map.Obstacles, Map.block);
 map.addObstacleToMap(2, 5, map.Obstacles, Map.block);
 
@@ -138,17 +138,17 @@ SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 map.addObstacleToMap(4, 2, map.Obstacles, sprite2);
 map.addObstacleToMap(4, 4, map.Obstacles, sprite);
 map.addObstacleToMap(4, 6, map.Obstacles, sprite1);
-TexturedWall wall = new TexturedWall(0, 0, 'a', @"Resources\Image\WallTexture\Wall1.png", t);
+TexturedWall wall = new TexturedWall(screen, 0, 0, 'a', @"Resources\Image\WallTexture\Wall1.png", t);
 map.addObstacleToMap(7, 7, map.Obstacles, wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
-map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'d', @"Resources\Image\WallTexture\Wall4.png", t));
-map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
-map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
+map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(screen, 0, 0,'d', @"Resources\Image\WallTexture\Wall4.png", t));
+map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(screen, 0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
+map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(screen, 0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
-map.addObstacleToMap(9, 8, map.Obstacles, new TexturedWall(Map.block));
-map.addObstacleToMap(9, 9, map.Obstacles, new TexturedWall(Map.block));
-map.addObstacleToMap(9, 10, map.Obstacles, new TexturedWall(Map.block));
+map.addObstacleToMap(9, 8, map.Obstacles, new TexturedWall(screen, Map.block));
+map.addObstacleToMap(9, 9, map.Obstacles, new TexturedWall(screen, Map.block));
+map.addObstacleToMap(9, 10, map.Obstacles, new TexturedWall(screen, Map.block));
 MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 1, @"Resources\Image\BorderMiniMap\Border.png");
 
 

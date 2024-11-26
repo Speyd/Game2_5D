@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MapLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d9705e4755c47e3f8020ebb7b7ca6bb610655764")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43392d9b5f0a09ecae8976051cfe34eb61c8cabe")]
 [assembly: System.Reflection.AssemblyProductAttribute("MapLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MapLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
