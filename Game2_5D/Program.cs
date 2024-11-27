@@ -26,7 +26,6 @@ using System.Data.Common;
 using MiniMapLib;
 using FpsLib;
 using ObstacleLib;
-using MapLib.Obstacles.DiversityObstacle;
 using System.Reflection.Metadata;
 using MiniMapLib.SettingMap;
 using ObstacleLib.Render.Texture;
@@ -34,6 +33,7 @@ using ControlLib;
 using BresenhamAlgorithm;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using Render.InterfaceRender;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 const int mapScale = 5;
 static void DrawPoint(RenderTexture renderTexture, Vector2f position, float radius)
@@ -52,8 +52,8 @@ Screen screen = new Screen(1500, 1000);
 
 screen.Window.SetActive(true);
 Map map = new Map(screen, 24, 23);
-map.addObstacleToMap(2, 2, map.Obstacles, Map.block);
-map.addObstacleToMap(2, 5, map.Obstacles, Map.block);
+map.AddObstacleToMap(2, 2, map.Obstacles, Map.block);
+map.AddObstacleToMap(2, 5, map.Obstacles, Map.block);
 
 int t = screen.Setting.Tile;
 List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
@@ -96,9 +96,12 @@ SpriteObstacle sprite = new SpriteObstacle(0, 0, 'S', @"Resources\Image\Sprite\G
 {
     setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
     {
-        ScaleMultSprite = 64,
+        ScaleMultSprite = 64
+    },
+    CurrentAnimation = new AnimationState()
+    {
         IsAnimation = true,
-        AnimationSpeed = 30,     
+        Speed = 30,     
     }
 };
 SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
@@ -106,7 +109,6 @@ SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
     setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
     {
         ScaleMultSprite = 100,
-        IsAnimation = false
     }
 };
 
@@ -115,9 +117,12 @@ SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
     setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
     {
         ScaleMultSprite = 100,
-        AnimationSpeed = 15,
+        ShiftCubedZ = -200  
+    },
+    CurrentAnimation = new AnimationState()
+    {
         IsAnimation = true,
-        ShiftCubedZ = -200
+        Speed = 15,
     }
 };
 
@@ -135,26 +140,26 @@ SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 //screen.Window.Display();
 //while (true) ;
 
-map.addObstacleToMap(4, 2, map.Obstacles, sprite2);
-map.addObstacleToMap(4, 4, map.Obstacles, sprite);
-map.addObstacleToMap(4, 6, map.Obstacles, sprite1);
+map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
+map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
+map.AddObstacleToMap(4, 6, map.Obstacles, sprite1);
 TexturedWall wall = new TexturedWall(screen, 0, 0, 'a', @"Resources\Image\WallTexture\Wall1.png", t);
-map.addObstacleToMap(7, 7, map.Obstacles, wall);
+map.AddObstacleToMap(7, 7, map.Obstacles, wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
-map.addObstacleToMap(7, 11, map.Obstacles, new TexturedWall(screen, 0, 0,'d', @"Resources\Image\WallTexture\Wall4.png", t));
-map.addObstacleToMap(7, 13, map.Obstacles, new TexturedWall(screen, 0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
-map.addObstacleToMap(7, 2, map.Obstacles, new TexturedWall(screen, 0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
+map.AddObstacleToMap(7, 11, map.Obstacles, new TexturedWall(screen, 0, 0,'d', @"Resources\Image\WallTexture\Wall4.png", t));
+map.AddObstacleToMap(7, 13, map.Obstacles, new TexturedWall(screen, 0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
+map.AddObstacleToMap(7, 2, map.Obstacles, new TexturedWall(screen, 0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
-map.addObstacleToMap(9, 8, map.Obstacles, new TexturedWall(screen, Map.block));
-map.addObstacleToMap(9, 9, map.Obstacles, new TexturedWall(screen, Map.block));
-map.addObstacleToMap(9, 10, map.Obstacles, new TexturedWall(screen, Map.block));
+map.AddObstacleToMap(9, 8, map.Obstacles, new TexturedWall(screen, Map.block));
+map.AddObstacleToMap(9, 9, map.Obstacles, new TexturedWall(screen, Map.block));
+map.AddObstacleToMap(9, 10, map.Obstacles, new TexturedWall(screen, Map.block));
 MiniMap mapMini = new MiniMap(screen, map, Color.Blue, MiniMapLib.SettingMap.Positions.UpperRightCorner, 5, 1, @"Resources\Image\BorderMiniMap\Border.png");
 
 
 Control control = new Control(map, screen, mapMini.Setting);
 Player player = new Player(screen, 1500);
-player.OnControlAction = control.makePressed;
+player.OnControlAction = control.MakePressed;
 
 Algorithm algorithm = new Algorithm(screen, map, player, new Render.ResultAlgorithm.Result(), new ZBuffer(screen));
 
@@ -168,18 +173,18 @@ try
         screen.Window.DispatchEvents();
         screen.Window.Clear(Color.Black);
 
-        fpsChecker.startRead();
+        fpsChecker.StartRead();
 
-        player.OnControlAction(fpsChecker.getDeltaTime(), player);
-        RenderPartsWorld.renderPartsWorld(screen, player);
-
-
-        algorithm.calculationAlgorithm();
+        player.OnControlAction(fpsChecker.GetDeltaTime(), player);
+        RenderPartsWorld.Render(screen, player);
 
 
-        fpsChecker.endRead(screen);
+        algorithm.CalculationAlgorithm();
 
-        mapMini.render(player.getEntityX(), player.getEntityY(), player.getEntityA());
+
+        fpsChecker.EndRead(screen);
+
+        mapMini.Render(player.GetEntityX(), player.GetEntityY(), player.GetEntityA());
 
         CircleShape point = new CircleShape(3)
         {

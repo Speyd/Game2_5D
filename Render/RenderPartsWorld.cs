@@ -26,17 +26,17 @@ namespace Render.RenderPartsWorld
         private const int stretchingTexture = -5;
 
 
-        private static void setCoordinate(ref int topRectHeight, ref int bottomRectHeight,
+        private static void SetCoordinate(ref int topRectHeight, ref int bottomRectHeight,
             Screen screen, Player player)
         {
-            if (player.getEntityVerticalA() > 0)
+            if (player.GetEntityVerticalA() > 0)
             {
-                topRectHeight = (int)(screen.Setting.HalfHeight / (1 + 1 * player.getEntityVerticalA()));
+                topRectHeight = (int)(screen.Setting.HalfHeight / (1 + 1 * player.GetEntityVerticalA()));
                 bottomRectHeight = screen.ScreenHeight - topRectHeight;
             }
-            else if (player.getEntityVerticalA() < 0)
+            else if (player.GetEntityVerticalA() < 0)
             {
-                topRectHeight = (int)(screen.Setting.HalfHeight * (1 + 1 * -player.getEntityVerticalA()));
+                topRectHeight = (int)(screen.Setting.HalfHeight * (1 + 1 * -player.GetEntityVerticalA()));
                 bottomRectHeight = screen.ScreenHeight - bottomRectHeight;
             }
             else
@@ -46,7 +46,7 @@ namespace Render.RenderPartsWorld
             }
         }
 
-        private static void renderBottomRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
+        private static void RenderBottomRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
         {
             if (bottomTexture is not null)
             {
@@ -69,12 +69,12 @@ namespace Render.RenderPartsWorld
             }
         }
 
-        private static void renderTopRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
+        private static void RenderTopRect(ref int topRectHeight, ref int bottomRectHeight, Screen screen, Player player)
         {
             if (skyTexture is not null)
             {
                 skyTexture.Repeated = true;
-                float skyOffset = (float)(stretchingTexture * (player.getEntityA() * (180 / (float)Math.PI)) % screen.ScreenWidth);
+                float skyOffset = (float)(stretchingTexture * (player.GetEntityA() * (180 / (float)Math.PI)) % screen.ScreenWidth);
 
                 Sprite topRect = new Sprite(skyTexture);
 
@@ -101,23 +101,23 @@ namespace Render.RenderPartsWorld
                 screen.Window.Draw(filledRectangle);
             }
         }
-        public static void renderPartsWorld(Screen screen, Player player)
+        public static void Render(Screen screen, Player player)
         {
             int topRectHeight = 0;
             int bottomRectHeight = 0;
 
-            setCoordinate(ref topRectHeight, ref bottomRectHeight, screen, player);
+            SetCoordinate(ref topRectHeight, ref bottomRectHeight, screen, player);
 
-            renderTopRect(ref topRectHeight, ref bottomRectHeight, screen, player);
-            renderBottomRect(ref topRectHeight, ref bottomRectHeight, screen, player);
+            RenderTopRect(ref topRectHeight, ref bottomRectHeight, screen, player);
+            RenderBottomRect(ref topRectHeight, ref bottomRectHeight, screen, player);
         }
 
 
-        public static void setSkyTexture(Texture texture)
+        public static void SetSkyTexture(Texture texture)
         {
             skyTexture = texture;
         }
-        public static void setBottomTexture(Texture texture)
+        public static void SetBottomTexture(Texture texture)
         {
             bottomTexture = texture;
         }

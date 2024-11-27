@@ -48,9 +48,9 @@ namespace MapLib.Obstacles
             this.isPassability = isPassability;
         }
 
-        public abstract void blackoutObstacle(double depth);
-        public abstract void fillingMiniMapShape(RectangleShape rectangleShape);
-        public abstract void render(Screen screen, Result result, Entity entity);
-        public abstract float normalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
+        public abstract void BlackoutObstacle(double depth);
+        public abstract void FillingMiniMapShape(RectangleShape rectangleShape);
+        public abstract void Render(Screen screen, Result result, Entity entity);
+        public abstract float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
     }
 }

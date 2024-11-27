@@ -9,6 +9,6 @@ namespace Render.InterfaceRender
 {
     public interface IWall
     {
-        float calcCooX(double ray, Screen screen);
+        float CalcCooX(double ray, Screen screen);
     }
 }

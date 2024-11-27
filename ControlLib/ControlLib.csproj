@@ -10,6 +10,7 @@
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
+    <ProjectReference Include="..\TextureWallCollisionDetection\TextureWallCollisionDetection.csproj" />
   </ItemGroup>
 
 </Project>

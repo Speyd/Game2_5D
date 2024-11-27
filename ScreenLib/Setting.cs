@@ -37,7 +37,6 @@ namespace ScreenLib.SettingScreen
             float CenterRay1 = (int)(AmountRays / 2) - 1;
             double rayAngleRadians = -60 / 2 + ((double)CenterRay1 / AmountRays) * 60;
 
-            // Переводим угол в радианы
             CenterRay = rayAngleRadians * (Math.PI / 180);
         }
     }

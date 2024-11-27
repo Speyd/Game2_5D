@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using ScreenLib;
 using SFML.Graphics;
 using System;
@@ -33,7 +34,7 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
             Top = (float)wall.Y;
             Bottom = (float)wall.Y + screen.Setting.Tile;
 
-            TextureHeight = wall.TextureObst.TextureHeight;
+            TextureHeight = wall.BaseTexture.TextureHeight;
         }
 
         public WallInfo()
@@ -49,7 +50,7 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
             Top = (float)wall.Y;
             Bottom = (float)wall.Y + screen.Setting.Tile;
 
-            TextureHeight = wall.TextureObst.TextureHeight;
+            TextureHeight = wall.BaseTexture.TextureHeight;
         }
     }
 }

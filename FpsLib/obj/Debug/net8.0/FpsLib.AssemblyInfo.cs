@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FpsLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+43392d9b5f0a09ecae8976051cfe34eb61c8cabe")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e133ecfdf7488fb492b40dd78711d76e76ef2c84")]
 [assembly: System.Reflection.AssemblyProductAttribute("FpsLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FpsLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

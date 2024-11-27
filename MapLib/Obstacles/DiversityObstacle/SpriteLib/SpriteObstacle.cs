@@ -28,8 +28,16 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
     {
         public static List<SpriteObstacle> spritesToRender = new List<SpriteObstacle>();
 
+        public List<TextureObstacle> Textures { get; init; } = new List<TextureObstacle> { };
+        public TextureObstacle? TextureInMap { get; set; } = null;
 
-        private RenderSpriteOpertion renderOperation;
+        public AnimationState CurrentAnimation { get; set; } = new AnimationState();
+        public TextureObstacle? CurrentRenderTexture { get; set; } = null;
+
+        public SFML.Graphics.Sprite RenderSprite { get; set; } = new SFML.Graphics.Sprite();
+
+        private RenderSpriteOpertion renderOperation = new RenderSpriteOpertion();
+        private AddSprite addSprite = new AddSprite();
         public Setting setting;
 
 
@@ -37,16 +45,16 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         public double WallX { get => setWallX(X); }
         private double setWallX(double value)
         {
-            if (renderOperation.CurrentTexture != null)
-                return value + setting.ShiftCubedX / 100 * renderOperation.CurrentTexture.ScreenScale;
+            if (CurrentRenderTexture != null)
+                return value + setting.ShiftCubedX / 100 * CurrentRenderTexture.ScreenScale;
             else
                 return value;
         }
         public double WallY { get => setWallY(Y); }
         private double setWallY(double value)
         {
-            if (renderOperation.CurrentTexture != null)
-                return value + setting.ShiftCubedY / 100 * renderOperation.CurrentTexture.ScreenScale;
+            if (CurrentRenderTexture != null)
+                return value + setting.ShiftCubedY / 100 * CurrentRenderTexture.ScreenScale;
             else
                 return value;
         }
@@ -61,8 +69,9 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             bool isPassability = false)
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
-            setting = new Setting();     
-            renderOperation = new RenderSpriteOpertion(this, null, textures);
+            setting = new Setting();
+            foreach(var texture in textures)
+                addSprite.AddTexture(this, texture);
         }
         public SpriteObstacle(double x, double y,
             char symbol, TextureObstacle texture,
@@ -70,7 +79,8 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
            : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             setting = new Setting();
-            renderOperation = new RenderSpriteOpertion(this, null, texture);
+
+            addSprite.AddTexture(this, texture);
         }
         public SpriteObstacle(double x, double y,
             char symbol, string path,
@@ -78,28 +88,29 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
            : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
         {
             setting = new Setting();
-            renderOperation = new RenderSpriteOpertion(this, null, path, screenTile);
+
+            addSprite.AddTexture(this, path, screenTile);
         }
         #endregion
-        public override void blackoutObstacle(double depth)
+
+        #region IRenderableImplementation
+        public override void BlackoutObstacle(double depth)
         {
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            if (renderOperation.CurrentTexture != null && renderOperation.CurrentTexture.Texture != null)
-                renderOperation.SpriteObst.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+            if (CurrentRenderTexture != null && CurrentRenderTexture.Texture != null)
+                RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
-        public override void fillingMiniMapShape(RectangleShape rectangleShape)
+        public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {
             rectangleShape.OutlineThickness = 0;
 
-            if (renderOperation.Textures.Count > 0 && renderOperation.Textures[0] is not null)
-                rectangleShape.Texture = renderOperation.Textures[0].Texture;
+            if (Textures.Count > 0 && Textures[0] is not null)
+                rectangleShape.Texture = Textures[0].Texture;
             else
                 rectangleShape.FillColor = ColorInMap;
         }
-
-        #region Render
-        public override float normalizePositionY(Screen screen, double angleVertical, float addVariable = 0)
+        public override float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
                 return (float)(screen.Setting.HalfHeight - screen.Setting.HalfHeight * angleVertical - addVariable);
@@ -110,36 +121,37 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 return (float)(screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
-        public override void render(Screen screen, Result result, Entity entity)
+        #endregion
+
+        public override void Render(Screen screen, Result result, Entity entity)
         {
-            double spriteAngle = renderOperation.calculationAngularDistance(entity);
+            double spriteAngle = renderOperation.CalculationAngularDistance(this, entity);
             if (Distance > entity.MaxDistance)
                 return;
 
-            Angle = renderOperation.calculationSpriteAngle(entity.getEntityA(), spriteAngle);
+            Angle = renderOperation.CalculationSpriteAngle(entity.GetEntityA(), spriteAngle);
 
             if (Angle < entity.EntityFov / 2)
             {
-                renderOperation.definingDesiredSprite(spriteAngle);
+                renderOperation.DefiningDesiredSprite(this, spriteAngle);
 
                 int sprite_X_Position = (int)(screen.ScreenWidth / 2 * (1 + Angle / (entity.EntityFov / 2)));
 
                 double safeDistance = Math.Max(Distance, 0.1);
                 int spriteHeight = (int)(screen.ScreenHeight / safeDistance * setting.ScaleMultSprite);
 
-                renderOperation.drawSprite(screen, entity.getEntityVerticalA(), sprite_X_Position, spriteHeight);
+                renderOperation.DrawSprite(screen, this, entity.GetEntityVerticalA(), sprite_X_Position, spriteHeight);
             }
         }
-        public static void renderSprites(Screen screen, Result result, Entity entity)
+        public static void RenderSprites(Screen screen, Result result, Entity entity)
         {
             var sortedSprites = spritesToRender
                 .OrderByDescending(sprite => sprite.Distance)
                 .ToList();
             foreach (var sprite in sortedSprites)
             {
-                sprite.render(screen, result, entity);
+                sprite.Render(screen, result, entity);
             }
         }
-        #endregion
     }
 }

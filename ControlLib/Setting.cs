@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ControlLib
 {
-    internal class Setting
+    public class Setting
     {
         //Speed
         public double moveSpeed;

@@ -1,5 +1,6 @@
 ﻿using EntityLib;
 using MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using MapLib.Obstacles.Texture;
 using Render.InterfaceRender;
 using ScreenLib;
@@ -24,55 +25,50 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
             if (entityInfo.CosAngle != 0)
             {
                 float tVerticalLeft = (wallInfo.Left - entityInfo.X) / entityInfo.CosAngle;
-                float tVerticalRight = (wallInfo.Right - entityInfo.X) / entityInfo.CosAngle;
-
-                float hitYLeft = entityInfo.Y + tVerticalLeft * entityInfo.SinAngle;
-                float hitYRight = entityInfo.Y + tVerticalRight * entityInfo.SinAngle;
-
-                if (hitYLeft >= wallInfo.Top && hitYLeft <= wallInfo.Bottom && tVerticalLeft >= 0)
+                if (tVerticalLeft >= 0)
                 {
-                    tempValue = tVerticalLeft;
+                    float hitYLeft = entityInfo.Y + tVerticalLeft * entityInfo.SinAngle;
+                    if (hitYLeft >= wallInfo.Top && hitYLeft <= wallInfo.Bottom)
+                        tempValue = tVerticalLeft;
                 }
 
-                if (hitYRight >= wallInfo.Top && hitYRight <= wallInfo.Bottom && tVerticalRight >= 0)
+                float tVerticalRight = (wallInfo.Right - entityInfo.X) / entityInfo.CosAngle;
+                if (tVerticalRight >= 0)
                 {
-                    tempValue = Math.Min(tempValue, tVerticalRight);
+                    float hitYRight = entityInfo.Y + tVerticalRight * entityInfo.SinAngle;
+                    if (hitYRight >= wallInfo.Top && hitYRight <= wallInfo.Bottom)
+                        tempValue = Math.Min(tempValue, tVerticalRight);
                 }
             }
-
             if (entityInfo.SinAngle != 0)
             {
                 float tHorizontalTop = (wallInfo.Top - entityInfo.Y) / entityInfo.SinAngle;
-                float tHorizontalBottom = (wallInfo.Bottom - entityInfo.Y) / entityInfo.SinAngle;
-
-                float hitXTop = entityInfo.X + tHorizontalTop * entityInfo.CosAngle;
-                float hitXBottom = entityInfo.X + tHorizontalBottom * entityInfo.CosAngle;
-
-                if (hitXTop >= wallInfo.Left && hitXTop <= wallInfo.Right && tHorizontalTop >= 0)
+                if (tHorizontalTop >= 0)
                 {
-                    tempValue = Math.Min(tempValue, tHorizontalTop);
+                    float hitXTop = entityInfo.X + tHorizontalTop * entityInfo.CosAngle;
+                    if (hitXTop >= wallInfo.Left && hitXTop <= wallInfo.Right)
+                        tempValue = Math.Min(tempValue, tHorizontalTop);
                 }
 
-                if (hitXBottom >= wallInfo.Left && hitXBottom <= wallInfo.Right && tHorizontalBottom >= 0)
+                float tHorizontalBottom = (wallInfo.Bottom - entityInfo.Y) / entityInfo.SinAngle;
+                if (tHorizontalBottom >= 0)
                 {
-                    tempValue = Math.Min(tempValue, tHorizontalBottom);
+                    float hitXBottom = entityInfo.X + tHorizontalBottom * entityInfo.CosAngle;
+                    if (hitXBottom >= wallInfo.Left && hitXBottom <= wallInfo.Right)
+                        tempValue = Math.Min(tempValue, tHorizontalBottom);
                 }
             }
-
 
             if (tempValue == float.MaxValue)
-            {
                 return new Vector2f(-1, -1);
-            }
 
-            float hitX = (float)(entityInfo.X + tempValue * entityInfo.CosAngle) - (int)wallInfo.X;
-            float hitY = (float)(entityInfo.Y + tempValue * entityInfo.SinAngle) - (int)wallInfo.Y;
-
-
+            float hitX = entityInfo.X + tempValue * entityInfo.CosAngle - wallInfo.X;
+            float hitY = entityInfo.Y + tempValue * entityInfo.SinAngle - wallInfo.Y;
             distanceToPoint = tempValue / screen.Setting.Tile;
 
             return new Vector2f(hitX, hitY);
         }
+
         private TextureWallSide DetermineWallSide()
         {
             if (entityInfo.Y >= wallInfo.Top && entityInfo.Y <= wallInfo.Bottom)
@@ -158,29 +154,29 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
         }
 
 
-        public void refreshData(Entity entity, TexturedWall wall)
+        public void RefreshData(Entity entity, TexturedWall wall)
         {
             entityInfo.RefreshData(entity);
             wallInfo.RefreshData(screen, wall);
         }
 
-        public void refreshData(Entity entity, double angle, TexturedWall wall)
+        public void RefreshData(Entity entity, double angle, TexturedWall wall)
         {
             entityInfo.RefreshData(entity, angle);
             wallInfo.RefreshData(screen, wall);
         }
-        public void refreshData(EntityInfo newEntityInfo, WallInfo newWallInfo)
+        public void RefreshData(EntityInfo newEntityInfo, WallInfo newWallInfo)
         {
             entityInfo = newEntityInfo;
             wallInfo = newWallInfo;
         }
 
-        public void refreshData(Entity entity)
+        public void RefreshData(Entity entity)
         {
             entityInfo.RefreshData(entity);
         }
 
-        public void refreshData(Entity entity, double angle)
+        public void RefreshData(Entity entity, double angle)
         {
             entityInfo.RefreshData(entity, angle);
         }

@@ -25,7 +25,7 @@ namespace ObstacleLib.Render.Texture
 
             return imageExtensions.Contains(extension);
         }
-        public static void isTruePath(string path)
+        public static void IsTruePath(string path)
         {
             if (!IsImageFile(path))
                 throw new Exception("Error file extensions(non photo or texture)");
@@ -35,14 +35,14 @@ namespace ObstacleLib.Render.Texture
 
         public TextureObstacle(string path, int screenTile)
         {
-            isTruePath(path);
+            IsTruePath(path);
 
             ScreenScale = screenTile;
 
             Texture = new SFML.Graphics.Texture(path);
             TextureWidth = Texture.Size.X;
             TextureHeight = Texture.Size.Y;
-            setTile(screenTile);
+            SetTile(screenTile);
 
             PixelCount = TextureWidth * TextureHeight;
         }
@@ -53,7 +53,7 @@ namespace ObstacleLib.Render.Texture
             Texture = texture;
             TextureWidth = texture.Size.X;
             TextureHeight = texture.Size.Y;
-            setTile(screenTile);
+            SetTile(screenTile);
 
             PixelCount = TextureWidth * TextureHeight;
         }
@@ -70,16 +70,16 @@ namespace ObstacleLib.Render.Texture
             PixelCount = TextureWidth * TextureHeight;
         }
 
-        public void setTexture(string path, int screenTile)
+        public void SetTexture(string path, int screenTile)
         {
             try
             {
-                isTruePath(path);
+                IsTruePath(path);
 
                 Texture = new SFML.Graphics.Texture(path);
                 TextureWidth = Texture.Size.X;
                 TextureHeight = Texture.Size.Y;
-                setTile(screenTile);
+                SetTile(screenTile);
             }
             catch (Exception ex)
             {
@@ -87,7 +87,7 @@ namespace ObstacleLib.Render.Texture
             }
         }
 
-        public void setTile(int screenTile)
+        public void SetTile(int screenTile)
         {
             if (screenTile != 0)
                 TextureScale = (int)(TextureWidth / screenTile);
@@ -95,7 +95,7 @@ namespace ObstacleLib.Render.Texture
                 TextureScale = 1;
         }
         
-        public static SFML.Graphics.IntRect setOffset(int offset, int screenTile, TextureObstacle texture)
+        public static SFML.Graphics.IntRect SetOffset(int offset, int screenTile, TextureObstacle texture)
         {
             int left = offset * texture.TextureScale;
             int top = 0;

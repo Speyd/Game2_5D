@@ -23,14 +23,14 @@ namespace FpsLib
             fromNow = from;
         }
 
-        public void startRead()
+        public void StartRead()
         {
             DateTime dateTime = DateTime.Now;
             double elapsed = (dateTime - fromNow).TotalSeconds;
             fromNow = DateTime.Now;
         }
 
-        public void endRead(Screen screen)
+        public void EndRead(Screen screen)
         {
             deltaTime = clock.Restart().AsSeconds();
             fps = 1.0f / deltaTime;
@@ -47,6 +47,6 @@ namespace FpsLib
             screen.Window.Draw(renderText);
         }
 
-        public float getDeltaTime() => deltaTime;
+        public float GetDeltaTime() => deltaTime;
     }
 }

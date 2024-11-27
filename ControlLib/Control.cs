@@ -16,7 +16,8 @@ using SixLabors.ImageSharp;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Render.ResultAlgorithm;
-using ControlLib.TextureCollisionDetection;
+using TextureWallCollisionDetection;
+
 
 namespace ControlLib
 {
@@ -40,19 +41,19 @@ namespace ControlLib
 
             setting = new Setting(minDistanceFromWall, mouseSensitivity);
             collision = new Collision(screen, map, setting);
-            collisionDet = new CollisionDetection(screen, setting, map);
+            collisionDet = new CollisionDetection(screen, map, setting.maxVerticalAngle);
 
             screen.Window.SetMouseCursorVisible(false);
             screen.Window.MouseMoved += OnMouseMoved;
         }
 
         #region Mouse
-        private void setAngleMouse(Vector2i currentMousePosition)
+        private void SetAngleMouse(Vector2i currentMousePosition)
         {
             int actualMousePositionX = currentMousePosition.X - screen.Setting.HalfWidth;
             setting.angle += actualMousePositionX * setting.mouseSensitivity;
         }
-        private void setVerticalAngleMouse(Vector2i currentMousePosition)
+        private void SetVerticalAngleMouse(Vector2i currentMousePosition)
         {
             int actualMousePositionY = currentMousePosition.Y - screen.Setting.HalfHeight;
             setting.verticalAngle = (float)Math.Clamp(setting.verticalAngle, setting.minVerticalAngle, setting.maxVerticalAngle);
@@ -67,48 +68,48 @@ namespace ControlLib
             Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
             Mouse.SetPosition(new Vector2i(screen.Setting.HalfWidth, screen.Setting.HalfHeight), screen.Window);
 
-            setAngleMouse(currentMousePosition);
-            setVerticalAngleMouse(currentMousePosition);
+            SetAngleMouse(currentMousePosition);
+            SetVerticalAngleMouse(currentMousePosition);
         }
         #endregion
-        private void move(Entity entity, double directionX, double directionY)
+        private void Move(Entity entity, double directionX, double directionY)
         {
-            double rx = Math.Cos(entity.getEntityA()) * directionX - Math.Sin(entity.getEntityA()) * directionY;
-            double ry = Math.Sin(entity.getEntityA()) * directionX + Math.Cos(entity.getEntityA()) * directionY;
+            double rx = Math.Cos(entity.GetEntityA()) * directionX - Math.Sin(entity.GetEntityA()) * directionY;
+            double ry = Math.Sin(entity.GetEntityA()) * directionX + Math.Cos(entity.GetEntityA()) * directionY;
 
-            collision.isCollision(rx * setting.moveSpeed, ry * setting.moveSpeed, entity);
+            collision.IsCollision(rx * setting.moveSpeed, ry * setting.moveSpeed, entity);
         }
     
-        private void turnAngle(ref double playerA, int direction)
+        private void TurnAngle(ref double playerA, int direction)
         {
             playerA -= setting.moveSpeedAngel * direction;
         }
       
       
-        public void makePressed(double deltaTime, Entity entity)
+        public void MakePressed(double deltaTime, Entity entity)
         {
             double tempMoveSpeed = (100 * deltaTime);
 
-            entity.getEntityA() = setting.angle % (2 * Math.PI);
-            entity.getEntityVerticalA() = setting.verticalAngle;
+            entity.GetEntityA() = setting.angle % (2 * Math.PI);
+            entity.GetEntityVerticalA() = setting.verticalAngle;
 
             setting.moveSpeed = (float)(tempMoveSpeed - Math.Min(tempMoveSpeed - 0.6, (screen.Setting.AmountRays / screen.ScreenWidth)));
             setting.moveSpeedAngel = 1 * deltaTime;
 
             checkPressed.check();
             if (checkPressed.CurrentDirection.Forward)
-                move(entity, 1, 0);
+                Move(entity, 1, 0);
             if (checkPressed.CurrentDirection.Backward)
-                move(entity, -1, 0);
+                Move(entity, -1, 0);
             if (checkPressed.CurrentDirection.Left)
-                move(entity, 0, -1);
+                Move(entity, 0, -1);
             if (checkPressed.CurrentDirection.Right)
-                move(entity, 0, 1);
+                Move(entity, 0, 1);
 
             if (checkPressed.CurrentDirection.TurnLeft)
-                turnAngle(ref setting.angle, -1);
+                TurnAngle(ref setting.angle, -1);
             if (checkPressed.CurrentDirection.TurnRight)
-                turnAngle(ref setting.angle, 1);
+                TurnAngle(ref setting.angle, 1);
 
             if (checkPressed.CurrentDirection.ZoomMiniMap)
                 settingMiniMap.Zoom += 0.01f;
@@ -116,7 +117,7 @@ namespace ControlLib
                 settingMiniMap.Zoom -= 0.01f;
 
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                collisionDet.calculateHitPoint(entity);
+                collisionDet.DrawingOnWall(entity);
 
             if (checkPressed.CurrentDirection.Exit)
                 screen.Window.Close();

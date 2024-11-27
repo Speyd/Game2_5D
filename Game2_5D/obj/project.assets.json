@@ -885,7 +885,8 @@
         "dependencies": {
           "EntityLib": "1.0.0",
           "MapLib": "1.0.0",
-          "MiniMapLib": "1.0.0"
+          "MiniMapLib": "1.0.0",
+          "TextureWallCollisionDetection": "1.0.0"
         },
         "compile": {
           "bin/placeholder/ControlLib.dll": {}
@@ -978,6 +979,21 @@
         },
         "runtime": {
           "bin/placeholder/ScreenLib.dll": {}
+        }
+      },
+      "TextureWallCollisionDetection/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TextureWallCollisionDetection.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TextureWallCollisionDetection.dll": {}
         }
       }
     }
@@ -1393,6 +1409,11 @@
       "type": "project",
       "path": "../ScreenLib/ScreenLib.csproj",
       "msbuildProject": "../ScreenLib/ScreenLib.csproj"
+    },
+    "TextureWallCollisionDetection/1.0.0": {
+      "type": "project",
+      "path": "../TextureWallCollisionDetection/TextureWallCollisionDetection.csproj",
+      "msbuildProject": "../TextureWallCollisionDetection/TextureWallCollisionDetection.csproj"
     }
   },
   "projectFileDependencyGroups": {

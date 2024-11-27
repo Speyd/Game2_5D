@@ -48,22 +48,22 @@ namespace MiniMapLib
             BorderMap = new Border(pathBorder);
         }
 
-        VertexArray renderLineSight(double entityA)
+        VertexArray RenderLineSight(double entityA)
         {
             Setting.line[0] = new Vertex(new Vector2f(Setting.centerX, Setting.centerY), Color.Green);
 
-            float endX = (float)(Setting.centerX - Setting.getSizeMainRayX() * Math.Cos(entityA));
-            float endY = (float)((Setting.centerY - Setting.getSizeMainRayY() * (Math.Sin(entityA))));
+            float endX = (float)(Setting.centerX - Setting.GetSizeMainRayX() * Math.Cos(entityA));
+            float endY = (float)((Setting.centerY - Setting.GetSizeMainRayY() * (Math.Sin(entityA))));
             Setting.line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
 
             return Setting.line;
         }
-        CircleShape renderEntityShape()
+        CircleShape RenderEntityShape()
         {
-            float x = Setting.centerX - Setting.getRadiusCircle();
-            float y = Setting.centerY - Setting.getRadiusCircle();
+            float x = Setting.centerX - Setting.GetRadiusCircle();
+            float y = Setting.centerY - Setting.GetRadiusCircle();
 
-            CircleShape entityShape = new CircleShape(Setting.getRadiusCircle())
+            CircleShape entityShape = new CircleShape(Setting.GetRadiusCircle())
             {
                 FillColor = Color.Red,
                 Position = new Vector2f(x, y)
@@ -71,7 +71,7 @@ namespace MiniMapLib
             return entityShape;
         }
 
-        void renderObstacle(double mapX, double mapY)
+        void RenderObstacle(double mapX, double mapY)
         {
             foreach (var obstacle in map.Obstacles)
             {
@@ -80,11 +80,11 @@ namespace MiniMapLib
 
                 RectangleShape rectangleShape = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
 
-                obstacle.Value.fillingMiniMapShape(rectangleShape);
+                obstacle.Value.FillingMiniMapShape(rectangleShape);
                 rectangleShape.Position = new Vector2f
                     (
-                        (float)(Setting.centerX - (x - mapX) - Setting.getMiniMapSlowdownFactor()),
-                        (float)(Setting.centerY - (y - mapY) - Setting.getMiniMapSlowdownFactor())
+                        (float)(Setting.centerX - (x - mapX) - Setting.GetMiniMapSlowdownFactor()),
+                        (float)(Setting.centerY - (y - mapY) - Setting.GetMiniMapSlowdownFactor())
                     );
 
                 Window.WindowMap.Draw(rectangleShape);
@@ -92,19 +92,15 @@ namespace MiniMapLib
         }
         public void ZoomToCoordinate(float targetX, float targetY)
         {
-            // Создаём View с размерами окна для миникарты
             View view = new View(new FloatRect(0, 0, Window.WindowMap.Size.X, Window.WindowMap.Size.Y));
 
-            // Устанавливаем центр View на целевую координату (targetX, targetY)
             view.Center = new Vector2f(targetX, targetY);
 
-            // Применяем масштабирование (зум)
             view.Zoom(Setting.Zoom);
 
-            // Устанавливаем этот View для окна отрисовки миникарты
             Window.WindowMap.SetView(view);
         }
-        void drawDebugGrid()
+        void DrawDebugGrid()
         {
             int gridSize = 20;
             for (int i = 0; i < Window.WindowMap.Size.X; i += gridSize)
@@ -122,7 +118,7 @@ namespace MiniMapLib
                 Window.WindowMap.Draw(line);
             }
         }
-        void drawMiniMapBorder()
+        void DrawMiniMapBorder()
         {
             if (BorderMap.borderTexture is null)
                 return;
@@ -146,7 +142,7 @@ namespace MiniMapLib
             BorderMapWindow.WindowMap.Draw(BorderMap.borderSprite);
             BorderMapWindow.WindowMap.Display();
         }
-        public void render(double entityX, double entityY, double entityA)
+        public void Render(double entityX, double entityY, double entityA)
         {
             int mapX = (int)(entityX / mapScale);
             int mapY = (int)(entityY / mapScale);
@@ -155,11 +151,11 @@ namespace MiniMapLib
             Window.WindowMap.Clear(fill);
 
 
-            Window.WindowMap.Draw(renderLineSight(entityA));
-            renderObstacle(mapX, mapY);
-            Window.WindowMap.Draw(renderEntityShape());
+            Window.WindowMap.Draw(RenderLineSight(entityA));
+            RenderObstacle(mapX, mapY);
+            Window.WindowMap.Draw(RenderEntityShape());
             ZoomToCoordinate(Setting.centerX, Setting.centerY);
-            drawMiniMapBorder();
+            DrawMiniMapBorder();
 
             Window.WindowMap.Display();
 

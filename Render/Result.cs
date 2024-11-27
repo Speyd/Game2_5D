@@ -21,7 +21,7 @@ namespace Render.ResultAlgorithm
         public int Ray { get; set; } = 0;
         public IRenderable obstacle { get; set; }
 
-        private void redefinitionValues(
+        private void RedefinitionValues(
             ref ValueTuple<IRenderable, IRenderable> obstacles,
             ref Entity entity,
             double depth_v, double depth_h,
@@ -44,7 +44,7 @@ namespace Render.ResultAlgorithm
             }
 
            
-            Depth *= Math.Cos(entity.getEntityA() - car_angle);
+            Depth *= Math.Cos(entity.GetEntityA() - car_angle);
             Depth = Math.Max(Depth, 0.1);
         }
 
@@ -54,7 +54,7 @@ namespace Render.ResultAlgorithm
             double hx, double vy,
             double car_angle)
         {
-            redefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
+            RedefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
 
             Ray = ray;
             CarAngle = car_angle;

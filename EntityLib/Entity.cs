@@ -55,12 +55,12 @@ namespace EntityLib
         }
 
 
-        public ref double getEntityY() => ref entityY;
+        public ref double GetEntityY() => ref entityY;
 
-        public ref double getEntityX() => ref entityX;
+        public ref double GetEntityX() => ref entityX;
 
-        public ref double getEntityA() => ref entityA;
-        public ref double getEntityVerticalA() => ref entityVerticalA;
+        public ref double GetEntityA() => ref entityA;
+        public ref double GetEntityVerticalA() => ref entityVerticalA;
 
 
         public (float x1, float y1) CalculateEndPoint()

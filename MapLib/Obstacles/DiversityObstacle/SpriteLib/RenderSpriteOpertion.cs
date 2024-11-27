@@ -16,95 +16,8 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
 {
     internal class RenderSpriteOpertion
     {
-        private SpriteObstacle sprite;
 
-        public List<TextureObstacle> Textures { get; init; }
-        private TextureObstacle TextureInMap { get; set; } = null;
-        public TextureObstacle CurrentTexture { get; set; } = null;
-
-        public SFML.Graphics.Sprite SpriteObst { get; set; } = new SFML.Graphics.Sprite();
-
-
-
-        public RenderSpriteOpertion(SpriteObstacle sprite, TextureObstacle textureInMap,
-            List<TextureObstacle> textures)
-        {
-            this.sprite = sprite;
-
-            TextureInMap = textureInMap;
-            Textures = textures;
-        }
-        public RenderSpriteOpertion(SpriteObstacle sprite, TextureObstacle textureInMap,
-            TextureObstacle texture)
-        {
-            this.sprite = sprite;
-
-            if (textureInMap is not null)
-                TextureInMap = textureInMap;
-            else
-                TextureInMap = texture;
-
-            Textures = new List<TextureObstacle>() { texture };
-        }
-        public RenderSpriteOpertion(SpriteObstacle sprite, TextureObstacle textureInMap,
-            string path, int screenTile)
-        {
-            this.sprite = sprite;
-
-            Textures = new List<TextureObstacle>();
-            addTexture(path, screenTile);
-        }
-
-
-
-        #region AddSprite
-        private void addGif(string gifPath, int screenTile)
-        {
-            try
-            {
-                using (SixLabors.ImageSharp.Image gifImage = SixLabors.ImageSharp.Image.Load(gifPath))
-                {
-                    int frameCount = gifImage.Frames.Count; // Количество кадров
-
-                    // Проходим по каждому кадру и добавляем его в Textures
-                    for (int i = 0; i < frameCount; i++)
-                    {
-                        using (var frame = gifImage.Frames.CloneFrame(i)) // Клонируем кадр
-                        using (var stream = new MemoryStream()) // Создаем поток
-                        {
-                            frame.SaveAsPng(stream);  // Сохраняем кадр как PNG в поток
-                            stream.Position = 0; // Сбрасываем указатель в начало
-
-                            // Создаем SFML текстуру из потока и добавляем в Textures
-                            var texture = new SFML.Graphics.Texture(stream);
-                            Textures.Add(new TextureObstacle(texture, screenTile));
-
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error when enabling gif: {ex.Message}");
-            }
-        }
-        public void addTexture(string path, int screenTile)
-        {
-            TextureObstacle.isTruePath(path);
-
-            if (Path.GetExtension(path)?.ToLower() == ".gif")
-                addGif(path, screenTile);
-            else
-                Textures.Add(new TextureObstacle(path, screenTile));
-
-            if (TextureInMap is null && Textures.Count > 0)
-                TextureInMap = Textures[0];
-        }
-        #endregion
-
-
-
-        public double calculationSpriteAngle(double playerAngle, double spriteAngle)
+        public double CalculationSpriteAngle(double playerAngle, double spriteAngle)
         {
             double angleDifference = spriteAngle - playerAngle;
             if (angleDifference > Math.PI)
@@ -114,45 +27,51 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
 
             return angleDifference;
         }
-        private void textureAnimation()
+        public void TextureAnimation(SpriteObstacle sprite)
         {
-            if (sprite.setting.CurrentAnimation.count > 0)
-                sprite.setting.CurrentAnimation = 
-                    (sprite.setting.CurrentAnimation.index, sprite.setting.CurrentAnimation.count - 1);
-            else
-                sprite.setting.CurrentAnimation = (sprite.setting.CurrentAnimation.index + 1, sprite.setting.AnimationSpeed);
+            var animation = sprite.CurrentAnimation;
 
-            if (sprite.setting.CurrentAnimation.index >= 0 && sprite.setting.CurrentAnimation.index < Textures.Count)
-                CurrentTexture = Textures[sprite.setting.CurrentAnimation.index];
-            else
-                sprite.setting.CurrentAnimation = (0, sprite.setting.CurrentAnimation.count);
+            animation.Count -= 1;
+            if (animation.Count <= 0)
+            {
+                animation.Index = (animation.Index + 1) % sprite.Textures.Count;
+                animation.Count = sprite.CurrentAnimation.Speed;
+            }
+
+            if (sprite.Textures.Count > 0)
+            {
+                sprite.CurrentRenderTexture = sprite.Textures[animation.Index];
+            }
+
+            sprite.CurrentAnimation = animation;
         }
-        private void textureNonAnimation(double spriteAngle)
+
+        public void TextureNonAnimation(SpriteObstacle sprite, double spriteAngle)
         {
             double spriteDegreeAngle = spriteAngle * (180.0 / Math.PI);
 
             if (spriteDegreeAngle < 0)
                 spriteDegreeAngle += 360;
 
-            int totalDirections = Textures.Count;
+            int totalDirections = sprite.Textures.Count;
             if (totalDirections == 0) return;
 
             double sectorSize = 360.0 / totalDirections;
 
             int textureIndex = (int)(spriteDegreeAngle / sectorSize) % totalDirections;
-            CurrentTexture = Textures[(totalDirections - 1 - textureIndex + totalDirections) % totalDirections];
+            sprite.CurrentRenderTexture = sprite.Textures[(totalDirections - 1 - textureIndex + totalDirections) % totalDirections];
         }
-        public void definingDesiredSprite(double spriteAngle)
+        public void DefiningDesiredSprite(SpriteObstacle sprite, double spriteAngle)
         {
-            if (sprite.setting.IsAnimation)
-                textureAnimation();
+            if (sprite.CurrentAnimation.IsAnimation)
+                TextureAnimation(sprite);
             else
-                textureNonAnimation(spriteAngle);
+                TextureNonAnimation(sprite, spriteAngle);
         }
-        public double calculationAngularDistance(Entity player)
+        public double CalculationAngularDistance(SpriteObstacle sprite, Entity player)
         {
-            double dx = sprite.WallX - player.getEntityX();
-            double dy = sprite.WallY - player.getEntityY();
+            double dx = sprite.WallX - player.GetEntityX();
+            double dy = sprite.WallY - player.GetEntityY();
             sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
 
             double spriteAngle = Math.Atan2(dy, dx);
@@ -160,23 +79,27 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
             return spriteAngle;
         }
 
-        public void drawSprite(Screen screen, double verticalAngle, int x, int height)
+        public void DrawSprite(Screen screen, SpriteObstacle sprite, double verticalAngle, int x, int height)
+        //verticalAngle - entity; x - sprite position; height - spriteHeight
         {
-            float scaledHeight = SpriteObst.GetGlobalBounds().Height + (float)(sprite.setting.ShiftCubedZ * (CurrentTexture.TextureHeight / sprite.Distance));
-            float y = sprite.normalizePositionY(screen, verticalAngle, scaledHeight / 2);
+            float scaledHeight = sprite.RenderSprite.GetGlobalBounds().Height;
+            scaledHeight += (float)(sprite.setting.ShiftCubedZ * (sprite.CurrentRenderTexture.TextureHeight / sprite.Distance));
 
-            SpriteObst = new SFML.Graphics.Sprite(CurrentTexture.Texture);
-            sprite.blackoutObstacle(sprite.Distance);
 
-            SpriteObst.Position = new Vector2f(x, y);
+            float y = sprite.NormalizePositionY(screen, verticalAngle, scaledHeight / 2);
 
-            SpriteObst.Scale = new Vector2f
+            sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.CurrentRenderTexture.Texture);
+            sprite.BlackoutObstacle(sprite.Distance);
+
+            sprite.RenderSprite.Position = new Vector2f(x, y);
+
+            sprite.RenderSprite.Scale = new Vector2f
                 (
-                (float)height / CurrentTexture.TextureWidth,
-                (float)height / CurrentTexture.TextureHeight
+                (float)height / sprite.CurrentRenderTexture.TextureWidth,
+                (float)height / sprite.CurrentRenderTexture.TextureHeight
                 );
 
-            ZBuffer.zBuffer.Add((SpriteObst, sprite.Distance));
+            ZBuffer.zBuffer.Add((sprite.RenderSprite, sprite.Distance));
         }
     }
 }

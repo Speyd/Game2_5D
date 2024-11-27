@@ -5,7 +5,7 @@ using ObstacleLib;
 using SFML.Graphics;
 using System.Collections.Generic;
 using MapLib.Obstacles;
-using MapLib.Obstacles.DiversityObstacle;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 namespace MapLib
 {
@@ -26,12 +26,12 @@ namespace MapLib
             Obstacles = new Dictionary<(int, int), Obstacle>();
 
             block = new TexturedWall(screen, 0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
-            block.TextureObst.setTile(screen.Setting.Tile);
+            block.BaseTexture.SetTile(screen.Setting.Tile);
 
-            creatMap(screen);
+            CreatMap(screen);
         }
 
-        private void refillingObstacles(Screen screen)
+        private void RefillingObstacles(Screen screen)
         {
             var tempObstacles = new Dictionary<(int, int), Obstacle>();
 
@@ -42,9 +42,9 @@ namespace MapLib
                     if (MapStr[y * Setting.MapWidth + x] != empty)
                     {
                         if(tempObstacles.ContainsKey((x, y)))
-                            addObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
+                            AddObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
                         else
-                            addObstacleToMap(x, y, tempObstacles, new TexturedWall(screen, block));
+                            AddObstacleToMap(x, y, tempObstacles, new TexturedWall(screen, block));
                     }
                         
                 }
@@ -52,9 +52,8 @@ namespace MapLib
 
             Obstacles = new Dictionary<(int, int), Obstacle>(tempObstacles);
         }
-        private string creatMap(Screen screen)
+        private void CreatMap(Screen screen)
         {
-            string tempMap = "";
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
 
@@ -64,12 +63,10 @@ namespace MapLib
             }
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
-            refillingObstacles(screen);
-
-            return tempMap;
+            RefillingObstacles(screen);
         }
 
-        public void addObstacleToMap(int x, int y,
+        public void AddObstacleToMap(int x, int y,
             Dictionary<(int, int), Obstacle> obstacles, Obstacle obstacle)
         {
             if (y < 0 || y >= Setting.MapHeight ||
@@ -88,7 +85,7 @@ namespace MapLib
             obstacles[(x, y)] = obstacle;
          
         }
-        public void deleteObstacleFromMap(int x, int y)
+        public void DeleteObstacleFromMap(int x, int y)
         {
 
             if (y <= 0 || y >= Setting.MapHeight - 1 ||
@@ -98,7 +95,7 @@ namespace MapLib
             Obstacles.Remove((x * Setting.ScreenTile, y * Setting.ScreenTile));
             MapStr[y * Setting.MapWidth + x] = empty;
         }
-        public ValueTuple<int, int> mapping(double x, double y, int tile)
+        public ValueTuple<int, int> Mapping(double x, double y, int tile)
         {
             return new ValueTuple<int, int>(
             (int)(x / tile) * tile,
@@ -112,7 +109,7 @@ namespace MapLib
             }
             return false;
         }
-        public List<ValueTuple<int, int>> getMapWorld(int TILE, Map map)
+        public List<ValueTuple<int, int>> GetMapWorld(int TILE, Map map)
         {
             List<ValueTuple<int, int>> values = new List<(int, int)>();
             for (int i = 0; i < map.Setting.MapHeight; i++)

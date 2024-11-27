@@ -58,75 +58,74 @@ namespace MiniMapLib.SettingMap
             this.zoom = zoom;
 
             mapTile = (screen.Setting.Tile / (int)mapScale);
-            radiusCircle = radiusCircle;
             miniMapSlowdownFactor = mapTile;
 
-            coorinatesPositionWindow = getPosition(screen, mapScale);
+            coorinatesPositionWindow = GetPosition(screen, mapScale);
             Zoom = zoom;
         }
 
-        private float getLowerY(Screen screen, double mapScale)
+        private float GetLowerY(Screen screen, double mapScale)
         {
             float mapHeight = screen.ScreenHeight / (float)mapScale;
             return screen.ScreenHeight - (mapHeight * (float)(Math.PI / 2));
         }
-        private float getLowerX(Screen screen, double mapScale)
+        private float GetLowerX(Screen screen, double mapScale)
         {
             float mapWidth = screen.ScreenWidth / (float)mapScale;
             return screen.ScreenWidth - (mapWidth / (float)(Math.PI / 2));
         }
 
-        private Vector2f getLowerLeftCorner(Screen screen, double mapScale)
+        private Vector2f GetLowerLeftCorner(Screen screen, double mapScale)
         {
-            return new Vector2f(0, getLowerY(screen, mapScale));
+            return new Vector2f(0, GetLowerY(screen, mapScale));
         }
 
-        private Vector2f getLowerRightCorner(Screen screen, double mapScale)
+        private Vector2f GetLowerRightCorner(Screen screen, double mapScale)
         {
-            return new Vector2f(getLowerX(screen, mapScale), getLowerY(screen, mapScale));
+            return new Vector2f(GetLowerX(screen, mapScale), GetLowerY(screen, mapScale));
         }
 
-        private Vector2f getUpperRightCorner(Screen screen, double mapScale)
+        private Vector2f GetUpperRightCorner(Screen screen, double mapScale)
         {
-            return new Vector2f(getLowerX(screen, mapScale), 0);
+            return new Vector2f(GetLowerX(screen, mapScale), 0);
         }
 
-        private Vector2f getUpperLeftCorner()
+        private Vector2f GetUpperLeftCorner()
         {
             return new Vector2f(0, 0);
         }
 
 
-        public Vector2f getPosition(Screen screen, double mapScale)
+        public Vector2f GetPosition(Screen screen, double mapScale)
         {
             Vector2f coorinatesPos = new Vector2f();
             switch (Positions) 
             { 
                 case Positions.LowerLeftCorner:
-                    coorinatesPos = getLowerLeftCorner(screen, mapScale); break;
+                    coorinatesPos = GetLowerLeftCorner(screen, mapScale); break;
                 case Positions.LowerRightCorner:
-                    coorinatesPos = getLowerRightCorner(screen, mapScale); break;
+                    coorinatesPos = GetLowerRightCorner(screen, mapScale); break;
                 case Positions.UpperRightCorner:
-                    coorinatesPos = getUpperRightCorner(screen, mapScale); break;
+                    coorinatesPos = GetUpperRightCorner(screen, mapScale); break;
                 case Positions.UpperLeftCorner:
-                    coorinatesPos = getUpperLeftCorner(); break;
+                    coorinatesPos = GetUpperLeftCorner(); break;
                 default:
-                    coorinatesPos = getUpperRightCorner(screen, mapScale); break;
+                    coorinatesPos = GetUpperRightCorner(screen, mapScale); break;
             }
 
             return coorinatesPos;
         }
 
-        public void setPositions(Screen screen, double mapScale, Positions positions)
+        public void SetPositions(Screen screen, double mapScale, Positions positions)
         {
             Positions = positions;
-            getPosition(screen, mapScale);
+            GetPosition(screen, mapScale);
         }
-        public int getSizeMainRayX() => sizeMainRayX;
-        public int getSizeMainRayY() => sizeMainRayY;
+        public int GetSizeMainRayX() => sizeMainRayX;
+        public int GetSizeMainRayY() => sizeMainRayY;
 
-        public float getMiniMapSlowdownFactor() => miniMapSlowdownFactor;
-        public int getRadiusCircle() => radiusCircle;
+        public float GetMiniMapSlowdownFactor() => miniMapSlowdownFactor;
+        public int GetRadiusCircle() => radiusCircle;
 
     }
 }

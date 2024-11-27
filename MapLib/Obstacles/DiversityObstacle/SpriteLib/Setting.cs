@@ -40,13 +40,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
 
         #endregion
 
-        public int AnimationSpeed { get; set; } = 50;
-        public (int index, int count) CurrentAnimation { get; set; }
-        public bool IsAnimation { get; set; } = false;
-
         public Setting()
-        {
-            CurrentAnimation = (0, AnimationSpeed);
-        }
+        { }
     }
 }

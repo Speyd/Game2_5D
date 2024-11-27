@@ -10,7 +10,8 @@
         "dependencies": {
           "EntityLib": "1.0.0",
           "MapLib": "1.0.0",
-          "MiniMapLib": "1.0.0"
+          "MiniMapLib": "1.0.0",
+          "TextureWallCollisionDetection": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {}
@@ -1021,6 +1022,16 @@
         "runtime": {
           "ScreenLib.dll": {}
         }
+      },
+      "TextureWallCollisionDetection/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "TextureWallCollisionDetection.dll": {}
+        }
       }
     }
   },
@@ -1100,6 +1111,11 @@
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TextureWallCollisionDetection/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -13,20 +13,20 @@ namespace ControlLib
     {
         public bool IsObstacle(double x, double y)
         {
-            var coords = map.mapping(x, y, screen.Setting.Tile);
+            var coords = map.Mapping(x, y, screen.Setting.Tile);
             return map.Obstacles.TryGetValue(coords, out var obstacle) && !obstacle.isPassability;
         }
 
-        public void isCollision(double nextX, double nextY, Entity entity)
+        public void IsCollision(double nextX, double nextY, Entity entity)
         {
             double deltaX = setting.minDistanceFromWall / 2 * Math.Sign(nextX);
             double deltaY = setting.minDistanceFromWall / 2 * Math.Sign(nextY);
 
-            if (nextX != 0 && !IsObstacle(entity.getEntityX() + nextX + deltaX, entity.getEntityY()))
-                entity.getEntityX() += nextX;
+            if (nextX != 0 && !IsObstacle(entity.GetEntityX() + nextX + deltaX, entity.GetEntityY()))
+                entity.GetEntityX() += nextX;
 
-            if (nextY != 0 && !IsObstacle(entity.getEntityX(), entity.getEntityY() + nextY + deltaY))
-                entity.getEntityY() += nextY;
+            if (nextY != 0 && !IsObstacle(entity.GetEntityX(), entity.GetEntityY() + nextY + deltaY))
+                entity.GetEntityY() += nextY;
         }
 
     }

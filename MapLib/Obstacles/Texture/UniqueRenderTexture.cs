@@ -23,27 +23,22 @@ namespace MapLib.Obstacles.Texture
 
         public bool Insert(KEY key, VALUE value)
         {
-            // Проверяем, есть ли уже такое значение
             if (valuesSet.Contains(value))
             {
-                return false; // Значение уже существует
+                return false;
             }
 
-            // Вставляем в Dictionary и HashSet
-            myMap[key] = value; // Если ключ уже существует, он будет обновлён
+            myMap[key] = value;
             valuesSet.Add(value);
             return true;
         }
 
         public VALUE? GetTexture(KEY key)
         {
-            // Используем метод TryGetValue для безопасного доступа к значению
             if (myMap.TryGetValue(key, out VALUE? value))
             {
-                return value; // Возвращаем текстуру, если ключ найден
+                return value;
             }
-
-            // Возвращаем null или другое значение по умолчанию, если ключ не найден
             return default(VALUE);
         }
 

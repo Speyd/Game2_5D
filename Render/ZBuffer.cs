@@ -13,7 +13,7 @@ namespace Render.ZBufferRender
     {
         static public List<(Drawable, double)> zBuffer = new List<(Drawable, double)>();
 
-        public void render()
+        public void Render()
         {
             zBuffer.Sort((a, b) => b.Item2.CompareTo(a.Item2));
 

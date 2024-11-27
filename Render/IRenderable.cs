@@ -15,9 +15,9 @@ namespace Render.InterfaceRender
     public interface IRenderable
     {
         public const double shadowMultiplier = 0.00001;
-        void blackoutObstacle(double depth);
-        void fillingMiniMapShape(RectangleShape rectangleShape);
-        void render(Screen screen, Result result, Entity entity);
-        float normalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
+        void BlackoutObstacle(double depth);
+        void FillingMiniMapShape(RectangleShape rectangleShape);
+        void Render(Screen screen, Result result, Entity entity);
+        float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
     }
 }

@@ -24,7 +24,7 @@ namespace EntityLib.Player
             :base(screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
         {}
 
-        public void makePressed(double deltaTime)
+        public void MakePressed(double deltaTime)
         {
             OnControlAction?.Invoke(deltaTime, this);
         }

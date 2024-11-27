@@ -39,7 +39,7 @@ namespace ScreenLib
             Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
         }
 
-        public void setSetting(int amountRays, int maxDepth, int tile)
+        public void SetSetting(int amountRays, int maxDepth, int tile)
         {
             Setting = new Setting(ScreenWidth, ScreenHeight, amountRays, maxDepth, tile);
         }
