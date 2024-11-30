@@ -753,6 +753,19 @@
           }
         }
       },
+      "NGenerics/1.5.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NGenerics.dll": {
+            "related": ".release.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NGenerics.dll": {
+            "related": ".release.xml"
+          }
+        }
+      },
       "SFML.Audio/2.6.0": {
         "type": "package",
         "dependencies": {
@@ -886,6 +899,8 @@
           "EntityLib": "1.0.0",
           "MapLib": "1.0.0",
           "MiniMapLib": "1.0.0",
+          "MoveLib": "1.0.0",
+          "TextField": "1.0.0",
           "TextureWallCollisionDetection": "1.0.0"
         },
         "compile": {
@@ -954,6 +969,22 @@
           "bin/placeholder/MiniMapLib.dll": {}
         }
       },
+      "MoveLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "FpsLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/MoveLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MoveLib.dll": {}
+        }
+      },
       "Render/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -972,6 +1003,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "NGenerics": "1.5.3",
           "SFML.Net": "2.6.0"
         },
         "compile": {
@@ -979,6 +1011,21 @@
         },
         "runtime": {
           "bin/placeholder/ScreenLib.dll": {}
+        }
+      },
+      "TextField/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "MapLib": "1.0.0",
+          "SFML.Net": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TextField.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TextField.dll": {}
         }
       },
       "TextureWallCollisionDetection/1.0.0": {
@@ -1241,6 +1288,19 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "NGenerics/1.5.3": {
+      "sha512": "yDJD4XEsvUzEg52HAyowTrnI3SGiPTczmOQYeBstEBMNizM/4okKMxb3n5HB6t7yGQoPYV3DItlGh7dAicJc/g==",
+      "type": "package",
+      "path": "ngenerics/1.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/NGenerics.dll",
+        "lib/netstandard2.0/NGenerics.release.xml",
+        "ngenerics.1.5.3.nupkg.sha512",
+        "ngenerics.nuspec"
+      ]
+    },
     "SFML.Audio/2.6.0": {
       "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
       "type": "package",
@@ -1400,6 +1460,11 @@
       "path": "../MiniMapLib/MiniMapLib.csproj",
       "msbuildProject": "../MiniMapLib/MiniMapLib.csproj"
     },
+    "MoveLib/1.0.0": {
+      "type": "project",
+      "path": "../MoveLib/MoveLib.csproj",
+      "msbuildProject": "../MoveLib/MoveLib.csproj"
+    },
     "Render/1.0.0": {
       "type": "project",
       "path": "../Render/Render.csproj",
@@ -1409,6 +1474,11 @@
       "type": "project",
       "path": "../ScreenLib/ScreenLib.csproj",
       "msbuildProject": "../ScreenLib/ScreenLib.csproj"
+    },
+    "TextField/1.0.0": {
+      "type": "project",
+      "path": "../TextField/TextField.csproj",
+      "msbuildProject": "../TextField/TextField.csproj"
     },
     "TextureWallCollisionDetection/1.0.0": {
       "type": "project",
@@ -1428,7 +1498,8 @@
       "SFML.Net >= 2.6.0",
       "ScreenLib >= 1.0.0",
       "SixLabors.ImageSharp >= 3.1.5",
-      "System.Drawing.Common >= 8.0.10"
+      "System.Drawing.Common >= 8.0.10",
+      "TextField >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1478,6 +1549,9 @@
             },
             "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+            },
+            "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj"
             }
           }
         }

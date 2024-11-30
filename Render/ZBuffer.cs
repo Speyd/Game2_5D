@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Render.RenderText;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.Window;
@@ -11,19 +12,20 @@ namespace Render.ZBufferRender
 {
     public class ZBuffer(Screen screen)
     {
-        static public List<(Drawable, double)> zBuffer = new List<(Drawable, double)>();
+        private static PriorityQueue<Drawable, double> zBuffer = new PriorityQueue<Drawable, double>();
 
         public void Render()
         {
-            zBuffer.Sort((a, b) => b.Item2.CompareTo(a.Item2));
-
-
-            foreach (var (drawable, _) in zBuffer)
+            while (zBuffer.Count > 0)
             {
-                screen.Window.Draw(drawable);
+                var drawable = zBuffer.Dequeue();
+                screen.OutputPriority.AddToPriority(2, drawable);
             }
+        }
 
-            zBuffer.Clear();
+        public static void AddToZBuffer(Drawable drawable, double depth)
+        {
+            zBuffer.Enqueue(drawable, depth);
         }
     }
 }

@@ -23,6 +23,9 @@ namespace ControlLib.Pressed.Key
 
         public const int VK_EXIT = 0x51;            //Q
 
+        public const int VK_ENTER = 0x0D;           //Enter
+
+        public const int VK_ESCAPE = 0x1B;          //ESCAPE
 
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int key);

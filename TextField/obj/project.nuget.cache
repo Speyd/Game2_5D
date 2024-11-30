@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "dgSpecHash": "tsEuVW8okJSUTWHEB+Dk1C56r93f6q5klvCTbAxTMdHRiiAau2S987fKIuz6DaSzeWMImdvLKSg0UllIjUVBPQ==",
+  "success": true,
+  "projectFilePath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.0\\sfml.system.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sixlabors.imagesharp\\3.1.5\\sixlabors.imagesharp.3.1.5.nupkg.sha512"
+  ],
+  "logs": []
+}

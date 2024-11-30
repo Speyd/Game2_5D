@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "95qbdA2gz1SVJ4+HdfmQMElttTSUPmObqzUsgdcjQGxe74q8Svrljm0iOC6MPNH6P/C0A7LLTag+YZ750+iYRQ==",
+  "dgSpecHash": "O9Lee8xy1lL2w8Do/vyAwbckCfCm9/TmDNFawSQUkHUSoaSNXw4+me9rtGi+N09gumQHtEBCUerZlldRcrna8w==",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",

@@ -109,6 +109,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "NGenerics": {
+              "target": "Package",
+              "version": "[1.5.3, )"
+            },
             "SFML.Net": {
               "target": "Package",
               "version": "[2.6.0, )"

@@ -26,7 +26,7 @@ using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 namespace TextureWallCollisionDetection
 {
 
-    public class CollisionDetection
+    public class CollisionTextureDetection
     {
         Screen screen;
         Map map;
@@ -39,7 +39,7 @@ namespace TextureWallCollisionDetection
         DetectionX detectionX;
         DetectionY detectionY;
 
-        public CollisionDetection(Screen screen, Map map, double maxVerticalAngle)
+        public CollisionTextureDetection(Screen screen, Map map, double maxVerticalAngle)
         {
             this.screen = screen;
             this.map = map;

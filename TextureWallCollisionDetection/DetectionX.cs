@@ -24,8 +24,8 @@ namespace TextureWallCollisionDetection
             detectionInfo.TextureWallDetermine = hitPoint.TextureWallDetermine;
 
             detectionInfo.DistanceToWallWithTile = hitPoint.DistanceToWall;
-            detectionInfo.DistanceToWall = hitPoint.DistanceToWall / screen.Setting.Tile;
-            detectionInfo.DistanceToPoint = hitPoint.DistanceToPoint;
+            detectionInfo.DistanceToWall = hitPoint.DistanceToWall / screen.Setting.Tile * (screen.BaseScreenWidth / screen.ScreenWidth);
+            detectionInfo.DistanceToPoint = hitPoint.DistanceToPoint * (screen.BaseScreenWidth / screen.ScreenWidth);
         }
 
         public float GetTextureCoordinate(TexturedWall wall)

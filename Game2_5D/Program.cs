@@ -34,19 +34,8 @@ using BresenhamAlgorithm;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using Render.InterfaceRender;
 using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
-
-const int mapScale = 5;
-static void DrawPoint(RenderTexture renderTexture, Vector2f position, float radius)
-{
-    CircleShape point = new CircleShape(radius)
-    {
-        FillColor = Color.Black,
-        Position = new Vector2f(position.X - radius, position.Y - radius)  // Центрируем точку
-    };
-
-    renderTexture.Draw(point);  // Рисуем точку на RenderTexture
-    renderTexture.Display();    // Обновляем RenderTexture для отображения изменений
-}
+using TextField;
+using System.Runtime;
 
 Screen screen = new Screen(1500, 1000);
 
@@ -92,39 +81,39 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 };
 
 
-SpriteObstacle sprite = new SpriteObstacle(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t)
-{
-    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-    {
-        ScaleMultSprite = 64
-    },
-    CurrentAnimation = new AnimationState()
-    {
-        IsAnimation = true,
-        Speed = 30,     
-    }
-};
-SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
-{
-    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-    {
-        ScaleMultSprite = 100,
-    }
-};
+//SpriteObstacle sprite = new SpriteObstacle(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t)
+//{
+//    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+//    {
+//        ScaleMultSprite = 64
+//    },
+//    CurrentAnimation = new AnimationState()
+//    {
+//        IsAnimation = true,
+//        Speed = 30,     
+//    }
+//};
+//SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
+//{
+//    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+//    {
+//        ScaleMultSprite = 100,
+//    }
+//};
 
-SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
-{
-    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-    {
-        ScaleMultSprite = 100,
-        ShiftCubedZ = -200  
-    },
-    CurrentAnimation = new AnimationState()
-    {
-        IsAnimation = true,
-        Speed = 15,
-    }
-};
+//SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
+//{
+//    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+//    {
+//        ScaleMultSprite = 100,
+//        ShiftCubedZ = -200  
+//    },
+//    CurrentAnimation = new AnimationState()
+//    {
+//        IsAnimation = true,
+//        Speed = 15,
+//    }
+//};
 
 //Texture text = new Texture(@"Resources\Image\WallTexture\Wall1.png");
 //RenderTexture renderTexture = new RenderTexture(text.Size.X, text.Size.Y);
@@ -140,9 +129,9 @@ SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 //screen.Window.Display();
 //while (true) ;
 
-map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
-map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
-map.AddObstacleToMap(4, 6, map.Obstacles, sprite1);
+//map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
+//map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
+//map.AddObstacleToMap(4, 6, map.Obstacles, sprite1);
 TexturedWall wall = new TexturedWall(screen, 0, 0, 'a', @"Resources\Image\WallTexture\Wall1.png", t);
 map.AddObstacleToMap(7, 7, map.Obstacles, wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
@@ -165,13 +154,16 @@ Algorithm algorithm = new Algorithm(screen, map, player, new Render.ResultAlgori
 
 DateTime from = DateTime.Now;
 FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\FontText\ArialBold.ttf", Color.White);
-
+//InputField inputField = new InputField(screen, @"Resources\FontText\ArialBold.ttf", 400, 50);
+//Event ev = ;
+GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 try
 {
+   // screen.Window.SetFramerateLimit(Screen.FPS_Limit);
     while (screen.Window.IsOpen)
     {
         screen.Window.DispatchEvents();
-        screen.Window.Clear(Color.Black);
+        screen.Window.Clear();
 
         fpsChecker.StartRead();
 
@@ -186,6 +178,8 @@ try
 
         mapMini.Render(player.GetEntityX(), player.GetEntityY(), player.GetEntityA());
 
+
+        screen.OutputPriority.DrawingByPriority();
         CircleShape point = new CircleShape(3)
         {
             FillColor = Color.Red,
@@ -193,8 +187,6 @@ try
         };
 
         screen.Window.Draw(point);
-
-
         screen.Window.Display();
     }
 }

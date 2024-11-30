@@ -7,9 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ControlLib
+namespace MoveLib
 {
-    internal class Collision(Screen screen, Map map, Setting setting)
+    public class Collision(Screen screen, Map map, MoveLib.Setting setting)
     {
         public bool IsObstacle(double x, double y)
         {

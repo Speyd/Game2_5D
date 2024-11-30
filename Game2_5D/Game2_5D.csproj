@@ -22,6 +22,7 @@
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <ProjectReference Include="..\TextField\TextField.csproj" />
   </ItemGroup>
 
 </Project>

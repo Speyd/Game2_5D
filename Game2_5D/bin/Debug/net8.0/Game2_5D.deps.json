@@ -18,7 +18,8 @@
           "SFML.Net": "2.6.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.5",
-          "System.Drawing.Common": "8.0.10"
+          "System.Drawing.Common": "8.0.10",
+          "TextField": "1.0.0"
         },
         "runtime": {
           "Game2_5D.dll": {}
@@ -942,6 +943,14 @@
           }
         }
       },
+      "NGenerics/1.5.3": {
+        "runtime": {
+          "lib/netstandard2.0/NGenerics.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "SFML.Audio/2.6.0": {
         "dependencies": {
           "CSFML": "2.6.1",
@@ -1031,6 +1040,8 @@
           "EntityLib": "1.0.0",
           "MapLib": "1.0.0",
           "MiniMapLib": "1.0.0",
+          "MoveLib": "1.0.0",
+          "TextField": "1.0.0",
           "TextureWallCollisionDetection": "1.0.0"
         },
         "runtime": {
@@ -1076,6 +1087,17 @@
           "MiniMapLib.dll": {}
         }
       },
+      "MoveLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "FpsLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "MoveLib.dll": {}
+        }
+      },
       "Render/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
@@ -1087,10 +1109,21 @@
       },
       "ScreenLib/1.0.0": {
         "dependencies": {
+          "NGenerics": "1.5.3",
           "SFML.Net": "2.6.0"
         },
         "runtime": {
           "ScreenLib.dll": {}
+        }
+      },
+      "TextField/1.0.0": {
+        "dependencies": {
+          "MapLib": "1.0.0",
+          "SFML.Net": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "TextField.dll": {}
         }
       },
       "TextureWallCollisionDetection/1.0.0": {
@@ -1131,6 +1164,13 @@
       "sha512": "sha512-9opKRyOKMCi2xJ7Bj7kxtZ1r9vbzosMvRrdEhVhDz8j8MoBGgB+WmC94yH839NPH+BclAjtQ/pyagvi/8gDLkw==",
       "path": "microsoft.win32.systemevents/8.0.0",
       "hashPath": "microsoft.win32.systemevents.8.0.0.nupkg.sha512"
+    },
+    "NGenerics/1.5.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yDJD4XEsvUzEg52HAyowTrnI3SGiPTczmOQYeBstEBMNizM/4okKMxb3n5HB6t7yGQoPYV3DItlGh7dAicJc/g==",
+      "path": "ngenerics/1.5.3",
+      "hashPath": "ngenerics.1.5.3.nupkg.sha512"
     },
     "SFML.Audio/2.6.0": {
       "type": "package",
@@ -1211,12 +1251,22 @@
       "serviceable": false,
       "sha512": ""
     },
+    "MoveLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Render/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TextField/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

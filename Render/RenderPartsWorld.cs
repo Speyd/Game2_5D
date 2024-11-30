@@ -25,6 +25,10 @@ namespace Render.RenderPartsWorld
 
         private const int stretchingTexture = -5;
 
+        private static RectangleShape filledTopRectangle = new RectangleShape();
+        private static RectangleShape filledBottomRectangle = new RectangleShape();
+
+        private static Sprite topRect = new Sprite();
 
         private static void SetCoordinate(ref int topRectHeight, ref int bottomRectHeight,
             Screen screen, Player player)
@@ -52,20 +56,19 @@ namespace Render.RenderPartsWorld
             {
                 Sprite bottomRect = new Sprite(bottomTexture);
 
-                bottomRect.Scale = new Vector2f(screen.ScreenWidth / (float)bottomTexture.Size.X, bottomRectHeight / (float)bottomTexture.Size.Y);
+                bottomRect.Scale = new Vector2f(screen.ScreenWidth / (float)bottomTexture.Size.X, bottomRectHeight / (float)bottomTexture.Size.Y);            
                 bottomRect.Position = new Vector2f(0, topRectHeight);
 
-                screen.Window.Draw(bottomRect);
+                screen.OutputPriority.AddToPriority(1, bottomRect);
             }
             else
             {
-                RectangleShape filledRectangle = new RectangleShape(new Vector2f(screen.ScreenWidth, bottomRectHeight))
-                {
-                    FillColor = colorBottom,
-                    Size = new Vector2f(screen.ScreenWidth, bottomRectHeight),
-                    Position = new Vector2f(0, topRectHeight),
-                };
-                screen.Window.Draw(filledRectangle);
+                filledBottomRectangle.Scale = new Vector2f(screen.ScreenWidth, bottomRectHeight);
+                filledBottomRectangle.FillColor = colorBottom;
+                filledBottomRectangle.Size = new Vector2f(screen.ScreenWidth, bottomRectHeight);
+                filledBottomRectangle.Position = new Vector2f(0, topRectHeight);
+
+                screen.OutputPriority.AddToPriority(1, filledBottomRectangle);
             }
         }
 
@@ -75,30 +78,31 @@ namespace Render.RenderPartsWorld
             {
                 skyTexture.Repeated = true;
                 float skyOffset = (float)(stretchingTexture * (player.GetEntityA() * (180 / (float)Math.PI)) % screen.ScreenWidth);
+                skyOffset /= Screen.MultWidth;
 
-                Sprite topRect = new Sprite(skyTexture);
+                topRect = new Sprite(skyTexture);
 
-                float scaleX = screen.ScreenWidth / (float)skyTexture.Size.X;
-                float scaleY = screen.ScreenWidth / (float)skyTexture.Size.Y;
+                float scaleX = screen.ScreenWidth / (float)skyTexture.Size.X * Screen.MultWidth;
+                float scaleY = screen.ScreenWidth / (float)skyTexture.Size.Y * Screen.MultWidth;
+
                 topRect.Scale = new Vector2f(scaleX, scaleY);
 
                 topRect.Position = new Vector2f(skyOffset, 0);
-                screen.Window.Draw(topRect);
+                screen.OutputPriority.AddToPriority(1, new Sprite(topRect));
 
                 topRect.Position = new Vector2f(skyOffset - screen.ScreenWidth, 0);
-                screen.Window.Draw(topRect);
+                screen.OutputPriority.AddToPriority(1, new Sprite(topRect));
 
                 topRect.Position = new Vector2f(skyOffset + screen.ScreenWidth, 0);
-                screen.Window.Draw(topRect);
+                screen.OutputPriority.AddToPriority(1, new Sprite(topRect));
             }
             else
             {
-                RectangleShape filledRectangle = new RectangleShape(new Vector2f(screen.ScreenWidth, bottomRectHeight))
-                {
-                    FillColor = colorSky,
-                    Size = new Vector2f(screen.ScreenWidth, topRectHeight),
-                };
-                screen.Window.Draw(filledRectangle);
+                filledTopRectangle.Scale = new Vector2f(screen.ScreenWidth, bottomRectHeight);
+                filledTopRectangle.FillColor = colorSky;
+                filledTopRectangle.Size = new Vector2f(screen.ScreenWidth, topRectHeight);
+
+                screen.OutputPriority.AddToPriority(1, filledTopRectangle);
             }
         }
         public static void Render(Screen screen, Player player)

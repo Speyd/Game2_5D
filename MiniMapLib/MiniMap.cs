@@ -12,13 +12,13 @@ using SFML.System;
 using MiniMapLib.SettingMap;
 using System.Threading;
 using MapLib;
+using EntityLib;
 
 namespace MiniMapLib
 {
     public class MiniMap
     {
         private readonly float mapScale = 5;
-
 
         private Screen screen;
         private Map map;
@@ -27,9 +27,13 @@ namespace MiniMapLib
 
         private WindowRender Window { get; init; }
         private WindowRender BorderMapWindow { get; init; }
+
         public Setting Setting { get; init; }
         private Border BorderMap { get; init; }
 
+
+        CircleShape entityShape;
+        RectangleShape rectangleShape = new RectangleShape();
 
         public MiniMap(Screen screen, Map map, Color fill,
             Positions position,
@@ -46,6 +50,10 @@ namespace MiniMapLib
             BorderMapWindow = new WindowRender(screen, mapScale);
             Setting = new Setting(screen, Window.WindowMap, position, mapScale, zoom);
             BorderMap = new Border(pathBorder);
+            entityShape = new CircleShape(Setting.GetRadiusCircle())
+            {
+                FillColor = Color.Red,
+            };
         }
 
         VertexArray RenderLineSight(double entityA)
@@ -63,31 +71,41 @@ namespace MiniMapLib
             float x = Setting.centerX - Setting.GetRadiusCircle();
             float y = Setting.centerY - Setting.GetRadiusCircle();
 
-            CircleShape entityShape = new CircleShape(Setting.GetRadiusCircle())
-            {
-                FillColor = Color.Red,
-                Position = new Vector2f(x, y)
-            };
+            entityShape.Position = new Vector2f(x, y);
             return entityShape;
         }
-
-        void RenderObstacle(double mapX, double mapY)
+        void RenderObstacle(double mapX, double mapY, double entityA)
         {
             foreach (var obstacle in map.Obstacles)
             {
                 float x = (obstacle.Key.Item1 / map.Setting.ScreenTile) * (Setting.mapTile);
                 float y = (obstacle.Key.Item2 / map.Setting.ScreenTile) * (Setting.mapTile);
 
-                RectangleShape rectangleShape = new RectangleShape(new Vector2f(Setting.mapTile, Setting.mapTile));
+                double angleToObstacle = Math.Atan2(y - mapY, x - mapX);
 
-                obstacle.Value.FillingMiniMapShape(rectangleShape);
-                rectangleShape.Position = new Vector2f
-                    (
-                        (float)(Setting.centerX - (x - mapX) - Setting.GetMiniMapSlowdownFactor()),
-                        (float)(Setting.centerY - (y - mapY) - Setting.GetMiniMapSlowdownFactor())
-                    );
+                // Преобразуем углы в диапазон от -180 до 180
+                double angleDifference = angleToObstacle - entityA;
 
-                Window.WindowMap.Draw(rectangleShape);
+                // Угол обзора игрока (например, 90 градусов)
+                double fieldOfView = 45.0; // Поле зрения 45 градусов в каждую сторону от центра
+                double maxDistance = 200; // Максимальное расстояние, на котором видны объекты
+
+                // Проверка, попадает ли стена в поле зрения
+                if (Math.Abs(angleDifference) <= fieldOfView / 2)
+                {
+                    // Также можно проверять, находится ли стена в пределах максимального расстояния
+                    double distance = Math.Sqrt(Math.Pow(x - mapX, 2) + Math.Pow(y - mapY, 2));
+                    if (distance <= maxDistance)
+                    {
+                        obstacle.Value.FillingMiniMapShape(rectangleShape);
+                        rectangleShape.Size = new Vector2f(Setting.mapTile, Setting.mapTile);
+                        rectangleShape.Position = new Vector2f(
+                            (float)(Setting.centerX - (x - mapX) - Setting.GetMiniMapSlowdownFactor()),
+                            (float)(Setting.centerY - (y - mapY) - Setting.GetMiniMapSlowdownFactor())
+                        );
+                        Window.WindowMap.Draw(rectangleShape);
+                    }
+                }
             }
         }
         public void ZoomToCoordinate(float targetX, float targetY)
@@ -128,10 +146,8 @@ namespace MiniMapLib
             float scaleX = (float)Window.WindowMap.Size.X / BorderMap.borderTexture.Size.X * 1.1f;
             float scaleY = (float)Window.WindowMap.Size.Y / BorderMap.borderTexture.Size.Y * 1.1f;
 
-            BorderMap.borderSprite = new Sprite(BorderMap.borderTexture)
-            {
-                Scale = new Vector2f(scaleX, scaleY)
-            };
+            BorderMap.borderSprite.Texture = BorderMap.borderTexture;
+            BorderMap.borderSprite.Scale = new Vector2f(scaleX, scaleY);
 
 
             BorderMap.borderSprite.Position = new Vector2f(
@@ -152,25 +168,21 @@ namespace MiniMapLib
 
 
             Window.WindowMap.Draw(RenderLineSight(entityA));
-            RenderObstacle(mapX, mapY);
             Window.WindowMap.Draw(RenderEntityShape());
             ZoomToCoordinate(Setting.centerX, Setting.centerY);
+            RenderObstacle(mapX, mapY, entityA);
             DrawMiniMapBorder();
 
             Window.WindowMap.Display();
 
-            Window.MiniMapSprite = new Sprite(Window.WindowMap.Texture)
-            {
-                Position = Setting.coorinatesPositionWindow
-            };
+            Window.MiniMapSprite.Texture = Window.WindowMap.Texture;
+            Window.MiniMapSprite.Position = Setting.coorinatesPositionWindow;
 
-            BorderMapWindow.MiniMapSprite = new Sprite(BorderMapWindow.WindowMap.Texture)
-            {
-                Position = Setting.coorinatesPositionWindow
-            };
+            BorderMapWindow.MiniMapSprite.Texture = BorderMapWindow.WindowMap.Texture;
+            BorderMapWindow.MiniMapSprite.Position = Setting.coorinatesPositionWindow;
 
-            screen.Window.Draw(Window.MiniMapSprite);
-            screen.Window.Draw(BorderMapWindow.MiniMapSprite);
+            screen.OutputPriority.AddToPriority(4, Window.MiniMapSprite);
+            screen.OutputPriority.AddToPriority(4, BorderMapWindow.MiniMapSprite);
         }
     }
 }

@@ -82,6 +82,9 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
         public void DrawSprite(Screen screen, SpriteObstacle sprite, double verticalAngle, int x, int height)
         //verticalAngle - entity; x - sprite position; height - spriteHeight
         {
+            if (sprite.CurrentRenderTexture is null)
+                return;
+
             float scaledHeight = sprite.RenderSprite.GetGlobalBounds().Height;
             scaledHeight += (float)(sprite.setting.ShiftCubedZ * (sprite.CurrentRenderTexture.TextureHeight / sprite.Distance));
 
@@ -99,7 +102,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
                 (float)height / sprite.CurrentRenderTexture.TextureHeight
                 );
 
-            ZBuffer.zBuffer.Add((sprite.RenderSprite, sprite.Distance));
+            ZBuffer.AddToZBuffer(sprite.RenderSprite, sprite.Distance);
         }
     }
 }

@@ -38,11 +38,11 @@ namespace BresenhamAlgorithm
             var key = map.Mapping(mappedX, mappedY, screen.Setting.Tile);
             if (map.Obstacles.TryGetValue(key, out var obstacle))
             {
-                IsSprite(obstacle);
+                //IsSprite(obstacle);
 
 
-                if(IsRenderObstacle(obstacle) == false)
-                    return false;
+                //if(IsRenderObstacle(obstacle) == false)
+                //    return false;
 
                 if (isVertical)
                 {
@@ -135,7 +135,7 @@ namespace BresenhamAlgorithm
                 carAngle += entity.DeltaAngle;
             }
 
-            SpriteObstacle.RenderSprites(screen, result, entity);
+            //SpriteObstacle.RenderSprites(screen, result, entity);
             zBuffer.Render();
         }
     }

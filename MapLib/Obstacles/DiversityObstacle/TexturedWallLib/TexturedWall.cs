@@ -146,7 +146,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             renderOperation.CalculationTextureScale(this, result);
             renderOperation. CalculationTexturePosition(screen, this, result, entity.GetEntityVerticalA());
 
-            ZBuffer.zBuffer.Add((RenderSprite, result.Depth));
+            ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }
     }
 }

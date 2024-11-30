@@ -1,4 +1,5 @@
-﻿using SFML.Graphics;
+﻿using ScreenLib;
+using SFML.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,12 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
                 shiftCubedY = value < 0 ? 1 : value > 100 ? 100 : value;
         }
 
-        public double ShiftCubedZ { get; set; } = 0;
+        private double shiftCubedZ = 0;
+        public double ShiftCubedZ 
+        {
+            get => shiftCubedZ;
+            set => shiftCubedZ = value / Screen.MultWidth;
+        }
         #endregion
 
         #region Scale
@@ -35,7 +41,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
         public float ScaleMultSprite
         {
             get => scaleMultSprite;
-            set => scaleMultSprite = value == 0 ? 1 : value;
+            set => scaleMultSprite = value == 0 ? 1 : value / Screen.MultWidth;
         }
 
         #endregion

@@ -20,5 +20,7 @@ namespace ControlLib.Pressed
         public bool ReduceMiniMap {  get; set; }
 
         public bool Exit { get; set; }
+
+        public bool Enter { get; set; }
     }
 }

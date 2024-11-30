@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "dSskGGDkgSc/+ZeZyVhXRY1c/IWLM9zkICFAKuZc8fWD68PCpJG6W3tVpguLUZCizqk6zf0e30B1B7DxTdxSIg==",
+  "dgSpecHash": "XaRe2unQshUTwsYmUEPZGK0XeRPAmd0yZuxYM8Ppda4kbqdO1AMttK7x1pweI6Zv8FmsbZXpHXDx8i9AGg541Q==",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",

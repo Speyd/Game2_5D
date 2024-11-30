@@ -23,6 +23,7 @@ namespace MiniMapLib.SettingMap
 
         public readonly int mapTile;
 
+
         #region Zoom
         public readonly float minZoom = 0.1f;
         public readonly float maxZoom = 2;

@@ -24,3 +24,9 @@ D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MiniMapLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MiniMapLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextureWallCollisionDetection.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextureWallCollisionDetection.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MoveLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextField.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MoveLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextField.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\FpsLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\FpsLib.pdb

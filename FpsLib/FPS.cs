@@ -9,11 +9,11 @@ namespace FpsLib
 {
     public class FPS : RenderText
     {
-        private Clock clock = new Clock();
-        private float fps = 0;
-        private float fpsTimer = 0;
-        private float deltaTime = 0;
-        DateTime fromNow;
+        private static Clock clock = new Clock();
+        public static float fps = 0;
+        private static float fpsTimer = 0;
+        private static float deltaTime = 0;
+        static DateTime fromNow;
 
         public FPS(DateTime from,
             string text, uint size, Vector2f position,
@@ -25,9 +25,9 @@ namespace FpsLib
 
         public void StartRead()
         {
-            DateTime dateTime = DateTime.Now;
-            double elapsed = (dateTime - fromNow).TotalSeconds;
-            fromNow = DateTime.Now;
+            //DateTime dateTime = DateTime.Now;
+            //double elapsed = (dateTime - fromNow).TotalSeconds;
+            //fromNow = DateTime.Now;
         }
 
         public void EndRead(Screen screen)
@@ -44,7 +44,7 @@ namespace FpsLib
                 fpsTimer = 0;
             }
 
-            screen.Window.Draw(renderText);
+            screen.OutputPriority.AddToPriority(3, renderText);
         }
 
         public float GetDeltaTime() => deltaTime;

@@ -722,6 +722,19 @@
           }
         }
       },
+      "NGenerics/1.5.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NGenerics.dll": {
+            "related": ".release.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NGenerics.dll": {
+            "related": ".release.xml"
+          }
+        }
+      },
       "SFML.Audio/2.6.0": {
         "type": "package",
         "dependencies": {
@@ -995,6 +1008,19 @@
         "sfml-icon.png"
       ]
     },
+    "NGenerics/1.5.3": {
+      "sha512": "yDJD4XEsvUzEg52HAyowTrnI3SGiPTczmOQYeBstEBMNizM/4okKMxb3n5HB6t7yGQoPYV3DItlGh7dAicJc/g==",
+      "type": "package",
+      "path": "ngenerics/1.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/NGenerics.dll",
+        "lib/netstandard2.0/NGenerics.release.xml",
+        "ngenerics.1.5.3.nupkg.sha512",
+        "ngenerics.nuspec"
+      ]
+    },
     "SFML.Audio/2.6.0": {
       "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
       "type": "package",
@@ -1071,6 +1097,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "NGenerics >= 1.5.3",
       "SFML.Net >= 2.6.0"
     ]
   },
@@ -1118,6 +1145,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "NGenerics": {
+            "target": "Package",
+            "version": "[1.5.3, )"
+          },
           "SFML.Net": {
             "target": "Package",
             "version": "[2.6.0, )"

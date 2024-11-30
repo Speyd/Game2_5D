@@ -35,7 +35,7 @@ namespace TextureWallCollisionDetection
         }
         private float GetAveragedMult(float baseMult)
         {
-            float newMult = baseMult * (screen.BaseScreenHeight / screen.ScreenHeight);
+            float newMult = baseMult / (screen.BaseScreenHeight / screen.ScreenHeight);
             newMult *= (wallInfo.BaseTextureHeight / wallInfo.TextureHeight);
 
             if (screen.Styles == Styles.Fullscreen)

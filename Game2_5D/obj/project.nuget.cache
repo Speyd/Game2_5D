@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "R7Xy5/pb2duuJVwdh/bt//I2/jIlP0cQoZ50fCdG3/VE94Yu+csW5Oxrz9H03sPlL2MTTj9TYKmzbK8oc80GTA==",
+  "dgSpecHash": "/CADArXyFkeuChKJfGeXsyWk96h7pS83JzNeP26x7Hx9s8yK5bWY2Lkulsm04EhdQyAFZx7UYpKc4MZTR7nM3A==",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\Game2_5D\\Game2_5D.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\goblinfactory.konsole\\6.2.2\\goblinfactory.konsole.6.2.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\microsoft.win32.systemevents\\8.0.0\\microsoft.win32.systemevents.8.0.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",

@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScreenLib;
 
-namespace ControlLib
+namespace MoveLib
 {
     public class Setting
     {
         //Speed
-        public double moveSpeed;
+        public float moveSpeed = 150f;
         public double moveSpeedAngel;
 
         //TempsValue
@@ -27,6 +28,7 @@ namespace ControlLib
 
         public Setting(float minDistanceFromWall, float mouseSensitivity) 
         {
+            //moveSpeed = 20;
             this.minDistanceFromWall = minDistanceFromWall;
             this.mouseSensitivity = mouseSensitivity;
         }

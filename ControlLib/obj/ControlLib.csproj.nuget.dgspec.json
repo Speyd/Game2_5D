@@ -37,6 +37,12 @@
               "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj"
               },
+              "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj"
+              },
               "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj"
               }
@@ -103,6 +109,70 @@
             "projectReferences": {
               "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
+        "projectName": "FpsLib",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
               }
             }
           }
@@ -297,6 +367,79 @@
         }
       }
     },
+    "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj",
+        "projectName": "MoveLib",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -388,6 +531,83 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "NGenerics": {
+              "target": "Package",
+              "version": "[1.5.3, )"
+            },
+            "SFML.Net": {
+              "target": "Package",
+              "version": "[2.6.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj",
+        "projectName": "TextField",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\TextField\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+              }
+            }
           }
         },
         "warningProperties": {

@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "eWshVWQ88YK+DHvmqZ1vqlXuzhN90HPnY88gNobfTHACpQKoQLAVZc/5Tr+KfDLbKnVePyw57feyaTf33x+ZwA==",
+  "dgSpecHash": "n25Xzm5h8kfaEnbkxq/iF2HX9fnYa8zlU5JI08pkOQltLQKJf0BVLyuolmVc3K/z5WGMH0pNYiQePecxOnHeKg==",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",

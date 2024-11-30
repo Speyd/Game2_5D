@@ -88,7 +88,7 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
                 renderOperation.CalculationBlockPosition(screen, this, result, entity)
                 );
 
-            ZBuffer.zBuffer.Add((renderWall, result.Depth));
+            ZBuffer.AddToZBuffer(renderWall, result.Depth);
         }
     }
 }

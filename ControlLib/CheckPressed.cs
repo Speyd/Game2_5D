@@ -15,7 +15,7 @@ namespace ControlLib.Pressed
         {
             return (GetAsyncKeyState(keyCode) & 0x8000) != 0;
         }
-        public void check()
+        public void Check()
         {
 
             CurrentDirection.Forward = IsKeyPressed(VK_FORWARD);
@@ -29,6 +29,8 @@ namespace ControlLib.Pressed
             CurrentDirection.ReduceMiniMap = IsKeyPressed(VK_REDUCE_MINIMAP);
 
             CurrentDirection.Exit = IsKeyPressed(VK_EXIT);
+
+            CurrentDirection.Enter = IsKeyPressed(VK_ENTER);
         }
     }
 }
