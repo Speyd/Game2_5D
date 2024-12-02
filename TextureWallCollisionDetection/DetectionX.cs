@@ -14,9 +14,9 @@ using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 namespace TextureWallCollisionDetection
 {
-    internal class DetectionX(Screen screen, WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
+    internal class DetectionX(WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
     {
-        DetermineWallParties determine = new DetermineWallParties(screen, entityInfo, wallInfo);
+        DetermineWallParties determine = new DetermineWallParties(entityInfo, wallInfo);
 
         private void SetDetectionInfo(HitPoint hitPoint)
         {
@@ -24,8 +24,8 @@ namespace TextureWallCollisionDetection
             detectionInfo.TextureWallDetermine = hitPoint.TextureWallDetermine;
 
             detectionInfo.DistanceToWallWithTile = hitPoint.DistanceToWall;
-            detectionInfo.DistanceToWall = hitPoint.DistanceToWall / screen.Setting.Tile * (screen.BaseScreenWidth / screen.ScreenWidth);
-            detectionInfo.DistanceToPoint = hitPoint.DistanceToPoint * (screen.BaseScreenWidth / screen.ScreenWidth);
+            detectionInfo.DistanceToWall = hitPoint.DistanceToWall / Screen.Setting.Tile * Screen.MultWidth;
+            detectionInfo.DistanceToPoint = hitPoint.DistanceToPoint * Screen.MultWidth;
         }
 
         public float GetTextureCoordinate(TexturedWall wall)
@@ -38,7 +38,7 @@ namespace TextureWallCollisionDetection
 
 
             float textureX = hitPoint.UV.X > hitPoint.UV.Y ? hitPoint.UV.X : hitPoint.UV.Y;
-            textureX *= wall.BaseTexture.TextureWidth / screen.Setting.Scale;
+            textureX *= wall.BaseTexture.TextureWidth / Screen.Setting.Scale;
 
             return textureX - (float)Math.Pow(wallInfo.TextureHeight / wallInfo.BaseTextureHeight, 4.5f);
         }

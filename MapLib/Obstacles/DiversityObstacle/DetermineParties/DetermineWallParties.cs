@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
 {
-    public class DetermineWallParties(Screen screen, EntityInfo entityInfo, WallInfo wallInfo)
+    public class DetermineWallParties(EntityInfo entityInfo, WallInfo wallInfo)
     {
         float distanceToPoint = 0;
         float distanceToWall = 0;
@@ -64,7 +64,7 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
 
             float hitX = entityInfo.X + tempValue * entityInfo.CosAngle - wallInfo.X;
             float hitY = entityInfo.Y + tempValue * entityInfo.SinAngle - wallInfo.Y;
-            distanceToPoint = tempValue / screen.Setting.Tile;
+            distanceToPoint = tempValue / Screen.Setting.Tile;
 
             return new Vector2f(hitX, hitY);
         }
@@ -120,7 +120,7 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
             distanceToWall = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (wallDetermine == TextureWallSide.Top || wallDetermine == TextureWallSide.Left)
-                distanceToWall -= -(screen.Setting.Tile * 3);
+                distanceToWall -= -(Screen.Setting.Tile * 3);
 
 
             Vector2f cornerHit = CalculateTextureHitPoint();
@@ -157,13 +157,13 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties
         public void RefreshData(Entity entity, TexturedWall wall)
         {
             entityInfo.RefreshData(entity);
-            wallInfo.RefreshData(screen, wall);
+            wallInfo.RefreshData(wall);
         }
 
         public void RefreshData(Entity entity, double angle, TexturedWall wall)
         {
             entityInfo.RefreshData(entity, angle);
-            wallInfo.RefreshData(screen, wall);
+            wallInfo.RefreshData(wall);
         }
         public void RefreshData(EntityInfo newEntityInfo, WallInfo newWallInfo)
         {

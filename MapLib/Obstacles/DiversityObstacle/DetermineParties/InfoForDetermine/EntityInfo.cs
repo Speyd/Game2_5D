@@ -22,11 +22,11 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
 
         public EntityInfo(Entity entity)
         {
-            X = (float)entity.GetEntityX();
-            Y = (float)entity.GetEntityY();
+            X = (float)entity.X;
+            Y = (float)entity.Y;
 
-            Angle = (float)entity.GetEntityA();
-            VertAngle = (float)entity.GetEntityVerticalA();
+            Angle = (float)entity.Angle;
+            VertAngle = (float)entity.VerticalAngle;
 
             CosAngle = (float)Math.Cos(Angle);
             SinAngle = (float)Math.Sin(Angle);
@@ -38,11 +38,11 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
 
         public void RefreshData(Entity entity)
         {
-            X = (float)entity.GetEntityX();
-            Y = (float)entity.GetEntityY();
+            X = (float)entity.X;
+            Y = (float)entity.Y;
 
-            Angle = (float)entity.GetEntityA();
-            VertAngle = (float)entity.GetEntityVerticalA();
+            Angle = (float)entity.Angle;
+            VertAngle = (float)entity.VerticalAngle;
 
             CosAngle = (float)Math.Cos(Angle);
             SinAngle = (float)Math.Sin(Angle);
@@ -51,11 +51,11 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
         }
         public void RefreshData(Entity entity, double angle)
         {
-            X = (float)entity.GetEntityX();
-            Y = (float)entity.GetEntityY();
+            X = (float)entity.X;
+            Y = (float)entity.Y;
 
             Angle = (float)angle;
-            VertAngle = (float)entity.GetEntityVerticalA();
+            VertAngle = (float)entity.VerticalAngle;
 
             CosAngle = (float)Math.Cos(angle);
             SinAngle = (float)Math.Sin(angle);

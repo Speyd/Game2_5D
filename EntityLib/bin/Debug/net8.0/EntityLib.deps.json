@@ -978,7 +978,10 @@
           "SFML.Net": "2.6.0"
         },
         "runtime": {
-          "ScreenLib.dll": {}
+          "ScreenLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

@@ -20,12 +20,12 @@ using TextureWallCollisionDetection;
 using TextField;
 using System.Diagnostics.Metrics;
 using MoveLib;
+using MiniMapLib.Window;
 namespace ControlLib
 {
     public class Control
     {
-        private Screen screen;
-        private MiniMapLib.SettingMap.Setting settingMiniMap;
+        private ZoomMiniMap ZoomMiniMap { get; init; }
 
         private CheckPressed CheckPressed { get; init; } = new CheckPressed();
 
@@ -42,27 +42,26 @@ namespace ControlLib
         InputField InputField { get; init; }
 
 
-        public Control(Map map, Screen screen, MiniMapLib.SettingMap.Setting settingMiniMap,
+        public Control(Map map, ZoomMiniMap zoom,
             float minDistanceFromWall = 50, float mouseSensitivity = 0.001f)
         {
-            this.screen = screen;
-            this.settingMiniMap = settingMiniMap;
-            SettingMove = new MoveLib.Setting(minDistanceFromWall, mouseSensitivity);
-            CollisionDetection = new CollisionTextureDetection(screen, map, SettingMove.maxVerticalAngle);
+            ZoomMiniMap = zoom;
 
-            MoveMouse = new MoveMouse(screen, SettingMove);
-            MovePositions = new MovePositions(new Collision(screen, map, SettingMove), SettingMove);
-            MoveAngle = new MoveAngle(screen, SettingMove);
+            SettingMove = new MoveLib.Setting(minDistanceFromWall, mouseSensitivity);
+            CollisionDetection = new CollisionTextureDetection(map, SettingMove.maxVerticalAngle);
+
+            MoveMouse = new MoveMouse(SettingMove);
+            MovePositions = new MovePositions(new Collision(map, SettingMove), SettingMove);
+            MoveAngle = new MoveAngle(SettingMove);
 
             InputField = new InputField(
-                screen, 
                 @"Resources\FontText\ArialBold.ttf", 
                 0,
-                screen.GetPercentHeight(20),
+                Screen.GetPercentHeight(20),
                 400, 50);
 
-            screen.Window.SetMouseCursorVisible(false);
-            screen.Window.MouseMoved += MoveMouse.OnMouseMoved;
+            Screen.Window.SetMouseCursorVisible(false);
+            Screen.Window.MouseMoved += MoveMouse.OnMouseMoved;
         }
 
         public void MakePressed(double deltaTime, Entity entity)
@@ -89,7 +88,7 @@ namespace ControlLib
 
 
             //---------------------Angle----------------------
-            MoveAngle.resetAngle(entity, deltaTime);
+            MoveAngle.ResetAngle(entity, deltaTime);
             if (CheckPressed.CurrentDirection.TurnLeft)
                 MoveAngle.TurnAngle(ref SettingMove.angle, -1);
             if (CheckPressed.CurrentDirection.TurnRight)
@@ -98,9 +97,9 @@ namespace ControlLib
 
             //-----------------Mini Map--------------------
             if (CheckPressed.CurrentDirection.ZoomMiniMap)
-                settingMiniMap.Zoom += 0.01f;
+                ZoomMiniMap.Zoom += 0.01f;
             if (CheckPressed.CurrentDirection.ReduceMiniMap)
-                settingMiniMap.Zoom -= 0.01f;
+                ZoomMiniMap.Zoom -= 0.01f;
 
 
             //-----------Collision Detection-------------
@@ -110,7 +109,7 @@ namespace ControlLib
 
             //----------------Exit-----------------
             if (CheckPressed.CurrentDirection.Exit)
-                screen.Window.Close();
+                Screen.Window.Close();
 
         }
     }

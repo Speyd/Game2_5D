@@ -30,7 +30,7 @@ namespace FpsLib
             //fromNow = DateTime.Now;
         }
 
-        public void EndRead(Screen screen)
+        public void EndRead()
         {
             deltaTime = clock.Restart().AsSeconds();
             fps = 1.0f / deltaTime;
@@ -44,7 +44,7 @@ namespace FpsLib
                 fpsTimer = 0;
             }
 
-            screen.OutputPriority.AddToPriority(3, renderText);
+            Screen.OutputPriority.AddToPriority(3, renderText);
         }
 
         public float GetDeltaTime() => deltaTime;

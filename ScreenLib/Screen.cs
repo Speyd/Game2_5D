@@ -5,64 +5,146 @@ using ScreenLib.SettingScreen;
 
 namespace ScreenLib
 {
-    public class Screen
+    public static class Screen
     {
+        private static bool IsInitialize = false;
+
         //--------------------Window Mode----------------------
-        private VideoMode videoMode = VideoMode.DesktopMode;
-        public Styles Styles { get; private set; } = Styles.Default;
+        private static VideoMode VideoMode { get; set; } = VideoMode.DesktopMode;
+        public static Styles Styles { get; set; } = Styles.Default;
 
 
-        public RenderWindow Window { get; set; }
+        //----------------------Window------------------------
+        public static RenderWindow _window;
+        public static RenderWindow Window 
+        {
+            get
+            {
+                if (!IsInitialize)
+                    throw new Exception("Screen is not Initialize!(Window)");
+                return _window;
+            }
+            private set => _window = value;
+        }
+
 
         //-----------------Setting----------------
-        public Setting Setting { get; set; }
-        public int ScreenWidth { get; private set; }
-        public int ScreenHeight { get; private set; }
-        public int BaseScreenHeight { get; } = 1000;
-        public int BaseScreenWidth { get; } = 1500;
+        public static Setting _setting;
+        public static Setting Setting 
+        {
+            get
+            {
+                if (!IsInitialize)
+                    throw new Exception("Screen is not Initialize!(Setting)");
+                return _setting;
+            }
+            private set => _setting = value;
+        }
 
+        //----------Dimensions Screen----------
+        private static void SetMultWidth() => MultWidth =  BaseScreenWidth / _screenWidth; 
+        private static int _screenWidth;
+        public static int ScreenWidth 
+        {
+            get
+            {
+                if (!IsInitialize)
+                    throw new Exception("Screen is not Initialize!(ScreenWidth)");
+                return _screenWidth;
+            }
+            set
+            {
+                if (value <= 0)
+                    throw new Exception("Width must be positive");
+
+                _screenWidth = value;
+                SetMultWidth();
+            } 
+        }
+
+        private static void SetMultHeight() => MultHeight = BaseScreenHeight / _screenHeight;
+        private static int _screenHeight;
+        public static int ScreenHeight
+        {
+            get
+            {
+                if (!IsInitialize)
+                    throw new Exception("Screen is not Initialize!(ScreenHeight)");
+                return _screenHeight;
+            }
+            set
+            {
+                if (value <= 0)
+                    throw new Exception("Height must be positive");
+                _screenHeight = value;
+                SetMultHeight();
+            }
+        }
+
+
+        //-------------Base Dimensions Screen-------------
+        public static int BaseScreenHeight { get; } = 1000;
+        public static int BaseScreenWidth { get; } = 1500;
+
+
+        //-------------------------------------
         public static float MultWidth { get; set; } = 1;
+        public static float MultHeight { get; set; } = 1;
         public static uint FPS_Limit { get; set; } = 60;
+
         //----------------------------Priority Draw--------------------------------
-        public OutputPriority OutputPriority { get; init; }
+        public static OutputPriority _outputPriority;
+        public static OutputPriority OutputPriority 
+        {
+            get
+            {
+                if (!IsInitialize)
+                    throw new Exception("Screen is not Initialize!(OutputPriority)");
+                return _outputPriority;
+
+            }
+            private set => _outputPriority = value;
+        }
 
 
-        private void SetWindowMode(bool fullScreen, string nameWindow)
+
+
+        private static void SetWindowMode(bool fullScreen, string nameWindow, 
+                                        uint width, uint height)
         {
             if (!fullScreen)
             {
-                Window = new RenderWindow(new VideoMode((uint)ScreenWidth, (uint)ScreenHeight), nameWindow, Styles.Default);
+                Window = new RenderWindow(new VideoMode(width, height), nameWindow, Styles.Default);
                 Styles = Styles.Default;
             }
             else
             {
                 Styles = Styles.Fullscreen;
-                Window = new RenderWindow(new VideoMode(videoMode.Width, videoMode.Height), nameWindow, Styles);
+                //this.VideoMode = VideoMode.FullscreenModes;
 
-                ScreenWidth = (int)Window.Size.X;
-                ScreenHeight = (int)Window.Size.Y;
+                Window = new RenderWindow(new VideoMode(VideoMode.Width, VideoMode.Height), nameWindow, Styles);
             }
         }
 
-        public Screen(int screenWidth, int screenHeight, bool fullScreen = false, string nameWindow = "Game")
-        {
-            ScreenWidth = screenWidth > 0 ? screenWidth : throw new Exception("Error value(screenWidth)");
-            ScreenHeight = screenHeight > 0 ? screenHeight : throw new Exception("Error value(screenHeight)");
 
-            SetWindowMode(fullScreen, nameWindow);
+        public static void Initialize(uint width, uint height, bool fullScreen = false, string nameWindow = "Game")
+        {
+            IsInitialize = true;
+
+            SetWindowMode(fullScreen, nameWindow, width, height);
+
+            ScreenWidth = (int)Window.Size.X;
+            ScreenHeight = (int)Window.Size.Y;
 
             MultWidth = BaseScreenWidth / ScreenWidth;
+            MultHeight = BaseScreenHeight / ScreenHeight;
 
             Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
             OutputPriority = new OutputPriority(Window);
         }
 
-        public void SetSetting(int amountRays, int maxDepth, int tile)
-        {
-            Setting = new Setting(ScreenWidth, ScreenHeight, amountRays, maxDepth, tile);
-        }
 
-        public uint GetPercentWidth(int percent)
+        public static  uint GetPercentWidth(int percent)
         {
             if (percent <= 0)
                 throw new Exception("Error percent value 'GetPercentWidth'");
@@ -70,12 +152,15 @@ namespace ScreenLib
             return (uint)(ScreenWidth - ((ScreenWidth / 100) * percent));
         }
 
-        public uint GetPercentHeight(int percent)
+        public static uint GetPercentHeight(int percent)
         {
             if (percent <= 0)
                 throw new Exception("Error percent value 'GetPercentHeight'");
 
             return (uint)(ScreenHeight - ((ScreenHeight / 100) * percent));
         }
+
+
+
     }
 }

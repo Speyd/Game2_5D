@@ -55,7 +55,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         }
 
 
-        public TexturedWall(Screen screen, TexturedWall textured)
+        public TexturedWall(TexturedWall textured)
         : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.isPassability)
         {
             BaseTexture = new TextureObstacle(textured.BaseTexture);
@@ -71,10 +71,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
                 Color = textured.RenderSprite.Color
             };
 
-            determineParties = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
+            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
         }
-        public TexturedWall(Screen screen,
-            double x, double y,
+        public TexturedWall(double x, double y,
             char symbol, SFML.Graphics.Color colorInMap,
             string path, int screenTile, bool isPassability = false)
 
@@ -83,10 +82,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             BaseTexture = new TextureObstacle(path, screenTile);
             RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
 
-            determineParties = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
+            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
         }
-        public TexturedWall(Screen screen,
-            double x, double y, char symbol,
+        public TexturedWall(double x, double y, char symbol,
             string path, int screenTile, bool isPassability = false)
 
             : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
@@ -94,7 +92,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             BaseTexture = new TextureObstacle(path, screenTile);
             RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
 
-            determineParties = new DetermineWallParties(screen, new EntityInfo(), new WallInfo(screen, this));
+            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
         }
 
 
@@ -117,34 +115,34 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             else
                 rectangleShape.FillColor = ColorInMap;
         }
-        public override float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0)
+        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
-                return (float)(screen.Setting.HalfHeight * (1 + 1 * -angleVertical));
+                return (float)(Screen.Setting.HalfHeight * (1 + 1 * -angleVertical));
             else
-                return (float)(screen.Setting.HalfHeight / (1 + 1 * angleVertical));
+                return (float)(Screen.Setting.HalfHeight / (1 + 1 * angleVertical));
         }
         #endregion
 
 
-        public float CalcCooX(double ray, Screen screen)
+        public float CalcCooX(double ray)
         {
-            return (float)ray * screen.Setting.Scale;
+            return (float)ray * Screen.Setting.Scale;
         }
         
-        public override void Render(Screen screen, Result result, Entity entity)
+        public override void Render(Result result, Entity entity)
         {
             if (BaseTexture.Texture is null)
                 return;
 
             renderOperation.SelectCurrentRenderTexture(this, result, entity);
-            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, screen.Setting.Tile, BaseTexture);
+            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, BaseTexture);
 
             RenderSprite = new Sprite(CurrentRenderTexture is not null ? CurrentRenderTexture.Texture : BaseTexture.Texture, textureRect);
             BlackoutObstacle(result.Depth);
 
             renderOperation.CalculationTextureScale(this, result);
-            renderOperation. CalculationTexturePosition(screen, this, result, entity.GetEntityVerticalA());
+            renderOperation. CalculationTexturePosition(this, result, entity.VerticalAngle);
 
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }

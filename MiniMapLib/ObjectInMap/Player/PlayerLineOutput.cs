@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib
+namespace MiniMapLib.ObjectInMap.Player
 {
     internal class PlayerLineOutput
     {
         //----------Setting MiniMap------------
-        private MiniMapLib.SettingMap.Setting Setting { get; init; }
+        private SettingMap.Setting Setting { get; init; }
 
 
         //-------------Setting Line----------------
@@ -20,9 +20,9 @@ namespace MiniMapLib
 
         //----------------Line------------------
         private VertexArray Line { get; init; }
-        
 
-        public PlayerLineOutput(MiniMapLib.SettingMap.Setting setting, 
+
+        public PlayerLineOutput(SettingMap.Setting setting,
                                 int sizeMainRayX = 50, int sizeMainRayY = 50)
         {
             Setting = setting;
@@ -36,11 +36,11 @@ namespace MiniMapLib
 
         public void RenderLineSight(RenderTexture renderTexture, double entityA)
         {
-            Setting.line[0] = new Vertex(new Vector2f(Setting.centerX, Setting.centerY), Color.Green);
+            Line[0] = new Vertex(new Vector2f(Setting.CenterX, Setting.CenterY), Color.Green);
 
-            float endX = (float)(Setting.centerX - SizeMainRayX * Math.Cos(entityA));
-            float endY = (float)((Setting.centerY - SizeMainRayY * (Math.Sin(entityA))));
-            Setting.line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
+            float endX = (float)(Setting.CenterX - SizeMainRayX * Math.Cos(entityA));
+            float endY = (float)(Setting.CenterY - SizeMainRayY * Math.Sin(entityA));
+            Line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
 
             renderTexture.Draw(Line);
         }

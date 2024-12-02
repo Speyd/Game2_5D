@@ -50,7 +50,7 @@ namespace MapLib.Obstacles
 
         public abstract void BlackoutObstacle(double depth);
         public abstract void FillingMiniMapShape(RectangleShape rectangleShape);
-        public abstract void Render(Screen screen, Result result, Entity entity);
-        public abstract float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
+        public abstract void Render(Result result, Entity entity);
+        public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
     }
 }

@@ -16,12 +16,12 @@ namespace EntityLib.Player
         public delegate void ControlAction(double deltaTime, Entity entity);
         public ControlAction OnControlAction;
 
-        public Player(Screen screen, double maxDistance,
+        public Player(double maxDistance,
             double entityFov = Math.PI / 3,
             double entityX = 0, float entityY = 0,
             double entityA = 0)
 
-            :base(screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
+            :base(Screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
         {}
 
         public void MakePressed(double deltaTime)

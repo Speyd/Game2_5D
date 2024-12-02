@@ -110,47 +110,47 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             else
                 rectangleShape.FillColor = ColorInMap;
         }
-        public override float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0)
+        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
-                return (float)(screen.Setting.HalfHeight - screen.Setting.HalfHeight * angleVertical - addVariable);
+                return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
             else
             {
                 angleVertical += 1;
 
-                return (float)(screen.Setting.HalfHeight / angleVertical - addVariable);
+                return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
         #endregion
 
-        public override void Render(Screen screen, Result result, Entity entity)
+        public override void Render(Result result, Entity entity)
         {
             double spriteAngle = renderOperation.CalculationAngularDistance(this, entity);
-            if (Distance > entity.MaxDistance)
+            if (Distance > entity.MaxRayDistance)
                 return;
 
-            Angle = renderOperation.CalculationSpriteAngle(entity.GetEntityA(), spriteAngle);
+            Angle = renderOperation.CalculationSpriteAngle(entity.Angle, spriteAngle);
 
-            if (Angle < entity.EntityFov / 2)
+            if (Angle < entity.Fov / 2)
             {
                 renderOperation.DefiningDesiredSprite(this, spriteAngle);
 
-                int sprite_X_Position = (int)(screen.ScreenWidth / 2 * (1 + Angle / (entity.EntityFov / 2)));
+                int sprite_X_Position = (int)(Screen.ScreenWidth / 2 * (1 + Angle / (entity.Fov / 2)));
 
                 double safeDistance = Math.Max(Distance, 0.1);
-                int spriteHeight = (int)(screen.ScreenHeight / safeDistance * setting.ScaleMultSprite);
+                int spriteHeight = (int)(Screen.ScreenHeight / safeDistance * setting.ScaleMultSprite);
 
-                renderOperation.DrawSprite(screen, this, entity.GetEntityVerticalA(), sprite_X_Position, spriteHeight);
+                renderOperation.DrawSprite(this, entity.VerticalAngle, sprite_X_Position, spriteHeight);
             }
         }
-        public static void RenderSprites(Screen screen, Result result, Entity entity)
+        public static void RenderSprites(Result result, Entity entity)
         {
             var sortedSprites = spritesToRender
                 .OrderByDescending(sprite => sprite.Distance)
                 .ToList();
             foreach (var sprite in sortedSprites)
             {
-                sprite.Render(screen, result, entity);
+                sprite.Render(result, entity);
             }
         }
     }

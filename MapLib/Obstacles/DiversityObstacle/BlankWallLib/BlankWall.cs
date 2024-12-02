@@ -60,32 +60,32 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
             rectangleShape.OutlineThickness = 1;
             rectangleShape.FillColor = ColorInMap;
         }
-        public override float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0)
+        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
-                return (float)(screen.Setting.HalfHeight - screen.Setting.HalfHeight * angleVertical - addVariable);
+                return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
             else
             {
                 angleVertical += 1;
 
-                return (float)(screen.Setting.HalfHeight / angleVertical - addVariable);
+                return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
         #endregion
 
-        public float CalcCooX(double ray, Screen screen)
+        public float CalcCooX(double ray)
         {
-            return (float)ray * screen.Setting.Scale;
+            return (float)ray * Screen.Setting.Scale;
         }
-        public override void Render(Screen screen, Result result, Entity entity)
+        public override void Render(Result result, Entity entity)
         {
             BlackoutObstacle(result.Depth);
 
             VertexArray renderWall = new VertexArray(PrimitiveType.Quads, 4);
             renderOperation.UpdateVertices(
                 this, renderWall,
-                renderOperation.CalculationBlockScale(screen, result),
-                renderOperation.CalculationBlockPosition(screen, this, result, entity)
+                renderOperation.CalculationBlockScale(result),
+                renderOperation.CalculationBlockPosition(this, result, entity)
                 );
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);

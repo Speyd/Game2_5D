@@ -9,8 +9,8 @@ namespace MoveLib
         {
             double speed = setting.moveSpeed * (1 / FPS.fps);
 
-            double rx = Math.Cos(entity.GetEntityA()) * directionX - Math.Sin(entity.GetEntityA()) * directionY;
-            double ry = Math.Sin(entity.GetEntityA()) * directionX + Math.Cos(entity.GetEntityA()) * directionY;
+            double rx = Math.Cos(entity.Angle) * directionX - Math.Sin(entity.Angle) * directionY;
+            double ry = Math.Sin(entity.Angle) * directionX + Math.Cos(entity.Angle) * directionY;
 
             rx *= speed;
             ry *= speed;

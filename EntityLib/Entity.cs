@@ -14,59 +14,58 @@ namespace EntityLib
 {
     public class Entity
     {
-        public double EntityFov { get; init; }
-        public double HalfFov { get; init; }
 
-        public double MaxDistance { get; private set; }
+        private double _fov;
+        public double Fov 
+        { 
+            get => _fov;
+            set
+            {
+                _fov = value;
+                HalfFov = value / 2;
+            }
+        }
+        public double HalfFov { get; private set; }
+
+
+
+        public double MaxRayDistance { get; private set; }
         public double DeltaAngle { get; init; }
 
 
         public double Dist { get; init; }
         public double ProjCoeff { get; init; }
 
-        public int MidlRay {  get; init; }
 
-
-        protected double entityY;
-        protected double entityX;
-        protected double entityA;
-        protected double entityVerticalA;
+        public double Y { get; set; }
+        public double X { get; set; }
+        public double Angle { get; set; }
+        public double VerticalAngle { get; set; }
 
         public Entity(Setting setting, double maxDistance,
-            double entityFov = Math.PI / 3,
-            double entityX = 0, double entityY = 0,
-            double entityA = 0, double entityVerticalA = 0)
+            double fov = Math.PI / 3,
+            double x = 0, double y = 0,
+            double angle = 0, double verticalAngle = 0)
         {
-            EntityFov = entityFov;
+            Fov = fov;
 
-            this.entityX = entityX <= 0 ? setting.HalfWidth : entityX;
-            this.entityY = entityY <= 0 ? setting.HalfHeight : entityY;
-            this.entityA = entityA;
-            this.entityVerticalA = entityVerticalA;
-
-            MidlRay = setting.AmountRays / 2;
-
-            HalfFov = (float)entityFov / 2;
-            DeltaAngle = (float)entityFov / setting.AmountRays;
+            X = x <= 0 ? setting.HalfWidth : x;
+            Y = y <= 0 ? setting.HalfHeight : y;
+            Angle = angle;
+            VerticalAngle = verticalAngle;
+          
+            HalfFov = (float)Fov / 2;
+            DeltaAngle = (float)Fov / setting.AmountRays;
 
             Dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
             ProjCoeff = Dist * setting.Tile;
-            MaxDistance = maxDistance;
+            MaxRayDistance = maxDistance;
         }
-
-
-        public ref double GetEntityY() => ref entityY;
-
-        public ref double GetEntityX() => ref entityX;
-
-        public ref double GetEntityA() => ref entityA;
-        public ref double GetEntityVerticalA() => ref entityVerticalA;
-
 
         public (float x1, float y1) CalculateEndPoint()
         {
-            float x1 = (float)(entityX + MaxDistance * Math.Cos(entityA));
-            float y1 = (float)(entityY + MaxDistance * Math.Sin(entityA));
+            float x1 = (float)(X + MaxRayDistance * Math.Cos(Angle));
+            float y1 = (float)(Y + MaxRayDistance * Math.Sin(Angle));
 
             return (x1, y1);
         }

@@ -16,7 +16,7 @@ using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 namespace TextureWallCollisionDetection
 {
-    internal class DetectionY(Screen screen, double maxVerticalAngle, WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
+    internal class DetectionY(double maxVerticalAngle, WallInfo wallInfo, EntityInfo entityInfo, DetectionActionInfo detectionInfo)
     {
         float addMultFullScreen = 1.3f;
 
@@ -35,10 +35,10 @@ namespace TextureWallCollisionDetection
         }
         private float GetAveragedMult(float baseMult)
         {
-            float newMult = baseMult / (screen.BaseScreenHeight / screen.ScreenHeight);
+            float newMult = baseMult / Screen.MultHeight;
             newMult *= (wallInfo.BaseTextureHeight / wallInfo.TextureHeight);
 
-            if (screen.Styles == Styles.Fullscreen)
+            if (Screen.Styles == Styles.Fullscreen)
                 return newMult + addMultFullScreen;
 
             return newMult;

@@ -990,7 +990,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "EntityLib.dll": {}
+          "EntityLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "FpsLib/1.0.0": {
@@ -998,7 +1001,10 @@
           "Render": "1.0.0"
         },
         "runtime": {
-          "FpsLib.dll": {}
+          "FpsLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "MapLib/1.0.0": {
@@ -1010,7 +1016,10 @@
           "SixLabors.ImageSharp": "3.1.5"
         },
         "runtime": {
-          "MapLib.dll": {}
+          "MapLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "MiniMapLib/1.0.0": {
@@ -1021,7 +1030,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "MiniMapLib.dll": {}
+          "MiniMapLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "MoveLib/1.0.0": {
@@ -1032,7 +1044,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "MoveLib.dll": {}
+          "MoveLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "Render/1.0.0": {
@@ -1041,7 +1056,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "Render.dll": {}
+          "Render.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "ScreenLib/1.0.0": {
@@ -1050,7 +1068,10 @@
           "SFML.Net": "2.6.0"
         },
         "runtime": {
-          "ScreenLib.dll": {}
+          "ScreenLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "TextField/1.0.0": {
@@ -1060,7 +1081,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "TextField.dll": {}
+          "TextField.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       },
       "TextureWallCollisionDetection/1.0.0": {
@@ -1070,7 +1094,10 @@
           "ScreenLib": "1.0.0"
         },
         "runtime": {
-          "TextureWallCollisionDetection.dll": {}
+          "TextureWallCollisionDetection.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }

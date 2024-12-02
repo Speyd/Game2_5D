@@ -44,11 +44,11 @@ namespace Render.ResultAlgorithm
             }
 
            
-            Depth *= Math.Cos(entity.GetEntityA() - car_angle);
+            Depth *= Math.Cos(entity.Angle - car_angle);
             Depth = Math.Max(Depth, 0.1);
         }
 
-        public void calculationSettingRender(ref Screen screen, ref Entity entity,
+        public void calculationSettingRender(ref Entity entity,
             ref ValueTuple<IRenderable, IRenderable> obstacles, int ray,
             double depth_v, double depth_h,
             double hx, double vy,
@@ -59,9 +59,9 @@ namespace Render.ResultAlgorithm
             Ray = ray;
             CarAngle = car_angle;
 
-            Offset = (int)Offset % screen.Setting.Tile;
+            Offset = (int)Offset % Screen.Setting.Tile;
             Depth = Math.Max(Depth, 0.1);
-            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * screen.ScreenHeight);
+            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
         }
     }
 }

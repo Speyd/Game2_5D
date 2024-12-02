@@ -17,7 +17,7 @@ namespace Render.InterfaceRender
         public const double shadowMultiplier = 0.00001;
         void BlackoutObstacle(double depth);
         void FillingMiniMapShape(RectangleShape rectangleShape);
-        void Render(Screen screen, Result result, Entity entity);
-        float NormalizePositionY(Screen screen, double angleVertical, float addVariable = 0);
+        void Render(Result result, Entity entity);
+        float NormalizePositionY(double angleVertical, float addVariable = 0);
     }
 }

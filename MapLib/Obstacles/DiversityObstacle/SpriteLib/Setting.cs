@@ -16,16 +16,14 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
         public double ShiftCubedX
         {
             get => shiftCubedX;
-            set =>
-                shiftCubedX = value < 0 ? 1 : value > 100 ? 100 : value;
+            set => shiftCubedX = value < 0 ? 1 : value > 100 ? 100 : value;
         }
 
         private double shiftCubedY = 50;
         public double ShiftCubedY
         {
             get => shiftCubedY;
-            set =>
-                shiftCubedY = value < 0 ? 1 : value > 100 ? 100 : value;
+            set => shiftCubedY = value < 0 ? 1 : value > 100 ? 100 : value;
         }
 
         private double shiftCubedZ = 0;

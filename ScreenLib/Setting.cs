@@ -34,8 +34,8 @@ namespace ScreenLib.SettingScreen
             Scale = ScreenWidth / AmountRays;
             MaxDepth = maxDepth;
 
-            float CenterRay1 = (int)(AmountRays / 2) - 1;
-            double rayAngleRadians = -60 / 2 + ((double)CenterRay1 / AmountRays) * 60;
+            float tempCenterRay = (int)(AmountRays / 2) - 1;
+            double rayAngleRadians = -60 / 2 + ((double)tempCenterRay / AmountRays) * 60;
 
             CenterRay = rayAngleRadians * (Math.PI / 180);
         }

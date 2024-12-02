@@ -10,7 +10,7 @@ using SFML.Window;
 
 namespace Render.ZBufferRender
 {
-    public class ZBuffer(Screen screen)
+    public class ZBuffer
     {
         private static PriorityQueue<Drawable, double> zBuffer = new PriorityQueue<Drawable, double>();
 
@@ -19,7 +19,7 @@ namespace Render.ZBufferRender
             while (zBuffer.Count > 0)
             {
                 var drawable = zBuffer.Dequeue();
-                screen.OutputPriority.AddToPriority(2, drawable);
+                Screen.OutputPriority.AddToPriority(2, drawable);
             }
         }
 

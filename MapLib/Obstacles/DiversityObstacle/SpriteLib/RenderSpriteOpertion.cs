@@ -70,8 +70,8 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
         }
         public double CalculationAngularDistance(SpriteObstacle sprite, Entity player)
         {
-            double dx = sprite.WallX - player.GetEntityX();
-            double dy = sprite.WallY - player.GetEntityY();
+            double dx = sprite.WallX - player.X;
+            double dy = sprite.WallY - player.Y;
             sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
 
             double spriteAngle = Math.Atan2(dy, dx);
@@ -79,8 +79,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
             return spriteAngle;
         }
 
-        public void DrawSprite(Screen screen, SpriteObstacle sprite, double verticalAngle, int x, int height)
-        //verticalAngle - entity; x - sprite position; height - spriteHeight
+        public void DrawSprite(SpriteObstacle sprite, double verticalAngle, int x, int height)
         {
             if (sprite.CurrentRenderTexture is null)
                 return;
@@ -89,7 +88,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
             scaledHeight += (float)(sprite.setting.ShiftCubedZ * (sprite.CurrentRenderTexture.TextureHeight / sprite.Distance));
 
 
-            float y = sprite.NormalizePositionY(screen, verticalAngle, scaledHeight / 2);
+            float y = sprite.NormalizePositionY(verticalAngle, scaledHeight / 2);
 
             sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.CurrentRenderTexture.Texture);
             sprite.BlackoutObstacle(sprite.Distance);

@@ -24,15 +24,15 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
         public float TextureHeight { get; set; } = 0;
         public float BaseTextureHeight { get; } = 1308;
 
-        public WallInfo(Screen screen, TexturedWall wall)
+        public WallInfo(TexturedWall wall)
         {
             Y = (float)wall.Y;
             X = (float)wall.X;
 
             Left = (float)wall.X;
-            Right = (float)wall.X + screen.Setting.Tile;
+            Right = (float)wall.X + Screen.Setting.Tile;
             Top = (float)wall.Y;
-            Bottom = (float)wall.Y + screen.Setting.Tile;
+            Bottom = (float)wall.Y + Screen.Setting.Tile;
 
             TextureHeight = wall.BaseTexture.TextureHeight;
         }
@@ -40,15 +40,15 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
         public WallInfo()
         {}
 
-        public void RefreshData(Screen screen, TexturedWall wall)
+        public void RefreshData(TexturedWall wall)
         {
             Y = (float)wall.Y;
             X = (float)wall.X;
 
             Left = (float)wall.X;
-            Right = (float)wall.X + screen.Setting.Tile;
+            Right = (float)wall.X + Screen.Setting.Tile;
             Top = (float)wall.Y;
-            Bottom = (float)wall.Y + screen.Setting.Tile;
+            Bottom = (float)wall.Y + Screen.Setting.Tile;
 
             TextureHeight = wall.BaseTexture.TextureHeight;
         }

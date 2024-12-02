@@ -6,17 +6,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib
+namespace MiniMapLib.ObjectInMap.Player
 {
-    internal class PlayerOutput
+    internal class PlayerCircleOutput
     {
         //----------Setting MiniMap------------
-        private MiniMapLib.SettingMap.Setting Setting { get; init; }
+        private SettingMap.Setting Setting { get; init; }
 
 
         //----------Setting Circle------------
         private int radiusCircle;
-        public int RadiusCircle 
+        public int RadiusCircle
         {
             get => radiusCircle;
             set
@@ -26,14 +26,15 @@ namespace MiniMapLib
             }
         }
 
+        public Color ColorCircle { get; set; } = Color.Red;
 
         //-----------------Circle--------------------
         private CircleShape EntityShape { get; init; }
 
 
-        public PlayerOutput(MiniMapLib.SettingMap.Setting setting, int radiusCircle = 5)
+        public PlayerCircleOutput(SettingMap.Setting setting, int radiusCircle = 5)
         {
-            this.Setting = setting;
+            Setting = setting;
 
             EntityShape = new CircleShape();
             RadiusCircle = 5;
@@ -43,10 +44,12 @@ namespace MiniMapLib
 
         public void RenderEntityShape(RenderTexture renderTexture)
         {
-            float x = Setting.centerX - RadiusCircle;
-            float y = Setting.centerY - RadiusCircle;
+            float x = Setting.CenterX - RadiusCircle;
+            float y = Setting.CenterY - RadiusCircle;
 
             EntityShape.Position = new Vector2f(x, y);
+
+            EntityShape.FillColor = ColorCircle;
 
             renderTexture.Draw(EntityShape);
         }

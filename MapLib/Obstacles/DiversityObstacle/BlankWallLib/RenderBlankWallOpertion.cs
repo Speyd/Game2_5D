@@ -13,18 +13,18 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
 {
     internal class RenderBlankWallOpertion
     {
-        public Vector2f CalculationBlockScale(Screen screen, Result result)
+        public Vector2f CalculationBlockScale(Result result)
         {
-            float scaleX = screen.Setting.Scale;
+            float scaleX = Screen.Setting.Scale;
             float scaleY = (float)result.ProjHeight;
 
             return new Vector2f(scaleX, scaleY);
         }
 
-        public Vector2f CalculationBlockPosition(Screen screen, BlankWall blankWall, Result result, Entity entity)
+        public Vector2f CalculationBlockPosition(BlankWall blankWall, Result result, Entity entity)
         {
-            float positionX = blankWall.CalcCooX(result.Ray, screen);
-            float positionY = blankWall.NormalizePositionY(screen, entity.GetEntityVerticalA(), (float)result.ProjHeight / 2);
+            float positionX = blankWall.CalcCooX(result.Ray);
+            float positionY = blankWall.NormalizePositionY(entity.VerticalAngle, (float)result.ProjHeight / 2);
 
             return new Vector2f(positionX, positionY);
         }

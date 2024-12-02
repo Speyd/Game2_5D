@@ -20,18 +20,18 @@ namespace MapLib
         public static TexturedWall block;// = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
         public static char empty = ' ';
 
-        public Map(Screen screen, int mapHeight, int mapWidth)
+        public Map(int mapHeight, int mapWidth)
         {
-            Setting = new Setting(mapHeight, mapWidth, screen.Setting.Tile);
+            Setting = new Setting(mapHeight, mapWidth);
             Obstacles = new Dictionary<(int, int), Obstacle>();
 
-            block = new TexturedWall(screen, 0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
-            block.BaseTexture.SetTile(screen.Setting.Tile);
+            block = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
+            block.BaseTexture.SetTile(Screen.Setting.Tile);
 
-            CreatMap(screen);
+            CreatMap();
         }
 
-        private void RefillingObstacles(Screen screen)
+        private void RefillingObstacles()
         {
             var tempObstacles = new Dictionary<(int, int), Obstacle>();
 
@@ -44,7 +44,7 @@ namespace MapLib
                         if(tempObstacles.ContainsKey((x, y)))
                             AddObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
                         else
-                            AddObstacleToMap(x, y, tempObstacles, new TexturedWall(screen, block));
+                            AddObstacleToMap(x, y, tempObstacles, new TexturedWall(block));
                     }
                         
                 }
@@ -52,7 +52,7 @@ namespace MapLib
 
             Obstacles = new Dictionary<(int, int), Obstacle>(tempObstacles);
         }
-        private void CreatMap(Screen screen)
+        private void CreatMap()
         {
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
@@ -63,7 +63,7 @@ namespace MapLib
             }
 
             MapStr.Append(new string(block.Symbol, Setting.MapWidth));
-            RefillingObstacles(screen);
+            RefillingObstacles();
         }
 
         public void AddObstacleToMap(int x, int y,
@@ -77,8 +77,8 @@ namespace MapLib
 
             MapStr[y * Setting.MapWidth + x] = obstacle.Symbol;
 
-            x *= Setting.ScreenTile;
-            y *= Setting.ScreenTile;
+            x *= Screen.Setting.Tile;
+            y *= Screen.Setting.Tile;
 
             obstacle.X = x;
             obstacle.Y = y;
@@ -92,7 +92,7 @@ namespace MapLib
                x <= 0 || x >= Setting.MapWidth - 1)
                 throw new Exception("You are trying to change the map boundaries or idnex out range 'addEmptyToMap'");
 
-            Obstacles.Remove((x * Setting.ScreenTile, y * Setting.ScreenTile));
+            Obstacles.Remove((x * Screen.Setting.Tile, y * Screen.Setting.Tile));
             MapStr[y * Setting.MapWidth + x] = empty;
         }
         public ValueTuple<int, int> Mapping(double x, double y, int tile)

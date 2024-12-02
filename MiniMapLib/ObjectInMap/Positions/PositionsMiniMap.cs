@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib.SettingMap
+namespace MiniMapLib.ObjectInMap.Positions
 {
-    public enum Positions
+    public enum PositionsMiniMap
     {
         UpperLeftCorner,
         LowerLeftCorner,

@@ -28,7 +28,6 @@ namespace TextureWallCollisionDetection
 
     public class CollisionTextureDetection
     {
-        Screen screen;
         Map map;
 
 
@@ -39,17 +38,16 @@ namespace TextureWallCollisionDetection
         DetectionX detectionX;
         DetectionY detectionY;
 
-        public CollisionTextureDetection(Screen screen, Map map, double maxVerticalAngle)
+        public CollisionTextureDetection(Map map, double maxVerticalAngle)
         {
-            this.screen = screen;
             this.map = map;
 
             wallInfo = new WallInfo();
             entityInfo = new EntityInfo();
             detectionInfo = new DetectionActionInfo();
 
-            detectionX = new DetectionX(screen, wallInfo, entityInfo, detectionInfo);
-            detectionY = new DetectionY(screen, maxVerticalAngle, wallInfo, entityInfo, detectionInfo);
+            detectionX = new DetectionX(wallInfo, entityInfo, detectionInfo);
+            detectionY = new DetectionY(maxVerticalAngle, wallInfo, entityInfo, detectionInfo);
         }
 
         private Obstacle? Raycast(Entity entity)
@@ -57,7 +55,7 @@ namespace TextureWallCollisionDetection
             float dx = entityInfo.CosAngle;
             float dy = entityInfo.SinAngle;
 
-            int tileSize = screen.Setting.Tile;
+            int tileSize = Screen.Setting.Tile;
 
             float startX = entityInfo.X;
             float startY = entityInfo.Y;
@@ -116,7 +114,7 @@ namespace TextureWallCollisionDetection
 
             if (obstacle is TexturedWall wall)
             {
-                wallInfo.RefreshData(screen, wall);
+                wallInfo.RefreshData(wall);
                 detectionInfo.RefreshData();
 
 

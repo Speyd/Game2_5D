@@ -9,8 +9,6 @@ namespace TextField
 {
     public class InputField
     {
-        private Screen screen;
-
        //----------------Text--------------
         private Font font;
         private Text inputText;
@@ -28,12 +26,10 @@ namespace TextField
 
 
 
-        public InputField(Screen screen, string pathFont,
+        public InputField(string pathFont,
             uint posWidth, uint posHeight, 
             uint widthField, uint heightField)
         {
-            this.screen = screen;
-
             if (!System.IO.File.Exists(pathFont))
                 throw new System.IO.FileNotFoundException($"Font file not found: {pathFont}");
 
@@ -59,8 +55,8 @@ namespace TextField
                 Position = new Vector2f(posWidth, posHeight),
             };
 
-            screen.Window.TextEntered += HandleTextEntered;
-            screen.Window.KeyPressed += HandleKeyPressed;
+            Screen.Window.TextEntered += HandleTextEntered;
+            Screen.Window.KeyPressed += HandleKeyPressed;
         }
 
         private void HandleTextEntered(object sender, TextEventArgs e)
@@ -87,20 +83,20 @@ namespace TextField
                 IsOpen = false;
                 userInput = "";
 
-                screen.Window.TextEntered -= HandleTextEntered;
+                Screen.Window.TextEntered -= HandleTextEntered;
             }
             else if (e.Code == Keyboard.Key.Enter)
             {
                 if (userInput == "" && IsOpen == false)
                 {
                     IsOpen = true;
-                    screen.Window.TextEntered += HandleTextEntered;
+                    Screen.Window.TextEntered += HandleTextEntered;
                     userInput = "";
                 }
                 else if(userInput != "" || userInput == "" && IsOpen == true)
                 {
                     IsOpen = false;
-                    screen.Window.TextEntered -= HandleTextEntered;
+                    Screen.Window.TextEntered -= HandleTextEntered;
                     userInput = "";
                 }
                 inputText.DisplayedString = userInput;
@@ -114,7 +110,7 @@ namespace TextField
             renderTexture.Draw(inputText);
             renderTexture.Display();
 
-            screen.OutputPriority.AddToPriority(4, RenderedSprite);
+            Screen.OutputPriority.AddToPriority(4, RenderedSprite);
         }
     }
 }

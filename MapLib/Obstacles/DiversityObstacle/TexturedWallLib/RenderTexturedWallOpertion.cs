@@ -23,10 +23,10 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             float scaleY = (float)result.ProjHeight / wall.BaseTexture.TextureHeight;
             wall.RenderSprite.Scale = new Vector2f(scaleX, scaleY);
         }
-        public void CalculationTexturePosition(Screen screen, TexturedWall wall, Result result, double angleVertical)
+        public void CalculationTexturePosition(TexturedWall wall, Result result, double angleVertical)
         {
-            float positionX = wall.CalcCooX(result.Ray, screen);
-            float positionY = (float)(wall.NormalizePositionY(screen, angleVertical) - result.ProjHeight / 2);
+            float positionX = wall.CalcCooX(result.Ray);
+            float positionY = (float)(wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2);
 
             wall.RenderSprite.Position = new Vector2f(positionX, positionY);
         }
