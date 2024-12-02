@@ -122,7 +122,7 @@ namespace TextureWallCollisionDetection
                 float radius = BringingToStandard(30);
 
                 float textureX = detectionX.GetTextureCoordinate(wall);
-                float textureY = detectionY.GetTextureCoordinate(wall, radius);
+                float textureY = detectionY.GetTextureCoordinate(radius);
 
                 Vector2f dotPosition = new Vector2f(textureX, textureY);
 
@@ -137,8 +137,8 @@ namespace TextureWallCollisionDetection
                 //s.Position = dotPosition;
                 if (wall.CurrentRenderTexture is not null)
                 {
-                    wall.CurrentRenderTexture.Draw(dot);
-                    wall.CurrentRenderTexture.Display();
+                    wall.CurrentRenderTexture.Mod.Draw(dot);
+                    wall.CurrentRenderTexture.Mod.Display();
                 }
             }
         }

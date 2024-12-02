@@ -1,6 +1,4 @@
 ﻿using EntityLib;
-using ObstacleLib;
-using ObstacleLib.Render;
 using ScreenLib;
 using SFML.Graphics;
 using System;
@@ -19,29 +17,32 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
 {
     public class BlankWall : Obstacle, IWall
     {
-
+        //--------------------Color For Render------------------
+        public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
         public Color ColorFilling { get; set; }
-        public Color CurrentColorFilling { get; set; }
 
-        private RenderBlankWallOpertion renderOperation = new RenderBlankWallOpertion();
 
-        public BlankWall(double x, double y,
-            char symbol, Color colorInMap,
-            Color color, bool isPassability = false)
 
-            : base(x, y, symbol, colorInMap, isPassability)
+        //-------------------------Render Operation-----------------------
+        private RenderBlankWallOpertion RenderOperation = new RenderBlankWallOpertion();
+
+
+
+        public BlankWall(double x, double y, Color color, bool isPassability = false)
+
+            : base(x, y, 'B', color, isPassability)
         {
-            ColorFilling = color;
+            StandartColorFilling = color;
         }
 
-        public BlankWall(double x, double y, char symbol,
-            byte r, byte g, byte b,
-            Color colorInMap, bool isPassability = false)
+        public BlankWall(double x, double y, byte r, byte g, byte b, bool isPassability = false)
 
-            : base(x, y, symbol, colorInMap, isPassability)
+            : base(x, y, 'B', new Color(r, g, b), isPassability)
         {
-            ColorFilling = new Color(r, g, b);
+            StandartColorFilling = new Color(r, g, b);
         }
+
+
 
 
         #region IRenderableImplementation
@@ -49,11 +50,11 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
         {
             byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            byte red = (byte)Math.Min(ColorFilling.R * darkened / 255, 255);
-            byte green = (byte)Math.Min(ColorFilling.G * darkened / 255, 255);
-            byte blue = (byte)Math.Min(ColorFilling.B * darkened / 255, 255);
+            byte red = (byte)Math.Min(StandartColorFilling.R * darkened / 255, 255);
+            byte green = (byte)Math.Min(StandartColorFilling.G * darkened / 255, 255);
+            byte blue = (byte)Math.Min(StandartColorFilling.B * darkened / 255, 255);
 
-            CurrentColorFilling = new Color(red, green, blue);
+            ColorFilling = new Color(red, green, blue);
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {
@@ -82,10 +83,10 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
             BlackoutObstacle(result.Depth);
 
             VertexArray renderWall = new VertexArray(PrimitiveType.Quads, 4);
-            renderOperation.UpdateVertices(
+            RenderOperation.UpdateVertices(
                 this, renderWall,
-                renderOperation.CalculationBlockScale(result),
-                renderOperation.CalculationBlockPosition(this, result, entity)
+                RenderOperation.CalculationBlockScale(result),
+                RenderOperation.CalculationBlockPosition(this, result, entity)
                 );
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);

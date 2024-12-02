@@ -95,13 +95,13 @@ namespace TextureWallCollisionDetection
         }
 
 
-        private float CalculateTextureY(TexturedWall wall,float ProjHeight, float mult, float addCoordinates)
+        private float CalculateTextureY(float ProjHeight, float mult, float addCoordinates)
         {
             float textureY = ProjHeight * entityInfo.VertAngle * mult;
 
-            return wall.BaseTexture.TextureHeight / 2 + textureY - addCoordinates;
+            return wallInfo.TextureHeight / 2 + textureY - addCoordinates;
         }
-        public float GetTextureCoordinate(TexturedWall wall, float radius)
+        public float GetTextureCoordinate(float radius)
         {
             float addCoordinates = 0;
 
@@ -109,7 +109,7 @@ namespace TextureWallCollisionDetection
 
             float mult = CalculateMultY(radius, ref addCoordinates);
 
-            return CalculateTextureY(wall, ProjHeight, mult, addCoordinates);
+            return CalculateTextureY(ProjHeight, mult, addCoordinates);
         }
     }
 }

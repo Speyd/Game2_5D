@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ScreenLib;
 
-namespace ObstacleLib.Render.Texture
+namespace MapLib.Obstacles.Texture
 {
     public class TextureObstacle
     {
@@ -13,7 +14,6 @@ namespace ObstacleLib.Render.Texture
         public uint TextureWidth { get; set; }
         public uint TextureHeight { get; set; }
         public int TextureScale { get; set; }
-        public int ScreenScale {  get; set; }
         public uint PixelCount {  get; set; }
 
 
@@ -33,35 +33,29 @@ namespace ObstacleLib.Render.Texture
                 throw new Exception("Error path TextureObstacle");
         }
 
-        public TextureObstacle(string path, int screenTile)
+        public TextureObstacle(string path)
         {
             IsTruePath(path);
-
-            ScreenScale = screenTile;
 
             Texture = new SFML.Graphics.Texture(path);
             TextureWidth = Texture.Size.X;
             TextureHeight = Texture.Size.Y;
-            SetTile(screenTile);
+            SetTile();
 
             PixelCount = TextureWidth * TextureHeight;
         }
-        public TextureObstacle(SFML.Graphics.Texture texture, int screenTile)
+        public TextureObstacle(SFML.Graphics.Texture texture)
         {
-            ScreenScale = screenTile;
-
             Texture = texture;
             TextureWidth = texture.Size.X;
             TextureHeight = texture.Size.Y;
-            SetTile(screenTile);
+            SetTile();
 
             PixelCount = TextureWidth * TextureHeight;
         }
 
         public TextureObstacle(TextureObstacle textureObstacle)
         {
-            ScreenScale = textureObstacle.ScreenScale;
-
             Texture = textureObstacle.Texture;
             TextureWidth = textureObstacle.TextureWidth;
             TextureHeight = textureObstacle.TextureHeight;
@@ -70,7 +64,7 @@ namespace ObstacleLib.Render.Texture
             PixelCount = TextureWidth * TextureHeight;
         }
 
-        public void SetTexture(string path, int screenTile)
+        public void SetTexture(string path)
         {
             try
             {
@@ -79,7 +73,7 @@ namespace ObstacleLib.Render.Texture
                 Texture = new SFML.Graphics.Texture(path);
                 TextureWidth = Texture.Size.X;
                 TextureHeight = Texture.Size.Y;
-                SetTile(screenTile);
+                SetTile();
             }
             catch (Exception ex)
             {
@@ -87,10 +81,10 @@ namespace ObstacleLib.Render.Texture
             }
         }
 
-        public void SetTile(int screenTile)
+        public void SetTile()
         {
-            if (screenTile != 0)
-                TextureScale = (int)(TextureWidth / screenTile);
+            if (Screen.Setting.Tile != 0)
+                TextureScale = (int)(TextureWidth / Screen.Setting.Tile);
             else
                 TextureScale = 1;
         }

@@ -34,13 +34,17 @@ namespace TextureWallCollisionDetection
 
             HitPoint hitPoint = determine.DetermineWallAllSides(wall);
             SetDetectionInfo(hitPoint);
-            wall.CurrentRenderTexture = wall.RenderTextures.GetTexture(detectionInfo.TextureWallDetermine);
 
+            wall.CurrentRenderTexture = wall.MultiTextured[detectionInfo.TextureWallDetermine];
+            if (wall.CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
+
+            wallInfo.RefreshTextureHeight(wall.CurrentRenderTexture.Base.TextureHeight);
 
             float textureX = hitPoint.UV.X > hitPoint.UV.Y ? hitPoint.UV.X : hitPoint.UV.Y;
-            textureX *= wall.BaseTexture.TextureWidth / Screen.Setting.Scale;
+            textureX *= wall.CurrentRenderTexture.Base.TextureWidth / Screen.Setting.Scale;
 
-            return textureX - (float)Math.Pow(wallInfo.TextureHeight / wallInfo.BaseTextureHeight, 4.5f);
+            return textureX - (float)Math.Pow(wall.CurrentRenderTexture.Base.TextureHeight / wallInfo.BaseTextureHeight, 4.5f);
         }
     }
 }

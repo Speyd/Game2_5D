@@ -4,9 +4,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ObstacleLib;
-using ObstacleLib.Render;
-using ObstacleLib.Render.Texture;
+//using ObstacleLib;
+//using ObstacleLib.Render;
+//using ObstacleLib.Render.Texture;
 using SFML.Graphics;
 using SixLabors.ImageSharp.PixelFormats;
 using Render.InterfaceRender;
@@ -20,48 +20,32 @@ using EntityLib.Player;
 using MapLib.Obstacles.DiversityObstacle.DetermineParties;
 using MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine;
 using System.Reflection.Metadata;
+using System.IO;
 
 namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 {
     public class TexturedWall : Obstacle, IWall
     {
-        public TextureObstacle BaseTexture { get; init; }
-        public RenderTexture? CurrentRenderTexture { get; set; } = null;
-        public UniqueDictionary<TextureWallSide, RenderTexture> RenderTextures { get; set; }
+        //----------------------Textures--------------------------
+        public MultiTexturedObject MultiTextured { get; init; }
+        public TexturedPair? CurrentRenderTexture { get; set; } = null;
+        public TextureObstacle? TextureInMiniMap { get; set; }
+
+        //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
+        private RenderTexturedWallOpertion RenderOperation { get; init; }
+
+        //----------------------Determine---------------------
+        public DetermineWallParties DetermineParties { get; init; }
 
 
-        private RenderTexturedWallOpertion renderOperation = new RenderTexturedWallOpertion();
-        public DetermineWallParties determineParties;
 
-
-        private List<(TextureWallSide, RenderTexture)> addRenderTextures()
-        {
-            var values = new List<(TextureWallSide, RenderTexture)>()
-            {
-                (TextureWallSide.Top, new RenderTexture(BaseTexture.TextureWidth, BaseTexture.TextureHeight)),
-                (TextureWallSide.Bottom, new RenderTexture(BaseTexture.TextureWidth, BaseTexture.TextureHeight)),
-                (TextureWallSide.Left, new RenderTexture(BaseTexture.TextureWidth, BaseTexture.TextureHeight)),
-                (TextureWallSide.Right, new RenderTexture(BaseTexture.TextureWidth, BaseTexture.TextureHeight)),
-            };
-
-            foreach (var texture in values)
-            {
-                texture.Item2.Draw(new Sprite(BaseTexture.Texture));
-                texture.Item2.Display();
-            }
-
-            return values;
-        }
-
-
+        #region Constructor
         public TexturedWall(TexturedWall textured)
         : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.isPassability)
         {
-            BaseTexture = new TextureObstacle(textured.BaseTexture);
-
-            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
-
+            MultiTextured = new MultiTexturedObject(textured.MultiTextured);
+            TextureInMiniMap = textured.MultiTextured.UniqueTexture.GetFirstValue().Base;
 
             RenderSprite = new Sprite(textured.RenderSprite.Texture)
             {
@@ -71,47 +55,78 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
                 Color = textured.RenderSprite.Color
             };
 
-            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
+        }
+        public TexturedWall(double x, double y, string path, bool isPassability = false)
+
+            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+        {
+            TextureInMiniMap = new TextureObstacle(path);
+
+            MultiTextured = new MultiTexturedObject(path);
+
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
+        }
+        public TexturedWall(double x, double y, string pathLR, string pathBT, bool isPassability = false)
+
+            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+        {
+            TextureInMiniMap = new TextureObstacle(pathLR);
+            MultiTextured = new MultiTexturedObject(pathLR, pathBT);
+
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
         }
         public TexturedWall(double x, double y,
-            char symbol, SFML.Graphics.Color colorInMap,
-            string path, int screenTile, bool isPassability = false)
+            string pathL, string pathR,
+            string pathB, string pathT,
+            bool isPassability = false)
 
-            : base(x, y, symbol, colorInMap, isPassability)
+            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
         {
-            BaseTexture = new TextureObstacle(path, screenTile);
-            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+            TextureInMiniMap = new TextureObstacle(pathL);
+            MultiTextured = new MultiTexturedObject(pathL,pathR, pathB, pathT);
 
-            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y, char symbol,
-            string path, int screenTile, bool isPassability = false)
-
-            : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
+        public TexturedWall(double x, double y, List<(TextureWallSide, string)> textures, bool isPassability = false)
+            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
         {
-            BaseTexture = new TextureObstacle(path, screenTile);
-            RenderTextures = new UniqueDictionary<TextureWallSide, RenderTexture>(addRenderTextures());
+            MultiTextured = new MultiTexturedObject(textures);
+            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
-            determineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
         }
+        public TexturedWall(double x, double y, List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
+            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+        {
+            MultiTextured = new MultiTexturedObject(textures);
+            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
-
-
-
+            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
+            RenderOperation = new RenderTexturedWallOpertion(this);
+        }
+        #endregion
 
         #region IRenderableImplementation
         public override void BlackoutObstacle(double depth)
         {
+            if (CurrentRenderTexture is null || CurrentRenderTexture.Base.Texture is null || RenderSprite is null)
+                return;
+
+
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            if (BaseTexture != null && BaseTexture.Texture != null && RenderSprite != null)
-                RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+            RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
-        {
-            rectangleShape.OutlineThickness = 0;
-            if (BaseTexture is not null && BaseTexture.Texture is not null)
-                rectangleShape.Texture = BaseTexture.Texture;
+        {    
+            if (TextureInMiniMap is not null)
+                rectangleShape.Texture = TextureInMiniMap.Texture;
             else
                 rectangleShape.FillColor = ColorInMap;
         }
@@ -132,17 +147,17 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         
         public override void Render(Result result, Entity entity)
         {
-            if (BaseTexture.Texture is null)
+            RenderOperation.SelectCurrentRenderTexture(result, entity);
+            if (CurrentRenderTexture is null)
                 return;
 
-            renderOperation.SelectCurrentRenderTexture(this, result, entity);
-            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, BaseTexture);
+            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
 
-            RenderSprite = new Sprite(CurrentRenderTexture is not null ? CurrentRenderTexture.Texture : BaseTexture.Texture, textureRect);
+            RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
             BlackoutObstacle(result.Depth);
 
-            renderOperation.CalculationTextureScale(this, result);
-            renderOperation. CalculationTexturePosition(this, result, entity.VerticalAngle);
+            RenderOperation.CalculationTextureScale(result);
+            RenderOperation. CalculationTexturePosition(result, entity.VerticalAngle);
 
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }

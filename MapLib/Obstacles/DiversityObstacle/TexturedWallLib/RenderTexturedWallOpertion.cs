@@ -12,31 +12,31 @@ using System.Threading.Tasks;
 
 namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 {
-    internal class RenderTexturedWallOpertion
+    internal class RenderTexturedWallOpertion(TexturedWall Wall)
     {
-        public void CalculationTextureScale(TexturedWall wall, Result result)
+        public void CalculationTextureScale(Result result)
         {
-            if (wall.BaseTexture is null)
+            if (Wall.CurrentRenderTexture is null)
                 return;
-
-            float scaleX = (float)wall.BaseTexture.TextureScale / wall.BaseTexture.TextureWidth;
-            float scaleY = (float)result.ProjHeight / wall.BaseTexture.TextureHeight;
-            wall.RenderSprite.Scale = new Vector2f(scaleX, scaleY);
+            
+            float scaleX = (float)Wall.CurrentRenderTexture.Base.TextureScale / Wall.CurrentRenderTexture.Base.TextureWidth;
+            float scaleY = (float)result.ProjHeight / Wall.CurrentRenderTexture.Base.TextureHeight;
+            Wall.RenderSprite.Scale = new Vector2f(scaleX, scaleY);
         }
-        public void CalculationTexturePosition(TexturedWall wall, Result result, double angleVertical)
+        public void CalculationTexturePosition(Result result, double angleVertical)
         {
-            float positionX = wall.CalcCooX(result.Ray);
-            float positionY = (float)(wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2);
+            float positionX = Wall.CalcCooX(result.Ray);
+            float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2);
 
-            wall.RenderSprite.Position = new Vector2f(positionX, positionY);
+            Wall.RenderSprite.Position = new Vector2f(positionX, positionY);
         }
 
-        public void SelectCurrentRenderTexture(TexturedWall wall, Result result, Entity entity)
+        public void SelectCurrentRenderTexture(Result result, Entity entity)
         {
-            wall.determineParties.RefreshData(entity, result.CarAngle, wall);
-            TextureWallSide wallDetermine = wall.determineParties.DetermineWallAllSides(wall).TextureWallDetermine;
+            Wall.DetermineParties.RefreshData(entity, result.CarAngle, Wall);
+            TextureWallSide wallDetermine = Wall.DetermineParties.DetermineWallAllSides(Wall).TextureWallDetermine;
 
-            wall.CurrentRenderTexture = wall.RenderTextures.GetTexture(wallDetermine);
+            Wall.CurrentRenderTexture = Wall.MultiTextured[wallDetermine];
         }
     }
 }

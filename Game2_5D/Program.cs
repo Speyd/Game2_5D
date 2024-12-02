@@ -25,9 +25,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using MiniMapLib;
 using FpsLib;
-using ObstacleLib;
 using System.Reflection.Metadata;
-using ObstacleLib.Render.Texture;
 using ControlLib;
 using BresenhamAlgorithm;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
@@ -36,47 +34,47 @@ using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using TextField;
 using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
-
+using MapLib.Obstacles.Texture;
 //Screen screen = new Screen(1500, 1000);
 Screen.Initialize(1500, 1000);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
-map.AddObstacleToMap(2, 2, map.Obstacles, Map.block);
-map.AddObstacleToMap(2, 5, map.Obstacles, Map.block);
+map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));
+map.AddObstacle(2, 5, new TexturedWall(Map.StandartBlock));
 
 int t = Screen.Setting.Tile;
 List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
 {
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\1.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\2.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\3.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\4.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\5.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\6.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png", Screen.Setting.Tile),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\1.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\2.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\3.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\4.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\5.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\6.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png"),
 
 };
 
 
 List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 {
-        new TextureObstacle( @"Resources\Image\Sprite\Flame\0.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\1.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\2.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\3.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\4.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\5.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\6.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\7.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\8.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\9.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\10.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\11.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\12.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\13.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\14.png", Screen.Setting.Tile),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\15.png", Screen.Setting.Tile),
+        new TextureObstacle( @"Resources\Image\Sprite\Flame\0.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\1.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\2.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\3.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\4.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\5.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\6.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\7.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\8.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\9.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\10.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\11.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\12.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\13.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\14.png" ),
+    new TextureObstacle( @"Resources\Image\Sprite\Flame\15.png" ),
 
 
 };
@@ -133,17 +131,17 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 //map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
 //map.AddObstacleToMap(4, 6, map.Obstacles, sprite1);
-TexturedWall wall = new TexturedWall(0, 0, 'a', @"Resources\Image\WallTexture\Wall1.png", t);
-map.AddObstacleToMap(7, 7, map.Obstacles, wall);
+TexturedWall wall = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png");
+map.AddObstacle(7, 7,  wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
-map.AddObstacleToMap(7, 11, map.Obstacles, new TexturedWall(0, 0,'d', @"Resources\Image\WallTexture\Wall4.png", t));
-map.AddObstacleToMap(7, 13, map.Obstacles, new TexturedWall(0, 0,'o', @"Resources\Image\WallTexture\Wall5.png", t));
-map.AddObstacleToMap(7, 2, map.Obstacles, new TexturedWall(0, 0, 'l', @"Resources\Image\WallTexture\Wall8.png", t));
+map.AddObstacle(7, 11, new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall4.png"));
+map.AddObstacle(7, 13,new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall5.png"));
+map.AddObstacle(7, 2,new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall8.png"));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
-map.AddObstacleToMap(9, 8, map.Obstacles, new TexturedWall(Map.block));
-map.AddObstacleToMap(9, 9, map.Obstacles, new TexturedWall(Map.block));
-map.AddObstacleToMap(9, 10, map.Obstacles, new TexturedWall(Map.block));
+map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
+map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
+map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
 Player player = new Player(100);
 MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
 

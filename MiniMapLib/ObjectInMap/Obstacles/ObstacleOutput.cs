@@ -76,6 +76,8 @@ namespace MiniMapLib.ObjectInMap.Obstacles
             Setting = setting;
 
             RectangleShape = new RectangleShape();
+            RectangleShape.OutlineThickness = 0;
+
             RenderMode = DisplayRenderMode.SpecificArea;
         }
 

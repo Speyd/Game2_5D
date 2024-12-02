@@ -1,5 +1,4 @@
-﻿using ObstacleLib.Render;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using Render.InterfaceRender;
 using Render.ResultAlgorithm;
 using EntityLib;
@@ -35,7 +34,7 @@ namespace MapLib.Obstacles
         public SFML.Graphics.Color ColorInMap { get; set; }
 
         //Controll setting
-        public bool isPassability {  get; set; }
+        public bool isPassability { get; set; }
 
 
         public Obstacle(double x, double y, char symbol, SFML.Graphics.Color colorInMap, bool isPassability)

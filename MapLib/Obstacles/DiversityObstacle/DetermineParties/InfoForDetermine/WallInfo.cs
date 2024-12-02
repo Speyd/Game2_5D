@@ -34,7 +34,10 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
             Top = (float)wall.Y;
             Bottom = (float)wall.Y + Screen.Setting.Tile;
 
-            TextureHeight = wall.BaseTexture.TextureHeight;
+            if (wall.CurrentRenderTexture is not null)
+                TextureHeight = wall.CurrentRenderTexture.Base.TextureHeight;
+            else
+                TextureHeight = 0;
         }
 
         public WallInfo()
@@ -50,7 +53,15 @@ namespace MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine
             Top = (float)wall.Y;
             Bottom = (float)wall.Y + Screen.Setting.Tile;
 
-            TextureHeight = wall.BaseTexture.TextureHeight;
+            if (wall.CurrentRenderTexture is not null)
+                TextureHeight = wall.CurrentRenderTexture.Base.TextureHeight;
+            else
+                TextureHeight = 0;
+        }
+
+        public void RefreshTextureHeight(uint textureHeight)
+        {
+            TextureHeight = textureHeight;
         }
     }
 }

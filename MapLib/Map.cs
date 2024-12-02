@@ -1,7 +1,6 @@
 ﻿using ScreenLib;
 using System.Text;
 using MapLib.SettingLib;
-using ObstacleLib;
 using SFML.Graphics;
 using System.Collections.Generic;
 using MapLib.Obstacles;
@@ -11,90 +10,100 @@ namespace MapLib
 {
     public class Map
     {
+        //---------------------Setting-----------------------
         public Setting Setting { get; init; }
 
+
+
+        //---------------------Obstacles-----------------------
+        public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; init; }
+        public static TexturedWall StandartBlock { get; set; } = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png");
+
+
+
+        //---------------------Map String-----------------------
         public StringBuilder MapStr { get; init; } = new StringBuilder();
 
-        public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; set; }
 
-        public static TexturedWall block;// = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
-        public static char empty = ' ';
 
-        public Map(int mapHeight, int mapWidth)
+        public Map(int height, int width)
         {
-            Setting = new Setting(mapHeight, mapWidth);
-            Obstacles = new Dictionary<(int, int), Obstacle>();
+            Setting = new Setting(height, width);
+            Obstacles = new Dictionary<(int X, int Y), Obstacle>();
 
-            block = new TexturedWall(0, 0, 'q', Color.Green, @"Resources\Image\WallTexture\Wall1.png", 0);
-            block.BaseTexture.SetTile(Screen.Setting.Tile);
-
-            CreatMap();
-        }
-
-        private void RefillingObstacles()
-        {
-            var tempObstacles = new Dictionary<(int, int), Obstacle>();
-
-            for (int y = 0; y < Setting.MapHeight;  y++)
-            {
-                for(int x = 0;  x < Setting.MapWidth; x++)
-                {
-                    if (MapStr[y * Setting.MapWidth + x] != empty)
-                    {
-                        if(tempObstacles.ContainsKey((x, y)))
-                            AddObstacleToMap(x, y, tempObstacles, tempObstacles[(x, y)]);
-                        else
-                            AddObstacleToMap(x, y, tempObstacles, new TexturedWall(block));
-                    }
-                        
-                }
-            }
-
-            Obstacles = new Dictionary<(int, int), Obstacle>(tempObstacles);
-        }
-        private void CreatMap()
-        {
-
-            MapStr.Append(new string(block.Symbol, Setting.MapWidth));
-
-            for(int i = 0; i < Setting.MapHeight - 2; i++)
-            {
-                MapStr.Append(block.Symbol + new string(empty, Setting.MapWidth - 2) + block.Symbol);
-            }
-
-            MapStr.Append(new string(block.Symbol, Setting.MapWidth));
             RefillingObstacles();
         }
 
-        public void AddObstacleToMap(int x, int y,
-            Dictionary<(int, int), Obstacle> obstacles, Obstacle obstacle)
+        private void CreatMap()
+        {
+
+            MapStr.Append(new string(StandartBlock.Symbol, Setting.MapWidth));
+
+            for (int i = 0; i < Setting.MapHeight - 2; i++)
+            {
+                MapStr.Append(StandartBlock.Symbol + new string(Setting.empty, Setting.MapWidth - 2) + StandartBlock.Symbol);
+            }
+
+            MapStr.Append(new string(StandartBlock.Symbol, Setting.MapWidth));
+        }
+        private void RefillingObstacles()
+        {
+            Obstacles.Clear();
+            MapStr.Clear();
+
+            CreatMap();
+
+            for(int y = 0; y < Setting.MapHeight; y++)
+            {
+                if(y == 0 || y == Setting.MapHeight - 1)
+                {
+                    for(int x = 0; x < Setting.MapWidth; x++)
+                    {
+                        AddObstacle(x, y, new TexturedWall(StandartBlock));
+                    }
+                }
+                else
+                {
+                    AddObstacle(0, y, new TexturedWall(StandartBlock));
+                    AddObstacle(Setting.MapWidth - 1, y, new TexturedWall(StandartBlock));
+                }
+            }
+        }
+
+
+        public void AddObstacle(int x, int y, Obstacle addObstacle)
         {
             if (y < 0 || y >= Setting.MapHeight ||
                x < 0 || x >= Setting.MapWidth)
                 throw new Exception("Index out of range 'addEmptyToMap'");
-            else if (obstacle.Symbol == empty)
+            else if (addObstacle.Symbol == Setting.empty)
                 return;
 
-            MapStr[y * Setting.MapWidth + x] = obstacle.Symbol;
+
+            MapStr[y * Setting.MapWidth + x] = addObstacle.Symbol;
 
             x *= Screen.Setting.Tile;
             y *= Screen.Setting.Tile;
 
-            obstacle.X = x;
-            obstacle.Y = y;
-            obstacles[(x, y)] = obstacle;
+            addObstacle.X = x;
+            addObstacle.Y = y;
+            Obstacles[(x, y)] = addObstacle;
          
         }
-        public void DeleteObstacleFromMap(int x, int y)
+        public void DeleteObstacle(int x, int y)
         {
 
             if (y <= 0 || y >= Setting.MapHeight - 1 ||
                x <= 0 || x >= Setting.MapWidth - 1)
                 throw new Exception("You are trying to change the map boundaries or idnex out range 'addEmptyToMap'");
 
+            if (MapStr[y * Setting.MapWidth + x] == Setting.empty)
+                return;
+
             Obstacles.Remove((x * Screen.Setting.Tile, y * Screen.Setting.Tile));
-            MapStr[y * Setting.MapWidth + x] = empty;
+            MapStr[y * Setting.MapWidth + x] = Setting.empty;
         }
+
         public ValueTuple<int, int> Mapping(double x, double y, int tile)
         {
             return new ValueTuple<int, int>(
@@ -124,7 +133,7 @@ namespace MapLib
 
             return values;
         }
-        public void printMap()
+        public void PrintMap()
         {
             for(int i = 0; i < Setting.MapHeight; i++)
             {

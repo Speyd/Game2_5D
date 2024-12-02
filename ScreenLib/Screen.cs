@@ -15,7 +15,7 @@ namespace ScreenLib
 
 
         //----------------------Window------------------------
-        public static RenderWindow _window;
+        private static RenderWindow _window;
         public static RenderWindow Window 
         {
             get
@@ -29,7 +29,7 @@ namespace ScreenLib
 
 
         //-----------------Setting----------------
-        public static Setting _setting;
+        private static Setting _setting;
         public static Setting Setting 
         {
             get

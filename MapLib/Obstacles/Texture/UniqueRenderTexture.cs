@@ -11,25 +11,29 @@ namespace MapLib.Obstacles.Texture
     public class UniqueDictionary<KEY, VALUE>
     {
         private Dictionary<KEY, VALUE> myMap = new Dictionary<KEY, VALUE>();
-        private HashSet<VALUE> valuesSet = new HashSet<VALUE>();
+        // private HashSet<VALUE> valuesSet = new HashSet<VALUE>();
+        private Dictionary<VALUE, bool> valuePresence = new Dictionary<VALUE, bool>();
+        public int Count {  get { return myMap.Count; } }
 
+        public UniqueDictionary() 
+        { }
         public UniqueDictionary(List<(KEY, VALUE)> values)
         {
             foreach ((KEY, VALUE) value in values)
             {
                 Insert(value.Item1, value.Item2);
             }
-        }
+        }    
 
         public bool Insert(KEY key, VALUE value)
         {
-            if (valuesSet.Contains(value))
+            if (valuePresence.ContainsKey(value))
             {
                 return false;
             }
 
             myMap[key] = value;
-            valuesSet.Add(value);
+            valuePresence[value] = true;
             return true;
         }
 
@@ -40,6 +44,18 @@ namespace MapLib.Obstacles.Texture
                 return value;
             }
             return default(VALUE);
+        }
+
+        public VALUE? GetFirstValue()
+        {
+            if(Count == 0)
+                return default(VALUE);
+
+            return myMap.First().Value;
+        }
+        public bool PresenceKey(KEY key)
+        {
+            return myMap.ContainsKey(key);
         }
 
         public Dictionary<KEY, VALUE> getUniqueDictionary() => myMap;

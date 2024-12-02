@@ -1,5 +1,4 @@
 ﻿using EntityLib;
-using ObstacleLib.Render.Texture;
 using Render.InterfaceRender;
 using Render.ZBufferRender;
 using ScreenLib;

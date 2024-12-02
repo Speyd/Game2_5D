@@ -4,13 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ObstacleLib.Render.Texture;
 using System.Drawing;
 using System.Drawing.Imaging;
 using SixLabors.ImageSharp;
-using ObstacleLib.Render;
 using System.Runtime.InteropServices;
-using ObstacleLib;
 using Render.InterfaceRender;
 using Render.ZBufferRender;
 using EntityLib;
@@ -21,6 +18,7 @@ using SFML.System;
 using Render;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib.Render;
+using MapLib.Obstacles.Texture;
 
 namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 {
@@ -46,7 +44,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         private double setWallX(double value)
         {
             if (CurrentRenderTexture != null)
-                return value + setting.ShiftCubedX / 100 * CurrentRenderTexture.ScreenScale;
+                return value + setting.ShiftCubedX / 100 * Screen.Setting.Scale;
             else
                 return value;
         }
@@ -54,7 +52,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         private double setWallY(double value)
         {
             if (CurrentRenderTexture != null)
-                return value + setting.ShiftCubedY / 100 * CurrentRenderTexture.ScreenScale;
+                return value + setting.ShiftCubedY / 100 * Screen.Setting.Scale;
             else
                 return value;
         }
@@ -64,32 +62,27 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         public double Distance { get; set; }
 
         #region Constructor
-        public SpriteObstacle(double x, double y,
-            char symbol, List<TextureObstacle> textures,
-            bool isPassability = false)
-            : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(double x, double y, List<TextureObstacle> textures, bool isPassability = false)
+            : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
         {
             setting = new Setting();
             foreach(var texture in textures)
                 addSprite.AddTexture(this, texture);
         }
-        public SpriteObstacle(double x, double y,
-            char symbol, TextureObstacle texture,
+        public SpriteObstacle(double x, double y, TextureObstacle texture,
             bool isPassability = false)
-           : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
+           : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
         {
             setting = new Setting();
 
             addSprite.AddTexture(this, texture);
         }
-        public SpriteObstacle(double x, double y,
-            char symbol, string path,
-            int screenTile, bool isPassability = false)
-           : base(x, y, symbol, SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(double x, double y, string path, bool isPassability = false)
+           : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
         {
             setting = new Setting();
 
-            addSprite.AddTexture(this, path, screenTile);
+            addSprite.AddTexture(this, path);
         }
         #endregion
 

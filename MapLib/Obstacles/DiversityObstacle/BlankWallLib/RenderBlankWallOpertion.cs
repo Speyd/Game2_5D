@@ -31,10 +31,10 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
 
         public void UpdateVertices(BlankWall blankWall, VertexArray renderWall, Vector2f scale, Vector2f position)
         {
-            renderWall[0] = new Vertex(position, blankWall.CurrentColorFilling);
-            renderWall[1] = new Vertex(position + new Vector2f(scale.X, 0), blankWall.CurrentColorFilling);
-            renderWall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), blankWall.CurrentColorFilling);
-            renderWall[3] = new Vertex(position + new Vector2f(0, scale.Y), blankWall.CurrentColorFilling);
+            renderWall[0] = new Vertex(position, blankWall.ColorFilling);
+            renderWall[1] = new Vertex(position + new Vector2f(scale.X, 0), blankWall.ColorFilling);
+            renderWall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), blankWall.ColorFilling);
+            renderWall[3] = new Vertex(position + new Vector2f(0, scale.Y), blankWall.ColorFilling);
         }
 
     }
