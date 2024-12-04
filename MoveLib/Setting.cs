@@ -10,27 +10,23 @@ namespace MoveLib
     public class Setting
     {
         //Speed
-        public float moveSpeed = 150f;
-        public double moveSpeedAngel;
+        public float MoveSpeed { get; set; } = 150f;
+        public double MoveSpeedAngel { get; set; } = 1;
 
         //TempsValue
-        public double verticalAngle = 0.0;
-        public double angle = 0.0;
+        public double TempVerticalAngle = 0.0;
+        public double TempAngle = 0.0;
 
         //Settig Control
-        public float minDistanceFromWall;
-        public float mouseSensitivity;
-        public bool isMouseCaptured = true;
+        public float MinDistanceFromWall { get; set; } = 50;
+        public float MouseSensitivity { get; set; } = 0.001f;
+        public bool IsMouseCaptured { get; set; } = true;
 
         //Settig Mouse
-        public double minVerticalAngle = -Math.PI / 2;
-        public double maxVerticalAngle = Math.PI / 2;
+        public static double MinVerticalAngle { get; } = -Math.PI / 2;
+        public static double MaxVerticalAngle { get; } = Math.PI / 2;
 
-        public Setting(float minDistanceFromWall, float mouseSensitivity) 
-        {
-            //moveSpeed = 20;
-            this.minDistanceFromWall = minDistanceFromWall;
-            this.mouseSensitivity = mouseSensitivity;
-        }
+        public Setting() 
+        {}
     }
 }

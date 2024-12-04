@@ -12,16 +12,15 @@ namespace MoveLib
     {
         public void TurnAngle(ref double entityAngle, int direction)
         {
-            entityAngle -= setting.moveSpeedAngel * direction;
+            entityAngle -= setting.MoveSpeedAngel * direction;
         }
 
         public void ResetAngle(Entity entity, double deltaTime)
         {
-            setting.moveSpeedAngel = 1 * deltaTime;
+            setting.MoveSpeedAngel = 1 * deltaTime;
 
-            entity.Angle = setting.angle % (2 * Math.PI);
-           // Console.WriteLine(entity.GetEntityA());
-            entity.VerticalAngle = setting.verticalAngle;
+            entity.Angle = setting.TempAngle % (2 * Math.PI);
+            entity.VerticalAngle = setting.TempVerticalAngle;
         }
     }
 }

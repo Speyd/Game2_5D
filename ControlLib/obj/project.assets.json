@@ -828,6 +828,21 @@
           "build/_._": {}
         }
       },
+      "DrawLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "RayTracingLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/DrawLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DrawLib.dll": {}
+        }
+      },
       "EntityLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -903,6 +918,22 @@
           "bin/placeholder/MoveLib.dll": {}
         }
       },
+      "RayTracingLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "MoveLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/RayTracingLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RayTracingLib.dll": {}
+        }
+      },
       "Render/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -944,21 +975,6 @@
         },
         "runtime": {
           "bin/placeholder/TextField.dll": {}
-        }
-      },
-      "TextureWallCollisionDetection/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "dependencies": {
-          "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "ScreenLib": "1.0.0"
-        },
-        "compile": {
-          "bin/placeholder/TextureWallCollisionDetection.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/TextureWallCollisionDetection.dll": {}
         }
       }
     }
@@ -1259,6 +1275,11 @@
         "sixlabors.imagesharp.nuspec"
       ]
     },
+    "DrawLib/1.0.0": {
+      "type": "project",
+      "path": "../DrawLib/DrawLib.csproj",
+      "msbuildProject": "../DrawLib/DrawLib.csproj"
+    },
     "EntityLib/1.0.0": {
       "type": "project",
       "path": "../EntityLib/EntityLib.csproj",
@@ -1284,6 +1305,11 @@
       "path": "../MoveLib/MoveLib.csproj",
       "msbuildProject": "../MoveLib/MoveLib.csproj"
     },
+    "RayTracingLib/1.0.0": {
+      "type": "project",
+      "path": "../RayTracingLib/RayTracingLib.csproj",
+      "msbuildProject": "../RayTracingLib/RayTracingLib.csproj"
+    },
     "Render/1.0.0": {
       "type": "project",
       "path": "../Render/Render.csproj",
@@ -1298,21 +1324,16 @@
       "type": "project",
       "path": "../TextField/TextField.csproj",
       "msbuildProject": "../TextField/TextField.csproj"
-    },
-    "TextureWallCollisionDetection/1.0.0": {
-      "type": "project",
-      "path": "../TextureWallCollisionDetection/TextureWallCollisionDetection.csproj",
-      "msbuildProject": "../TextureWallCollisionDetection/TextureWallCollisionDetection.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "DrawLib >= 1.0.0",
       "EntityLib >= 1.0.0",
       "MapLib >= 1.0.0",
       "MiniMapLib >= 1.0.0",
       "MoveLib >= 1.0.0",
-      "TextField >= 1.0.0",
-      "TextureWallCollisionDetection >= 1.0.0"
+      "TextField >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1347,6 +1368,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj"
+            },
             "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
             },
@@ -1361,9 +1385,6 @@
             },
             "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj"
-            },
-            "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj": {
-              "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj"
             }
           }
         }

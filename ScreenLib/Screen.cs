@@ -42,7 +42,7 @@ namespace ScreenLib
         }
 
         //----------Dimensions Screen----------
-        private static void SetMultWidth() => MultWidth =  BaseScreenWidth / _screenWidth; 
+        private static void SetMultWidth() => MultWidth = (float)(BaseScreenWidth / _screenWidth); 
         private static int _screenWidth;
         public static int ScreenWidth 
         {
@@ -62,7 +62,7 @@ namespace ScreenLib
             } 
         }
 
-        private static void SetMultHeight() => MultHeight = BaseScreenHeight / _screenHeight;
+        private static void SetMultHeight() => MultHeight = (float)(BaseScreenHeight / _screenHeight);
         private static int _screenHeight;
         public static int ScreenHeight
         {
@@ -136,8 +136,8 @@ namespace ScreenLib
             ScreenWidth = (int)Window.Size.X;
             ScreenHeight = (int)Window.Size.Y;
 
-            MultWidth = BaseScreenWidth / ScreenWidth;
-            MultHeight = BaseScreenHeight / ScreenHeight;
+            //MultWidth = BaseScreenWidth / ScreenWidth;
+            //MultHeight = BaseScreenHeight / ScreenHeight;
 
             Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
             OutputPriority = new OutputPriority(Window);

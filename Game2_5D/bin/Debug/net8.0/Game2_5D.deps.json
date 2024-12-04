@@ -1040,15 +1040,28 @@
       },
       "ControlLib/1.0.0": {
         "dependencies": {
+          "DrawLib": "1.0.0",
           "EntityLib": "1.0.0",
           "MapLib": "1.0.0",
           "MiniMapLib": "1.0.0",
           "MoveLib": "1.0.0",
-          "TextField": "1.0.0",
-          "TextureWallCollisionDetection": "1.0.0"
+          "TextField": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "DrawLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "RayTracingLib": "1.0.0"
+        },
+        "runtime": {
+          "DrawLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1119,6 +1132,20 @@
           }
         }
       },
+      "RayTracingLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "MoveLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "RayTracingLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Render/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
@@ -1156,15 +1183,10 @@
           }
         }
       },
-      "TextureWallCollisionDetection/1.0.0": {
-        "dependencies": {
-          "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "ScreenLib": "1.0.0"
-        },
+      "TextureWallCollisionDetection/1.0.0.0": {
         "runtime": {
           "TextureWallCollisionDetection.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -1264,6 +1286,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "DrawLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "EntityLib/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1289,6 +1316,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "RayTracingLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "Render/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1304,8 +1336,8 @@
       "serviceable": false,
       "sha512": ""
     },
-    "TextureWallCollisionDetection/1.0.0": {
-      "type": "project",
+    "TextureWallCollisionDetection/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

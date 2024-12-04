@@ -1,5 +1,6 @@
 ﻿using EntityLib;
 using MapLib.Obstacles.Texture;
+using Render.InterfaceRender;
 using Render.ResultAlgorithm;
 using ScreenLib;
 using SFML.Graphics;
@@ -33,8 +34,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
         public void SelectCurrentRenderTexture(Result result, Entity entity)
         {
-            Wall.DetermineParties.RefreshData(entity, result.CarAngle, Wall);
-            TextureWallSide wallDetermine = Wall.DetermineParties.DetermineWallAllSides(Wall).TextureWallDetermine;
+            Wall.ResetSides();
+            TextureWallSide wallDetermine = DetermineWallSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
+          
 
             Wall.CurrentRenderTexture = Wall.MultiTextured[wallDetermine];
         }

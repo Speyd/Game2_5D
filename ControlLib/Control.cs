@@ -16,20 +16,23 @@ using SixLabors.ImageSharp;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Render.ResultAlgorithm;
-using TextureWallCollisionDetection;
 using TextField;
 using System.Diagnostics.Metrics;
 using MoveLib;
 using MiniMapLib.Window;
+using DrawLib;
+
 namespace ControlLib
 {
     public class Control
     {
+        private Map map;
         private ZoomMiniMap ZoomMiniMap { get; init; }
 
         private CheckPressed CheckPressed { get; init; } = new CheckPressed();
 
-        private CollisionTextureDetection CollisionDetection { get; init; }
+        //private CollisionTextureDetection CollisionDetection { get; init; }
+        private Drawing Drawing { get; init; }
 
 
         #region Move
@@ -42,13 +45,13 @@ namespace ControlLib
         InputField InputField { get; init; }
 
 
-        public Control(Map map, ZoomMiniMap zoom,
-            float minDistanceFromWall = 50, float mouseSensitivity = 0.001f)
+        public Control(Map map, ZoomMiniMap zoom)
         {
             ZoomMiniMap = zoom;
-
-            SettingMove = new MoveLib.Setting(minDistanceFromWall, mouseSensitivity);
-            CollisionDetection = new CollisionTextureDetection(map, SettingMove.maxVerticalAngle);
+            this.map = map;
+            SettingMove = new MoveLib.Setting();
+            Drawing = new Drawing();
+            // CollisionDetection = new CollisionTextureDetection(map);
 
             MoveMouse = new MoveMouse(SettingMove);
             MovePositions = new MovePositions(new Collision(map, SettingMove), SettingMove);
@@ -90,9 +93,9 @@ namespace ControlLib
             //---------------------Angle----------------------
             MoveAngle.ResetAngle(entity, deltaTime);
             if (CheckPressed.CurrentDirection.TurnLeft)
-                MoveAngle.TurnAngle(ref SettingMove.angle, -1);
+                MoveAngle.TurnAngle(ref SettingMove.TempAngle, -1);
             if (CheckPressed.CurrentDirection.TurnRight)
-                MoveAngle.TurnAngle(ref SettingMove.angle, 1);
+                MoveAngle.TurnAngle(ref SettingMove.TempAngle, 1);
 
 
             //-----------------Mini Map--------------------
@@ -104,7 +107,7 @@ namespace ControlLib
 
             //-----------Collision Detection-------------
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                CollisionDetection.DrawingOnWall(entity);
+                Drawing.DrawingPoint(map, entity, 30);
 
 
             //----------------Exit-----------------

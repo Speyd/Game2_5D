@@ -13,6 +13,8 @@ namespace MapLib.Obstacles.Texture
         public SFML.Graphics.Texture Texture { get; set; }
         public uint TextureWidth { get; set; }
         public uint TextureHeight { get; set; }
+        public static uint BaseTextureHeight { get; } = 1308;
+
         public int TextureScale { get; set; }
         public uint PixelCount {  get; set; }
 

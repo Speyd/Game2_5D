@@ -5,12 +5,18 @@ namespace MoveLib
 {
     public class MovePositions(Collision collision, MoveLib.Setting setting)
     {
+        double cosAngle = 1;
+        double sinAngle = 1;
+
         public void Move(Entity entity, double directionX, double directionY, double deltaTime)
         {
-            double speed = setting.moveSpeed * (1 / FPS.fps);
+            double speed = setting.MoveSpeed * (1 / FPS.fps);
 
-            double rx = Math.Cos(entity.Angle) * directionX - Math.Sin(entity.Angle) * directionY;
-            double ry = Math.Sin(entity.Angle) * directionX + Math.Cos(entity.Angle) * directionY;
+            cosAngle = Math.Cos(entity.Angle);
+            sinAngle = Math.Sin(entity.Angle);
+
+            double rx = cosAngle * directionX - sinAngle * directionY;
+            double ry = sinAngle * directionX + cosAngle * directionY;
 
             rx *= speed;
             ry *= speed;

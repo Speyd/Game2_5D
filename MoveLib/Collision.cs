@@ -19,8 +19,8 @@ namespace MoveLib
 
         public void IsCollision(double nextX, double nextY, Entity entity)
         {
-            double deltaX = setting.minDistanceFromWall / 2 * Math.Sign(nextX);
-            double deltaY = setting.minDistanceFromWall / 2 * Math.Sign(nextY);
+            double deltaX = setting.MinDistanceFromWall / 2 * Math.Sign(nextX);
+            double deltaY = setting.MinDistanceFromWall / 2 * Math.Sign(nextY);
 
             if (nextX != 0 && !IsObstacle(entity.X + nextX + deltaX, entity.Y))
                 entity.X += nextX;

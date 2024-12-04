@@ -104,6 +104,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj"
+              },
               "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
               },
@@ -118,9 +121,81 @@
               },
               "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\TextField\\TextField.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj",
+        "projectName": "DrawLib",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\DrawLib\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
               },
-              "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj"
+              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj"
               }
             }
           }
@@ -650,6 +725,84 @@
         }
       }
     },
+    "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
+        "projectName": "RayTracingLib",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
     "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -855,81 +1008,6 @@
               "version": "[2.6.0, )"
             }
           },
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj",
-        "projectName": "TextureWallCollisionDetection",
-        "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\TextureWallCollisionDetection.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\C++ проекты\\Game2_5D\\TextureWallCollisionDetection\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",

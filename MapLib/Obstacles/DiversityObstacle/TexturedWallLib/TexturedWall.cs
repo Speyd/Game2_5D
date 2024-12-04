@@ -4,9 +4,6 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using ObstacleLib;
-//using ObstacleLib.Render;
-//using ObstacleLib.Render.Texture;
 using SFML.Graphics;
 using SixLabors.ImageSharp.PixelFormats;
 using Render.InterfaceRender;
@@ -17,8 +14,6 @@ using Render.ResultAlgorithm;
 using SFML.System;
 using MapLib.Obstacles.Texture;
 using EntityLib.Player;
-using MapLib.Obstacles.DiversityObstacle.DetermineParties;
-using MapLib.Obstacles.DiversityObstacle.DetermineParties.InfoForDetermine;
 using System.Reflection.Metadata;
 using System.IO;
 
@@ -31,12 +26,36 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         public TexturedPair? CurrentRenderTexture { get; set; } = null;
         public TextureObstacle? TextureInMiniMap { get; set; }
 
+        //----------------------Coordinates---------------------
+        private double _x;
+        public override double X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                ResetSides();
+            }
+        }
+        private double _y;
+        public override double Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                ResetSides();
+            }
+        }
+
+        //-----------------------SidesInfo--------------------
+        public float Left { get; set; } = 0;
+        public float Right { get; set; } = 0;
+        public float Top { get; set; } = 0;
+        public float Bottom { get; set; } = 0;
         //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
         private RenderTexturedWallOpertion RenderOperation { get; init; }
-
-        //----------------------Determine---------------------
-        public DetermineWallParties DetermineParties { get; init; }
 
 
 
@@ -55,8 +74,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
                 Color = textured.RenderSprite.Color
             };
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         public TexturedWall(double x, double y, string path, bool isPassability = false)
 
@@ -66,8 +85,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
             MultiTextured = new MultiTexturedObject(path);
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         public TexturedWall(double x, double y, string pathLR, string pathBT, bool isPassability = false)
 
@@ -76,8 +95,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(pathLR);
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         public TexturedWall(double x, double y,
             string pathL, string pathR,
@@ -89,8 +108,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(pathL);
             MultiTextured = new MultiTexturedObject(pathL,pathR, pathB, pathT);
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         public TexturedWall(double x, double y, List<(TextureWallSide, string)> textures, bool isPassability = false)
             : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
@@ -98,8 +117,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         public TexturedWall(double x, double y, List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
             : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
@@ -107,8 +126,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
-            DetermineParties = new DetermineWallParties(new EntityInfo(), new WallInfo(this));
             RenderOperation = new RenderTexturedWallOpertion(this);
+            ResetSides();
         }
         #endregion
 
@@ -144,7 +163,13 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         {
             return (float)ray * Screen.Setting.Scale;
         }
-        
+        public void ResetSides()
+        {
+            Left = (float)X;
+            Right = (float)X + Screen.Setting.Tile;
+            Top = (float)Y;
+            Bottom = (float)Y + Screen.Setting.Tile;
+        }
         public override void Render(Result result, Entity entity)
         {
             RenderOperation.SelectCurrentRenderTexture(result, entity);
