@@ -10,21 +10,25 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
 {
     public class Setting
     {
+        
 
         #region Shift
-        private double shiftCubedX = 50;
-        public double ShiftCubedX
-        {
-            get => shiftCubedX;
-            set => shiftCubedX = value < 0 ? 1 : value > 100 ? 100 : value;
-        }
+        //private double shiftCubedX = 99;
+        //public double ShiftCubedX
+        //{
+        //    get => shiftCubedX;
+        //    set => shiftCubedX = value < 0 ? 1 : value > 99 ? 99 : value;
+        //}
 
-        private double shiftCubedY = 50;
-        public double ShiftCubedY
-        {
-            get => shiftCubedY;
-            set => shiftCubedY = value < 0 ? 1 : value > 100 ? 100 : value;
-        }
+        //private double shiftCubedY = 1;
+        //public double ShiftCubedY
+        //{
+        //    get => shiftCubedY;
+        //    set
+        //    {
+        //        shiftCubedY = value < 0 ? 1 : value > 99 ? 99 : value;
+        //    }
+        //}
 
         private double shiftCubedZ = 0;
         public double ShiftCubedZ 
@@ -35,7 +39,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
         #endregion
 
         #region Scale
-        private float scaleMultSprite = 100;
+        private float scaleMultSprite = 1;
         public float ScaleMultSprite
         {
             get => scaleMultSprite;

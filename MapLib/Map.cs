@@ -4,6 +4,7 @@ using MapLib.SettingLib;
 using SFML.Graphics;
 using System.Collections.Generic;
 using MapLib.Obstacles;
+using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 namespace MapLib
@@ -16,7 +17,8 @@ namespace MapLib
 
 
         //---------------------Obstacles-----------------------
-        public Dictionary<ValueTuple<int, int>, Obstacle> Obstacles { get; init; }
+        public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
+        public Dictionary<ValueTuple<int, int>, List<Obstacle>> ObstaclesWithoutNull { get; init; }
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png");
 
 
@@ -29,7 +31,8 @@ namespace MapLib
         public Map(int height, int width)
         {
             Setting = new Setting(height, width);
-            Obstacles = new Dictionary<(int X, int Y), Obstacle>();
+            Obstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
+            ObstaclesWithoutNull = new Dictionary<(int X, int Y), List<Obstacle>>();
 
             RefillingObstacles();
         }
@@ -53,19 +56,17 @@ namespace MapLib
 
             CreatMap();
 
-            for(int y = 0; y < Setting.MapHeight; y++)
+            for (int y = 0; y < Setting.MapHeight; y++)
             {
-                if(y == 0 || y == Setting.MapHeight - 1)
+                for (int x = 0; x < Setting.MapWidth; x++)
                 {
-                    for(int x = 0; x < Setting.MapWidth; x++)
+                    Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
+
+                    if (y == 0 || y == Setting.MapHeight - 1 || x == 0 || x == Setting.MapWidth - 1)
                     {
+                        ObstaclesWithoutNull[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
                         AddObstacle(x, y, new TexturedWall(StandartBlock));
                     }
-                }
-                else
-                {
-                    AddObstacle(0, y, new TexturedWall(StandartBlock));
-                    AddObstacle(Setting.MapWidth - 1, y, new TexturedWall(StandartBlock));
                 }
             }
         }
@@ -87,8 +88,19 @@ namespace MapLib
 
             addObstacle.X = x;
             addObstacle.Y = y;
-            Obstacles[(x, y)] = addObstacle;
-         
+            addObstacle.StandartSetSides();
+
+            if (!Obstacles.ContainsKey((x, y)))
+            {
+                Obstacles[(x, y)] = new List<Obstacle>();
+            }
+            Obstacles[(x, y)].Add(addObstacle);
+
+            if (!ObstaclesWithoutNull.ContainsKey((x, y)))
+            {
+                ObstaclesWithoutNull[(x, y)] = new List<Obstacle>();
+            }
+            ObstaclesWithoutNull[(x, y)].Add(addObstacle);
         }
         public void DeleteObstacle(int x, int y)
         {
@@ -100,23 +112,37 @@ namespace MapLib
             if (MapStr[y * Setting.MapWidth + x] == Setting.empty)
                 return;
 
-            Obstacles.Remove((x * Screen.Setting.Tile, y * Screen.Setting.Tile));
+
+
+            if (Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Count > 1)
+                return;
+            else
+            {        
+                Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Clear();
+                ObstaclesWithoutNull[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Clear();
+            }
+
             MapStr[y * Setting.MapWidth + x] = Setting.empty;
         }
 
-        public ValueTuple<int, int> Mapping(double x, double y, int tile)
+        public static ValueTuple<int, int> Mapping(double x, double y, int tile)
         {
             return new ValueTuple<int, int>(
             (int)(x / tile) * tile,
             (int)(y / tile) * tile);
         }
-        public bool IsWall(int x, int y)    //pass only values ​​that correspond to world coordinates (screen.Setting.Tile)
+        public static int Mapping(double value, int tile)
         {
-            if (x >= 0 && y >= 0 && x < Setting.MapTileWidth && y < Setting.MapTileHeight)
-            {
-                return Obstacles.ContainsKey((x, y));
-            }
-            return false;
+            return (int)(value / tile) * tile;
+        }
+
+        public bool CheckTrueCoordinates(int x, int y)
+        {
+            return x >= 0 && y >= 0 && x < Setting.MapTileWidth && y < Setting.MapTileHeight;
+        }
+        public bool CheckTrueCoordinates(ValueTuple<int, int> coo)
+        {
+            return coo.Item1 >= 0 && coo.Item2 >= 0 && coo.Item1 < Setting.MapTileWidth && coo.Item2 < Setting.MapTileHeight;
         }
         public List<ValueTuple<int, int>> GetMapWorld(int TILE, Map map)
         {

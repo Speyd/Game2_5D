@@ -14,7 +14,7 @@ namespace ScreenLib.SettingScreen
         public int AmountRays { get; init; }
         public int MaxDepth { get; init; } // 800
         public int Scale { get; init; }
-        public double CenterRay { get; init; }
+        public int CenterRay { get; init; }
 
         public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800, int tile = 100)
         {
@@ -37,7 +37,7 @@ namespace ScreenLib.SettingScreen
             float tempCenterRay = (int)(AmountRays / 2) - 1;
             double rayAngleRadians = -60 / 2 + ((double)tempCenterRay / AmountRays) * 60;
 
-            CenterRay = rayAngleRadians * (Math.PI / 180);
+            CenterRay = AmountRays / 2 - 1;
         }
     }
 }

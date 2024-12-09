@@ -21,7 +21,7 @@ namespace MoveLib
             rx *= speed;
             ry *= speed;
 
-            collision.IsCollision(rx, ry, entity);
+            collision.IsCollision(entity, rx, ry);
         }
     }
 }

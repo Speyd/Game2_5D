@@ -1,6 +1,5 @@
 ﻿using RayTracingLib;
 using MapLib.Obstacles;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using EntityLib;
 using MapLib;
 using MapLib.Obstacles.Texture;
@@ -8,6 +7,8 @@ using SFML.System;
 using RayTracingLib.Detection;
 using SFML.Graphics;
 using ScreenLib;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
+using Render;
 
 namespace DrawLib
 {
@@ -19,7 +20,7 @@ namespace DrawLib
             if (wall.CurrentRenderTexture is null)
                 throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
 
-            return radius * ((float)wall.CurrentRenderTexture.Base.TextureHeight / (float)TextureObstacle.BaseTextureHeight);
+            return radius * (wall.CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight);
         }
 
         public float GetTextureXCoordinate(TexturedWall wall, Entity entity)
@@ -31,20 +32,19 @@ namespace DrawLib
                 throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
 
             float textureX = hitPoint.UV.X > hitPoint.UV.Y ? hitPoint.UV.X : hitPoint.UV.Y;
-            textureX *= wall.CurrentRenderTexture.Base.TextureWidth / Screen.Setting.Scale;
+            textureX *= wall.CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
 
-            return textureX - (float)Math.Pow(wall.CurrentRenderTexture.Base.TextureHeight / TextureObstacle.BaseTextureHeight, 4.5f);
+            return textureX - (float)Math.Pow(wall.CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
         }
 
 
         public void DrawingPoint(Map map, Entity entity, int radiusPoint)
         {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
-            if (obstacle is null)
-                return;
+            Obstacle? obstacle = Raycast.RaycastFun(map, entity).Where(o => o is IDrawable).FirstOrDefault();
 
-            if (obstacle is TexturedWall wall)
-            {;
+            if (obstacle is not null && obstacle is TexturedWall wall)// obstacle is TexturedWall wall
+            {
+                //Console.WriteLine("1");
                 hitPoint = RayDetectionX.DetermineWallAllSides(wall, entity);
                 float textureX = GetTextureXCoordinate(wall, entity);
 

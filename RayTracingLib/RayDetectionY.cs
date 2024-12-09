@@ -9,8 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Window;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using Render.InterfaceRender;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 
 namespace RayTracingLib.Detection
 {
@@ -44,7 +44,7 @@ namespace RayTracingLib.Detection
 
 
             float newMult = baseMult * Screen.MultHeight;
-            newMult *= (float)TextureObstacle.BaseTextureHeight / (float)wall.CurrentRenderTexture.Base.TextureHeight;
+            newMult *= (float)TextureObstacle.BaseHeight / (float)wall.CurrentRenderTexture.Base.Height;
 
             if (Screen.Styles == Styles.Fullscreen)
                 return newMult + addMultFullScreen;
@@ -114,7 +114,7 @@ namespace RayTracingLib.Detection
                 throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
             float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-            return wall.CurrentRenderTexture.Base.TextureHeight / 2 + textureY - addCoordinates;
+            return wall.CurrentRenderTexture.Base.HulfHeight + textureY - addCoordinates;
         }
         public static float GetTextureCoordinate(HitPoint hitPoint, TexturedWall wall, Entity entity, float radius)
         {

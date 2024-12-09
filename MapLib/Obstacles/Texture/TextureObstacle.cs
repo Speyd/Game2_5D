@@ -11,15 +11,41 @@ namespace MapLib.Obstacles.Texture
     public class TextureObstacle
     {
         public SFML.Graphics.Texture Texture { get; set; }
-        public uint TextureWidth { get; set; }
-        public uint TextureHeight { get; set; }
-        public static uint BaseTextureHeight { get; } = 1308;
 
-        public int TextureScale { get; set; }
+        //--------------------Size Texture-----------------------
+        private uint _width = 0;
+        public uint Width 
+        {
+            get => _width;
+            set
+            {
+                _width = value;
+                HulfWidth = value / 2;
+            }
+        }
+
+        private uint _height = 0;
+        public uint Height
+        {
+            get => _height;
+            set
+            {
+                _height = value;
+                HulfWidth = value / 2;
+            }
+        }
+
+        public uint HulfWidth { get; set; }
+        public uint HulfHeight { get; set; }
+        public static uint BaseHeight { get; } = 1308;
+
+        //-----------------------Setting---------------------
+        public int Scale { get; set; }
         public uint PixelCount {  get; set; }
 
-
+        //-------------------------Available formats------------------------
         private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
+
 
         private static bool IsImageFile(string path)
         {
@@ -40,30 +66,30 @@ namespace MapLib.Obstacles.Texture
             IsTruePath(path);
 
             Texture = new SFML.Graphics.Texture(path);
-            TextureWidth = Texture.Size.X;
-            TextureHeight = Texture.Size.Y;
+            Width = Texture.Size.X;
+            Height = Texture.Size.Y;
             SetTile();
 
-            PixelCount = TextureWidth * TextureHeight;
+            PixelCount = Width * Height;
         }
         public TextureObstacle(SFML.Graphics.Texture texture)
         {
             Texture = texture;
-            TextureWidth = texture.Size.X;
-            TextureHeight = texture.Size.Y;
+            Width = texture.Size.X;
+            Height = texture.Size.Y;
             SetTile();
 
-            PixelCount = TextureWidth * TextureHeight;
+            PixelCount = Width * Height;
         }
 
         public TextureObstacle(TextureObstacle textureObstacle)
         {
             Texture = textureObstacle.Texture;
-            TextureWidth = textureObstacle.TextureWidth;
-            TextureHeight = textureObstacle.TextureHeight;
-            TextureScale = textureObstacle.TextureScale;
+            Width = textureObstacle.Width;
+            Height = textureObstacle.Height;
+            Scale = textureObstacle.Scale;
 
-            PixelCount = TextureWidth * TextureHeight;
+            PixelCount = Width * Height;
         }
 
         public void SetTexture(string path)
@@ -73,8 +99,8 @@ namespace MapLib.Obstacles.Texture
                 IsTruePath(path);
 
                 Texture = new SFML.Graphics.Texture(path);
-                TextureWidth = Texture.Size.X;
-                TextureHeight = Texture.Size.Y;
+                Width = Texture.Size.X;
+                Height = Texture.Size.Y;
                 SetTile();
             }
             catch (Exception ex)
@@ -86,17 +112,17 @@ namespace MapLib.Obstacles.Texture
         public void SetTile()
         {
             if (Screen.Setting.Tile != 0)
-                TextureScale = (int)(TextureWidth / Screen.Setting.Tile);
+                Scale = (int)(Width / Screen.Setting.Tile);
             else
-                TextureScale = 1;
+                Scale = 1;
         }
         
         public static SFML.Graphics.IntRect SetOffset(int offset, int screenTile, TextureObstacle texture)
         {
-            int left = offset * texture.TextureScale;
+            int left = offset * texture.Scale;
             int top = 0;
             int width = screenTile;
-            int height = (int)texture.TextureHeight;
+            int height = (int)texture.Height;
 
             return new SFML.Graphics.IntRect(left, top, width, height);
         }

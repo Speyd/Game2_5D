@@ -28,5 +28,7 @@ namespace EntityLib.Player
         {
             OnControlAction?.Invoke(deltaTime, this);
         }
+
+
     }
 }

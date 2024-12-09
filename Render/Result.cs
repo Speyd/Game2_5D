@@ -46,6 +46,7 @@ namespace Render.ResultAlgorithm
            
             Depth *= Math.Cos(entity.Angle - car_angle);
             Depth = Math.Max(Depth, 0.1);
+            
         }
 
         public void calculationSettingRender(ref Entity entity,
@@ -60,7 +61,6 @@ namespace Render.ResultAlgorithm
             CarAngle = car_angle;
 
             Offset = (int)Offset % Screen.Setting.Tile;
-            Depth = Math.Max(Depth, 0.1);
             ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
         }
     }

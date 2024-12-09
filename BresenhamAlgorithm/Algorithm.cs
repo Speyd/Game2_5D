@@ -19,42 +19,42 @@ namespace BresenhamAlgorithm
         {
             if (obstacle is SpriteObstacle sprite)
             {
-                if (!SpriteObstacle.spritesToRender.Contains(sprite))
+                if (!SpriteObstacle.SpritesToRender.Contains(sprite))
                 {
-                    SpriteObstacle.spritesToRender.Add(sprite);
+                    SpriteObstacle.SpritesToRender.Add(sprite);
                 }
             }
         }
 
-        private bool IsRenderObstacle(IRenderable obstacle)
-        {
-            return obstacle is not IRaylessRenderable;
-        }
+        //private bool IsRenderObstacle(IRenderable obstacle)
+        //{
+        //    return obstacle is IRaylessRenderable;
+        //}
         private bool CheckAndAddObstacle(double x, double y, double auxiliary, bool isVertical)
         {
             double mappedX = isVertical ? x + auxiliary : x;
             double mappedY = isVertical ? y : y + auxiliary;
 
-            var key = map.Mapping(mappedX, mappedY, Screen.Setting.Tile);
-            if (map.Obstacles.TryGetValue(key, out var obstacle))
+            var key = Map.Mapping(mappedX, mappedY, Screen.Setting.Tile);
+            foreach (var obstacle in map.Obstacles[key])
             {
-                //IsSprite(obstacle);
-
-
-                //if(IsRenderObstacle(obstacle) == false)
-                //    return false;
+                if (obstacle is not IWall)
+                {
+                    IsSprite(obstacle);
+                    continue;
+                }
 
                 if (isVertical)
                 {
                     obstacles.Item1 = obstacle;
+                    return true;
                 }
                 else
                 {
                     obstacles.Item2 = obstacle;
+                    return true;
                 }
-                return true;
             }
-
             return false;
         }
         #endregion
@@ -80,7 +80,7 @@ namespace BresenhamAlgorithm
             double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
             double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
 
-            var coordinates = map.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
+            var coordinates = Map.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
 
             double sinA, cosA;
 
@@ -95,11 +95,13 @@ namespace BresenhamAlgorithm
                     depth_v = (x - entity.X) / cosA;
                     vy = entity.Y + depth_v * sinA;
 
-                    if (map.Obstacles.ContainsKey(map.Mapping(x + auxiliaryX, vy, Screen.Setting.Tile)))
+                    if (map.CheckTrueCoordinates(Map.Mapping(x + auxiliaryX, vy, Screen.Setting.Tile)))
                     {
                         if (CheckAndAddObstacle(x, vy, auxiliaryX, true))
                             break;
                     }
+                    else
+                        break;
 
                     x += auxiliaryX * Screen.Setting.Tile;
                 }
@@ -112,11 +114,13 @@ namespace BresenhamAlgorithm
                     depth_h = (y - entity.Y) / sinA;
                     hx = entity.X + depth_h * cosA;
 
-                    if (map.Obstacles.ContainsKey(map.Mapping(hx, y + auxiliaryY, Screen.Setting.Tile)))
+                    if (map.CheckTrueCoordinates(Map.Mapping(hx, y + auxiliaryY, Screen.Setting.Tile)))
                     {
                         if (CheckAndAddObstacle(hx, y, auxiliaryY, false))
                             break;
                     }
+                    else
+                        break;
 
                     y += auxiliaryY * Screen.Setting.Tile;
                 }
@@ -124,14 +128,14 @@ namespace BresenhamAlgorithm
 
                 result.calculationSettingRender(ref entity, ref obstacles, ray, depth_v, depth_h, hx, vy, carAngle);
 
-                if (result.obstacle != null && IsRenderObstacle(result.obstacle) == true)
+                if (result.obstacle != null)
                     result.obstacle.Render(result, entity);
 
 
                 carAngle += entity.DeltaAngle;
             }
 
-            //SpriteObstacle.RenderSprites(screen, result, entity);
+            SpriteObstacle.RenderSprites(result, entity);
             zBuffer.Render();
         }
     }

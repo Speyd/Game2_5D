@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MoveLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6dd206de5efac29972b8e863840a5c2beb3b8291")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+399174773b4e0f1ca29d7333520e82bfc0bebd45")]
 [assembly: System.Reflection.AssemblyProductAttribute("MoveLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoveLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

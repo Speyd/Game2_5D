@@ -16,10 +16,12 @@ using MapLib.Obstacles.Texture;
 using EntityLib.Player;
 using System.Reflection.Metadata;
 using System.IO;
+using Render;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 {
-    public class TexturedWall : Obstacle, IWall
+    public class TexturedWall : Obstacle, IWall, IDrawable
     {
         //----------------------Textures--------------------------
         public MultiTexturedObject MultiTextured { get; init; }
@@ -27,32 +29,34 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         public TextureObstacle? TextureInMiniMap { get; set; }
 
         //----------------------Coordinates---------------------
-        private double _x;
-        public override double X
-        {
-            get => _x;
-            set
-            {
-                _x = value;
-                ResetSides();
-            }
-        }
-        private double _y;
-        public override double Y
-        {
-            get => _y;
-            set
-            {
-                _y = value;
-                ResetSides();
-            }
-        }
+
+        // public override Coordinates Coordinates;//= new Coordinates();
+        //private double _x;
+        //public override double X
+        //{
+        //    get => _x;
+        //    set
+        //    {
+        //        _x = value;
+        //        ResetSides();
+        //    }
+        //}
+        //private double _y;
+        //public override double Y
+        //{
+        //    get => _y;
+        //    set
+        //    {
+        //        _y = value;
+        //        ResetSides();
+        //    }
+        //}
 
         //-----------------------SidesInfo--------------------
-        public float Left { get; set; } = 0;
-        public float Right { get; set; } = 0;
-        public float Top { get; set; } = 0;
-        public float Bottom { get; set; } = 0;
+        //public float Left { get; set; } = 0;
+        //public float Right { get; set; } = 0;
+        //public float Top { get; set; } = 0;
+        //public float Bottom { get; set; } = 0;
         //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
         private RenderTexturedWallOpertion RenderOperation { get; init; }
@@ -61,10 +65,10 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
         #region Constructor
         public TexturedWall(TexturedWall textured)
-        : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.isPassability)
+        : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.IsPassability)
         {
             MultiTextured = new MultiTexturedObject(textured.MultiTextured);
-            TextureInMiniMap = textured.MultiTextured.UniqueTexture.GetFirstValue().Base;
+            TextureInMiniMap = new TextureObstacle(textured.MultiTextured.UniqueTexture.GetFirstValue().Base);
 
             RenderSprite = new Sprite(textured.RenderSprite.Texture)
             {
@@ -75,7 +79,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             };
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         public TexturedWall(double x, double y, string path, bool isPassability = false)
 
@@ -86,7 +89,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             MultiTextured = new MultiTexturedObject(path);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         public TexturedWall(double x, double y, string pathLR, string pathBT, bool isPassability = false)
 
@@ -96,7 +98,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         public TexturedWall(double x, double y,
             string pathL, string pathR,
@@ -106,10 +107,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(pathL);
-            MultiTextured = new MultiTexturedObject(pathL,pathR, pathB, pathT);
+            MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         public TexturedWall(double x, double y, List<(TextureWallSide, string)> textures, bool isPassability = false)
             : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
@@ -118,7 +118,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         public TexturedWall(double x, double y, List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
             : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
@@ -127,7 +126,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
-            ResetSides();
         }
         #endregion
 
@@ -143,7 +141,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
-        {    
+        {
             if (TextureInMiniMap is not null)
                 rectangleShape.Texture = TextureInMiniMap.Texture;
             else
@@ -158,18 +156,36 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         }
         #endregion
 
-
+        //public override float Normalize_X_MiniMap()
+        //{
+        //    return (float)X / Screen.Setting.Tile;
+        //}
+        //public override float Normalize_Y_MiniMap()
+        //{
+        //    return (float)Y / Screen.Setting.Tile;
+        //}
+        //public override void ResetXSides(double value)
+        //{
+        //    Left = X;
+        //    Right = X + Screen.Setting.Tile;
+        //}
+        //public override void ResetYSides(double value)
+        //{
+        //    Top = Y;
+        //    Bottom = Y + Screen.Setting.Tile;
+        //}
+        public override void StandartSetSides()
+        {
+            Left = X;
+            Right = X + Screen.Setting.Tile;
+            Top = Y;
+            Bottom = Y + Screen.Setting.Tile;
+        }
         public float CalcCooX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
         }
-        public void ResetSides()
-        {
-            Left = (float)X;
-            Right = (float)X + Screen.Setting.Tile;
-            Top = (float)Y;
-            Bottom = (float)Y + Screen.Setting.Tile;
-        }
+
         public override void Render(Result result, Entity entity)
         {
             RenderOperation.SelectCurrentRenderTexture(result, entity);
@@ -182,7 +198,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             BlackoutObstacle(result.Depth);
 
             RenderOperation.CalculationTextureScale(result);
-            RenderOperation. CalculationTexturePosition(result, entity.VerticalAngle);
+            RenderOperation.CalculationTexturePosition(result, entity.VerticalAngle);
 
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }

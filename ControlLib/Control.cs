@@ -28,10 +28,7 @@ namespace ControlLib
     {
         private Map map;
         private ZoomMiniMap ZoomMiniMap { get; init; }
-
         private CheckPressed CheckPressed { get; init; } = new CheckPressed();
-
-        //private CollisionTextureDetection CollisionDetection { get; init; }
         private Drawing Drawing { get; init; }
 
 
@@ -70,7 +67,7 @@ namespace ControlLib
         public void MakePressed(double deltaTime, Entity entity)
         {
             CheckPressed.Check();
-            //Console.WriteLine(deltaTime);
+
             //---------------Input Field--------------
             if (InputField.IsOpen == true) 
             {

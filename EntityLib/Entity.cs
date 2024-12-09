@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Numerics;
 using System.Reflection.Metadata;
@@ -29,12 +30,15 @@ namespace EntityLib
 
 
 
-        public double MaxRayDistance { get; private set; }
+        public double MaxRayMapDistance { get; private set; }
+        public double MaxRaySpriteDistance { get; private set; }
         public double DeltaAngle { get; init; }
 
 
         public double Dist { get; init; }
         public double ProjCoeff { get; init; }
+
+        public double Side { get; set; } = 10;
 
 
         public double Y { get; set; }
@@ -56,16 +60,24 @@ namespace EntityLib
           
             HalfFov = (float)Fov / 2;
             DeltaAngle = (float)Fov / setting.AmountRays;
+           // CenterRay = (int)(Screen.Setting.AmountRays / 2) - 1;
 
             Dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
             ProjCoeff = Dist * setting.Tile;
-            MaxRayDistance = maxDistance;
-        }
+            MaxRayMapDistance = maxDistance;
 
+            MaxRaySpriteDistance = 1000;
+        }
+        public (double nextX, double nextY) CalculateNextPosition(double deltaX, double deltaY)
+        {
+            double nextX = X + deltaX;
+            double nextY = Y + deltaY;
+            return (nextX, nextY);
+        }
         public (float x1, float y1) CalculateEndPoint()
         {
-            float x1 = (float)(X + MaxRayDistance * Math.Cos(Angle));
-            float y1 = (float)(Y + MaxRayDistance * Math.Sin(Angle));
+            float x1 = (float)(X + MaxRayMapDistance * Math.Cos(Angle));
+            float y1 = (float)(Y + MaxRayMapDistance * Math.Sin(Angle));
 
             return (x1, y1);
         }

@@ -35,7 +35,7 @@ namespace MapLib.Obstacles.Texture
         public void ResetMod()
         {
             Mod?.Dispose();
-            Mod = new RenderTexture(Base.TextureWidth, Base.TextureHeight);
+            Mod = new RenderTexture(Base.Width, Base.Height);
             Mod.Draw(new Sprite(Base.Texture));
             Mod.Display();
         }

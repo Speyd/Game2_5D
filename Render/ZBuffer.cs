@@ -12,20 +12,20 @@ namespace Render.ZBufferRender
 {
     public class ZBuffer
     {
-        private static PriorityQueue<Drawable, double> zBuffer = new PriorityQueue<Drawable, double>();
+        private static SortedList<double, Drawable> zBuffer = new SortedList<double, Drawable>(Comparer<double>.Create((x, y) => y.CompareTo(x)));
 
         public void Render()
         {
-            while (zBuffer.Count > 0)
+            foreach (var drawable in zBuffer.Values)
             {
-                var drawable = zBuffer.Dequeue();
                 Screen.OutputPriority.AddToPriority(2, drawable);
             }
+            zBuffer.Clear();
         }
 
         public static void AddToZBuffer(Drawable drawable, double depth)
         {
-            zBuffer.Enqueue(drawable, depth);
+            zBuffer[depth] = drawable;
         }
     }
 }

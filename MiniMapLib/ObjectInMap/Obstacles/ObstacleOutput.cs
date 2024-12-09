@@ -114,7 +114,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         {
             double distance = Math.Sqrt(Math.Pow(MapObstacle.X - MapPlayer.X, 2) + Math.Pow(MapObstacle.Y - MapPlayer.Y, 2));
 
-            if (distance <= Player.MaxRayDistance)
+            if (distance <= Player.MaxRayMapDistance)
                 SetRectangleShape(Window, obstacle);
         }
         private void RenderEntireArea(RenderTexture Window, IRenderable obstacle)
@@ -152,11 +152,14 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         public void RenderObstacle(RenderTexture Window)
         {
             SetMapСoordinatesPlayer();      
-            foreach (var obstacle in Map.Obstacles)
+            foreach (var obstacles in Map.ObstaclesWithoutNull.Values)
             {
-                SetMapCoordinatesObstacle(obstacle.Value);
+                foreach (var obstacle in obstacles)
+                {
+                    SetMapCoordinatesObstacle(obstacle);
 
-                RenderDelegate(Window, obstacle.Value);
+                    RenderDelegate(Window, obstacle);
+                }
             }
         }
     }

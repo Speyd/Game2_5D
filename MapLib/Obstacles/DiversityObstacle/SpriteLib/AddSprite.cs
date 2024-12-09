@@ -9,9 +9,9 @@ using MapLib.Obstacles.Texture;
 
 namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 {
-    internal class AddSprite
+    public static class AddSprite
     {
-        public void AddGif(SpriteObstacle sprite, string gifPath)
+        public static void AddGif(SpriteObstacle sprite, string gifPath)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 Console.WriteLine($"Error when enabling gif: {ex.Message}");
             }
         }
-        public void AddTexture(SpriteObstacle sprite, string path)
+        public static void AddTexture(SpriteObstacle sprite, string path)
         {
             TextureObstacle.IsTruePath(path);
 
@@ -52,12 +52,24 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 sprite.TextureInMap = sprite.Textures[0];
         }
 
-        public void AddTexture(SpriteObstacle sprite, TextureObstacle texture)
+        public static void AddTexture(SpriteObstacle sprite, TextureObstacle texture)
         {
             sprite.Textures.Add(texture);
 
             if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
                 sprite.TextureInMap = sprite.Textures[0];
+        }
+
+        public static void AddTextures(SpriteObstacle sprite, List<TextureObstacle> textures)
+        {
+            foreach (var texture in textures)
+                AddTexture(sprite, texture);
+        }
+
+        public static void AddTextures(SpriteObstacle sprite, List<string> paths)
+        {
+            foreach (var path in paths)
+                AddTexture(sprite, path);
         }
     }
 }

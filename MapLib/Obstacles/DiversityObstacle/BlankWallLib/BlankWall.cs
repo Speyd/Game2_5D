@@ -73,7 +73,38 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
             }
         }
         #endregion
+        //public override bool Collision(double X, double Y, double playerSide)
+        //{
+        //    bool isCollidingX = X > Left && X < Right;
+        //    bool isCollidingY = Y > Top && Y < Bottom;
 
+        //    return isCollidingX && isCollidingY && !IsPassability;
+        //}
+        //public override void ResetXSides(double value)
+        //{
+        //    Left = X;
+        //    Right = X + Screen.Setting.Tile;
+        //}
+        //public override void ResetYSides(double value)
+        //{
+        //    Top = Y;
+        //    Bottom = Y + Screen.Setting.Tile;
+        //}
+        //public override float Normalize_X_MiniMap()
+        //{
+        //    return (float)X / Screen.Setting.Tile;
+        //}
+        //public override float Normalize_Y_MiniMap()
+        //{
+        //    return (float)Y / Screen.Setting.Tile;
+        //}
+        public override void StandartSetSides()
+        {
+            Left = X;
+            Right = X + Screen.Setting.Tile;
+            Top = Y;
+            Bottom = Y + Screen.Setting.Tile;
+        }
         public float CalcCooX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;

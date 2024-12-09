@@ -30,11 +30,11 @@ using ControlLib;
 using BresenhamAlgorithm;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using Render.InterfaceRender;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using TextField;
 using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
 using MapLib.Obstacles.Texture;
+using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 //Screen screen = new Screen(1500, 1000);
 Screen.Initialize(1500, 1000);
 
@@ -55,7 +55,22 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
     new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png"),
 
 };
-
+List<TextureObstacle> textureBarel= new List<TextureObstacle>()
+{
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\0.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\1.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\2.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\3.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\4.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\5.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\6.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\7.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\8.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\9.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\10.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\11.png"),
+    new TextureObstacle( @"Resources\Image\Sprite\Barel\12.png"),
+};
 
 List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 {
@@ -92,14 +107,27 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 //        Speed = 30,     
 //    }
 //};
-//SpriteObstacle sprite1 = new SpriteObstacle(0, 0, 'S', textureObstacles)
-//{
-//    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-//    {
-//        ScaleMultSprite = 100,
-//    }
-//};
-
+SpriteObstacle sprite1 = new SpriteObstacle(0, 0, textureObstacles)
+{
+    Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+    {
+        ScaleMultSprite = 64,
+    }
+};
+SpriteObstacle barel = new SpriteObstacle(0, 0, textureBarel)
+{
+    Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+    {
+        ScaleMultSprite = 64,
+        ShiftCubedZ = -70,
+    },
+    CurrentAnimation = new AnimationState()
+    {
+        Speed = 30,
+        IsAnimation = true,
+    },
+    
+};
 //SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 //{
 //    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
@@ -130,7 +158,15 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 
 //map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
-//map.AddObstacleToMap(4, 6, map.Obstacles, sprite1);
+//map.AddObstacle(4, 5, sprite1);
+//sprite1.SetShifts(50);
+
+map.AddObstacle(3, 5, barel);
+barel.ShiftCubedX = 20;
+barel.ShiftCubedY = 95;
+barel.SideBT = 10;
+barel.SideLR = 20;
+
 TexturedWall wall = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png");
 map.AddObstacle(7, 7,  wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));

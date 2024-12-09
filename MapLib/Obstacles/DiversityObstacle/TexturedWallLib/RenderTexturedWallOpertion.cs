@@ -19,9 +19,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         {
             if (Wall.CurrentRenderTexture is null)
                 return;
-            
-            float scaleX = (float)Wall.CurrentRenderTexture.Base.TextureScale / Wall.CurrentRenderTexture.Base.TextureWidth;
-            float scaleY = (float)result.ProjHeight / Wall.CurrentRenderTexture.Base.TextureHeight;
+
+            float scaleX = (float)Wall.CurrentRenderTexture.Base.Scale / Wall.CurrentRenderTexture.Base.Width;
+            float scaleY = (float)result.ProjHeight / Wall.CurrentRenderTexture.Base.Height;
             Wall.RenderSprite.Scale = new Vector2f(scaleX, scaleY);
         }
         public void CalculationTexturePosition(Result result, double angleVertical)
@@ -34,9 +34,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
         public void SelectCurrentRenderTexture(Result result, Entity entity)
         {
-            Wall.ResetSides();
+           // Wall.ResetSides();
             TextureWallSide wallDetermine = DetermineWallSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
-          
+
 
             Wall.CurrentRenderTexture = Wall.MultiTextured[wallDetermine];
         }
