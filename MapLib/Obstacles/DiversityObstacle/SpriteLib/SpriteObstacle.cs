@@ -25,10 +25,11 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 {
-    public class SpriteObstacle : Obstacle, IRaylessRenderable
+    public class SpriteObstacle : Obstacle, ISelfDrawable
     {
         //-------------------List Sprites Render------------
         public static List<SpriteObstacle> SpritesToRender { get; } = new List<SpriteObstacle>();
+        private bool IsAdded { get; set; } = false;
 
 
         //---------------------------Textures------------------------------
@@ -113,37 +114,13 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         }
         #endregion
 
-
-        //public override bool Collision(double X, double Y, double playerSide)
-        //{
-        //    double playerLeft = X - playerSide;
-        //    double playerRight = X + playerSide;
-        //    double playerTop = Y - playerSide;
-        //    double playerBottom = Y + playerSide;
-
-        //    bool isCollidingX = playerRight > Left && playerLeft < Right;
-        //    bool isCollidingY = playerBottom > Top && playerTop < Bottom;
-
-
-        //    return isCollidingX && isCollidingY && !IsPassability;
-        //}
-
-        //public override void ResetXSides(double value)
-        //{
-        //    Left = X - Side;
-        //    Right = X + Side;
-        //}
-        //public override void ResetYSides(double value)
-        //{
-        //    Top = Y - Side;
-        //    Bottom = Y + Side;
-        //}
-        public override void StandartSetSides()
+        public override void UpdateAdditionalInformation(double x, double y)
         {
-            Left = X - SideLR;
-            Right = X + SideLR;
-            Top = Y - SideBT;
-            Bottom = Y + SideBT;
+            X = x;
+            Y = y;
+
+            ShiftCubedX = ShiftCubedX;
+            ShiftCubedY = ShiftCubedY;
         }
 
         private double GetRenderX(Entity entity)
@@ -151,9 +128,19 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             int delta_rays = (int)(Angle / entity.DeltaAngle);
             int current_ray = Screen.Setting.CenterRay + delta_rays;
 
-            Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
+            if(Distance >= Screen.Setting.Tile)
+                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
 
             return current_ray;
+        }
+
+        public void AddObstacleToRenderList()
+        {
+            if (IsAdded == true || SpritesToRender.Contains(this))
+                return;
+
+            SpritesToRender.Add(this);
+            IsAdded = true;
         }
 
         public override void Render(Result result, Entity entity)
@@ -164,15 +151,17 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 
             Angle = RenderSpriteOpertion.CalculationSpriteAngle(entity.Angle, spriteAngle);
            
-            if (Math.Abs(Angle) < entity.HalfFov ||
+            if (Math.Abs(Angle) < entity.Fov ||
                 CurrentRenderTexture is not null && Math.Abs(Angle) < entity.HalfFov + Math.Atan(CurrentRenderTexture.Width / (2 * Distance)))
             {
                 RenderSpriteOpertion.DefiningDesiredSprite(this, spriteAngle);
                 double renderX = GetRenderX(entity);
-                float spriteHeight = (float)(Screen.ScreenHeight / Distance * Setting.ScaleMultSprite);
+                float spriteHeight = (float)(Screen.ScreenHeight / Distance * Setting.ScaleMultSprite);// * Screen.MultHeight;
+               // Console.WriteLine(Screen.MultHeight);
 
                 RenderSpriteOpertion.DrawSprite(this, entity.VerticalAngle, renderX, spriteHeight);
             }
+            
         }
         public static void RenderSprites(Result result, Entity entity)
         {

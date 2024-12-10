@@ -71,6 +71,62 @@ namespace MapLib
             }
         }
 
+        private void AddToObstacles(Dictionary<ValueTuple<int, int>, List<Obstacle>> obst, Obstacle addObstacle, int x, int y)
+        {
+            if (!obst.ContainsKey((x, y)))
+            {
+                obst[(x, y)] = new List<Obstacle>();
+            }
+
+            obst[(x, y)].Add(addObstacle);
+        }
+
+
+        private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)
+        {
+            if (!ObstaclesWithoutNull.ContainsKey((x, y)))
+            {
+                AddToObstacles(Obstacles, addObstacle, x, y);
+                AddToObstacles(ObstaclesWithoutNull, addObstacle, x, y);
+                return;
+            }
+            else if (ObstaclesWithoutNull[(x, y)].Contains(addObstacle))
+            {
+                //TODO: выводить ошибку
+                return;
+            }
+            else if (ObstaclesWithoutNull[(x, y)].Count == 0)
+            {
+                Obstacles[(x, y)].Add(addObstacle);
+                ObstaclesWithoutNull[(x, y)].Add(addObstacle);
+                return;
+            }
+            else if (addObstacle.IsSingleAddable)
+                return;
+            else
+            {
+                foreach (var obst in ObstaclesWithoutNull[(x, y)])
+                {
+
+                    if (obst.IsSingleAddable)
+                    {
+                        //throw new Exception("222");
+                        //TODO: выводить ошибку
+                        return;
+                    }
+
+                    if (addObstacle.X == obst.X && addObstacle.Y == obst.Y)
+                    {
+                        //throw new Exception("111");
+                        return; //TODO: выводить ошибку
+                    }
+                }
+
+                Obstacles[(x, y)].Add(addObstacle);
+                ObstaclesWithoutNull[(x, y)].Add(addObstacle);
+            }
+
+        }
 
         public void AddObstacle(int x, int y, Obstacle addObstacle)
         {
@@ -86,21 +142,10 @@ namespace MapLib
             x *= Screen.Setting.Tile;
             y *= Screen.Setting.Tile;
 
-            addObstacle.X = x;
-            addObstacle.Y = y;
-            addObstacle.StandartSetSides();
-
-            if (!Obstacles.ContainsKey((x, y)))
-            {
-                Obstacles[(x, y)] = new List<Obstacle>();
-            }
-            Obstacles[(x, y)].Add(addObstacle);
-
-            if (!ObstaclesWithoutNull.ContainsKey((x, y)))
-            {
-                ObstaclesWithoutNull[(x, y)] = new List<Obstacle>();
-            }
-            ObstaclesWithoutNull[(x, y)].Add(addObstacle);
+            addObstacle.UpdateAdditionalInformation(x, y);
+            CheckTrueAddObstacle(addObstacle, x, y);
+            //AddToObstacles(Obstacles, addObstacle, x, y);
+            //AddToObstacles(ObstaclesWithoutNull, addObstacle, x, y);
         }
         public void DeleteObstacle(int x, int y)
         {

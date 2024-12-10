@@ -24,40 +24,53 @@ namespace RayTracingLib
         private static float startY;
         private static float tMaxY;
         private static float dy;
-        private static bool IsRayIntersectingWithSprite(SpriteObstacle sprite)
+        private static bool IsRayIntersectingWithSprite(SpriteObstacle sprite, Entity entity)
         {
-            //const float epsilon = 1e-6f;
+            if (sprite.CurrentRenderTexture is null)
+                return true;
 
-            //float left = (float)(sprite.Left);// - (Screen.Setting.Tile * (SpriteObstacle.percentScaleMult * Screen.MultWidth) / 100));
-            //float right = (float)(sprite.Right);// - (Screen.Setting.Tile * (SpriteObstacle.percentScaleMult * Screen.MultWidth) / 100));
-            //float top = (float)(sprite.Top);// - (Screen.Setting.Tile * (SpriteObstacle.percentScaleMult * Screen.MultWidth) / 100));
-            //float bottom = (float)(sprite.Bottom);// - (Screen.Setting.Tile * (SpriteObstacle.percentScaleMult * Screen.MultWidth) / 100));
+            //-------------Z Coordinates------------
+            float distanceToSprite = (float)Math.Sqrt(
+            (sprite.X - entity.X) * (sprite.X - entity.X) +
+            (sprite.Y - entity.Y) * (sprite.Y - entity.Y)
+            );
+            float entityViewZ = (float)(entity.CameraZ + Math.Tan(entity.VerticalAngle) * distanceToSprite);
 
+            bool isCollidingZ = entityViewZ >= Math.Abs(sprite.Setting.ShiftCubedZ);
+
+
+            //-------------X-Y Coordinates------------
             float currentRayX = startX + tMaxY * dx;
             float currentRayY = startY + tMaxX * dy;
 
-            Console.WriteLine($"Ray Position: X = {currentRayX}, Y = {currentRayY}");
-            Console.WriteLine($"sprite Position: X = {sprite.X}, Y = {sprite.Y}");
+            bool isCollidingX = currentRayX >= sprite.Left && currentRayX <= sprite.Right;
+            bool isCollidingY = currentRayY >= sprite.Top && currentRayY <= sprite.Bottom;
 
-            bool isCollidingX = currentRayX > sprite.Left - 50 && currentRayX < sprite.Right - 50;
-            bool isCollidingY = currentRayY > sprite.Top - 50 && currentRayY < sprite.Bottom - 50;
-            Console.WriteLine($"isCollidingX: {isCollidingX}, isCollidingY: {isCollidingY}");
 
-            return isCollidingX && isCollidingY;
+
+            if ((isCollidingX || isCollidingY) == true && isCollidingZ == false)
+                return false;
+            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == true)
+                return false;
+            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == false)
+                return false;
+            else 
+                return true;
         }
-        private static bool CheckLumbago(List<Obstacle> obstacles)
+
+        private static bool CheckLumbago(List<Obstacle> obstacles, Entity entity)
         {
             foreach(var obstacle in obstacles)
             {
                 if (obstacle is IWall)
                     return true;
-                else if(obstacle is SpriteObstacle sprite)
+                else if (obstacle is SpriteObstacle sprite)
                 {
-                    Console.WriteLine("1");
-                    return IsRayIntersectingWithSprite(sprite) == false;
+                    if (IsRayIntersectingWithSprite(sprite, entity))
+                        return true;
                 }
             }
-            return true;
+            return false;
         }
         public static List<Obstacle> RaycastFun(Map map, Entity entity)
         {
@@ -82,18 +95,12 @@ namespace RayTracingLib
              tMaxX = dx > 0 ? (gridX + tileSize - startX) / dx : (startX - gridX) / -dx;
              tMaxY = dy > 0 ? (gridY + tileSize - startY) / dy : (startY - gridY) / -dy;
 
-            //if (map.ObstaclesWithoutNull.ContainsKey((gridX, gridY)))
-            //{
-            //    if (CheckLumbago(map.ObstaclesWithoutNull[(gridX, gridY)]))
-            //        return map.Obstacles[(gridX, gridY)];
-            //}
-
             while (true)
             {
 
                 if (map.ObstaclesWithoutNull.ContainsKey((gridX, gridY)))
                 {
-                    if (CheckLumbago(map.ObstaclesWithoutNull[(gridX, gridY)]))
+                    if (CheckLumbago(map.ObstaclesWithoutNull[(gridX, gridY)], entity))
                         return map.Obstacles[(gridX, gridY)];
                 }
 

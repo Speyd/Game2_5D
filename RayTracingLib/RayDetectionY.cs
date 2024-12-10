@@ -43,7 +43,7 @@ namespace RayTracingLib.Detection
                 throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
 
-            float newMult = baseMult * Screen.MultHeight;
+            float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
             newMult *= (float)TextureObstacle.BaseHeight / (float)wall.CurrentRenderTexture.Base.Height;
 
             if (Screen.Styles == Styles.Fullscreen)
@@ -114,7 +114,7 @@ namespace RayTracingLib.Detection
                 throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
             float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-            return wall.CurrentRenderTexture.Base.HulfHeight + textureY - addCoordinates;
+            return wall.CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
         }
         public static float GetTextureCoordinate(HitPoint hitPoint, TexturedWall wall, Entity entity, float radius)
         {

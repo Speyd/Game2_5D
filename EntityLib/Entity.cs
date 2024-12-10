@@ -46,11 +46,20 @@ namespace EntityLib
         public double Angle { get; set; }
         public double VerticalAngle { get; set; }
 
+        private double _cameraZ;
+        public double CameraZ
+        {
+            get => _cameraZ;
+            set => _cameraZ = (value / Screen.MultWidth) / Screen.MultHeight;
+        } //= 70;
+
         public Entity(Setting setting, double maxDistance,
             double fov = Math.PI / 3,
             double x = 0, double y = 0,
             double angle = 0, double verticalAngle = 0)
         {
+            CameraZ = 70;
+
             Fov = fov;
 
             X = x <= 0 ? setting.HalfWidth : x;

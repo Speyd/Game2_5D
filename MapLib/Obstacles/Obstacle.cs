@@ -49,8 +49,8 @@ namespace MapLib.Obstacles
         }
         private void ResetYSides(double value)
         {
-            Top = value - _sideLR;
-            Bottom = value + _sideLR;
+            Top = value - _sideBT;
+            Bottom = value + _sideBT;
         }
 
 
@@ -58,7 +58,7 @@ namespace MapLib.Obstacles
         //----------------------Imaginry square---------------------
 
         //The size of the imaginary square for left and Right side
-        private double _sideLR = Screen.Setting.Tile / 2;
+        private double _sideLR = 0;
         public virtual double SideLR 
         {
             get => _sideLR;
@@ -70,7 +70,7 @@ namespace MapLib.Obstacles
         }
 
         //The size of the imaginary square for Bottom and Top side
-        private double _sideBT = Screen.Setting.Tile / 2;
+        private double _sideBT = 0;
         public virtual double SideBT
         {
             get => _sideBT;
@@ -81,13 +81,11 @@ namespace MapLib.Obstacles
             }
         }
 
-        public abstract void StandartSetSides();
-
 
 
         //--------------------Shift-------------------------
         #region Shift
-        private double shiftCubedX = 50;
+        private double shiftCubedX = 0;
         public double ShiftCubedX
         {
             get => shiftCubedX;
@@ -98,7 +96,7 @@ namespace MapLib.Obstacles
             }
         }
 
-        private double shiftCubedY = 50;
+        private double shiftCubedY = 0;
         public double ShiftCubedY
         {
             get => shiftCubedY;
@@ -124,6 +122,7 @@ namespace MapLib.Obstacles
 
         //-------------------Collision Setting--------------------
         public bool IsPassability { get; set; }
+        public bool IsSingleAddable { get; set; } = true;
 
 
         public Obstacle(double x, double y, char symbol, SFML.Graphics.Color colorInMap, bool isPassability)
@@ -140,7 +139,7 @@ namespace MapLib.Obstacles
         public abstract void FillingMiniMapShape(RectangleShape rectangleShape);
         public abstract void Render(Result result, Entity entity);
         public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
-
+        public abstract void UpdateAdditionalInformation(double x, double y);//Update shift, sides
 
 
     }

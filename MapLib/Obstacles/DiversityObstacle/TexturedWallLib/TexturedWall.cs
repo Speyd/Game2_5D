@@ -156,26 +156,11 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         }
         #endregion
 
-        //public override float Normalize_X_MiniMap()
-        //{
-        //    return (float)X / Screen.Setting.Tile;
-        //}
-        //public override float Normalize_Y_MiniMap()
-        //{
-        //    return (float)Y / Screen.Setting.Tile;
-        //}
-        //public override void ResetXSides(double value)
-        //{
-        //    Left = X;
-        //    Right = X + Screen.Setting.Tile;
-        //}
-        //public override void ResetYSides(double value)
-        //{
-        //    Top = Y;
-        //    Bottom = Y + Screen.Setting.Tile;
-        //}
-        public override void StandartSetSides()
+        public override void UpdateAdditionalInformation(double x, double y)
         {
+            X = x;
+            Y = y;
+
             Left = X;
             Right = X + Screen.Setting.Tile;
             Top = Y;

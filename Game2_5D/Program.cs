@@ -126,7 +126,30 @@ SpriteObstacle barel = new SpriteObstacle(0, 0, textureBarel)
         Speed = 30,
         IsAnimation = true,
     },
-    
+    ShiftCubedX = 20,
+    ShiftCubedY = 95,
+    SideBT = 40,
+    SideLR = 40,
+    IsSingleAddable = false,
+};
+
+SpriteObstacle barel2 = new SpriteObstacle(0, 0, textureBarel)
+{
+    Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+    {
+        ScaleMultSprite = 64,
+        ShiftCubedZ = -70,
+    },
+    CurrentAnimation = new AnimationState()
+    {
+        Speed = 30,
+        IsAnimation = true,
+    },
+    ShiftCubedX = 20,
+    ShiftCubedY = 5,
+    SideBT = 20,
+    SideLR = 40,
+    IsSingleAddable = false,
 };
 //SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 //{
@@ -162,11 +185,7 @@ SpriteObstacle barel = new SpriteObstacle(0, 0, textureBarel)
 //sprite1.SetShifts(50);
 
 map.AddObstacle(3, 5, barel);
-barel.ShiftCubedX = 20;
-barel.ShiftCubedY = 95;
-barel.SideBT = 10;
-barel.SideLR = 20;
-
+map.AddObstacle(3, 5, barel2);
 TexturedWall wall = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png");
 map.AddObstacle(7, 7,  wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));

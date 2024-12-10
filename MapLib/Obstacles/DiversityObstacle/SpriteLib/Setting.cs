@@ -34,7 +34,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite
         public double ShiftCubedZ 
         {
             get => shiftCubedZ;
-            set => shiftCubedZ = value / Screen.MultWidth;
+            set => shiftCubedZ = (value / Screen.MultWidth) * Screen.MultHeight;
         }
         #endregion
 

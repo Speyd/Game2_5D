@@ -42,7 +42,7 @@ namespace ScreenLib
         }
 
         //----------Dimensions Screen----------
-        private static void SetMultWidth() => MultWidth = (float)(BaseScreenWidth / _screenWidth); 
+        private static void SetMultWidth() => MultWidth = (float)BaseScreenWidth / _screenWidth; 
         private static int _screenWidth;
         public static int ScreenWidth 
         {
@@ -62,7 +62,7 @@ namespace ScreenLib
             } 
         }
 
-        private static void SetMultHeight() => MultHeight = (float)(BaseScreenHeight / _screenHeight);
+        private static void SetMultHeight() => MultHeight = (float)BaseScreenHeight / _screenHeight;
         private static int _screenHeight;
         public static int ScreenHeight
         {
@@ -76,6 +76,7 @@ namespace ScreenLib
             {
                 if (value <= 0)
                     throw new Exception("Height must be positive");
+
                 _screenHeight = value;
                 SetMultHeight();
             }
@@ -89,7 +90,7 @@ namespace ScreenLib
 
         //-------------------------------------
         public static float MultWidth { get; set; } = 1;
-        public static float MultHeight { get; set; } = 1;
+        public static float MultHeight { get; set; }
         public static uint FPS_Limit { get; set; } = 60;
 
         //----------------------------Priority Draw--------------------------------
@@ -111,7 +112,7 @@ namespace ScreenLib
 
         private static void SetWindowMode(bool fullScreen, string nameWindow, 
                                         uint width, uint height)
-        {
+        {   
             if (!fullScreen)
             {
                 Window = new RenderWindow(new VideoMode(width, height), nameWindow, Styles.Default);
@@ -135,9 +136,6 @@ namespace ScreenLib
 
             ScreenWidth = (int)Window.Size.X;
             ScreenHeight = (int)Window.Size.Y;
-
-            //MultWidth = BaseScreenWidth / ScreenWidth;
-            //MultHeight = BaseScreenHeight / ScreenHeight;
 
             Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
             OutputPriority = new OutputPriority(Window);

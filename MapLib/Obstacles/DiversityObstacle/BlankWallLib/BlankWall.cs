@@ -12,10 +12,11 @@ using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using SFML.System;
 using System.Numerics;
+using Render;
 
 namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
 {
-    public class BlankWall : Obstacle, IWall
+    public class BlankWall : Obstacle, IWall, IDrawable
     {
         //--------------------Color For Render------------------
         public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
@@ -73,33 +74,12 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
             }
         }
         #endregion
-        //public override bool Collision(double X, double Y, double playerSide)
-        //{
-        //    bool isCollidingX = X > Left && X < Right;
-        //    bool isCollidingY = Y > Top && Y < Bottom;
 
-        //    return isCollidingX && isCollidingY && !IsPassability;
-        //}
-        //public override void ResetXSides(double value)
-        //{
-        //    Left = X;
-        //    Right = X + Screen.Setting.Tile;
-        //}
-        //public override void ResetYSides(double value)
-        //{
-        //    Top = Y;
-        //    Bottom = Y + Screen.Setting.Tile;
-        //}
-        //public override float Normalize_X_MiniMap()
-        //{
-        //    return (float)X / Screen.Setting.Tile;
-        //}
-        //public override float Normalize_Y_MiniMap()
-        //{
-        //    return (float)Y / Screen.Setting.Tile;
-        //}
-        public override void StandartSetSides()
+        public override void UpdateAdditionalInformation(double x, double y)
         {
+            X = x;
+            Y = y;
+
             Left = X;
             Right = X + Screen.Setting.Tile;
             Top = Y;

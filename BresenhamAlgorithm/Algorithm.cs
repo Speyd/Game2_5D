@@ -15,21 +15,7 @@ namespace BresenhamAlgorithm
         private ValueTuple<IRenderable, IRenderable> obstacles = (null, null);
 
         #region CheckedObstacle
-        private void IsSprite(IRenderable obstacle)
-        {
-            if (obstacle is SpriteObstacle sprite)
-            {
-                if (!SpriteObstacle.SpritesToRender.Contains(sprite))
-                {
-                    SpriteObstacle.SpritesToRender.Add(sprite);
-                }
-            }
-        }
 
-        //private bool IsRenderObstacle(IRenderable obstacle)
-        //{
-        //    return obstacle is IRaylessRenderable;
-        //}
         private bool CheckAndAddObstacle(double x, double y, double auxiliary, bool isVertical)
         {
             double mappedX = isVertical ? x + auxiliary : x;
@@ -38,22 +24,26 @@ namespace BresenhamAlgorithm
             var key = Map.Mapping(mappedX, mappedY, Screen.Setting.Tile);
             foreach (var obstacle in map.Obstacles[key])
             {
-                if (obstacle is not IWall)
+                if (obstacle is IDrawable)
                 {
-                    IsSprite(obstacle);
+                    if (isVertical)
+                    {
+                        obstacles.Item1 = obstacle;
+                        return true;
+                    }
+                    else
+                    {
+                        obstacles.Item2 = obstacle;
+                        return true;
+                    }
+                }
+                else if (obstacle is ISelfDrawable self)
+                {
+                    self.AddObstacleToRenderList();
                     continue;
                 }
-
-                if (isVertical)
-                {
-                    obstacles.Item1 = obstacle;
-                    return true;
-                }
                 else
-                {
-                    obstacles.Item2 = obstacle;
-                    return true;
-                }
+                    throw new Exception("Render non tipe obstacle!(CheckAndAddObstacle)");
             }
             return false;
         }

@@ -44,11 +44,10 @@ namespace DrawLib
 
             if (obstacle is not null && obstacle is TexturedWall wall)// obstacle is TexturedWall wall
             {
-                //Console.WriteLine("1");
                 hitPoint = RayDetectionX.DetermineWallAllSides(wall, entity);
                 float textureX = GetTextureXCoordinate(wall, entity);
 
-                float radius = BringingToStandard(wall, 30);
+                float radius = BringingToStandard(wall, radiusPoint);
                 float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, wall, entity, radius);
                 Vector2f dotPosition = new Vector2f(textureX, textureY);
 
