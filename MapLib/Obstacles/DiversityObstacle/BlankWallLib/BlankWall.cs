@@ -16,7 +16,7 @@ using Render;
 
 namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
 {
-    public class BlankWall : Obstacle, IWall, IDrawable
+    public class BlankWall : Obstacle, IWall
     {
         //--------------------Color For Render------------------
         public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
@@ -28,7 +28,8 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
         private RenderBlankWallOpertion RenderOperation = new RenderBlankWallOpertion();
 
 
-
+        public override bool IsSingleAddable { get; init; } = true;
+        //public override bool IsRayPasses { get; init; } = false;
         public BlankWall(double x, double y, Color color, bool isPassability = false)
 
             : base(x, y, 'B', color, isPassability)

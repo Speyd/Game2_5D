@@ -15,56 +15,33 @@ namespace DrawLib
     public class Drawing()
     {
         HitPoint hitPoint;
-        private float BringingToStandard(TexturedWall wall, float radius)
+
+        public void DrawingPoint(Map map, Entity entity, int heightObj)
         {
-            if (wall.CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
+            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 
-            return radius * (wall.CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight);
-        }
-
-        public float GetTextureXCoordinate(TexturedWall wall, Entity entity)
-        {
-            HitPoint hitPoint = RayDetectionX.DetermineWallAllSides(wall, entity);
-
-            wall.CurrentRenderTexture = wall.MultiTextured[hitPoint.TextureWallDetermine];
-            if (wall.CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
-
-            float textureX = hitPoint.UV.X > hitPoint.UV.Y ? hitPoint.UV.X : hitPoint.UV.Y;
-            textureX *= wall.CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
-
-            return textureX - (float)Math.Pow(wall.CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
-        }
-
-
-        public void DrawingPoint(Map map, Entity entity, int radiusPoint)
-        {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity).Where(o => o is IDrawable).FirstOrDefault();
-
-            if (obstacle is not null && obstacle is TexturedWall wall)// obstacle is TexturedWall wall
+            if (obstacle is not null && obstacle is IDrawable drawable)
             {
-                hitPoint = RayDetectionX.DetermineWallAllSides(wall, entity);
-                float textureX = GetTextureXCoordinate(wall, entity);
+                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
-                float radius = BringingToStandard(wall, radiusPoint);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, wall, entity, radius);
+
+                float textureX = drawable.GetTextureXCoordinate(hitPoint.UV, hitPoint.TextureWallDetermine);
+
+                float height = drawable.BringingToStandard(heightObj);
+                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
                 Vector2f dotPosition = new Vector2f(textureX, textureY);
 
-                CircleShape dot = new CircleShape(radius)
+                CircleShape dot = new CircleShape(heightObj)
                 {
                     FillColor = SFML.Graphics.Color.Black,
                     Position = dotPosition
                 };
 
+
                 //Sprite s = new Sprite(new Texture(@"Resources\Image\Sprite\Devil\1.png"));
                 //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2);
                 //s.Position = dotPosition;
-                if (wall.CurrentRenderTexture is not null)
-                {
-                    wall.CurrentRenderTexture.Mod.Draw(dot);
-                    wall.CurrentRenderTexture.Mod.Display();
-                }
+                drawable.DrawObject(dot);
             }
         }
     }

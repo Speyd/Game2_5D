@@ -227,3 +227,5 @@ D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\DrawLib.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\RayTracingLib.dll
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\DrawLib.pdb
 D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\RayTracingLib.pdb
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\TextureLib.dll
+D:\C++ проекты\Game2_5D\Game2_5D\bin\Debug\net8.0\TextureLib.pdb

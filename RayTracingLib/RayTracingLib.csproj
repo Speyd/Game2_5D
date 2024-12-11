@@ -11,6 +11,7 @@
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
   </ItemGroup>
 
 </Project>

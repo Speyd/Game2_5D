@@ -54,8 +54,19 @@ namespace BresenhamAlgorithm
 
             var key = Map.Mapping(mappedX, mappedY, Screen.Setting.Tile);
             foreach (var obstacle in map.Obstacles[key])
-            {
-                if (obstacle is IDrawable)
+            {    
+                if (obstacle is ISelfDrawable self)
+                {
+                    var type = self.GetType();
+                    if (!uniqueSelfDrawableTypes.Contains(type))
+                    {
+                        uniqueSelfDrawableTypes.Add(type);
+                        hasNewTypes = true;
+                    }
+                    self.AddObstacleToRenderList();
+                    continue;
+                }
+                else
                 {
                     if (isVertical)
                     {
@@ -68,19 +79,6 @@ namespace BresenhamAlgorithm
                         return true;
                     }
                 }
-                else if (obstacle is ISelfDrawable self)
-                {
-                    var type = self.GetType();
-                    if (!uniqueSelfDrawableTypes.Contains(type))
-                    {
-                        uniqueSelfDrawableTypes.Add(type);
-                        hasNewTypes = true;
-                    }
-                    self.AddObstacleToRenderList();
-                    continue;
-                }
-                else
-                    throw new Exception("Render non tipe obstacle!(CheckAndAddObstacle)");
             }
             return false;
         }

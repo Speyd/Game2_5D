@@ -1000,7 +1000,8 @@
           "Render": "1.0.0",
           "SFML.Graphics": "2.6.0",
           "ScreenLib": "1.0.0",
-          "SixLabors.ImageSharp": "3.1.5"
+          "SixLabors.ImageSharp": "3.1.5",
+          "TextureLib": "1.0.0"
         },
         "runtime": {
           "MapLib.dll": {
@@ -1012,7 +1013,8 @@
       "Render/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
-          "ScreenLib": "1.0.0"
+          "ScreenLib": "1.0.0",
+          "TextureLib": "1.0.0"
         },
         "runtime": {
           "Render.dll": {
@@ -1028,6 +1030,17 @@
         },
         "runtime": {
           "ScreenLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "TextureLib/1.0.0": {
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "TextureLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1113,6 +1126,11 @@
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TextureLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -838,6 +838,19 @@
         "runtime": {
           "bin/placeholder/ScreenLib.dll": {}
         }
+      },
+      "TextureLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TextureLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TextureLib.dll": {}
+        }
       }
     }
   },
@@ -1130,12 +1143,18 @@
       "type": "project",
       "path": "../ScreenLib/ScreenLib.csproj",
       "msbuildProject": "../ScreenLib/ScreenLib.csproj"
+    },
+    "TextureLib/1.0.0": {
+      "type": "project",
+      "path": "../TextureLib/TextureLib.csproj",
+      "msbuildProject": "../TextureLib/TextureLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
       "EntityLib >= 1.0.0",
-      "ScreenLib >= 1.0.0"
+      "ScreenLib >= 1.0.0",
+      "TextureLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1175,6 +1194,9 @@
             },
             "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+            },
+            "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj"
             }
           }
         }

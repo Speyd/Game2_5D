@@ -5,8 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ScreenLib;
+using System.Diagnostics;
 
-namespace MapLib.Obstacles.Texture
+namespace TextureLib
 {
     public class TextureObstacle
     {
@@ -14,7 +15,7 @@ namespace MapLib.Obstacles.Texture
 
         //--------------------Size Texture-----------------------
         private uint _width = 0;
-        public uint Width 
+        public uint Width
         {
             get => _width;
             set
@@ -41,7 +42,7 @@ namespace MapLib.Obstacles.Texture
 
         //-----------------------Setting---------------------
         public int Scale { get; set; }
-        public uint PixelCount {  get; set; }
+        public uint PixelCount { get; set; }
 
         //-------------------------Available formats------------------------
         private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
@@ -116,7 +117,9 @@ namespace MapLib.Obstacles.Texture
             else
                 Scale = 1;
         }
-        
+
+        public static float DifferenceHeight(float height) => height / BaseHeight;
+
         public static SFML.Graphics.IntRect SetOffset(int offset, int screenTile, TextureObstacle texture)
         {
             int left = offset * texture.Scale;

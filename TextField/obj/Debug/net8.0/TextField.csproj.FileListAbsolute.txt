@@ -20,3 +20,5 @@ D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\TextField.dll
 D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\refint\TextField.dll
 D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\TextField.pdb
 D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\ref\TextField.dll
+D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\TextureLib.dll
+D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\TextureLib.pdb

@@ -122,7 +122,9 @@ namespace MapLib.Obstacles
 
         //-------------------Collision Setting--------------------
         public bool IsPassability { get; set; }
-        public bool IsSingleAddable { get; set; } = true;
+        public virtual bool IsSingleAddable { get; init; } = true;
+        //public virtual bool IsRayPasses { get; init; } = false;
+
 
 
         public Obstacle(double x, double y, char symbol, SFML.Graphics.Color colorInMap, bool isPassability)

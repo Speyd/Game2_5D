@@ -1,4 +1,4 @@
-﻿using MapLib.Obstacles.DiversityObstacle;
+﻿//using MapLib.Obstacles.DiversityObstacle;
 using SFML.Graphics;
 using System;
 using System.Collections.Generic;
@@ -6,16 +6,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MapLib.Obstacles.Texture
+namespace TextureLib
 {
     public class UniqueDictionary<KEY, VALUE>
     {
         private Dictionary<KEY, VALUE> myMap = new Dictionary<KEY, VALUE>();
         // private HashSet<VALUE> valuesSet = new HashSet<VALUE>();
         private Dictionary<VALUE, bool> valuePresence = new Dictionary<VALUE, bool>();
-        public int Count {  get { return myMap.Count; } }
+        public int Count { get { return myMap.Count; } }
 
-        public UniqueDictionary() 
+        public UniqueDictionary()
         { }
         public UniqueDictionary(List<(KEY, VALUE)> values)
         {
@@ -23,7 +23,7 @@ namespace MapLib.Obstacles.Texture
             {
                 Insert(value.Item1, value.Item2);
             }
-        }    
+        }
 
         public bool Insert(KEY key, VALUE value)
         {
@@ -43,13 +43,13 @@ namespace MapLib.Obstacles.Texture
             {
                 return value;
             }
-            return default(VALUE);
+            return default;
         }
 
         public VALUE? GetFirstValue()
         {
-            if(Count == 0)
-                return default(VALUE);
+            if (Count == 0)
+                return default;
 
             return myMap.First().Value;
         }

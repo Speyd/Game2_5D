@@ -16,7 +16,9 @@ using MapLib.Obstacles.Texture;
 using EntityLib.Player;
 using System.Reflection.Metadata;
 using System.IO;
+using SFML.Window;
 using Render;
+using TextureLib;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
@@ -29,6 +31,8 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         public TextureObstacle? TextureInMiniMap { get; set; }
 
         //----------------------Coordinates---------------------
+        public override bool IsSingleAddable { get; init; } = true;
+        //public override bool IsRayPasses { get; init; } = false;
 
         // public override Coordinates Coordinates;//= new Coordinates();
         //private double _x;
@@ -130,6 +134,46 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         #endregion
 
         #region IRenderableImplementation
+        public float CalculateTextureX(Vector2f UV, TextureWallSide side)
+        {
+            CurrentRenderTexture = MultiTextured[side];
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
+
+            float textureX = UV.X > UV.Y ? UV.X : UV.Y;
+            textureX *= CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
+
+            return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
+        }
+        public float BringingToStandard(float heightObj)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
+
+            return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
+        }
+        public float GetAveragedMult(float baseMult, float addMultFullScreen)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
+
+
+            float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
+            newMult *= (float)TextureObstacle.BaseHeight / (float)CurrentRenderTexture.Base.Height;
+
+            if (Screen.Styles == Styles.Fullscreen)
+                return newMult + addMultFullScreen;
+
+            return newMult;
+        }
+        public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
+
+            float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
+            return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
+        }
         public override void BlackoutObstacle(double depth)
         {
             if (CurrentRenderTexture is null || CurrentRenderTexture.Base.Texture is null || RenderSprite is null)
@@ -139,6 +183,14 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
             RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+        }
+        public void DrawObject(Drawable drawObject)
+        {
+            if (CurrentRenderTexture is null)
+                return;
+
+            CurrentRenderTexture.Mod.Draw(drawObject);
+            CurrentRenderTexture.Mod.Display();
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {

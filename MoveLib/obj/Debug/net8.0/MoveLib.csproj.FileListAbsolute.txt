@@ -22,3 +22,5 @@ D:\C++ проекты\Game2_5D\MoveLib\obj\Debug\net8.0\MoveLib.pdb
 D:\C++ проекты\Game2_5D\MoveLib\obj\Debug\net8.0\ref\MoveLib.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\FpsLib.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\FpsLib.pdb
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\TextureLib.dll
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\TextureLib.pdb

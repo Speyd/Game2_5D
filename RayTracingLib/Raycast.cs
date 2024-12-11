@@ -11,6 +11,7 @@ using Render.InterfaceRender;
 using SFML.Graphics;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using static SFML.Window.Mouse;
+using Render;
 
 
 namespace RayTracingLib
@@ -24,55 +25,23 @@ namespace RayTracingLib
         private static float startY;
         private static float tMaxY;
         private static float dy;
-        private static bool IsRayIntersectingWithSprite(SpriteObstacle sprite, Entity entity)
-        {
-            if (sprite.CurrentRenderTexture is null)
-                return true;
-
-            //-------------Z Coordinates------------
-            float distanceToSprite = (float)Math.Sqrt(
-            (sprite.X - entity.X) * (sprite.X - entity.X) +
-            (sprite.Y - entity.Y) * (sprite.Y - entity.Y)
-            );
-            float entityViewZ = (float)(entity.CameraZ + Math.Tan(entity.VerticalAngle) * distanceToSprite);
-
-            bool isCollidingZ = entityViewZ >= Math.Abs(sprite.Setting.ShiftCubedZ);
-
-
-            //-------------X-Y Coordinates------------
-            float currentRayX = startX + tMaxY * dx;
-            float currentRayY = startY + tMaxX * dy;
-
-            bool isCollidingX = currentRayX >= sprite.Left && currentRayX <= sprite.Right;
-            bool isCollidingY = currentRayY >= sprite.Top && currentRayY <= sprite.Bottom;
-
-
-
-            if ((isCollidingX || isCollidingY) == true && isCollidingZ == false)
-                return false;
-            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == true)
-                return false;
-            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == false)
-                return false;
-            else 
-                return true;
-        }
-
-        private static bool CheckLumbago(List<Obstacle> obstacles, Entity entity)
+       
+        private static (bool, Obstacle?) CheckingTouchingOfList(List<Obstacle> obstacles, Entity entity)
         {
             foreach(var obstacle in obstacles)
             {
-                if (obstacle is IWall)
-                    return true;
-                else if (obstacle is SpriteObstacle sprite)
+                if (obstacle is IRayPassability rayPassability)
                 {
-                    if (IsRayIntersectingWithSprite(sprite, entity))
-                        return true;
+                    float currentRayX = startX + tMaxY * dx;
+                    float currentRayY = startY + tMaxX * dy;
+                    return (rayPassability.IsRayTouchesObject(entity, currentRayX, currentRayY), obstacle);
                 }
+                else
+                    return (true, obstacle);
             }
-            return false;
+            return (false, null);
         }
-        public static List<Obstacle> RaycastFun(Map map, Entity entity)
+        public static Obstacle? RaycastFun(Map map, Entity entity)
         {
              dx = (float)Math.Cos(entity.Angle);
              dy = (float)Math.Sin(entity.Angle);
@@ -100,8 +69,10 @@ namespace RayTracingLib
 
                 if (map.ObstaclesWithoutNull.ContainsKey((gridX, gridY)))
                 {
-                    if (CheckLumbago(map.ObstaclesWithoutNull[(gridX, gridY)], entity))
-                        return map.Obstacles[(gridX, gridY)];
+                    var obstInfo = CheckingTouchingOfList(map.ObstaclesWithoutNull[(gridX, gridY)], entity);
+
+                    if(obstInfo.Item1 && obstInfo.Item2 is not null)
+                        return obstInfo.Item2;
                 }
 
                 if (tMaxX < tMaxY)
@@ -119,7 +90,7 @@ namespace RayTracingLib
                     gridX >= map.Setting.MapWidth * tileSize ||
                     gridY >= map.Setting.MapHeight * tileSize)
                 {
-                    return new List<Obstacle>();
+                    return null;
                 }
             }
         }

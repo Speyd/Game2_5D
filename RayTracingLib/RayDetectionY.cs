@@ -11,12 +11,15 @@ using System.Threading.Tasks;
 using SFML.Window;
 using Render.InterfaceRender;
 using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
+using TextureLib;
+using Render;
 
 namespace RayTracingLib.Detection
 {
     static public class RayDetectionY
     {
-        const float addMultFullScreen = 1.3f;
+        public static float AddMultFullScreen { get; } = 1.3f;
+        public static float AddCoordinates { get; private set; } = 0;
 
 
         const float baseMultNegativeCoo = 2.6f;
@@ -30,6 +33,7 @@ namespace RayTracingLib.Detection
         const float distanceLimitationValue = 1f;
 
 
+
         private static bool IsCornerWall(HitPoint hitPoint)
         {
             return hitPoint.WallDetermine == TextureWallSide.LeftCorner ||
@@ -37,23 +41,10 @@ namespace RayTracingLib.Detection
                    hitPoint.WallDetermine == TextureWallSide.BottomCorner ||
                    hitPoint.WallDetermine == TextureWallSide.TopCorner;
         }
-        private static float GetAveragedMult(TexturedWall wall, float baseMult)
-        {
-            if (wall.CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
 
-            float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
-            newMult *= (float)TextureObstacle.BaseHeight / (float)wall.CurrentRenderTexture.Base.Height;
-
-            if (Screen.Styles == Styles.Fullscreen)
-                return newMult + addMultFullScreen;
-
-            return newMult;
-        }
-       
-        
-        private static float CalculateNegativeMult(HitPoint hitPoint, TexturedWall wall, float radius, ref float addCoordinates)
+        #region Mult
+        private static float CalculateNegativeMult(HitPoint hitPoint, IDrawable obst, float heightObj)
         {
             float safeDistance = hitPoint.DistanceToWall <= distanceLimitation ? 
                 Math.Min(hitPoint.DistanceToWall, distanceLimitationValue) :
@@ -63,23 +54,24 @@ namespace RayTracingLib.Detection
             float baseMult = 1;
             if (!IsCornerWall(hitPoint))
             {
-                addCoordinates = radius;
-                baseMult = GetAveragedMult(wall, baseMultNegativeCoo);
+                AddCoordinates = heightObj;
+                baseMult = obst.GetAveragedMult(baseMultNegativeCoo, AddMultFullScreen);
             }
             else
-                baseMult = GetAveragedMult(wall, baseMultNegativeCornerCoo);
+                baseMult = obst.GetAveragedMult(baseMultNegativeCornerCoo, AddMultFullScreen);
 
             return (safeDistance * safeDistance) / (baseMult * safeDistance * (1 / hitPoint.DistanceToPoint));
         }
-        private static float CalculatePozititiveMult(HitPoint hitPoint, TexturedWall wall, Entity entity, float radius, ref float addCoordinates)
+        private static float CalculatePozititiveMult(HitPoint hitPoint, IDrawable obst, Entity entity, float heightObj)
         {
             float safeDistance = hitPoint.DistanceToWall <= distanceLimitation ?
                 Math.Min(hitPoint.DistanceToWall, distanceLimitationValue) :
                 hitPoint.DistanceToWall;
 
+
             if (IsCornerWall(hitPoint))
             {
-                float baseCornerMult = GetAveragedMult(wall, baseMultPozititiveCornerCoo);
+                float baseCornerMult = obst.GetAveragedMult(baseMultPozititiveCornerCoo, AddMultFullScreen);
 
                 float baseCornerValue = baseCornerMult * safeDistance * (1 / hitPoint.DistanceToPoint);
                 baseCornerValue = safeDistance * safeDistance / baseCornerValue;
@@ -88,41 +80,31 @@ namespace RayTracingLib.Detection
             }
 
 
-            float baseMult = GetAveragedMult(wall, baseMultPozititiveCoo);
-            addCoordinates = radius;
+            float baseMult = obst.GetAveragedMult(baseMultPozititiveCoo, AddMultFullScreen);
+            AddCoordinates = heightObj;
 
             float baseValue = baseMult * safeDistance * (1 / hitPoint.DistanceToPoint);
             baseValue = (safeDistance * safeDistance) / baseValue;
 
             return baseValue / (float)Math.Max(entity.VerticalAngle + 1, 0.1f);
-        }
-       
+        }      
         
-        private static float CalculateMultY(HitPoint hitPoint, TexturedWall wall, Entity entity, float radius, ref float addCoordinates)
+        private static float CalculateMult(HitPoint hitPoint, IDrawable obst, Entity entity, float heightObj)
         {
             if (entity.VerticalAngle <= 0f)
-                return CalculateNegativeMult(hitPoint, wall, radius, ref addCoordinates);
+                return CalculateNegativeMult(hitPoint, obst, heightObj);
             else
-                return CalculatePozititiveMult(hitPoint, wall, entity, radius, ref addCoordinates);
+                return CalculatePozititiveMult(hitPoint, obst, entity, heightObj);
         }
+        #endregion
 
-
-        private static float CalculateTextureY(TexturedWall wall, Entity entity,
-            float ProjHeight, float mult, float addCoordinates)
+        public static float GetTextureCoordinate(HitPoint hitPoint, IDrawable obst, Entity entity, float heightObj)
         {
-            if (wall.CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
-
-            float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-            return wall.CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
-        }
-        public static float GetTextureCoordinate(HitPoint hitPoint, TexturedWall wall, Entity entity, float radius)
-        {
-            float addCoordinates = 0;
+            AddCoordinates = 0;
             float ProjHeight = (float)entity.ProjCoeff / hitPoint.DistanceToWallWithoutTile;
-            //Console.WriteLine(hitPoint.DistanceToWall);
-            float mult = CalculateMultY(hitPoint, wall, entity, radius, ref addCoordinates);
-            return CalculateTextureY(wall, entity, ProjHeight, mult, addCoordinates);
+
+            float mult = CalculateMult(hitPoint, obst, entity, heightObj);
+            return obst.CalculateTextureY(entity, ProjHeight, mult, AddCoordinates);
         }
     }
 }

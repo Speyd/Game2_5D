@@ -4,9 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MapLib.Obstacles.Texture;
 using SFML.Graphics;
 
-namespace MapLib.Obstacles.Texture
+namespace TextureLib
 {
     public class MultiTexturedObject
     {
@@ -46,7 +47,7 @@ namespace MapLib.Obstacles.Texture
         }
         public MultiTexturedObject(List<(TextureWallSide, TextureObstacle)> textures)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair> ();
+            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
             SetUniqueTexture(textures);
         }
         public MultiTexturedObject(List<(TextureWallSide, string)> textures)
@@ -69,7 +70,7 @@ namespace MapLib.Obstacles.Texture
 
         public void CheckTrueSet(UniqueDictionary<TextureWallSide, TexturedPair> uniqueTexture)
         {
-            if(uniqueTexture.PresenceKey(TextureWallSide.Left) == true &&
+            if (uniqueTexture.PresenceKey(TextureWallSide.Left) == true &&
                 uniqueTexture.PresenceKey(TextureWallSide.Right) == true &&
                 uniqueTexture.PresenceKey(TextureWallSide.Bottom) == true &&
                 uniqueTexture.PresenceKey(TextureWallSide.Top) == true)
@@ -99,7 +100,7 @@ namespace MapLib.Obstacles.Texture
 
 
             CheckTrueSet(UniqueTexture);
-        }   
+        }
         public void SetUniqueTexture(string pathL, string pathR, string pathB, string pathT)
         {
             UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(pathL));
@@ -138,17 +139,17 @@ namespace MapLib.Obstacles.Texture
             UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(Bottom));
             UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(Top));
 
-           
+
             CheckTrueSet(UniqueTexture);
         }
         public void SetUniqueTexture(List<(TextureWallSide, TextureObstacle)> textures)
         {
             if (textures.Count < countSides)
                 throw new Exception($"Too few textures to fill(You have {textures.Count}, Need{countSides})");
-            else if(textures.Count > countSides)
+            else if (textures.Count > countSides)
                 throw new Exception($"Too many textures to fill(You have {textures.Count}, Need{countSides})");
 
-            foreach(var value in textures)
+            foreach (var value in textures)
             {
                 UniqueTexture.Insert(value.Item1, new TexturedPair(value.Item2));
             }
@@ -173,7 +174,7 @@ namespace MapLib.Obstacles.Texture
 
         public TexturedPair? this[TextureWallSide side]
         {
-            get => UniqueTexture.GetTexture(side);   
+            get => UniqueTexture.GetTexture(side);
         }
     }
 }

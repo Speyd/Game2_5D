@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using MapLib.Obstacles;
 using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using MapLib.Obstacles.Texture;
 using Render.InterfaceRender;
@@ -10,6 +11,7 @@ using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextureLib;
 
 namespace RayTracingLib.Detection
 {
@@ -20,43 +22,43 @@ namespace RayTracingLib.Detection
 
         static float sinAngle = 0;
         static float cosAngle = 0;
-        static private Vector2f CalculateTextureHitPoint(TexturedWall wall, Entity entity)
+        static private Vector2f CalculateTextureHitPoint(Obstacle obstacle, Entity entity)
         {
             float tempValue = float.MaxValue;
 
             if (cosAngle != 0)
             {
-                float tVerticalLeft = (float)(wall.Left - entity.X) / cosAngle;
+                float tVerticalLeft = (float)(obstacle.Left - entity.X) / cosAngle;
                 if (tVerticalLeft >= 0)
                 {
                     float hitYLeft = (float)entity.Y + tVerticalLeft * sinAngle;
-                    if (hitYLeft >= wall.Top && hitYLeft <= wall.Bottom)
+                    if (hitYLeft >= obstacle.Top && hitYLeft <= obstacle.Bottom)
                         tempValue = tVerticalLeft;
                 }
 
-                float tVerticalRight = (float)(wall.Right - entity.X) / cosAngle;
+                float tVerticalRight = (float)(obstacle.Right - entity.X) / cosAngle;
                 if (tVerticalRight >= 0)
                 {
                     float hitYRight = (float)entity.Y + tVerticalRight * sinAngle;
-                    if (hitYRight >= wall.Top && hitYRight <= wall.Bottom)
+                    if (hitYRight >= obstacle.Top && hitYRight <= obstacle.Bottom)
                         tempValue = Math.Min(tempValue, tVerticalRight);
                 }
             }
             if (sinAngle != 0)
             {
-                float tHorizontalTop = (float)(wall.Top - entity.Y) / sinAngle;
+                float tHorizontalTop = (float)(obstacle.Top - entity.Y) / sinAngle;
                 if (tHorizontalTop >= 0)
                 {
                     float hitXTop = (float)entity.X + tHorizontalTop * cosAngle;
-                    if (hitXTop >= wall.Left && hitXTop <= wall.Right)
+                    if (hitXTop >= obstacle.Left && hitXTop <= obstacle.Right)
                         tempValue = Math.Min(tempValue, tHorizontalTop);
                 }
 
-                float tHorizontalBottom = (float)(wall.Bottom - entity.Y) / sinAngle;
+                float tHorizontalBottom = (float)(obstacle.Bottom - entity.Y) / sinAngle;
                 if (tHorizontalBottom >= 0)
                 {
                     float hitXBottom = (float)entity.X + tHorizontalBottom * cosAngle;
-                    if (hitXBottom >= wall.Left && hitXBottom <= wall.Right)
+                    if (hitXBottom >= obstacle.Left && hitXBottom <= obstacle.Right)
                         tempValue = Math.Min(tempValue, tHorizontalBottom);
                 }
             }
@@ -64,28 +66,28 @@ namespace RayTracingLib.Detection
             if (tempValue == float.MaxValue)
                 return new Vector2f(-1, -1);
 
-            float hitX = (float)entity.X + tempValue * cosAngle - (float)wall.X;
-            float hitY = (float)entity.Y + tempValue * sinAngle - (float)wall.Y;
+            float hitX = (float)entity.X + tempValue * cosAngle - (float)obstacle.X;
+            float hitY = (float)entity.Y + tempValue * sinAngle - (float)obstacle.Y;
             distanceToPoint = tempValue;
 
             return new Vector2f(hitX, hitY);
         }
 
-        static private TextureWallSide DetermineWallSide(TexturedWall wall, Entity entity)
+        static private TextureWallSide DetermineWallSide(Obstacle obstacle, Entity entity)
         {
-            if (entity.Y >= wall.Top && entity.Y <= wall.Bottom)
+            if (entity.Y >= obstacle.Top && entity.Y <= obstacle.Bottom)
             {
-                if (cosAngle > 0 && entity.X <= wall.Right)
+                if (cosAngle > 0 && entity.X <= obstacle.Right)
                     return TextureWallSide.Right;
-                else if (cosAngle < 0 && entity.X >= wall.Left)
+                else if (cosAngle < 0 && entity.X >= obstacle.Left)
                     return TextureWallSide.Left;
             }
 
-            if (entity.X >= wall.Left && entity.X <= wall.Right)
+            if (entity.X >= obstacle.Left && entity.X <= obstacle.Right)
             {
-                if (sinAngle > 0 && entity.Y <= wall.Bottom)
+                if (sinAngle > 0 && entity.Y <= obstacle.Bottom)
                     return TextureWallSide.Bottom;
-                else if (sinAngle < 0 && entity.Y >= wall.Top)
+                else if (sinAngle < 0 && entity.Y >= obstacle.Top)
                     return TextureWallSide.Top;
             }
 
@@ -113,29 +115,29 @@ namespace RayTracingLib.Detection
             }
         }
 
-        static private void CalculateDistanceToWall(TexturedWall wall, Entity entity, TextureWallSide wallDetermine)
+        static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, TextureWallSide wallDetermine)
         {
-            double deltaX = wall.X - entity.X;
-            double deltaY = wall.Y - entity.Y;
+            double deltaX = obstacle.X - entity.X;
+            double deltaY = obstacle.Y - entity.Y;
             distanceToWall = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (wallDetermine == TextureWallSide.Top || wallDetermine == TextureWallSide.Left)
                 distanceToWall -= -(Screen.Setting.Tile * 3);
         }
 
-        static public HitPoint DetermineWallAllSides(TexturedWall wall, Entity entity)
+        static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
         {
             sinAngle = (float)Math.Sin(entity.Angle);
             cosAngle = (float)Math.Cos(entity.Angle);
 
 
             TextureWallSide wallDetermine = TextureWallSide.Error;
-            wallDetermine = DetermineWallSide(wall, entity);
+            wallDetermine = DetermineWallSide(obstacle, entity);
 
-            CalculateDistanceToWall(wall, entity, wallDetermine);
+            CalculateDistanceToWall(obstacle, entity, wallDetermine);
 
 
-            Vector2f cornerHit = CalculateTextureHitPoint(wall, entity);
+            Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity);
             if (cornerHit.X > cornerHit.Y)
             {
                 cornerHit.X /= 100;

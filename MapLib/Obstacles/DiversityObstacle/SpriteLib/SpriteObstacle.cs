@@ -22,10 +22,11 @@ using MapLib.Obstacles.Texture;
 using static System.Net.Mime.MediaTypeNames;
 using SFML.Window;
 using static System.Formats.Asn1.AsnWriter;
+using TextureLib;
 
 namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 {
-    public class SpriteObstacle : Obstacle, ISelfDrawable
+    public class SpriteObstacle : Obstacle, ISelfDrawable, IRayPassability
     {
         //-------------------List Sprites Render------------
         public static List<SpriteObstacle> SpritesToRender { get; } = new List<SpriteObstacle>();
@@ -48,7 +49,8 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 
         //--------------------------Setting-----------------------------
         public Setting Setting { get; init; }
-
+        public override bool IsSingleAddable { get; init; } = false;
+        //public override bool IsRayPasses { get; init; } = true;
 
         //---------------------Render Parameters----------------------
         public double Angle { get; set; }
@@ -164,6 +166,36 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             
         }
 
+        public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
+        {
+            if (CurrentRenderTexture is null)
+                return true;
+
+            //-------------Z Coordinates------------
+            float distanceToSprite = (float)Math.Sqrt(
+            (X - entity.X) * (X - entity.X) +
+            (Y - entity.Y) * (Y - entity.Y)
+            );
+            float entityViewZ = (float)(entity.CameraZ + Math.Tan(entity.VerticalAngle) * distanceToSprite);
+
+            bool isCollidingZ = entityViewZ >= Math.Abs(Setting.ShiftCubedZ);
+
+
+            //-------------X-Y Coordinates------------
+            bool isCollidingX = currentRayX >= Left && currentRayX <= Right;
+            bool isCollidingY = currentRayY >= Top && currentRayY <= Bottom;
+
+
+
+            if ((isCollidingX || isCollidingY) == true && isCollidingZ == false)
+                return false;
+            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == true)
+                return false;
+            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == false)
+                return false;
+            else
+                return true;
+        }
         public static void RenderSelfDrawableList(Result result, Entity entity)
         {
             var sortedSprites = SpritesToRender

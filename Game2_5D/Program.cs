@@ -35,6 +35,8 @@ using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
 using MapLib.Obstacles.Texture;
 using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
+using TextureLib;
+
 //Screen screen = new Screen(1500, 1000);
 Screen.Initialize(1500, 1000);
 
