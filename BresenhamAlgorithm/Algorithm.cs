@@ -7,12 +7,43 @@ using Render.ResultAlgorithm;
 using ScreenLib;
 using Render;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib;
+using NGenerics.Extensions;
+using System.Reflection;
 
 namespace BresenhamAlgorithm
 {
     public class Algorithm(Map map, Entity entity, Result result, ZBuffer zBuffer)
     {
         private ValueTuple<IRenderable, IRenderable> obstacles = (null, null);
+
+        private readonly HashSet<Type> uniqueSelfDrawableTypes = new HashSet<Type>();
+        private bool hasNewTypes = false;
+        private readonly Dictionary<Type, Action<Result, Entity>> cachedDelegates = new();
+
+        public void PrepareRenderObjects()
+        {
+            //Console.WriteLine($"uniqueSelfDrawableTypes count: {uniqueSelfDrawableTypes.Count}");
+            foreach (var type in uniqueSelfDrawableTypes)
+            {
+                //Console.WriteLine($"Processing type: {type.Name}");
+                if (!cachedDelegates.TryGetValue(type, out var del))
+                {
+                    var method = type.GetMethod(ISelfDrawable.NameRenderFun, BindingFlags.Public | BindingFlags.Static);
+                    if (method != null)
+                    {
+                        //Console.WriteLine($"Creating delegate for {type.Name}");
+                        del = (Action<Result, Entity>)Delegate.CreateDelegate(typeof(Action<Result, Entity>), method);
+                        cachedDelegates[type] = del;
+                    }
+                    else
+                    {
+                        //Console.WriteLine($"Method RenderSelfDrawableList not found for {type.Name}");
+                    }
+                }
+                del?.Invoke(result, entity);
+            }
+        }
+
 
         #region CheckedObstacle
 
@@ -39,6 +70,12 @@ namespace BresenhamAlgorithm
                 }
                 else if (obstacle is ISelfDrawable self)
                 {
+                    var type = self.GetType();
+                    if (!uniqueSelfDrawableTypes.Contains(type))
+                    {
+                        uniqueSelfDrawableTypes.Add(type);
+                        hasNewTypes = true;
+                    }
                     self.AddObstacleToRenderList();
                     continue;
                 }
@@ -125,7 +162,13 @@ namespace BresenhamAlgorithm
                 carAngle += entity.DeltaAngle;
             }
 
-            SpriteObstacle.RenderSprites(result, entity);
+            if (hasNewTypes)
+            {
+                PrepareRenderObjects();
+                hasNewTypes = false;
+            }
+            cachedDelegates.ForEach(cd => cd.Value(result, entity));
+
             zBuffer.Render();
         }
     }

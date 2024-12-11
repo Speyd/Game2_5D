@@ -163,11 +163,12 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             }
             
         }
-        public static void RenderSprites(Result result, Entity entity)
+
+        public static void RenderSelfDrawableList(Result result, Entity entity)
         {
             var sortedSprites = SpritesToRender
-                .OrderByDescending(sprite => sprite.Distance)
-                .ToList();
+               .OrderByDescending(sprite => sprite.Distance)
+               .ToList();
             foreach (var sprite in sortedSprites)
             {
                 sprite.Render(result, entity);
