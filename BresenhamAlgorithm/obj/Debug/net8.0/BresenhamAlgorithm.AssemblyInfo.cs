@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BresenhamAlgorithm")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4938aee5c8e9be35a9a84f195aa8f67020e06f07")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5223a7da0a28021ac2563b5bb472ac1a3c2c331d")]
 [assembly: System.Reflection.AssemblyProductAttribute("BresenhamAlgorithm")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BresenhamAlgorithm")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

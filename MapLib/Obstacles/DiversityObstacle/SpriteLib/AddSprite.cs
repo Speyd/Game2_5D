@@ -14,6 +14,9 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
     {
         public static void AddGif(SpriteObstacle sprite, string gifPath)
         {
+            string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            Directory.CreateDirectory(tempDir);
+
             try
             {
                 using (SixLabors.ImageSharp.Image gifImage = SixLabors.ImageSharp.Image.Load(gifPath))
@@ -23,14 +26,12 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                     for (int i = 0; i < frameCount; i++)
                     {
                         using (var frame = gifImage.Frames.CloneFrame(i))
-                        using (var stream = new MemoryStream())
                         {
-                            frame.SaveAsPng(stream);  
-                            stream.Position = 0; 
+                            string filePath = Path.Combine(tempDir, $"frame_{i}.png");
+                            frame.SaveAsPng(filePath);
 
-                            var texture = new SFML.Graphics.Texture(stream);
+                            var texture = new SFML.Graphics.Texture(filePath);
                             sprite.Textures.Add(new TextureObstacle(texture));
-
                         }
                     }
                 }
@@ -38,6 +39,14 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             catch (Exception ex)
             {
                 Console.WriteLine($"Error when enabling gif: {ex.Message}");
+            }
+            finally
+            {       
+                if (Directory.Exists(tempDir))
+                {
+                    Directory.Delete(tempDir, true);
+                    //Console.WriteLine($"Temporary directory {tempDir} deleted.");
+                }
             }
         }
         public static void AddTexture(SpriteObstacle sprite, string path)
@@ -52,7 +61,25 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
                 sprite.TextureInMap = sprite.Textures[0];
         }
+        public static void AddTextureFromFolder(SpriteObstacle sprite, string path)
+        {
+            if (!Directory.Exists(path))
+                throw new Exception("Error path TextureObstacle");
 
+            string[] files = Directory.GetFiles(path);
+            string[] directories = Directory.GetDirectories(path);
+
+            foreach (var directorie in directories)
+            {
+                AddTextureFromFolder(sprite, directorie);
+            }
+
+            foreach (var file in files)
+            { 
+                TextureObstacle.IsTruePath(file);
+                sprite.Textures.Add(new TextureObstacle(file));
+            }
+        }
         public static void AddTexture(SpriteObstacle sprite, TextureObstacle texture)
         {
             sprite.Textures.Add(texture);
@@ -60,17 +87,16 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
                 sprite.TextureInMap = sprite.Textures[0];
         }
-
         public static void AddTextures(SpriteObstacle sprite, List<TextureObstacle> textures)
         {
             foreach (var texture in textures)
                 AddTexture(sprite, texture);
         }
-
         public static void AddTextures(SpriteObstacle sprite, List<string> paths)
         {
             foreach (var path in paths)
                 AddTexture(sprite, path);
         }
+
     }
 }

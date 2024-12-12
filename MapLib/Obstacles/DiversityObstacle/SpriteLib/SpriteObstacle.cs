@@ -83,10 +83,13 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         {
             AddSprite.AddTexture(this, texture);
         }
-        public SpriteObstacle(string path, bool isPassability = false)
+        public SpriteObstacle(string path, bool isDirectory, bool isPassability = false)
            : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
-            AddSprite.AddTexture(this, path);
+            if(isDirectory)
+                AddSprite.AddTextureFromFolder(this, path);
+            else
+                AddSprite.AddTexture(this, path);
         }
         public SpriteObstacle(List<string> paths, bool isPassability = false)
            : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
@@ -105,8 +108,13 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {
-            if (Textures.Count > 0 && Textures[0] is not null)
-                rectangleShape.Texture = Textures[0].Texture;
+            if (TextureInMap is not null)
+                rectangleShape.Texture = TextureInMap.Texture;
+            else if(TextureInMap is null && Textures.Count > 0)
+            {
+                TextureInMap = Textures.First();
+                rectangleShape.Texture = TextureInMap.Texture;
+            }
             else
                 rectangleShape.FillColor = ColorInMap;
         }

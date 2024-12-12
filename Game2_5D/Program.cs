@@ -61,7 +61,7 @@ List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
     new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png"),
 
 };
-List<TextureObstacle> textureBarel= new List<TextureObstacle>()
+List<TextureObstacle> textureBarel = new List<TextureObstacle>()
 {
     new TextureObstacle( @"Resources\Image\Sprite\Barel\0.png"),
     new TextureObstacle( @"Resources\Image\Sprite\Barel\1.png"),
@@ -101,18 +101,16 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 };
 
 
-//SpriteObstacle sprite = new SpriteObstacle(0, 0, 'S', @"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", t)
-//{
-//    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-//    {
-//        ScaleMultSprite = 64
-//    },
-//    CurrentAnimation = new AnimationState()
-//    {
-//        IsAnimation = true,
-//        Speed = 30,     
-//    }
-//};
+SpriteObstacle sprite = new SpriteObstacle(@"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", false)
+{
+
+    Scale = 64,
+    CurrentAnimation = new AnimationState()
+    {
+        IsAnimation = true,
+        Speed = 30,
+    }
+};
 SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
 {
     //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
@@ -124,7 +122,7 @@ SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
     SideLR = 10,
     Z = -30,
 };
-SpriteObstacle barel = new SpriteObstacle(textureBarel)
+SpriteObstacle barel = new SpriteObstacle(@"Resources\Image\Sprite\Barel\", true)
 {
     //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
     //{
@@ -150,7 +148,7 @@ SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
     //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
     //{
     //    ScaleMultSprite = 64,
-       
+
     //},
     Scale = 64,
     Z = -70,
@@ -196,10 +194,11 @@ SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
 //map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
 map.AddObstacle(4, 5, sprite1);
+map.AddObstacle(4, 4, sprite);
 sprite1.SetShifts(50);
 
 map.AddObstacle(3, 5, barel);
-map.AddObstacle(3, 5, barel2);
+//map.AddObstacle(3, 5, barel2);
 TexturedWall wall = new TexturedWall( @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png", @"Resources\Image\WallTexture\add.png", @"Resources\Image\WallTexture\Wall4.png");
 map.AddObstacle(7, 7,  wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
