@@ -1,5 +1,4 @@
-﻿//using ObstacleLib.ItemObstacle;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;

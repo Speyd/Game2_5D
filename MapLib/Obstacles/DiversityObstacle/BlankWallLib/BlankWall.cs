@@ -23,31 +23,30 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
         public Color ColorFilling { get; set; }
 
 
-
         //-------------------------Render Operation-----------------------
         private RenderBlankWallOpertion RenderOperation = new RenderBlankWallOpertion();
 
 
+        //-------------------Setting--------------------
         public override bool IsSingleAddable { get; init; } = true;
-        //public override bool IsRayPasses { get; init; } = false;
-        public BlankWall(double x, double y, Color color, bool isPassability = false)
 
-            : base(x, y, 'B', color, isPassability)
+        #region Constructor
+        public BlankWall(Color color, bool isPassability = false)
+
+            : base(0, 0, 'B', color, isPassability)
         {
             StandartColorFilling = color;
         }
 
-        public BlankWall(double x, double y, byte r, byte g, byte b, bool isPassability = false)
+        public BlankWall(byte r, byte g, byte b, bool isPassability = false)
 
-            : base(x, y, 'B', new Color(r, g, b), isPassability)
+            : base(0, 0, 'B', new Color(r, g, b), isPassability)
         {
             StandartColorFilling = new Color(r, g, b);
         }
+        #endregion
 
-
-
-
-        #region IRenderableImplementation
+        #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
             byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
@@ -76,6 +75,13 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
         }
         #endregion
 
+        #region IWall_Implementation
+        public float CalcCooX(double ray)
+        {
+            return (float)ray * Screen.Setting.Scale;
+        }
+        #endregion
+
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X = x;
@@ -86,10 +92,7 @@ namespace MapLib.Obstacles.DiversityObstacle.BlankWallLib
             Top = Y;
             Bottom = Y + Screen.Setting.Tile;
         }
-        public float CalcCooX(double ray)
-        {
-            return (float)ray * Screen.Setting.Scale;
-        }
+       
         public override void Render(Result result, Entity entity)
         {
             BlackoutObstacle(result.Depth);

@@ -19,7 +19,7 @@ namespace MapLib
         //---------------------Obstacles-----------------------
         public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
         public Dictionary<ValueTuple<int, int>, List<Obstacle>> ObstaclesWithoutNull { get; init; }
-        public static TexturedWall StandartBlock { get; set; } = new TexturedWall(0, 0, @"Resources\Image\WallTexture\Wall1.png");
+        public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
 

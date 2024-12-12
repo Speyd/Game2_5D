@@ -25,7 +25,7 @@ namespace DrawLib
                 hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
 
-                float textureX = drawable.GetTextureXCoordinate(hitPoint.UV, hitPoint.TextureWallDetermine);
+                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
 
                 float height = drawable.BringingToStandard(heightObj);
                 float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);

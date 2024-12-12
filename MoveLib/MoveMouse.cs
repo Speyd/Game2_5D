@@ -19,10 +19,9 @@ namespace MoveLib
         private void SetVerticalAngleMouse(Vector2i currentMousePosition)
         {
             int actualMousePositionY = currentMousePosition.Y - Screen.Setting.HalfHeight;
-            setting.TempVerticalAngle = 
-                (float)Math.Clamp(setting.TempVerticalAngle, MoveLib.Setting.MinVerticalAngle, MoveLib.Setting.MaxVerticalAngle);
-
             setting.TempVerticalAngle += actualMousePositionY * setting.MouseSensitivity;
+            setting.TempVerticalAngle =
+                (float)Math.Clamp(setting.TempVerticalAngle, MoveLib.Setting.MinVerticalAngle, MoveLib.Setting.MaxVerticalAngle);
         }
 
         public void OnMouseMoved(object sender, MouseMoveEventArgs e)

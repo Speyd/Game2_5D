@@ -16,6 +16,7 @@ namespace EntityLib
     public class Entity
     {
 
+        //-----------------Fov-----------------
         private double _fov;
         public double Fov 
         { 
@@ -29,54 +30,68 @@ namespace EntityLib
         public double HalfFov { get; private set; }
 
 
-
+        //---------------------Ray Setting----------------------
         public double MaxRayMapDistance { get; private set; }
         public double MaxRaySpriteDistance { get; private set; }
+
+
+        //---------------------Render Setting----------------------
         public double DeltaAngle { get; init; }
-
-
-        public double Dist { get; init; }
         public double ProjCoeff { get; init; }
 
+
+        //---------------------Collision Setting----------------------
         public double Side { get; set; } = 10;
 
 
+        //---------------------Coordinates----------------------
         public double Y { get; set; }
         public double X { get; set; }
+
+
+        //-----------------------Angle-----------------------
         public double Angle { get; set; }
         public double VerticalAngle { get; set; }
 
+
+        //-----------------------Camera-----------------------
         private double _cameraZ;
         public double CameraZ
         {
             get => _cameraZ;
-            set => _cameraZ = (value / Screen.MultWidth) / Screen.MultHeight;
-        } //= 70;
+            set => _cameraZ = value / Screen.MultWidth / Screen.MultHeight;
+        }
+
+
 
         public Entity(Setting setting, double maxDistance,
             double fov = Math.PI / 3,
             double x = 0, double y = 0,
             double angle = 0, double verticalAngle = 0)
         {
+            Fov = fov;
+            HalfFov = (float)Fov / 2;
             CameraZ = 70;
 
-            Fov = fov;
 
             X = x <= 0 ? setting.HalfWidth : x;
             Y = y <= 0 ? setting.HalfHeight : y;
+
+
             Angle = angle;
             VerticalAngle = verticalAngle;
-          
-            HalfFov = (float)Fov / 2;
             DeltaAngle = (float)Fov / setting.AmountRays;
-           // CenterRay = (int)(Screen.Setting.AmountRays / 2) - 1;
 
-            Dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
-            ProjCoeff = Dist * setting.Tile;
+
+            float dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
+            ProjCoeff = dist * setting.Tile;
+
+
             MaxRayMapDistance = maxDistance;
-
             MaxRaySpriteDistance = 1000;
         }
+
+
         public (double nextX, double nextY) CalculateNextPosition(double deltaX, double deltaY)
         {
             double nextX = X + deltaX;

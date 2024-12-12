@@ -10,6 +10,7 @@ namespace Render
 {
     public interface IRayPassability
     {
+        public static float BaseRayPassObjectHeight { get; } = 499;
         public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY);
     }
 }

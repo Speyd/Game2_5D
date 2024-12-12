@@ -34,7 +34,9 @@ namespace RayTracingLib
                 {
                     float currentRayX = startX + tMaxY * dx;
                     float currentRayY = startY + tMaxX * dy;
-                    return (rayPassability.IsRayTouchesObject(entity, currentRayX, currentRayY), obstacle);
+
+                    if (rayPassability.IsRayTouchesObject(entity, currentRayX, currentRayY))
+                        return (true, obstacle);
                 }
                 else
                     return (true, obstacle);

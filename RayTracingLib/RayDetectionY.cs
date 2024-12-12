@@ -23,10 +23,8 @@ namespace RayTracingLib.Detection
 
 
         const float baseMultNegativeCoo = 2.6f;
-        const float baseMultNegativeCornerCoo = 2.4f;
 
         const float baseMultPozititiveCoo = 2.5f;
-        const float baseMultPozititiveCornerCoo = 2.1f;
 
 
         const float distanceLimitation = 1.2f;
@@ -51,14 +49,8 @@ namespace RayTracingLib.Detection
                 hitPoint.DistanceToWall;
 
 
-            float baseMult = 1;
-            if (!IsCornerWall(hitPoint))
-            {
-                AddCoordinates = heightObj;
-                baseMult = obst.GetAveragedMult(baseMultNegativeCoo, AddMultFullScreen);
-            }
-            else
-                baseMult = obst.GetAveragedMult(baseMultNegativeCornerCoo, AddMultFullScreen);
+            float baseMult = obst.GetAveragedMult(baseMultNegativeCoo, AddMultFullScreen);
+            AddCoordinates = heightObj;
 
             return (safeDistance * safeDistance) / (baseMult * safeDistance * (1 / hitPoint.DistanceToPoint));
         }
@@ -69,21 +61,11 @@ namespace RayTracingLib.Detection
                 hitPoint.DistanceToWall;
 
 
-            if (IsCornerWall(hitPoint))
-            {
-                float baseCornerMult = obst.GetAveragedMult(baseMultPozititiveCornerCoo, AddMultFullScreen);
-
-                float baseCornerValue = baseCornerMult * safeDistance * (1 / hitPoint.DistanceToPoint);
-                baseCornerValue = safeDistance * safeDistance / baseCornerValue;
-
-                return baseCornerValue / (float)Math.Max(entity.VerticalAngle + MoveLib.Setting.MaxVerticalAngle, 0.1f);
-            }
-
-
-            float baseMult = obst.GetAveragedMult(baseMultPozititiveCoo, AddMultFullScreen);
+            float baseMult = obst.GetAveragedMult(baseMultPozititiveCoo, AddMultFullScreen);          
             AddCoordinates = heightObj;
 
-            float baseValue = baseMult * safeDistance * (1 / hitPoint.DistanceToPoint);
+
+            float baseValue = (baseMult * safeDistance) * (1 / hitPoint.DistanceToPoint);
             baseValue = (safeDistance * safeDistance) / baseValue;
 
             return baseValue / (float)Math.Max(entity.VerticalAngle + 1, 0.1f);

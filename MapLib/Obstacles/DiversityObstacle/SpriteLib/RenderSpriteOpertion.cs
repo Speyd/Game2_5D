@@ -84,7 +84,7 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib.Render
                 return;
    
             float y = sprite.NormalizePositionY(verticalAngle, height / 2)
-                - (float)(sprite.Setting.ShiftCubedZ * Screen.ScreenHeight / Math.Max(sprite.Distance, 0.1));
+                - (float)(sprite.Z * Screen.ScreenHeight / Math.Max(sprite.Distance, 0.1));
 
             sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.CurrentRenderTexture.Texture);
             sprite.BlackoutObstacle(sprite.Distance);

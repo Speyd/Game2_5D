@@ -30,41 +30,12 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         public TexturedPair? CurrentRenderTexture { get; set; } = null;
         public TextureObstacle? TextureInMiniMap { get; set; }
 
-        //----------------------Coordinates---------------------
+        //----------------------Setting---------------------
         public override bool IsSingleAddable { get; init; } = true;
-        //public override bool IsRayPasses { get; init; } = false;
 
-        // public override Coordinates Coordinates;//= new Coordinates();
-        //private double _x;
-        //public override double X
-        //{
-        //    get => _x;
-        //    set
-        //    {
-        //        _x = value;
-        //        ResetSides();
-        //    }
-        //}
-        //private double _y;
-        //public override double Y
-        //{
-        //    get => _y;
-        //    set
-        //    {
-        //        _y = value;
-        //        ResetSides();
-        //    }
-        //}
-
-        //-----------------------SidesInfo--------------------
-        //public float Left { get; set; } = 0;
-        //public float Right { get; set; } = 0;
-        //public float Top { get; set; } = 0;
-        //public float Bottom { get; set; } = 0;
         //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
         private RenderTexturedWallOpertion RenderOperation { get; init; }
-
 
 
         #region Constructor
@@ -84,9 +55,9 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
             RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y, string path, bool isPassability = false)
+        public TexturedWall(string path, bool isPassability = false)
 
-            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(path);
 
@@ -94,37 +65,34 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
 
             RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y, string pathLR, string pathBT, bool isPassability = false)
+        public TexturedWall(string pathLR, string pathBT, bool isPassability = false)
 
-            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(pathLR);
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y,
-            string pathL, string pathR,
-            string pathB, string pathT,
-            bool isPassability = false)
+        public TexturedWall(string pathL, string pathR, string pathB, string pathT, bool isPassability = false)
 
-            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(pathL);
             MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y, List<(TextureWallSide, string)> textures, bool isPassability = false)
-            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+        public TexturedWall(List<(TextureWallSide, string)> textures, bool isPassability = false)
+            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
 
             RenderOperation = new RenderTexturedWallOpertion(this);
         }
-        public TexturedWall(double x, double y, List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
-            : base(x, y, 'T', SFML.Graphics.Color.Red, isPassability)
+        public TexturedWall(List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
+            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
@@ -133,47 +101,7 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         }
         #endregion
 
-        #region IRenderableImplementation
-        public float CalculateTextureX(Vector2f UV, TextureWallSide side)
-        {
-            CurrentRenderTexture = MultiTextured[side];
-            if (CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
-
-            float textureX = UV.X > UV.Y ? UV.X : UV.Y;
-            textureX *= CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
-
-            return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
-        }
-        public float BringingToStandard(float heightObj)
-        {
-            if (CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
-
-            return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
-        }
-        public float GetAveragedMult(float baseMult, float addMultFullScreen)
-        {
-            if (CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
-
-
-            float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
-            newMult *= (float)TextureObstacle.BaseHeight / (float)CurrentRenderTexture.Base.Height;
-
-            if (Screen.Styles == Styles.Fullscreen)
-                return newMult + addMultFullScreen;
-
-            return newMult;
-        }
-        public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
-        {
-            if (CurrentRenderTexture is null)
-                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
-
-            float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-            return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
-        }
+        #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
             if (CurrentRenderTexture is null || CurrentRenderTexture.Base.Texture is null || RenderSprite is null)
@@ -183,14 +111,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
             RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
-        }
-        public void DrawObject(Drawable drawObject)
-        {
-            if (CurrentRenderTexture is null)
-                return;
-
-            CurrentRenderTexture.Mod.Draw(drawObject);
-            CurrentRenderTexture.Mod.Display();
         }
         public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {
@@ -208,6 +128,68 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
         }
         #endregion
 
+        #region IWall_Implementation
+        public float CalcCooX(double ray)
+        {
+            return (float)ray * Screen.Setting.Scale;
+        }
+        #endregion
+
+        #region IDrawable_Implementation
+        public float CalculateTextureX(Vector2f UV, TextureWallSide side)
+        {
+            CurrentRenderTexture = MultiTextured[side];
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
+
+            float textureX = UV.X > UV.Y ? UV.X : UV.Y;
+            textureX *= CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
+
+            return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
+        }      
+
+        public float BringingToStandard(float heightObj)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
+
+            return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
+        }
+
+        public float GetAveragedMult(float baseMult, float addMultFullScreen)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
+
+
+            float newMult = baseMult / Screen.MultHeight / Screen.MultWidth;
+            newMult *= (float)TextureObstacle.BaseHeight / CurrentRenderTexture.Base.Height;
+
+            if (Screen.Styles == Styles.Fullscreen)
+                return newMult + addMultFullScreen;
+
+            return newMult;
+        }
+
+        public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
+
+            float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
+            return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
+        }
+
+        public void DrawObject(Drawable drawObject)
+        {
+            if (CurrentRenderTexture is null)
+                return;
+
+            CurrentRenderTexture.Mod.Draw(drawObject);
+            CurrentRenderTexture.Mod.Display();
+        }
+        #endregion
+
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X = x;
@@ -217,10 +199,6 @@ namespace MapLib.Obstacles.DiversityObstacle.TexturedWallLib
             Right = X + Screen.Setting.Tile;
             Top = Y;
             Bottom = Y + Screen.Setting.Tile;
-        }
-        public float CalcCooX(double ray)
-        {
-            return (float)ray * Screen.Setting.Scale;
         }
 
         public override void Render(Result result, Entity entity)

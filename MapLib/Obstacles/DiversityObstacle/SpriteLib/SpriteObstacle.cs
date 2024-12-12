@@ -16,13 +16,13 @@ using Render.ResultAlgorithm;
 using EntityLib.Player;
 using SFML.System;
 using Render;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite;
 using MapLib.Obstacles.DiversityObstacle.SpriteLib.Render;
 using MapLib.Obstacles.Texture;
 using static System.Net.Mime.MediaTypeNames;
 using SFML.Window;
 using static System.Formats.Asn1.AsnWriter;
 using TextureLib;
+using System.Net;
 
 namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 {
@@ -48,9 +48,24 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 
 
         //--------------------------Setting-----------------------------
-        public Setting Setting { get; init; }
         public override bool IsSingleAddable { get; init; } = false;
-        //public override bool IsRayPasses { get; init; } = true;
+
+        private float _z = 0;
+        public float Z 
+        {
+            get => _z;
+            set
+            {
+                _z = value * Screen.MultHeight / Screen.MultWidth;
+            } 
+        }
+
+        private float scale = 1;
+        public float Scale
+        {
+            get => scale;
+            set => scale = value == 0 ? 1 : value / Screen.MultWidth;
+        }
 
         //---------------------Render Parameters----------------------
         public double Angle { get; set; }
@@ -58,37 +73,29 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
 
 
         #region Constructor
-        public SpriteObstacle(double x, double y, List<TextureObstacle> textures, bool isPassability = false)
-            : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(List<TextureObstacle> textures, bool isPassability = false)
+            : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
-            Setting = new Setting();
-
             AddSprite.AddTextures(this, textures);
         }
-        public SpriteObstacle(double x, double y, TextureObstacle texture, bool isPassability = false)
-           : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(TextureObstacle texture, bool isPassability = false)
+           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
-            Setting = new Setting();
-
             AddSprite.AddTexture(this, texture);
         }
-        public SpriteObstacle(double x, double y, string path, bool isPassability = false)
-           : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(string path, bool isPassability = false)
+           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
-            Setting = new Setting();
-
             AddSprite.AddTexture(this, path);
         }
-        public SpriteObstacle(double x, double y, List<string> paths, bool isPassability = false)
-           : base(x, y, 'S', SFML.Graphics.Color.White, isPassability)
+        public SpriteObstacle(List<string> paths, bool isPassability = false)
+           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
-            Setting = new Setting();
-
             AddSprite.AddTextures(this, paths);
         }
         #endregion
 
-        #region IRenderableImplementation
+        #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
@@ -114,8 +121,19 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
+        private double GetRenderX(Entity entity)
+        {
+            int delta_rays = (int)(Angle / entity.DeltaAngle);
+            int current_ray = Screen.Setting.CenterRay + delta_rays;
+
+            if (Distance >= Screen.Setting.Tile)
+                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
+
+            return current_ray;
+        }
         #endregion
 
+        #region IRayPassability_Implementation
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X = x;
@@ -125,67 +143,40 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
             ShiftCubedY = ShiftCubedY;
         }
 
-        private double GetRenderX(Entity entity)
-        {
-            int delta_rays = (int)(Angle / entity.DeltaAngle);
-            int current_ray = Screen.Setting.CenterRay + delta_rays;
+        public bool IsRayTouchesObjectX(float currentRayX)
+            => currentRayX >= Left && currentRayX <= Right;
 
-            if(Distance >= Screen.Setting.Tile)
-                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
-
-            return current_ray;
-        }
-
-        public void AddObstacleToRenderList()
-        {
-            if (IsAdded == true || SpritesToRender.Contains(this))
-                return;
-
-            SpritesToRender.Add(this);
-            IsAdded = true;
-        }
-
-        public override void Render(Result result, Entity entity)
-        {
-            double spriteAngle = RenderSpriteOpertion.CalculationAngularDistance(this, entity);
-            if (Distance > entity.MaxRaySpriteDistance)
-                return;
-
-            Angle = RenderSpriteOpertion.CalculationSpriteAngle(entity.Angle, spriteAngle);
-           
-            if (Math.Abs(Angle) < entity.Fov ||
-                CurrentRenderTexture is not null && Math.Abs(Angle) < entity.HalfFov + Math.Atan(CurrentRenderTexture.Width / (2 * Distance)))
-            {
-                RenderSpriteOpertion.DefiningDesiredSprite(this, spriteAngle);
-                double renderX = GetRenderX(entity);
-                float spriteHeight = (float)(Screen.ScreenHeight / Distance * Setting.ScaleMultSprite);// * Screen.MultHeight;
-               // Console.WriteLine(Screen.MultHeight);
-
-                RenderSpriteOpertion.DrawSprite(this, entity.VerticalAngle, renderX, spriteHeight);
-            }
-            
-        }
-
-        public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
+        public bool IsRayTouchesObjectY(float currentRayY)
+            => currentRayY >= Top && currentRayY <= Bottom;
+        public bool IsRayTouchesObjectZ(Entity entity)
         {
             if (CurrentRenderTexture is null)
                 return true;
 
-            //-------------Z Coordinates------------
-            float distanceToSprite = (float)Math.Sqrt(
-            (X - entity.X) * (X - entity.X) +
-            (Y - entity.Y) * (Y - entity.Y)
-            );
-            float entityViewZ = (float)(entity.CameraZ + Math.Tan(entity.VerticalAngle) * distanceToSprite);
 
-            bool isCollidingZ = entityViewZ >= Math.Abs(Setting.ShiftCubedZ);
+            float distance = (float)Math.Sqrt(Math.Pow(X - entity.X, 2) + Math.Pow(Y - entity.Y, 2));
 
 
-            //-------------X-Y Coordinates------------
-            bool isCollidingX = currentRayX >= Left && currentRayX <= Right;
-            bool isCollidingY = currentRayY >= Top && currentRayY <= Bottom;
+            double vertAngle = Math.Clamp(entity.VerticalAngle, -Math.PI / 4, Math.PI / 4);
+            float entityViewZ = (float)(entity.CameraZ + Math.Tan(vertAngle) * distance);
 
 
+            float mult = IRayPassability.BaseRayPassObjectHeight / CurrentRenderTexture.Height;
+            mult = mult == 1 ? 0 : mult;
+
+
+            float supposedZ = (-Z + Scale);
+            float Top = -Z - (supposedZ / 2 * mult);
+            float Bottom = supposedZ + (mult == 0 ? supposedZ : supposedZ * mult);
+
+            return entityViewZ >= Top && entityViewZ <= Bottom;
+        }
+
+        public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
+        {
+            bool isCollidingX = IsRayTouchesObjectX(currentRayX);
+            bool isCollidingY = IsRayTouchesObjectY(currentRayY);
+            bool isCollidingZ = IsRayTouchesObjectZ(entity);
 
             if ((isCollidingX || isCollidingY) == true && isCollidingZ == false)
                 return false;
@@ -195,6 +186,19 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 return false;
             else
                 return true;
+        }
+        #endregion
+
+        #region ISelfDrawable_Implementation
+        public void AddObstacleToRenderList()
+        {
+            if (IsAdded == true)
+                return;
+            else if (SpritesToRender.Contains(this))
+                return;
+
+            SpritesToRender.Add(this);
+            IsAdded = true;
         }
         public static void RenderSelfDrawableList(Result result, Entity entity)
         {
@@ -206,5 +210,27 @@ namespace MapLib.Obstacles.DiversityObstacle.SpriteLib
                 sprite.Render(result, entity);
             }
         }
+        #endregion
+        public override void Render(Result result, Entity entity)
+        {
+            double spriteAngle = RenderSpriteOpertion.CalculationAngularDistance(this, entity);
+            if (Distance > entity.MaxRaySpriteDistance)
+                return;
+
+            Angle = RenderSpriteOpertion.CalculationSpriteAngle(entity.Angle, spriteAngle);
+
+            if (Math.Abs(Angle) <= entity.Fov)
+            {
+                RenderSpriteOpertion.DefiningDesiredSprite(this, spriteAngle);
+
+                double renderX = GetRenderX(entity);
+                float height = (float)(Screen.ScreenHeight / Distance * Scale);
+
+                RenderSpriteOpertion.DrawSprite(this, entity.VerticalAngle, renderX, height);
+            }
+            
+        }
+      
+        
     }
 }
