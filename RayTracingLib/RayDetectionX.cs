@@ -1,7 +1,5 @@
 ﻿using EntityLib;
-using MapLib.Obstacles;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
-using MapLib.Obstacles.Texture;
+using ObstacleLib;
 using Render.InterfaceRender;
 using ScreenLib;
 using SFML.System;
@@ -72,7 +70,6 @@ namespace RayTracingLib.Detection
 
             return new Vector2f(hitX, hitY);
         }
-
         static private TextureWallSide DetermineWallSide(Obstacle obstacle, Entity entity)
         {
             if (entity.Y >= obstacle.Top && entity.Y <= obstacle.Bottom)
@@ -114,7 +111,6 @@ namespace RayTracingLib.Detection
                     return wallDetermine;
             }
         }
-
         static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, TextureWallSide wallDetermine)
         {
             double deltaX = obstacle.X - entity.X;
@@ -124,7 +120,6 @@ namespace RayTracingLib.Detection
             if (wallDetermine == TextureWallSide.Top || wallDetermine == TextureWallSide.Left)
                 distanceToWall -= -(Screen.Setting.Tile * 3);
         }
-
         static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
         {
             sinAngle = (float)Math.Sin(entity.Angle);

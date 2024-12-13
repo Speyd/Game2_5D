@@ -1,5 +1,4 @@
 ﻿using EntityLib;
-using MapLib.Obstacles.Texture;
 using MapLib;
 using ScreenLib;
 using SFML.System;
@@ -10,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Window;
 using Render.InterfaceRender;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using TextureLib;
 using Render;
 

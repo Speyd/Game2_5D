@@ -26,3 +26,5 @@ D:\C++ проекты\Game2_5D\RayTracingLib\obj\Debug\net8.0\RayTracingLib.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\obj\Debug\net8.0\ref\RayTracingLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\TextureLib.pdb
+D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ObstacleLib.dll
+D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ObstacleLib.pdb

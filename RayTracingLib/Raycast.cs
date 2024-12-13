@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MapLib.Obstacles;
 using EntityLib;
 using MapLib;
 using ScreenLib;
 using Render.InterfaceRender;
 using SFML.Graphics;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib;
+using ObstacleLib;
 using static SFML.Window.Mouse;
 using Render;
 
@@ -69,9 +68,9 @@ namespace RayTracingLib
             while (true)
             {
 
-                if (map.ObstaclesWithoutNull.ContainsKey((gridX, gridY)))
+                if (map.ExistingObstacles.ContainsKey((gridX, gridY)))
                 {
-                    var obstInfo = CheckingTouchingOfList(map.ObstaclesWithoutNull[(gridX, gridY)], entity);
+                    var obstInfo = CheckingTouchingOfList(map.ExistingObstacles[(gridX, gridY)], entity);
 
                     if(obstInfo.Item1 && obstInfo.Item2 is not null)
                         return obstInfo.Item2;

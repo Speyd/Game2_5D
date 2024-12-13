@@ -13,7 +13,6 @@ using MiniMapLib.SettingMap;
 using System.Threading;
 using MapLib;
 using EntityLib;
-using MapLib.Obstacles;
 using MiniMapLib.ObjectInMap.Player;
 using MiniMapLib.ObjectInMap.Positions;
 using MiniMapLib.Window;

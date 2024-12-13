@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DrawLib", "DrawLib\DrawLib.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextureLib", "TextureLib\TextureLib.csproj", "{C55532F4-A985-460F-9AE2-117EEC1E1788}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObstacleLib", "ObstacleLib\ObstacleLib.csproj", "{09662D73-033C-4B0E-8FBE-EFDBE97219F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{C55532F4-A985-460F-9AE2-117EEC1E1788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C55532F4-A985-460F-9AE2-117EEC1E1788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C55532F4-A985-460F-9AE2-117EEC1E1788}.Release|Any CPU.Build.0 = Release|Any CPU
+		{09662D73-033C-4B0E-8FBE-EFDBE97219F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09662D73-033C-4B0E-8FBE-EFDBE97219F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09662D73-033C-4B0E-8FBE-EFDBE97219F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09662D73-033C-4B0E-8FBE-EFDBE97219F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

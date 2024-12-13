@@ -1,12 +1,10 @@
 ﻿using EntityLib;
 using MapLib;
-using MapLib.Obstacles;
 using Render.InterfaceRender;
 using Render.ZBufferRender;
 using Render.ResultAlgorithm;
 using ScreenLib;
 using Render;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib;
 using NGenerics.Extensions;
 using System.Reflection;
 
@@ -52,7 +50,7 @@ namespace BresenhamAlgorithm
             double mappedX = isVertical ? x + auxiliary : x;
             double mappedY = isVertical ? y : y + auxiliary;
 
-            var key = Map.Mapping(mappedX, mappedY, Screen.Setting.Tile);
+            var key = Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile);
             foreach (var obstacle in map.Obstacles[key])
             {    
                 if (obstacle is ISelfDrawable self)
@@ -105,7 +103,7 @@ namespace BresenhamAlgorithm
             double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
             double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
 
-            var coordinates = Map.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
+            var coordinates = Screen.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
 
             double sinA, cosA;
 
@@ -120,7 +118,7 @@ namespace BresenhamAlgorithm
                     depth_v = (x - entity.X) / cosA;
                     vy = entity.Y + depth_v * sinA;
 
-                    if (map.CheckTrueCoordinates(Map.Mapping(x + auxiliaryX, vy, Screen.Setting.Tile)))
+                    if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy, Screen.Setting.Tile)))
                     {
                         if (CheckAndAddObstacle(x, vy, auxiliaryX, true))
                             break;
@@ -139,7 +137,7 @@ namespace BresenhamAlgorithm
                     depth_h = (y - entity.Y) / sinA;
                     hx = entity.X + depth_h * cosA;
 
-                    if (map.CheckTrueCoordinates(Map.Mapping(hx, y + auxiliaryY, Screen.Setting.Tile)))
+                    if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY, Screen.Setting.Tile)))
                     {
                         if (CheckAndAddObstacle(hx, y, auxiliaryY, false))
                             break;

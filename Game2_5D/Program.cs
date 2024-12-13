@@ -28,14 +28,14 @@ using FpsLib;
 using System.Reflection.Metadata;
 using ControlLib;
 using BresenhamAlgorithm;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib;
+using ObstacleLib.SpriteLib;
+using ObstacleLib.TexturedWallLib;
 using Render.InterfaceRender;
 using TextField;
 using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
-using MapLib.Obstacles.Texture;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
 using TextureLib;
+using ObstacleLib.SpriteLib.Animation;
 using static System.Formats.Asn1.AsnWriter;
 
 //Screen screen = new Screen(1500, 1000);
@@ -101,16 +101,16 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 };
 
 
-SpriteObstacle sprite = new SpriteObstacle(@"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", false)
-{
+//SpriteObstacle sprite = new SpriteObstacle(@"Resources\Image\Sprite\GifSprite\pokemon-8939_256.gif", false)
+//{
 
-    Scale = 64,
-    CurrentAnimation = new AnimationState()
-    {
-        IsAnimation = true,
-        Speed = 30,
-    }
-};
+//    Scale = 64,
+//    CurrentAnimation = new AnimationState()
+//    {
+//        IsAnimation = true,
+//        Speed = 30,
+//    }
+//};
 SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
 {
     //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
@@ -136,7 +136,7 @@ SpriteObstacle barel = new SpriteObstacle(@"Resources\Image\Sprite\Barel\", true
         Speed = 30,
         IsAnimation = true,
     },
-    ShiftCubedX = 20,
+    ShiftCubedX = 0,
     ShiftCubedY = 95,
     SideBT = 40,
     SideLR = 40,
@@ -193,8 +193,8 @@ SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
 
 //map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
-map.AddObstacle(4, 5, sprite1);
-map.AddObstacle(4, 4, sprite);
+//map.AddObstacle(4, 4, sprite);
+map.AddObstacle(3, 5, sprite1);
 sprite1.SetShifts(50);
 
 map.AddObstacle(3, 5, barel);

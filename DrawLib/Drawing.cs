@@ -1,13 +1,12 @@
 ﻿using RayTracingLib;
-using MapLib.Obstacles;
 using EntityLib;
 using MapLib;
-using MapLib.Obstacles.Texture;
 using SFML.System;
 using RayTracingLib.Detection;
 using SFML.Graphics;
 using ScreenLib;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
+using ObstacleLib;
+using ObstacleLib.TexturedWallLib;
 using Render;
 
 namespace DrawLib

@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MapLib.Obstacles.Texture;
 using SFML.Graphics;
 
 namespace TextureLib

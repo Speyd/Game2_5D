@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SFML.Graphics;
 using TextureLib;
 
-namespace MapLib.Obstacles.Texture
+namespace TextureLib
 {
     public class TexturedPair
     {

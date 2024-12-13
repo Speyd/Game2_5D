@@ -158,7 +158,16 @@ namespace ScreenLib
             return (uint)(ScreenHeight - ((ScreenHeight / 100) * percent));
         }
 
-
+        public static ValueTuple<int, int> Mapping(double x, double y, int tile)
+        {
+            return new ValueTuple<int, int>(
+            (int)(x / tile) * tile,
+            (int)(y / tile) * tile);
+        }
+        public static int Mapping(double value, int tile)
+        {
+            return (int)(value / tile) * tile;
+        }
 
     }
 }

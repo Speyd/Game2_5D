@@ -13,12 +13,6 @@ namespace MiniMapLib.SettingMap
 {
     public class Setting
     {
-       // private float miniMapSlowdownFactor = 19;   //slow movement on minimap
-        //private int radiusCircle = 5;
-
-       // private const int sizeMainRayX = 50;
-        //private const int sizeMainRayY = 50;
-
         public float CenterX { get; private set; }
         public float CenterY { get; private set; }
 
@@ -43,28 +37,6 @@ namespace MiniMapLib.SettingMap
             }
         }
 
-        //#region Zoom
-        //public readonly float minZoom = 0.1f;
-        //public readonly float maxZoom = 2;
-
-        //private float zoom = 1;
-        //public float Zoom
-        //{
-        //    get => zoom;
-        //    set
-        //    {
-        //        if (value < minZoom)
-        //            zoom = minZoom;
-        //        else if(value > maxZoom)
-        //            zoom = maxZoom;
-        //        else
-        //            zoom = value;
-        //    }
-        //}
-        //#endregion
-
-
-       // public VertexArray line = new VertexArray(PrimitiveType.Lines, 2);
         public PositionsMiniMap Positions { get; set; }
         public Vector2f coorinatesPositionWindow;
 

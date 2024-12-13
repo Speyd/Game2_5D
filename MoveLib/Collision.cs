@@ -7,20 +7,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib;
+using ObstacleLib;
 using EntityLib.Player;
-using MapLib.Obstacles;
 using static SFML.Window.Mouse;
 namespace MoveLib
 {
-    public class Collision(Map map, MoveLib.Setting setting)
+    public class Collision
     {
-        private int _radiusCheckTouch = 2;
+        private Map Map { get; init; }
+        private MoveLib.Setting Setting { get; init; }
+
+        private int _radiusCheckTouch;
         public int RadiusCheckTouch 
         {
-            get => _radiusCheckTouch * Screen.Setting.Tile;
-            set => _radiusCheckTouch = value;
+            get => _radiusCheckTouch;
+            set => _radiusCheckTouch = value * Screen.Setting.Tile;
         }
+
+        public Collision(Map map, MoveLib.Setting setting)
+        {
+            Map = map;
+            Setting = setting;
+
+            RadiusCheckTouch = 2;
+        }
+
 
         public bool IsCollision(Obstacle obstacle, Entity entity, double nextX, double nextY)
         {
@@ -38,12 +49,12 @@ namespace MoveLib
 
         private bool IsTouch(Entity entity, double nextX, double nextY)
         {
-            var (playerCellX, playerCellY) = Map.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
+            var (playerCellX, playerCellY) = Screen.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
 
-            int minX = Map.Mapping(playerCellX, Screen.Setting.Tile) - RadiusCheckTouch;
-            int maxX = Map.Mapping(playerCellX, Screen.Setting.Tile) + RadiusCheckTouch;
-            int minY = Map.Mapping(playerCellY, Screen.Setting.Tile) - RadiusCheckTouch;
-            int maxY = Map.Mapping(playerCellY, Screen.Setting.Tile) + RadiusCheckTouch;
+            int minX = Screen.Mapping(playerCellX, Screen.Setting.Tile) - RadiusCheckTouch;
+            int maxX = Screen.Mapping(playerCellX, Screen.Setting.Tile) + RadiusCheckTouch;
+            int minY = Screen.Mapping(playerCellY, Screen.Setting.Tile) - RadiusCheckTouch;
+            int maxY = Screen.Mapping(playerCellY, Screen.Setting.Tile) + RadiusCheckTouch;
 
             for (int x = minX; x <= maxX; x += Screen.Setting.Tile)
             {
@@ -52,10 +63,10 @@ namespace MoveLib
                     int worldX = x;
                     int worldY = y;
 
-                    if (!map.CheckTrueCoordinates(worldX, worldY))
+                    if (!Map.CheckTrueCoordinates(worldX, worldY))
                         continue;
 
-                    foreach (var obstacle in map.Obstacles[(worldX, worldY)])
+                    foreach (var obstacle in Map.Obstacles[(worldX, worldY)])
                     {
                         if(IsCollision(obstacle, entity, nextX, nextY))
                             return true;
@@ -68,8 +79,8 @@ namespace MoveLib
 
         public void IsCollision(Entity entity, double nextX, double nextY)
         {
-            double deltaX = setting.MinDistanceFromWall / 2 * Math.Sign(nextX);
-            double deltaY = setting.MinDistanceFromWall / 2 * Math.Sign(nextY);
+            double deltaX = Setting.MinDistanceFromWall / 2 * Math.Sign(nextX);
+            double deltaY = Setting.MinDistanceFromWall / 2 * Math.Sign(nextY);
 
             if(nextX != 0 && !IsTouch(entity, entity.X + nextX + deltaX, entity.Y))
                 entity.X += nextX;

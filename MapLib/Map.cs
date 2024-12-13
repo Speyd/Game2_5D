@@ -3,9 +3,8 @@ using System.Text;
 using MapLib.SettingLib;
 using SFML.Graphics;
 using System.Collections.Generic;
-using MapLib.Obstacles;
-using MapLib.Obstacles.DiversityObstacle.SpriteLib;
-using MapLib.Obstacles.DiversityObstacle.TexturedWallLib;
+using ObstacleLib;
+using ObstacleLib.TexturedWallLib;
 
 namespace MapLib
 {
@@ -18,7 +17,7 @@ namespace MapLib
 
         //---------------------Obstacles-----------------------
         public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
-        public Dictionary<ValueTuple<int, int>, List<Obstacle>> ObstaclesWithoutNull { get; init; }
+        public Dictionary<ValueTuple<int, int>, List<Obstacle>> ExistingObstacles{ get; init; }
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
@@ -32,7 +31,7 @@ namespace MapLib
         {
             Setting = new Setting(height, width);
             Obstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
-            ObstaclesWithoutNull = new Dictionary<(int X, int Y), List<Obstacle>>();
+            ExistingObstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
 
             RefillingObstacles();
         }
@@ -64,7 +63,7 @@ namespace MapLib
 
                     if (y == 0 || y == Setting.MapHeight - 1 || x == 0 || x == Setting.MapWidth - 1)
                     {
-                        ObstaclesWithoutNull[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
+                        ExistingObstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
                         AddObstacle(x, y, new TexturedWall(StandartBlock));
                     }
                 }
@@ -80,32 +79,35 @@ namespace MapLib
 
             obst[(x, y)].Add(addObstacle);
         }
-
+        private void AddToAllObstacles(Obstacle addObstacle, int x, int y)
+        {
+            AddToObstacles(Obstacles, addObstacle, x, y);
+            AddToObstacles(ExistingObstacles, addObstacle, x, y);
+        }
 
         private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)
         {
-            if (!ObstaclesWithoutNull.ContainsKey((x, y)))
+            if (!ExistingObstacles.ContainsKey((x, y)))
             {
-                AddToObstacles(Obstacles, addObstacle, x, y);
-                AddToObstacles(ObstaclesWithoutNull, addObstacle, x, y);
+                AddToAllObstacles(addObstacle, x, y);
                 return;
             }
-            else if (ObstaclesWithoutNull[(x, y)].Contains(addObstacle))
+            else if (ExistingObstacles[(x, y)].Contains(addObstacle))
             {
                 //TODO: выводить ошибку
                 return;
             }
-            else if (ObstaclesWithoutNull[(x, y)].Count == 0)
+            else if (ExistingObstacles[(x, y)].Count == 0)
             {
                 Obstacles[(x, y)].Add(addObstacle);
-                ObstaclesWithoutNull[(x, y)].Add(addObstacle);
+                ExistingObstacles[(x, y)].Add(addObstacle);
                 return;
             }
             else if (addObstacle.IsSingleAddable)
                 return;
             else
             {
-                foreach (var obst in ObstaclesWithoutNull[(x, y)])
+                foreach (var obst in ExistingObstacles[(x, y)])
                 {
 
                     if (obst.IsSingleAddable)
@@ -123,7 +125,7 @@ namespace MapLib
                 }
 
                 Obstacles[(x, y)].Add(addObstacle);
-                ObstaclesWithoutNull[(x, y)].Add(addObstacle);
+                ExistingObstacles[(x, y)].Add(addObstacle);
             }
 
         }
@@ -144,8 +146,6 @@ namespace MapLib
 
             addObstacle.UpdateAdditionalInformation(x, y);
             CheckTrueAddObstacle(addObstacle, x, y);
-            //AddToObstacles(Obstacles, addObstacle, x, y);
-            //AddToObstacles(ObstaclesWithoutNull, addObstacle, x, y);
         }
         public void DeleteObstacle(int x, int y)
         {
@@ -164,23 +164,13 @@ namespace MapLib
             else
             {        
                 Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Clear();
-                ObstaclesWithoutNull[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Clear();
+                ExistingObstacles.Remove((x * Screen.Setting.Tile, y * Screen.Setting.Tile));
             }
 
             MapStr[y * Setting.MapWidth + x] = Setting.empty;
         }
 
-        public static ValueTuple<int, int> Mapping(double x, double y, int tile)
-        {
-            return new ValueTuple<int, int>(
-            (int)(x / tile) * tile,
-            (int)(y / tile) * tile);
-        }
-        public static int Mapping(double value, int tile)
-        {
-            return (int)(value / tile) * tile;
-        }
-
+        
         public bool CheckTrueCoordinates(int x, int y)
         {
             return x >= 0 && y >= 0 && x < Setting.MapTileWidth && y < Setting.MapTileHeight;
