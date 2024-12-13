@@ -114,6 +114,7 @@ namespace ObstacleLib.TexturedWallLib
             else
                 return (float)(Screen.Setting.HalfHeight / (1 + 1 * angleVertical));
         }
+        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
         #endregion
 
         #region IWall_Implementation
@@ -183,12 +184,17 @@ namespace ObstacleLib.TexturedWallLib
             X = x;
             Y = y;
 
-            Left = X;
-            Right = X + Screen.Setting.Tile;
-            Top = Y;
-            Bottom = Y + Screen.Setting.Tile;
         }
-
+        protected override void ResetXSides(double value)
+        {
+            Left = value;
+            Right = value + Screen.Setting.Tile;
+        }
+        protected override void ResetYSides(double value)
+        {
+            Top = value;
+            Bottom = value + Screen.Setting.Tile;
+        }
         public override void Render(Result result, Entity entity)
         {
             RenderOperation.SelectCurrentRenderTexture(this, result, entity);

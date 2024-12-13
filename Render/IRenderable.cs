@@ -18,5 +18,6 @@ namespace Render.InterfaceRender
         void FillingMiniMapShape(RectangleShape rectangleShape);
         void Render(Result result, Entity entity);
         float NormalizePositionY(double angleVertical, float addVariable = 0);
+        float CoordinatesObjectOffsetOnMap(float baseOffset);
     }
 }

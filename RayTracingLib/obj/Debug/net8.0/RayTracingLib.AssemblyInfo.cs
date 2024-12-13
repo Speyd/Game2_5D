@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RayTracingLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b87955ca6a2cc1b7cb96be8afb2a815c61711a84")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c6fce42005182472bc580fec0d9174acc69886fd")]
 [assembly: System.Reflection.AssemblyProductAttribute("RayTracingLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RayTracingLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

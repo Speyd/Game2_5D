@@ -136,7 +136,7 @@ SpriteObstacle barel = new SpriteObstacle(@"Resources\Image\Sprite\Barel\", true
         Speed = 30,
         IsAnimation = true,
     },
-    ShiftCubedX = 0,
+    ShiftCubedX = 20,
     ShiftCubedY = 95,
     SideBT = 40,
     SideLR = 40,
@@ -194,7 +194,7 @@ SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
 //map.AddObstacleToMap(4, 2, map.Obstacles, sprite2);
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
 //map.AddObstacle(4, 4, sprite);
-map.AddObstacle(3, 5, sprite1);
+map.AddObstacle(4, 5, sprite1);
 sprite1.SetShifts(50);
 
 map.AddObstacle(3, 5, barel);

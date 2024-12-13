@@ -38,16 +38,16 @@ namespace ObstacleLib
 
 
         //-----------------Sides----------------
-        public double Left { get; set; } = 0;
-        public double Right { get; set; } = 0;
-        public double Top { get; set; } = 0;
-        public double Bottom { get; set; } = 0;
-        private void ResetXSides(double value)
+        public virtual double Left { get; set; } = 0;
+        public virtual double Right { get; set; } = 0;
+        public virtual double Top { get; set; } = 0;
+        public virtual double Bottom { get; set; } = 0;
+        protected virtual void ResetXSides(double value)
         {
             Left = value - _sideLR;
             Right = value + _sideLR;
         }
-        private void ResetYSides(double value)
+        protected virtual void ResetYSides(double value)
         {
             Top = value - _sideBT;
             Bottom = value + _sideBT;
@@ -118,12 +118,13 @@ namespace ObstacleLib
         //----------------------Map Setting-----------------
         public char Symbol {  get; set; }
         public SFML.Graphics.Color ColorInMap { get; set; }
+        public virtual bool IsOffsetMap { get; set; } = false;
+        //true - MapTile in MiniMap will be divided by 2 (positioning will be from the center of the object and not from the top corner)
 
 
         //-------------------Collision Setting--------------------
         public bool IsPassability { get; set; }
         public virtual bool IsSingleAddable { get; init; } = true;
-        //public virtual bool IsRayPasses { get; init; } = false;
 
 
 
@@ -142,7 +143,7 @@ namespace ObstacleLib
         public abstract void Render(Result result, Entity entity);
         public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
         public abstract void UpdateAdditionalInformation(double x, double y);//Update shift, sides
-
+        public abstract float CoordinatesObjectOffsetOnMap(float baseOffset);
 
     }
 }

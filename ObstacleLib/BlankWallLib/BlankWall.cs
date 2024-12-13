@@ -74,6 +74,7 @@ namespace ObstacleLib.BlankWallLib
                 return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
+        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
         #endregion
 
         #region IWall_Implementation

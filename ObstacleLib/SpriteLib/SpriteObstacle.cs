@@ -63,6 +63,7 @@ namespace ObstacleLib.SpriteLib
         //---------------------Render Parameters----------------------
         public double Angle { get; set; }
         public double Distance { get; set; }
+        public override bool IsOffsetMap { get; set; } = true;
 
 
         #region Constructor
@@ -132,6 +133,7 @@ namespace ObstacleLib.SpriteLib
 
             return current_ray;
         }
+        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset / 2;
         #endregion
 
         #region IRayPassability_Implementation
