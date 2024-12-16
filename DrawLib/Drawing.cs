@@ -7,7 +7,7 @@ using SFML.Graphics;
 using ScreenLib;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
-using Render;
+using Render.RenderInterface;
 
 namespace DrawLib
 {

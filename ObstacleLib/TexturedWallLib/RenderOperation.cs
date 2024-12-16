@@ -35,7 +35,7 @@ namespace ObstacleLib.TexturedWallLib.Render
 
         public static void SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
         {
-            TextureWallSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
+            ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
 
             Wall.CurrentRenderTexture = Wall.MultiTextured[wallDetermine];
         }

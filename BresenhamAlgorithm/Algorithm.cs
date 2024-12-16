@@ -7,6 +7,7 @@ using ScreenLib;
 using Render;
 using NGenerics.Extensions;
 using System.Reflection;
+using Render.RenderInterface;
 
 namespace BresenhamAlgorithm
 {
@@ -26,7 +27,7 @@ namespace BresenhamAlgorithm
                 //Console.WriteLine($"Processing type: {type.Name}");
                 if (!cachedDelegates.TryGetValue(type, out var del))
                 {
-                    var method = type.GetMethod(ISelfDrawable.NameRenderFun, BindingFlags.Public | BindingFlags.Static);
+                    var method = type.GetMethod(ISelfRenderable.NameRenderFun, BindingFlags.Public | BindingFlags.Static);
                     if (method != null)
                     {
                         //Console.WriteLine($"Creating delegate for {type.Name}");
@@ -50,10 +51,11 @@ namespace BresenhamAlgorithm
             double mappedX = isVertical ? x + auxiliary : x;
             double mappedY = isVertical ? y : y + auxiliary;
 
+
             var key = Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile);
             foreach (var obstacle in map.Obstacles[key])
-            {    
-                if (obstacle is ISelfDrawable self)
+            {
+                if (obstacle is ISelfRenderable self)
                 {
                     var type = self.GetType();
                     if (!uniqueSelfDrawableTypes.Contains(type))
@@ -64,7 +66,7 @@ namespace BresenhamAlgorithm
                     self.AddObstacleToRenderList();
                     continue;
                 }
-                else
+                else if (obstacle is IRayRenderable)
                 {
                     if (isVertical)
                     {
@@ -77,6 +79,8 @@ namespace BresenhamAlgorithm
                         return true;
                     }
                 }
+                else
+                    throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
             }
             return false;
         }

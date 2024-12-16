@@ -16,11 +16,11 @@ namespace RayTracingLib.Detection
         public float DistanceToWall { get; set; } = 0;
         public float DistanceToWallWithoutTile { get; set; } = 0;
 
-        public TextureWallSide WallDetermine { get; set; } = TextureWallSide.Error;
-        public TextureWallSide TextureWallDetermine { get; set; } = TextureWallSide.Error;
+        public ObjectSide WallDetermine { get; set; } = ObjectSide.Error;
+        public ObjectSide TextureWallDetermine { get; set; } = ObjectSide.Error;
         public HitPoint(Vector2f uV,
             float distanceToPoint, float distanceToWall,
-            TextureWallSide wallDetermine, TextureWallSide textureWallDetermine)
+            ObjectSide wallDetermine, ObjectSide textureWallDetermine)
         {
             UV = uV;
             DistanceToPoint = distanceToPoint / Screen.Setting.Tile * Screen.MultWidth;
@@ -35,8 +35,8 @@ namespace RayTracingLib.Detection
             UV = new Vector2f(0, 0);
             DistanceToPoint = 0;
             DistanceToWall = 0;
-            WallDetermine = TextureWallSide.Error;
-            TextureWallDetermine = TextureWallSide.Error;
+            WallDetermine = ObjectSide.Error;
+            TextureWallDetermine = ObjectSide.Error;
         }
     }
 }

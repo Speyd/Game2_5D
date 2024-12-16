@@ -9,7 +9,7 @@ using Render.ResultAlgorithm;
 
 namespace Render
 {
-    public interface ISelfDrawable
+    public interface ISelfRenderable
     {
         public static string NameRenderFun { get; } = "RenderSelfDrawableList";
 

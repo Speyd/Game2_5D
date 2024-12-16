@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="RenderInterface\ISelfRenderable.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
     <ProjectReference Include="..\TextureLib\TextureLib.csproj" />

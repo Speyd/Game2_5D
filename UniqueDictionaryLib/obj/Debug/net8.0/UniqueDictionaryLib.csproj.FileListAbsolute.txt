@@ -1,0 +1,12 @@
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\bin\Debug\net8.0\UniqueDictionaryLib.deps.json
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\bin\Debug\net8.0\UniqueDictionaryLib.dll
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\bin\Debug\net8.0\UniqueDictionaryLib.pdb
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.AssemblyInfoInputs.cache
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.AssemblyInfo.cs
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.csproj.CoreCompileInputs.cache
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.sourcelink.json
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.dll
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\refint\UniqueDictionaryLib.dll
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\UniqueDictionaryLib.pdb
+D:\C++ проекты\Game2_5D\UniqueDictionaryLib\obj\Debug\net8.0\ref\UniqueDictionaryLib.dll

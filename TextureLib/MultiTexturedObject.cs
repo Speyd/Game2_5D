@@ -5,127 +5,117 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
+using UniqueDictionaryLib;
 
 namespace TextureLib
 {
     public class MultiTexturedObject
     {
-        public UniqueDictionary<TextureWallSide, TexturedPair> UniqueTexture { get; init; }
+        public UniqueDictionary<ObjectSide, TexturedPair> UniqueTexture { get; init; }
         private const int countSides = 4;
+
+
+        #region Constructor
         public MultiTexturedObject(string path)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(path);
         }
-
         public MultiTexturedObject(string pathLR, string pathBT)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(pathLR, pathBT);
         }
         public MultiTexturedObject(string pathL, string pathR, string pathB, string pathT)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(pathL, pathR, pathB, pathT);
         }
         public MultiTexturedObject(TextureObstacle texture)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(texture);
         }
         public MultiTexturedObject(TextureObstacle textureLR, TextureObstacle textureBT)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(textureLR, textureBT);
         }
         public MultiTexturedObject(TextureObstacle Left, TextureObstacle Right,
             TextureObstacle Bottom, TextureObstacle Top)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(Left, Right, Bottom, Top);
         }
-        public MultiTexturedObject(List<(TextureWallSide, TextureObstacle)> textures)
+        public MultiTexturedObject(List<(ObjectSide, TextureObstacle)> textures)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(textures);
         }
-        public MultiTexturedObject(List<(TextureWallSide, string)> textures)
+        public MultiTexturedObject(List<(ObjectSide, string)> textures)
         {
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
             SetUniqueTexture(textures);
         }
         public MultiTexturedObject(MultiTexturedObject multiTextured)
         {
             CheckTrueSet(multiTextured.UniqueTexture);
 
-            UniqueTexture = new UniqueDictionary<TextureWallSide, TexturedPair>();
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(multiTextured[TextureWallSide.Left].Base));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(multiTextured[TextureWallSide.Right].Base));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(multiTextured[TextureWallSide.Bottom].Base));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(multiTextured[TextureWallSide.Top].Base));
+            UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(multiTextured[ObjectSide.Left].Base));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(multiTextured[ObjectSide.Right].Base));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(multiTextured[ObjectSide.Bottom].Base));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(multiTextured[ObjectSide.Top].Base));
         }
+        #endregion 
 
-
-
-        public void CheckTrueSet(UniqueDictionary<TextureWallSide, TexturedPair> uniqueTexture)
-        {
-            if (uniqueTexture.PresenceKey(TextureWallSide.Left) == true &&
-                uniqueTexture.PresenceKey(TextureWallSide.Right) == true &&
-                uniqueTexture.PresenceKey(TextureWallSide.Bottom) == true &&
-                uniqueTexture.PresenceKey(TextureWallSide.Top) == true)
-            {
-                return;
-            }
-
-            throw new Exception("Not all sides of the wall are created!(MultiTexturedObject)");
-        }
-
+        #region Set
         public void SetUniqueTexture(string path)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(path));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(path));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(path));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(path));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(path));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(path));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(path));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(path));
 
 
             CheckTrueSet(UniqueTexture);
         }
         public void SetUniqueTexture(string pathLR, string pathBT)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(pathLR));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(pathLR));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(pathBT));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(pathBT));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(pathLR));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(pathLR));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(pathBT));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(pathBT));
 
 
             CheckTrueSet(UniqueTexture);
         }
         public void SetUniqueTexture(string pathL, string pathR, string pathB, string pathT)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(pathL));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(pathR));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(pathB));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(pathT));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(pathL));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(pathR));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(pathB));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(pathT));
 
 
             CheckTrueSet(UniqueTexture);
         }
         public void SetUniqueTexture(TextureObstacle texture)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(texture));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(texture));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(texture));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(texture));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(texture));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(texture));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(texture));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(texture));
 
 
             CheckTrueSet(UniqueTexture);
         }
         public void SetUniqueTexture(TextureObstacle textureLR, TextureObstacle textureBT)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(textureLR));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(textureLR));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(textureBT));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(textureBT));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(textureLR));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(textureLR));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(textureBT));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(textureBT));
 
 
             CheckTrueSet(UniqueTexture);
@@ -133,15 +123,15 @@ namespace TextureLib
         public void SetUniqueTexture(TextureObstacle Left, TextureObstacle Right,
             TextureObstacle Bottom, TextureObstacle Top)
         {
-            UniqueTexture.Insert(TextureWallSide.Left, new TexturedPair(Left));
-            UniqueTexture.Insert(TextureWallSide.Right, new TexturedPair(Right));
-            UniqueTexture.Insert(TextureWallSide.Bottom, new TexturedPair(Bottom));
-            UniqueTexture.Insert(TextureWallSide.Top, new TexturedPair(Top));
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(Left));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(Right));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(Bottom));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(Top));
 
 
             CheckTrueSet(UniqueTexture);
         }
-        public void SetUniqueTexture(List<(TextureWallSide, TextureObstacle)> textures)
+        public void SetUniqueTexture(List<(ObjectSide, TextureObstacle)> textures)
         {
             if (textures.Count < countSides)
                 throw new Exception($"Too few textures to fill(You have {textures.Count}, Need{countSides})");
@@ -155,7 +145,7 @@ namespace TextureLib
 
             CheckTrueSet(UniqueTexture);
         }
-        public void SetUniqueTexture(List<(TextureWallSide, string)> textures)
+        public void SetUniqueTexture(List<(ObjectSide, string)> textures)
         {
             if (textures.Count < countSides)
                 throw new Exception($"Too few textures to fill(You have {textures.Count}, Need{countSides})");
@@ -169,9 +159,22 @@ namespace TextureLib
 
             CheckTrueSet(UniqueTexture);
         }
+        #endregion
 
+        public void CheckTrueSet(UniqueDictionary<ObjectSide, TexturedPair> uniqueTexture)
+        {
+            if (uniqueTexture.PresenceKey(ObjectSide.Left) == true &&
+                uniqueTexture.PresenceKey(ObjectSide.Right) == true &&
+                uniqueTexture.PresenceKey(ObjectSide.Bottom) == true &&
+                uniqueTexture.PresenceKey(ObjectSide.Top) == true)
+            {
+                return;
+            }
 
-        public TexturedPair? this[TextureWallSide side]
+            throw new Exception("Not all sides of the wall are created!(MultiTexturedObject)");
+        }
+
+        public TexturedPair? this[ObjectSide side]
         {
             get => UniqueTexture.GetTexture(side);
         }

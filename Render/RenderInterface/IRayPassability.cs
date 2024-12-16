@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Render
+namespace Render.RenderInterface
 {
     public interface IRayPassability
     {

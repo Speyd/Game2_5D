@@ -1,17 +1,14 @@
-﻿//using MapLib.Obstacles.DiversityObstacle;
-using SFML.Graphics;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextureLib
+namespace UniqueDictionaryLib
 {
     public class UniqueDictionary<KEY, VALUE>
     {
         private Dictionary<KEY, VALUE> myMap = new Dictionary<KEY, VALUE>();
-        // private HashSet<VALUE> valuesSet = new HashSet<VALUE>();
         private Dictionary<VALUE, bool> valuePresence = new Dictionary<VALUE, bool>();
         public int Count { get { return myMap.Count; } }
 

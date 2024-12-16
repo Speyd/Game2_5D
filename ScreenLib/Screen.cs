@@ -169,5 +169,10 @@ namespace ScreenLib
             return (int)(value / tile) * tile;
         }
 
+        public static int Mapping(double value)
+        {
+            return (int)(value / Setting.Tile) * Setting.Tile;
+        }
+
     }
 }

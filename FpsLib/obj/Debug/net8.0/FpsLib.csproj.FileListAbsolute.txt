@@ -20,3 +20,5 @@ D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\FpsLib.pdb
 D:\C++ проекты\Game2_5D\FpsLib\obj\Debug\net8.0\ref\FpsLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\TextureLib.pdb
+D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\UniqueDictionaryLib.dll
+D:\C++ проекты\Game2_5D\FpsLib\bin\Debug\net8.0\UniqueDictionaryLib.pdb

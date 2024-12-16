@@ -14,6 +14,7 @@ using SFML.System;
 using System.Numerics;
 using ObstacleLib.BlankWallLib.Render;
 using Render;
+using Render.RenderInterface;
 
 namespace ObstacleLib.BlankWallLib
 {

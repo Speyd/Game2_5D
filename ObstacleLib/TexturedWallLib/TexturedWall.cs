@@ -16,11 +16,11 @@ using EntityLib.Player;
 using System.Reflection.Metadata;
 using System.IO;
 using SFML.Window;
-using Render;
 using TextureLib;
 using static System.Net.Mime.MediaTypeNames;
 using ObstacleLib.TexturedWallLib.Render;
 using ObstacleLib;
+using Render.RenderInterface;
 
 namespace ObstacleLib.TexturedWallLib
 {
@@ -75,13 +75,13 @@ namespace ObstacleLib.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(pathL);
             MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
         }
-        public TexturedWall(List<(TextureWallSide, string)> textures, bool isPassability = false)
+        public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
             : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
         }
-        public TexturedWall(List<(TextureWallSide, TextureObstacle)> textures, bool isPassability = false)
+        public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
             : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
@@ -125,7 +125,7 @@ namespace ObstacleLib.TexturedWallLib
         #endregion
 
         #region IDrawable_Implementation
-        public float CalculateTextureX(Vector2f UV, TextureWallSide side)
+        public float CalculateTextureX(Vector2f UV, ObjectSide side)
         {
             CurrentRenderTexture = MultiTextured[side];
             if (CurrentRenderTexture is null)

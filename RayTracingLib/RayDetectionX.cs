@@ -70,54 +70,54 @@ namespace RayTracingLib.Detection
 
             return new Vector2f(hitX, hitY);
         }
-        static private TextureWallSide DetermineWallSide(Obstacle obstacle, Entity entity)
+        static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity)
         {
             if (entity.Y >= obstacle.Top && entity.Y <= obstacle.Bottom)
             {
                 if (cosAngle > 0 && entity.X <= obstacle.Right)
-                    return TextureWallSide.Right;
+                    return ObjectSide.Right;
                 else if (cosAngle < 0 && entity.X >= obstacle.Left)
-                    return TextureWallSide.Left;
+                    return ObjectSide.Left;
             }
 
             if (entity.X >= obstacle.Left && entity.X <= obstacle.Right)
             {
                 if (sinAngle > 0 && entity.Y <= obstacle.Bottom)
-                    return TextureWallSide.Bottom;
+                    return ObjectSide.Bottom;
                 else if (sinAngle < 0 && entity.Y >= obstacle.Top)
-                    return TextureWallSide.Top;
+                    return ObjectSide.Top;
             }
 
-            return TextureWallSide.Error;
+            return ObjectSide.Error;
         }
-        static private void SetTextureWall(ref TextureWallSide oldWallTexture, TextureWallSide newWallTexture)
+        static private void SetTextureWall(ref ObjectSide oldWallTexture, ObjectSide newWallTexture)
         {
-            if (oldWallTexture == TextureWallSide.Error)
+            if (oldWallTexture == ObjectSide.Error)
                 oldWallTexture = newWallTexture;
         }
-        static private TextureWallSide RedefiningWallSides(TextureWallSide wallDetermine)
+        static private ObjectSide RedefiningWallSides(ObjectSide wallDetermine)
         {
             switch (wallDetermine)
             {
-                case TextureWallSide.LeftCorner:
-                    return TextureWallSide.Left;
-                case TextureWallSide.RightCorner:
-                    return TextureWallSide.Right;
-                case TextureWallSide.TopCorner:
-                    return TextureWallSide.Top;
-                case TextureWallSide.BottomCorner:
-                    return TextureWallSide.Bottom;
+                case ObjectSide.LeftCorner:
+                    return ObjectSide.Left;
+                case ObjectSide.RightCorner:
+                    return ObjectSide.Right;
+                case ObjectSide.TopCorner:
+                    return ObjectSide.Top;
+                case ObjectSide.BottomCorner:
+                    return ObjectSide.Bottom;
                 default:
                     return wallDetermine;
             }
         }
-        static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, TextureWallSide wallDetermine)
+        static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, ObjectSide wallDetermine)
         {
             double deltaX = obstacle.X - entity.X;
             double deltaY = obstacle.Y - entity.Y;
             distanceToWall = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
-            if (wallDetermine == TextureWallSide.Top || wallDetermine == TextureWallSide.Left)
+            if (wallDetermine == ObjectSide.Top || wallDetermine == ObjectSide.Left)
                 distanceToWall -= -(Screen.Setting.Tile * 3);
         }
         static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
@@ -126,7 +126,7 @@ namespace RayTracingLib.Detection
             cosAngle = (float)Math.Cos(entity.Angle);
 
 
-            TextureWallSide wallDetermine = TextureWallSide.Error;
+            ObjectSide wallDetermine = ObjectSide.Error;
             wallDetermine = DetermineWallSide(obstacle, entity);
 
             CalculateDistanceToWall(obstacle, entity, wallDetermine);
@@ -135,30 +135,30 @@ namespace RayTracingLib.Detection
             Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity);
             if (cornerHit.X > cornerHit.Y)
             {
-                cornerHit.X /= 100;
+                cornerHit.X /= Screen.Setting.Tile;
                 if (cornerHit.X < cornerHit.Y)
                 {
-                    cornerHit.Y /= 100;
+                    cornerHit.Y /= Screen.Setting.Tile;
                     cornerHit.X = 0;
-                    SetTextureWall(ref wallDetermine, TextureWallSide.LeftCorner);
+                    SetTextureWall(ref wallDetermine, ObjectSide.LeftCorner);
                 }
                 else
-                    SetTextureWall(ref wallDetermine, TextureWallSide.BottomCorner);
+                    SetTextureWall(ref wallDetermine, ObjectSide.BottomCorner);
             }
             else
             {
-                cornerHit.Y /= 100;
+                cornerHit.Y /= Screen.Setting.Tile;
                 if (cornerHit.X > cornerHit.Y)
                 {
-                    cornerHit.X /= 100;
+                    cornerHit.X /= Screen.Setting.Tile;
                     cornerHit.Y = 0;
-                    SetTextureWall(ref wallDetermine, TextureWallSide.TopCorner);
+                    SetTextureWall(ref wallDetermine, ObjectSide.TopCorner);
                 }
                 else
-                    SetTextureWall(ref wallDetermine, TextureWallSide.RightCorner);
+                    SetTextureWall(ref wallDetermine, ObjectSide.RightCorner);
             }
 
-            TextureWallSide textureWallDetermine = RedefiningWallSides(wallDetermine);
+            ObjectSide textureWallDetermine = RedefiningWallSides(wallDetermine);
             return new HitPoint(cornerHit, distanceToPoint, distanceToWall, wallDetermine, textureWallDetermine);
         }
     }

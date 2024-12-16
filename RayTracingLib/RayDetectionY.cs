@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using SFML.Window;
 using Render.InterfaceRender;
 using TextureLib;
-using Render;
+using Render.RenderInterface;
 
 namespace RayTracingLib.Detection
 {
@@ -30,13 +30,13 @@ namespace RayTracingLib.Detection
 
 
 
-        private static bool IsCornerWall(HitPoint hitPoint)
-        {
-            return hitPoint.WallDetermine == TextureWallSide.LeftCorner ||
-                   hitPoint.WallDetermine == TextureWallSide.RightCorner ||
-                   hitPoint.WallDetermine == TextureWallSide.BottomCorner ||
-                   hitPoint.WallDetermine == TextureWallSide.TopCorner;
-        }
+        //public static bool IsCornerWall(HitPoint hitPoint)
+        //{
+        //    return hitPoint.WallDetermine == ObjectSide.LeftCorner ||
+        //           hitPoint.WallDetermine == ObjectSide.RightCorner ||
+        //           hitPoint.WallDetermine == ObjectSide.BottomCorner ||
+        //           hitPoint.WallDetermine == ObjectSide.TopCorner;
+        //}
 
 
         #region Mult

@@ -75,7 +75,7 @@ namespace ObstacleLib.SpriteLib.Render
             double dy = sprite.Y - player.Y;
 
             sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
-            return Math.Atan2(dy, dx); ;
+            return Math.Atan2(dy, dx);
         }
 
         public static void DrawSprite(SpriteObstacle sprite, double verticalAngle, double x, float height)

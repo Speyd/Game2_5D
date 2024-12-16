@@ -21,6 +21,7 @@ namespace ObstacleLib
             set
             {
                 _x = value;
+                OriginX = Screen.Mapping(value);
                 ResetXSides(value);
             }
         }
@@ -32,9 +33,13 @@ namespace ObstacleLib
             set
             {
                 _y = value;
+                OriginY = Screen.Mapping(value);
                 ResetYSides(value);
             }
         }
+
+        public double OriginX { get; private set; }
+        public double OriginY { get; private set; }
 
 
         //-----------------Sides----------------

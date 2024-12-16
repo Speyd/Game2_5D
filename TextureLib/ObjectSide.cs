@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TextureLib
 {
-    public enum TextureWallSide
+    public enum ObjectSide
     {
         Error,
         Left,

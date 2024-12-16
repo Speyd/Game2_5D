@@ -11,17 +11,22 @@ using ScreenLib;
 using Render.ResultAlgorithm;
 using EntityLib.Player;
 using SFML.System;
-using Render;
 using ObstacleLib.SpriteLib.Animation;
 using ObstacleLib.SpriteLib.Render;
 using TextureLib;
 using ObstacleLib.SpriteLib.Add;
+using System.Drawing;
+using System.Numerics;
+using Render.RenderInterface;
+using Render;
+using System.Reflection.Metadata;
 
 namespace ObstacleLib.SpriteLib
 {
-    public class SpriteObstacle : Obstacle, ISelfDrawable, IRayPassability
+    public class SpriteObstacle : Obstacle, ISelfRenderable, IRayPassability
     {
-        //-------------------List Sprites Render------------
+
+        //-------------------List Sprites Render------------------
         public static List<SpriteObstacle> SpritesToRender { get; } = new List<SpriteObstacle>();
         private bool IsAdded { get; set; } = false;
 
@@ -77,11 +82,11 @@ namespace ObstacleLib.SpriteLib
         {
             Adder.AddTexture(this, texture);
         }
-        public SpriteObstacle(string path, bool isDirectory, bool isPassability = false)
+        public SpriteObstacle(string path, bool isDirectory, bool isPassability = false, bool folderAccounting = false)
            : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
         {
             if(isDirectory)
-                Adder.AddTextureFromFolder(this, path);
+                Adder.AddTextureFromFolder(this, path, folderAccounting);
             else
                 Adder.AddTexture(this, path);
         }
@@ -146,11 +151,15 @@ namespace ObstacleLib.SpriteLib
             ShiftCubedY = ShiftCubedY;
         }
 
-        public bool IsRayTouchesObjectX(float currentRayX)
-            => currentRayX >= Left && currentRayX <= Right;
+        public bool IsRayTouchesObjectX(Entity entity, float currentRayX)
+        {
+            return (int)currentRayX > Left && (int)currentRayX < Right;
+        }
 
-        public bool IsRayTouchesObjectY(float currentRayY)
-            => currentRayY >= Top && currentRayY <= Bottom;
+        public bool IsRayTouchesObjectY(Entity entity, float currentRayY)
+        {
+            return (int)currentRayY > Top && (int)currentRayY < Bottom;
+        }
         public bool IsRayTouchesObjectZ(Entity entity)
         {
             if (CurrentRenderTexture is null)
@@ -177,15 +186,16 @@ namespace ObstacleLib.SpriteLib
 
         public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
         {
-            bool isCollidingX = IsRayTouchesObjectX(currentRayX);
-            bool isCollidingY = IsRayTouchesObjectY(currentRayY);
+            bool isCollidingX = IsRayTouchesObjectX(entity, currentRayX);
+            bool isCollidingY = IsRayTouchesObjectY(entity, currentRayY);
             bool isCollidingZ = IsRayTouchesObjectZ(entity);
 
-            if ((isCollidingX || isCollidingY) == true && isCollidingZ == false)
+
+            if ((isCollidingX && isCollidingY) == true && isCollidingZ == false)
                 return false;
-            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == true)
+            else if ((isCollidingX && isCollidingY) == false && isCollidingZ == true)
                 return false;
-            else if ((isCollidingX || isCollidingY) == false && isCollidingZ == false)
+            else if ((isCollidingX && isCollidingY) == false && isCollidingZ == false)
                 return false;
             else
                 return true;
@@ -232,8 +242,6 @@ namespace ObstacleLib.SpriteLib
                 RenderOpertion.DrawSprite(this, entity.VerticalAngle, renderX, height);
             }
             
-        }
-      
-        
+        }        
     }
 }

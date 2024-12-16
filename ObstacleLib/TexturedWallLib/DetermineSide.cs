@@ -68,36 +68,36 @@ namespace ObstacleLib.TexturedWallLib.Determine
             return new Vector2f(hitX, hitY);
         }
 
-        static private TextureWallSide DetermineMineWallSide(TexturedWall wall, Entity entity)
+        static private ObjectSide DetermineMineWallSide(TexturedWall wall, Entity entity)
         {
             if (entity.Y >= wall.Top && entity.Y <= wall.Bottom)
             {
                 if (cosAngle > 0 && entity.X <= wall.Right)
-                    return TextureWallSide.Right;
+                    return ObjectSide.Right;
                 else if (cosAngle < 0 && entity.X >= wall.Left)
-                    return TextureWallSide.Left;
+                    return ObjectSide.Left;
             }
 
             if (entity.X >= wall.Left && entity.X <= wall.Right)
             {
                 if (sinAngle > 0 && entity.Y <= wall.Bottom)
-                    return TextureWallSide.Bottom;
+                    return ObjectSide.Bottom;
                 else if (sinAngle < 0 && entity.Y >= wall.Top)
-                    return TextureWallSide.Top;
+                    return ObjectSide.Top;
             }
 
-            return TextureWallSide.Error;
+            return ObjectSide.Error;
         }
 
-        static public TextureWallSide DetermineWallAllSides(TexturedWall wall, Entity entity)
+        static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity)
         {
             sinAngle = (float)Math.Sin(entity.Angle);
             cosAngle = (float)Math.Cos(entity.Angle);
 
 
-            TextureWallSide wallDetermine = TextureWallSide.Error;
+            ObjectSide wallDetermine = ObjectSide.Error;
             wallDetermine = DetermineMineWallSide(wall, entity);
-            if (wallDetermine != TextureWallSide.Error)
+            if (wallDetermine != ObjectSide.Error)
                 return wallDetermine;
 
             Vector2f cornerHit = DetermineCornerWallSide(wall, entity);
@@ -105,47 +105,48 @@ namespace ObstacleLib.TexturedWallLib.Determine
             {
                 cornerHit.X /= 100;
                 if (cornerHit.X < cornerHit.Y)
-                    return TextureWallSide.Left;
+                    return ObjectSide.Left;
                 else
-                    return TextureWallSide.Bottom;
+                    return ObjectSide.Bottom;
             }
             else
             {
                 cornerHit.Y /= 100;
                 if (cornerHit.X > cornerHit.Y)
-                    return TextureWallSide.Top;
+                    return ObjectSide.Top;
                 else
-                    return TextureWallSide.Right;
+                    return ObjectSide.Right;
             }
         }
 
-        static public TextureWallSide DetermineWallAllSides(TexturedWall wall, Entity entity, double addAngle)
+        static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity, double addAngle)
         {
             sinAngle = (float)Math.Sin(addAngle);
             cosAngle = (float)Math.Cos(addAngle);
 
 
-            TextureWallSide wallDetermine = TextureWallSide.Error;
+            ObjectSide wallDetermine = ObjectSide.Error;
             wallDetermine = DetermineMineWallSide(wall, entity);
-            if (wallDetermine != TextureWallSide.Error)
+
+            if (wallDetermine != ObjectSide.Error)
                 return wallDetermine;
 
             Vector2f cornerHit = DetermineCornerWallSide(wall, entity);
             if (cornerHit.X > cornerHit.Y)
             {
-                cornerHit.X /= 100;
+                cornerHit.X /= Screen.Setting.Tile;
                 if (cornerHit.X < cornerHit.Y)
-                    return TextureWallSide.Left;
+                    return ObjectSide.Left;
                 else
-                    return TextureWallSide.Bottom;
+                    return ObjectSide.Bottom;
             }
             else
             {
-                cornerHit.Y /= 100;
+                cornerHit.Y /= Screen.Setting.Tile;
                 if (cornerHit.X > cornerHit.Y)
-                    return TextureWallSide.Top;
+                    return ObjectSide.Top;
                 else
-                    return TextureWallSide.Right;
+                    return ObjectSide.Right;
             }
         }
     }

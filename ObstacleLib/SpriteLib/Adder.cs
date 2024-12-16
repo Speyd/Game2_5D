@@ -60,7 +60,7 @@ namespace ObstacleLib.SpriteLib.Add
             if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
                 sprite.TextureInMap = sprite.Textures[0];
         }
-        public static void AddTextureFromFolder(SpriteObstacle sprite, string path)
+        public static void AddTextureFromFolder(SpriteObstacle sprite, string path, bool folderAccounting)
         {
             if (!Directory.Exists(path))
                 throw new Exception("Error path TextureObstacle");
@@ -68,9 +68,12 @@ namespace ObstacleLib.SpriteLib.Add
             string[] files = Directory.GetFiles(path);
             string[] directories = Directory.GetDirectories(path);
 
-            foreach (var directorie in directories)
+            if (folderAccounting)
             {
-                AddTextureFromFolder(sprite, directorie);
+                foreach (var directorie in directories)
+                {
+                    AddTextureFromFolder(sprite, directorie, folderAccounting);
+                }
             }
 
             foreach (var file in files)

@@ -9,11 +9,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
 
-namespace Render
+namespace Render.RenderInterface
 {
     public interface IDrawable
     {
-        public float CalculateTextureX(Vector2f UV, TextureWallSide side);
+        public float CalculateTextureX(Vector2f UV, ObjectSide side);
         public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates);
 
         public float BringingToStandard(float heightObj);
