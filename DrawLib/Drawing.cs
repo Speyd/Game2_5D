@@ -15,7 +15,7 @@ namespace DrawLib
     {
         HitPoint hitPoint;
 
-        public void DrawingPoint(Map map, Entity entity, int heightObj)
+        public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
         {
             Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 
@@ -32,7 +32,7 @@ namespace DrawLib
 
                 CircleShape dot = new CircleShape(heightObj)
                 {
-                    FillColor = SFML.Graphics.Color.Black,
+                    FillColor = colorFill,
                     Position = dotPosition
                 };
 
@@ -41,6 +41,37 @@ namespace DrawLib
                 //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2);
                 //s.Position = dotPosition;
                 drawable.DrawObject(dot);
+            }
+        }
+
+        public void DrawingSprite(Map map, Entity entity, Sprite sprite)
+        {
+            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+
+            if (obstacle is not null && obstacle is IDrawable drawable)
+            {
+                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+
+
+                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+
+                float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
+                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+
+                Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
+                sprite.Position = dotPosition;
+
+                //CircleShape dot = new CircleShape(heightObj)
+                //{
+                //    FillColor = SFML.Graphics.Color.Black,
+                //    Position = dotPosition
+                //};
+
+
+                //Sprite s = new Sprite(new Texture(@"Resources\Image\Sprite\Devil\1.png"));
+                //dotPosition = new Vector2f(dotPosition.X - s.Texture.Size.X / 2, dotPosition.Y - s.Texture.Size.Y / 2);
+                //s.Position = dotPosition;
+                drawable.DrawObject(sprite);
             }
         }
     }

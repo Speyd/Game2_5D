@@ -8,10 +8,9 @@ namespace ObstacleLib
 {
     public abstract class Obstacle : IRenderable
     {
-        static public List<Type> obstaclesRaylessRendering = new List<Type>()
-        {
-            typeof(Sprite)
-        };
+        //<int oldCoo, int newCoo> 
+        public Action<Obstacle, double, double> OnPositionChanged;
+
 
         //---------------------Coordinates-----------------------
         private double _x;
@@ -20,6 +19,9 @@ namespace ObstacleLib
             get => _x;
             set
             {
+                if(Screen.Mapping(_x) != Screen.Mapping(value))
+                    OnPositionChanged(this, value, _y);
+
                 _x = value;
                 OriginX = Screen.Mapping(value);
                 ResetXSides(value);
@@ -32,14 +34,17 @@ namespace ObstacleLib
             get => _y;
             set
             {
+                if (Screen.Mapping(_y) != Screen.Mapping(value))
+                    OnPositionChanged(this, _x, value);
+
                 _y = value;
                 OriginY = Screen.Mapping(value);
                 ResetYSides(value);
             }
         }
 
-        public double OriginX { get; private set; }
-        public double OriginY { get; private set; }
+        public int OriginX { get; private set; }
+        public int OriginY { get; private set; }
 
 
         //-----------------Sides----------------

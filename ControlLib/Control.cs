@@ -101,7 +101,7 @@ namespace ControlLib
 
             //-----------Collision Detection-------------
             if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                Drawing.DrawingPoint(map, entity, 30);
+                Drawing.DrawingPoint(map, entity, 30, SFML.Graphics.Color.Black);
 
 
             //----------------Exit-----------------

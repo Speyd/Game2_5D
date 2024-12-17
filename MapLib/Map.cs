@@ -5,6 +5,7 @@ using SFML.Graphics;
 using System.Collections.Generic;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
+using System.Linq;
 
 namespace MapLib
 {
@@ -16,8 +17,8 @@ namespace MapLib
 
 
         //---------------------Obstacles-----------------------
-        public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
-        public Dictionary<ValueTuple<int, int>, List<Obstacle>> ExistingObstacles{ get; init; }
+        //public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
+        public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles{ get; init; }
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
@@ -31,7 +32,7 @@ namespace MapLib
         {
             Setting = new Setting(height, width);
             Obstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
-            ExistingObstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
+           // ExistingObstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
 
             RefillingObstacles();
         }
@@ -59,11 +60,9 @@ namespace MapLib
             {
                 for (int x = 0; x < Setting.MapWidth; x++)
                 {
-                    Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
-
                     if (y == 0 || y == Setting.MapHeight - 1 || x == 0 || x == Setting.MapWidth - 1)
                     {
-                        ExistingObstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
+                        //ExistingObstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
                         AddObstacle(x, y, new TexturedWall(StandartBlock));
                     }
                 }
@@ -82,50 +81,43 @@ namespace MapLib
         private void AddToAllObstacles(Obstacle addObstacle, int x, int y)
         {
             AddToObstacles(Obstacles, addObstacle, x, y);
-            AddToObstacles(ExistingObstacles, addObstacle, x, y);
         }
 
         private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)
         {
-            if (!ExistingObstacles.ContainsKey((x, y)))
+            if (!Obstacles.ContainsKey((x, y)))
             {
-                AddToAllObstacles(addObstacle, x, y);
-                return;
+                if (!CheckTrueCoordinates(x, y))
+                    throw new Exception("The coordinates for adding the object are not correct(CheckTrueAddObstacle)");
+
+                Obstacles[(x, y)] = new List<Obstacle>() 
+                                         { addObstacle };
             }
-            else if (ExistingObstacles[(x, y)].Contains(addObstacle))
-            {
-                //TODO: выводить ошибку
-                return;
-            }
-            else if (ExistingObstacles[(x, y)].Count == 0)
+            else if (Obstacles[(x, y)].Count == 0)
             {
                 Obstacles[(x, y)].Add(addObstacle);
-                ExistingObstacles[(x, y)].Add(addObstacle);
+                addObstacle.OnPositionChanged = UpdateCoordinatesObstacle;
                 return;
             }
+            else if (Obstacles[(x, y)].Contains(addObstacle))
+                throw new Exception("The object has already been added to this cell(CheckTrueAddObstacle)");
             else if (addObstacle.IsSingleAddable)
-                return;
+                throw new Exception("the added object does not allow to add it to the cell with objects(CheckTrueAddObstacle)");
+
             else
             {
-                foreach (var obst in ExistingObstacles[(x, y)])
+                foreach (var obst in Obstacles[(x, y)])
                 {
 
                     if (obst.IsSingleAddable)
-                    {
-                        //throw new Exception("222");
-                        //TODO: выводить ошибку
-                        return;
-                    }
+                        throw new Exception("Adding to this cell is impossible, the object inside does not allow adding(CheckTrueAddObstacle)");
 
                     if (addObstacle.X == obst.X && addObstacle.Y == obst.Y)
-                    {
-                        //throw new Exception("111");
-                        return; //TODO: выводить ошибку
-                    }
+                        throw new Exception("At what coordinates does the object already exist!(CheckTrueAddObstacle)");
                 }
 
                 Obstacles[(x, y)].Add(addObstacle);
-                ExistingObstacles[(x, y)].Add(addObstacle);
+                addObstacle.OnPositionChanged = UpdateCoordinatesObstacle;
             }
 
         }
@@ -147,38 +139,85 @@ namespace MapLib
             addObstacle.UpdateAdditionalInformation(x, y);
             CheckTrueAddObstacle(addObstacle, x, y);
         }
-        public void DeleteObstacle(int x, int y)
+
+        public void UpdateCoordinatesObstacle(Obstacle obstacle, double x, double y)
         {
+            if (!CheckTrueCoordinates(x, y))
+                throw new Exception("Error update coordinates(UpdateCoordinatesObstacle)");
 
-            if (y <= 0 || y >= Setting.MapHeight - 1 ||
-               x <= 0 || x >= Setting.MapWidth - 1)
-                throw new Exception("You are trying to change the map boundaries or idnex out range 'addEmptyToMap'");
+            if(!Obstacles.ContainsKey((obstacle.OriginX, obstacle.OriginY)))
+                throw new Exception("Coordinates to update not found(UpdateCoordinatesObstacle)");
 
-            if (MapStr[y * Setting.MapWidth + x] == Setting.empty)
-                return;
+            if (!Obstacles[(obstacle.OriginX, obstacle.OriginY)].Contains(obstacle))
+                throw new Exception("Object to update not found(UpdateCoordinatesObstacle)");
 
-
-
-            if (Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Count > 1)
-                return;
-            else
-            {        
-                Obstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)].Clear();
-                ExistingObstacles.Remove((x * Screen.Setting.Tile, y * Screen.Setting.Tile));
-            }
-
-            MapStr[y * Setting.MapWidth + x] = Setting.empty;
+            Obstacles[(obstacle.OriginX, obstacle.OriginY)].Remove(obstacle);
+            Obstacles[(Screen.Mapping(x), Screen.Mapping(y))].Add(obstacle);
         }
 
-        
-        public bool CheckTrueCoordinates(int x, int y)
+
+
+        private void RemoveObstacle(Obstacle obstacle)
+        {
+            Obstacles[(obstacle.OriginX, obstacle.OriginY)].Remove(obstacle);
+
+            if (Obstacles[(obstacle.OriginX, obstacle.OriginY)].Count == 0)
+                Obstacles.Remove((obstacle.OriginX, obstacle.OriginY));
+        }
+        public void DeleteAllCellObstacles(int x, int y)
+        {
+
+            if (!CheckTrueIntCoordinates(x, y))
+                throw new Exception("Deletion in this area is not allowed(DeleteAllCellObstacle)");
+            else if(!Obstacles.ContainsKey((x, y)))
+                throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
+
+            Obstacles.Remove((x, y));
+        }
+        public void DeleteObstacle(double x, double y)
+        {
+            int mX = Screen.Mapping(x);
+            int mY = Screen.Mapping(y);
+
+
+            if (!CheckTrueCoordinates(x, y))
+                throw new Exception("Deletion in this area is not allowed(DeleteAllCellObstacle)");
+            else if (!Obstacles.ContainsKey((mX, mY)))
+                throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
+
+            Obstacle? tempObst = Obstacles[(mX, mY)].FirstOrDefault(o => o.X == x && o.Y == y);
+            if (tempObst is null)
+                throw new Exception("There is no such object in this cell(DeleteAllCellObstacle)");
+
+            RemoveObstacle(tempObst);
+        }
+        public void DeleteObstacle(Obstacle obstacle)
+        {
+            if (!CheckTrueCoordinates(obstacle.OriginX, obstacle.OriginY))
+                throw new Exception("Deletion in this area is not allowed(DeleteAllCellObstacle)");
+            else if (!Obstacles.ContainsKey((obstacle.OriginX, obstacle.OriginY)))
+                throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
+            else if (!Obstacles[(obstacle.OriginX, obstacle.OriginY)].Contains(obstacle))
+                throw new Exception("There is no such object in this cell(DeleteAllCellObstacle)");
+
+            RemoveObstacle(obstacle);
+        }
+
+
+        public bool CheckTrueCoordinates(double x, double y)
         {
             return x >= 0 && y >= 0 && x < Setting.MapTileWidth && y < Setting.MapTileHeight;
+        }
+        public bool CheckTrueIntCoordinates(int x, int y)
+        {
+            return x >= 0 && y >= 0 && x < Setting.MapWidth && y < Setting.MapHeight;
         }
         public bool CheckTrueCoordinates(ValueTuple<int, int> coo)
         {
             return coo.Item1 >= 0 && coo.Item2 >= 0 && coo.Item1 < Setting.MapTileWidth && coo.Item2 < Setting.MapTileHeight;
         }
+
+
         public List<ValueTuple<int, int>> GetMapWorld(int TILE, Map map)
         {
             List<ValueTuple<int, int>> values = new List<(int, int)>();
