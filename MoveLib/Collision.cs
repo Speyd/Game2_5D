@@ -49,12 +49,12 @@ namespace MoveLib
 
         private bool IsTouch(Entity entity, double nextX, double nextY)
         {
-            var (playerCellX, playerCellY) = Screen.Mapping(entity.X, entity.Y, Screen.Setting.Tile);
+            var (playerCellX, playerCellY) = Screen.Mapping(entity.X, entity.Y);
 
-            int minX = Screen.Mapping(playerCellX, Screen.Setting.Tile) - RadiusCheckTouch;
-            int maxX = Screen.Mapping(playerCellX, Screen.Setting.Tile) + RadiusCheckTouch;
-            int minY = Screen.Mapping(playerCellY, Screen.Setting.Tile) - RadiusCheckTouch;
-            int maxY = Screen.Mapping(playerCellY, Screen.Setting.Tile) + RadiusCheckTouch;
+            int minX = Screen.Mapping(playerCellX) - RadiusCheckTouch;
+            int maxX = Screen.Mapping(playerCellX) + RadiusCheckTouch;
+            int minY = Screen.Mapping(playerCellY) - RadiusCheckTouch;
+            int maxY = Screen.Mapping(playerCellY) + RadiusCheckTouch;
 
             for (int x = minX; x <= maxX; x += Screen.Setting.Tile)
             {
@@ -63,7 +63,7 @@ namespace MoveLib
                     int worldX = x;
                     int worldY = y;
 
-                    if (!Map.CheckTrueCoordinates(worldX, worldY))
+                    if (!Map.Obstacles.ContainsKey((worldX, worldY)))
                         continue;
 
                     foreach (var obstacle in Map.Obstacles[(worldX, worldY)])

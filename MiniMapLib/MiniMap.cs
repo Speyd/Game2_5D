@@ -59,14 +59,13 @@ namespace MiniMapLib
         {
             Player = player;
 
-            MiniMapWindow = new WindowRender(mapScale);
+            Setting = new Setting(positionMiniMap, mapScale);
+            MiniMapWindow = new WindowRender(Setting);
 
-
-            Setting = new Setting(MiniMapWindow.Window, positionMiniMap, mapScale);
             PositionDef = new PositionDefinition(Setting);
 
 
-            BorderMapWindow = new WindowRender(mapScale);
+            BorderMapWindow = new WindowRender(Setting);
             Border = new Border(pathBorder);
 
 
@@ -86,7 +85,7 @@ namespace MiniMapLib
             MiniMapWindow.Window.Clear(BackgroundColor);
 
 
-            PlayerLine.RenderLineSight(MiniMapWindow.Window, Player.Angle);
+            PlayerLine.RenderLineSight(MiniMapWindow.Window, Player.Direction);
             PlayerCircle.RenderEntityShape(MiniMapWindow.Window);
 
             Zoom.ZoomToCoordinate(MiniMapWindow.Window);

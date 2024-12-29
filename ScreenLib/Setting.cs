@@ -8,19 +8,18 @@ namespace ScreenLib.SettingScreen
 {
     public class Setting
     {
-        public int HalfWidth { get; init; }
-        public int HalfHeight { get; init; }
+        public int HalfWidth { get; private set; }
+        public int HalfHeight { get; private set; }
         public int Tile { get; init; }// 100;
-        public int AmountRays { get; init; }
-        public int MaxDepth { get; init; } // 800
-        public int Scale { get; init; }
-        public int CenterRay { get; init; }
+        public int AmountRays { get; private set; }
+        //public int MaxDepth { get; init; } // 800
+        public int Scale { get; private set; }
+        public int CenterRay { get; private set; }
 
         public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800, int tile = 100)
         {
             if (ScreenWidth <= 0 || ScreenHeight <= 0)
                 throw new Exception("Error builder 'Setting'");
-
 
             HalfWidth = ScreenWidth / 2;
             HalfHeight = ScreenHeight / 2;
@@ -31,13 +30,23 @@ namespace ScreenLib.SettingScreen
                 amountRays;
 
             Tile = tile <= 0 ? 100 : tile;
-            Scale = ScreenWidth / AmountRays;
-            MaxDepth = maxDepth;
 
-            float tempCenterRay = (int)(AmountRays / 2) - 1;
-            double rayAngleRadians = -60 / 2 + ((double)tempCenterRay / AmountRays) * 60;
+            Scale = ScreenWidth / AmountRays;
 
             CenterRay = AmountRays / 2 - 1;
+        }
+
+        public void ResetScreenWidthSetting()
+        {
+            HalfWidth = Screen.ScreenWidth / 2;
+
+            AmountRays = Screen.ScreenWidth;
+            Scale = Screen.ScreenWidth / AmountRays;
+            CenterRay = AmountRays / 2 - 1;
+        }
+        public void ResetScreenHeightSetting()
+        {
+            HalfHeight = Screen.ScreenHeight / 2;
         }
     }
 }

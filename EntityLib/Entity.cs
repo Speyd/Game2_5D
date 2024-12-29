@@ -10,11 +10,24 @@ using ScreenLib;
 using ScreenLib.SettingScreen;
 using SFML.System;
 using SFML.Window;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EntityLib
 {
     public class Entity
     {
+        
+
+        public Vector2f Position
+        {
+            get
+            {
+                return new Vector2f((float)X, (float)Y) / Screen.Setting.Tile;
+            }
+        }
+
+
+
 
         //-----------------Fov-----------------
         private double _fov;
@@ -36,8 +49,8 @@ namespace EntityLib
 
 
         //---------------------Render Setting----------------------
-        public double DeltaAngle { get; init; }
-        public double ProjCoeff { get; init; }
+        public double DeltaAngle { get; private set; }
+        public double ProjCoeff { get; private set; }
 
 
         //---------------------Collision Setting----------------------
@@ -50,7 +63,26 @@ namespace EntityLib
 
 
         //-----------------------Angle-----------------------
-        public double Angle { get; set; }
+
+        public Vector2f Direction { get; private set; }
+        public Vector2f Plane { get; private set; }
+
+        private double _angle;
+        public double Angle
+        {
+            get => _angle;
+            set
+            {
+                if (_angle != value)
+                {
+                    _angle = value;
+                    float cos = (float)Math.Cos(_angle);
+                    float sin = (float)Math.Sin(_angle);
+                    Direction = new Vector2f(cos, sin);
+                    Plane = new Vector2f(-sin, cos);
+                }
+            }
+        }
         public double VerticalAngle { get; set; }
 
 
@@ -58,8 +90,8 @@ namespace EntityLib
         private double _cameraZ;
         public double CameraZ
         {
-            get => _cameraZ;
-            set => _cameraZ = value / Screen.MultWidth / Screen.MultHeight;
+            get => _cameraZ * Screen.MultHeight / Screen.MultWidth;
+            set => _cameraZ = value;
         }
 
 
@@ -85,13 +117,20 @@ namespace EntityLib
 
             float dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
             ProjCoeff = dist * setting.Tile;
-
+            Screen.WidthChangesFun += EntitySettingChangesFun;
 
             MaxRayMapDistance = maxDistance;
             MaxRaySpriteDistance = 1000;
         }
 
 
+        private void EntitySettingChangesFun()
+        {
+            float dist = Screen.Setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
+            ProjCoeff = dist * Screen.Setting.Tile;
+
+            DeltaAngle = (float)Fov / Screen.Setting.AmountRays;
+        }
         public (double nextX, double nextY) CalculateNextPosition(double deltaX, double deltaY)
         {
             double nextX = X + deltaX;

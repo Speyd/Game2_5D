@@ -13,19 +13,27 @@ namespace MiniMapLib.SettingMap
 {
     public class Setting
     {
+        private float _centerX;
         public float CenterX { get; private set; }
+        private float _centerY;
         public float CenterY { get; private set; }
+
+        public void SetCenterWindow(RenderTexture Window)
+        {
+            CenterX = Window.Size.X / 2;
+            CenterY = Window.Size.Y / 2;
+        }
 
         public float MapTile { get; private set; }
 
         //----------------MapScale----------------
-        private void SetMiniMapTile(int mapScale)
+        private void SetMiniMapTile()
         {
-            MapTile = Screen.Setting.Tile / mapScale;
+            MapTile = Screen.Setting.Tile / MapScale;
         }
 
 
-
+        public Action MapScaleChangesFun;
         private float _mapScale;
         public float MapScale 
         {
@@ -33,7 +41,7 @@ namespace MiniMapLib.SettingMap
             set
             {
                 _mapScale = value;
-                SetMiniMapTile((int)value);
+                MapScaleChangesFun();               
             }
         }
 
@@ -42,11 +50,23 @@ namespace MiniMapLib.SettingMap
 
         public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
         {
+            MapScaleChangesFun += SetMiniMapTile;
+
             MapScale = mapScale;
             Positions = positions;
 
-            CenterX = Window.Size.X / 2;
-            CenterY = Window.Size.Y / 2;
+            SetCenterWindow(Window);
+        }
+
+        public Setting(PositionsMiniMap positions, float mapScale = 5)
+        {
+            MapScaleChangesFun += SetMiniMapTile;
+
+            MapScale = mapScale;
+            Positions = positions;
+
+            CenterX = 1;
+            CenterY = 1;
         }
     }
 }

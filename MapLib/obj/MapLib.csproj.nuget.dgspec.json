@@ -296,6 +296,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "OpenTK": {
+              "target": "Package",
+              "version": "[4.9.3, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

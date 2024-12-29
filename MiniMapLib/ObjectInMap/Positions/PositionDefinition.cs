@@ -38,6 +38,9 @@ namespace MiniMapLib.ObjectInMap.Positions
         {
             Setting = setting;
             Positions = positions;
+
+            Screen.WidthChangesFun += SetPosition;
+            Screen.HeightChangesFun += SetPosition;
         }
 
 

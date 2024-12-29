@@ -1,4 +1,5 @@
-﻿using ScreenLib;
+﻿using MiniMapLib.SettingMap;
+using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -11,18 +12,35 @@ namespace MiniMapLib.Window
 {
     public class WindowRender
     {
-        public RenderTexture Window { get; init; }
+        private Setting Setting {  get; init; }
+        public RenderTexture Window { get; private set; }
         public Sprite RenderSprite { get; set; } = new Sprite();
 
-        public WindowRender(float mapScale)
+        public WindowRender(Setting setting)
         {
-            uint sizeX = (uint)(Screen.ScreenWidth / (mapScale * (Math.PI / 2)));
-            uint sizeY = (uint)(Screen.ScreenHeight / (mapScale / (Math.PI / 2)));
+            Setting = setting;
+
+            Screen.WidthChangesFun += ResetWindowSize;
+            Screen.HeightChangesFun += ResetWindowSize;
+            Setting.MapScaleChangesFun += ResetWindowSize;
+
+            uint sizeX = (uint)(Screen.ScreenWidth / (Setting.MapScale * (Math.PI / 2)));
+            uint sizeY = (uint)(Screen.ScreenHeight / (Setting.MapScale / (Math.PI / 2)));
+
             Window = new RenderTexture(sizeX, sizeY);
+            Setting.SetCenterWindow(Window);
 
             RenderSprite = new Sprite();
         }
 
+        private void ResetWindowSize()
+        {
+            uint sizeX = (uint)(Screen.ScreenWidth / (Setting.MapScale * (Math.PI / 2)));
+            uint sizeY = (uint)(Screen.ScreenHeight / (Setting.MapScale / (Math.PI / 2)));
+
+            Window = new RenderTexture(sizeX, sizeY);
+            Setting.SetCenterWindow(Window);
+        }
 
         public void SetRenderSprite(Vector2f coordinates)
         {

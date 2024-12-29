@@ -17,7 +17,6 @@ namespace MapLib
 
 
         //---------------------Obstacles-----------------------
-        //public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles { get; init; }
         public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles{ get; init; }
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
@@ -32,7 +31,6 @@ namespace MapLib
         {
             Setting = new Setting(height, width);
             Obstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
-           // ExistingObstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
 
             RefillingObstacles();
         }
@@ -61,10 +59,7 @@ namespace MapLib
                 for (int x = 0; x < Setting.MapWidth; x++)
                 {
                     if (y == 0 || y == Setting.MapHeight - 1 || x == 0 || x == Setting.MapWidth - 1)
-                    {
-                        //ExistingObstacles[(x * Screen.Setting.Tile, y * Screen.Setting.Tile)] = new List<Obstacle>();
                         AddObstacle(x, y, new TexturedWall(StandartBlock));
-                    }
                 }
             }
         }
@@ -72,15 +67,9 @@ namespace MapLib
         private void AddToObstacles(Dictionary<ValueTuple<int, int>, List<Obstacle>> obst, Obstacle addObstacle, int x, int y)
         {
             if (!obst.ContainsKey((x, y)))
-            {
                 obst[(x, y)] = new List<Obstacle>();
-            }
 
             obst[(x, y)].Add(addObstacle);
-        }
-        private void AddToAllObstacles(Obstacle addObstacle, int x, int y)
-        {
-            AddToObstacles(Obstacles, addObstacle, x, y);
         }
 
         private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)

@@ -38,10 +38,14 @@ namespace ScreenLib
                     throw new Exception("Screen is not Initialize!(Setting)");
                 return _setting;
             }
-            private set => _setting = value;
+            set => _setting = value;
         }
 
         //----------Dimensions Screen----------
+
+        public static Action WidthChangesFun;
+        public static Action HeightChangesFun;
+
         private static void SetMultWidth() => MultWidth = (float)BaseScreenWidth / _screenWidth; 
         private static int _screenWidth;
         public static int ScreenWidth 
@@ -58,7 +62,10 @@ namespace ScreenLib
                     throw new Exception("Width must be positive");
 
                 _screenWidth = value;
-                SetMultWidth();
+                Setting?.ResetScreenWidthSetting();
+
+                if (WidthChangesFun is not null)
+                    WidthChangesFun();
             } 
         }
 
@@ -78,7 +85,10 @@ namespace ScreenLib
                     throw new Exception("Height must be positive");
 
                 _screenHeight = value;
-                SetMultHeight();
+                Setting?.ResetScreenHeightSetting();
+
+                if (HeightChangesFun is not null)
+                    HeightChangesFun();
             }
         }
 
@@ -106,7 +116,7 @@ namespace ScreenLib
             }
             private set => _outputPriority = value;
         }
-
+        public static OutputPriority UnicOutputPriority;
 
 
 
@@ -121,8 +131,6 @@ namespace ScreenLib
             else
             {
                 Styles = Styles.Fullscreen;
-                //this.VideoMode = VideoMode.FullscreenModes;
-
                 Window = new RenderWindow(new VideoMode(VideoMode.Width, VideoMode.Height), nameWindow, Styles);
             }
         }
@@ -130,17 +138,57 @@ namespace ScreenLib
 
         public static void Initialize(uint width, uint height, bool fullScreen = false, string nameWindow = "Game")
         {
+
             IsInitialize = true;
 
             SetWindowMode(fullScreen, nameWindow, width, height);
+            Window.SetActive(true);
+
+            WidthChangesFun += SetMultWidth;
+            HeightChangesFun += SetMultHeight;
 
             ScreenWidth = (int)Window.Size.X;
             ScreenHeight = (int)Window.Size.Y;
 
+            WidthChangesFun += SetWindowSize;
+            HeightChangesFun += SetWindowSize;
+
+
             Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
             OutputPriority = new OutputPriority(Window);
+            UnicOutputPriority = new OutputPriority(Window);
         }
 
+        private static void SetWindowSize()
+        {
+            if (ScreenWidth <= 0 || ScreenHeight <= 0)
+            {
+                throw new Exception("ScreenWidth and ScreenHeight must be positive values.");
+            }
+
+            // Установка нового размера окна
+            Window.Size = new SFML.System.Vector2u((uint)ScreenWidth, (uint)ScreenHeight);
+
+            // Обновляем Viewport (область просмотра)
+            View view = new View(new FloatRect(0, 0, ScreenWidth, ScreenHeight));
+            Window.SetView(view);
+
+            CenterWindow();
+        }
+        public static void CenterWindow()
+        {
+            // Получаем размер экрана (монитора)
+            var desktopMode = VideoMode.DesktopMode;
+            uint screenWidth = desktopMode.Width;
+            uint screenHeight = desktopMode.Height;
+
+            // Рассчитываем позицию для центрирования окна
+            int posX = (int)(screenWidth / 2 - ScreenWidth / 2);
+            int posY = (int)(screenHeight / 2 - ScreenHeight / 2);
+
+            // Устанавливаем позицию окна
+            Window.Position = new Vector2i(posX, posY);
+        }
 
         public static  uint GetPercentWidth(int percent)
         {
@@ -163,6 +211,12 @@ namespace ScreenLib
             return new ValueTuple<int, int>(
             (int)(x / tile) * tile,
             (int)(y / tile) * tile);
+        }
+        public static ValueTuple<int, int> Mapping(double x, double y)
+        {
+            return new ValueTuple<int, int>(
+            (int)(x / Setting.Tile) * Setting.Tile,
+            (int)(y / Setting.Tile) * Setting.Tile);
         }
         public static int Mapping(double value, int tile)
         {

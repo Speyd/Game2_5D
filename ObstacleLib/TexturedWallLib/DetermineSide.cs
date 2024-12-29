@@ -91,8 +91,8 @@ namespace ObstacleLib.TexturedWallLib.Determine
 
         static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity)
         {
-            sinAngle = (float)Math.Sin(entity.Angle);
-            cosAngle = (float)Math.Cos(entity.Angle);
+            cosAngle = entity.Direction.X;
+            sinAngle = entity.Direction.Y;
 
 
             ObjectSide wallDetermine = ObjectSide.Error;
@@ -103,7 +103,7 @@ namespace ObstacleLib.TexturedWallLib.Determine
             Vector2f cornerHit = DetermineCornerWallSide(wall, entity);
             if (cornerHit.X > cornerHit.Y)
             {
-                cornerHit.X /= 100;
+                cornerHit.X /= Screen.Setting.Tile;
                 if (cornerHit.X < cornerHit.Y)
                     return ObjectSide.Left;
                 else
@@ -111,7 +111,7 @@ namespace ObstacleLib.TexturedWallLib.Determine
             }
             else
             {
-                cornerHit.Y /= 100;
+                cornerHit.Y /= Screen.Setting.Tile;
                 if (cornerHit.X > cornerHit.Y)
                     return ObjectSide.Top;
                 else
@@ -121,9 +121,9 @@ namespace ObstacleLib.TexturedWallLib.Determine
 
         static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity, double addAngle)
         {
-            sinAngle = (float)Math.Sin(addAngle);
             cosAngle = (float)Math.Cos(addAngle);
-
+            sinAngle = (float)Math.Sin(addAngle);
+            
 
             ObjectSide wallDetermine = ObjectSide.Error;
             wallDetermine = DetermineMineWallSide(wall, entity);

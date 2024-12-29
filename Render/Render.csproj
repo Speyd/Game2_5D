@@ -4,10 +4,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<Optimize>true</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="RenderInterface\ISelfRenderable.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="OpenTK" Version="4.9.3" />
   </ItemGroup>
 
   <ItemGroup>

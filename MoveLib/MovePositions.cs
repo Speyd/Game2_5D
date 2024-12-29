@@ -12,8 +12,8 @@ namespace MoveLib
         {
             double speed = setting.MoveSpeed * (1 / FPS.fps);
 
-            cosAngle = Math.Cos(entity.Angle);
-            sinAngle = Math.Sin(entity.Angle);
+            cosAngle = entity.Direction.X;
+            sinAngle = entity.Direction.Y;
 
             double rx = cosAngle * directionX - sinAngle * directionY;
             double ry = sinAngle * directionX + cosAngle * directionY;

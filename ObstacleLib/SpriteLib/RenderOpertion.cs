@@ -91,15 +91,13 @@ namespace ObstacleLib.SpriteLib.Render
 
             sprite.RenderSprite.Origin = new Vector2f(sprite.CurrentRenderTexture.Width / 2, sprite.CurrentRenderTexture.Height / 2);
             sprite.RenderSprite.Position = new Vector2f((float)x, y);
-
-            // Применяем масштабирование с учетом множителя масштаба
+            
             sprite.RenderSprite.Scale = new Vector2f
                 (
                 (float)height / sprite.CurrentRenderTexture.Width,
                 (float)height / sprite.CurrentRenderTexture.Height
                 );
-
-            // Добавляем спрайт в ZBuffer для правильного наложения объектов
+           
             ZBuffer.AddToZBuffer(sprite.RenderSprite, sprite.Distance);
         }
 

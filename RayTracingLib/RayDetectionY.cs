@@ -16,7 +16,6 @@ namespace RayTracingLib.Detection
 {
     static public class RayDetectionY
     {
-        public static float AddMultFullScreen { get; } = 1.3f;
         public static float AddCoordinates { get; private set; } = 0;
 
 
@@ -29,16 +28,6 @@ namespace RayTracingLib.Detection
         const float distanceLimitationValue = 1f;
 
 
-
-        //public static bool IsCornerWall(HitPoint hitPoint)
-        //{
-        //    return hitPoint.WallDetermine == ObjectSide.LeftCorner ||
-        //           hitPoint.WallDetermine == ObjectSide.RightCorner ||
-        //           hitPoint.WallDetermine == ObjectSide.BottomCorner ||
-        //           hitPoint.WallDetermine == ObjectSide.TopCorner;
-        //}
-
-
         #region Mult
         private static float CalculateNegativeMult(HitPoint hitPoint, IDrawable obst, float heightObj)
         {
@@ -47,7 +36,7 @@ namespace RayTracingLib.Detection
                 hitPoint.DistanceToWall;
 
 
-            float baseMult = obst.GetAveragedMult(baseMultNegativeCoo, AddMultFullScreen);
+            float baseMult = obst.GetAveragedMult(baseMultNegativeCoo);
             AddCoordinates = heightObj;
 
             return (safeDistance * safeDistance) / (baseMult * safeDistance * (1 / hitPoint.DistanceToPoint));
@@ -59,7 +48,7 @@ namespace RayTracingLib.Detection
                 hitPoint.DistanceToWall;
 
 
-            float baseMult = obst.GetAveragedMult(baseMultPozititiveCoo, AddMultFullScreen);          
+            float baseMult = obst.GetAveragedMult(baseMultPozititiveCoo);          
             AddCoordinates = heightObj;
 
 

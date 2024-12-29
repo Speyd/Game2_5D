@@ -51,18 +51,18 @@ namespace ObstacleLib.SpriteLib
         private float _z = 0;
         public float Z 
         {
-            get => _z;
+            get => _z * Screen.MultHeight / Screen.MultWidth;
             set
             {
-                _z = value * Screen.MultHeight / Screen.MultWidth;
+                _z = value;
             } 
         }
 
         private float scale = 1;
         public float Scale
         {
-            get => scale;
-            set => scale = value == 0 ? 1 : value / Screen.MultWidth;
+            get => scale * Screen.MultHeight / Screen.MultWidth;
+            set => scale = value == 0 ? 1 : value;
         }
 
         //---------------------Render Parameters----------------------

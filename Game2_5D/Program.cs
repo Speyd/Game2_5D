@@ -19,7 +19,6 @@ using EntityLib.Player;
 using Render;
 using Render.ZBufferRender;
 using Render.ResultAlgorithm;
-using Render.RenderPartsWorld;
 using Render.RenderText;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -37,9 +36,9 @@ using MiniMapLib.ObjectInMap.Positions;
 using TextureLib;
 using ObstacleLib.SpriteLib.Animation;
 using static System.Formats.Asn1.AsnWriter;
-
+using PartsWorldLib;
 //Screen screen = new Screen(1500, 1000);
-Screen.Initialize(1000, 1000);
+Screen.Initialize(1000,1000);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -225,18 +224,22 @@ FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\Fo
 //Event ev = ;
 //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 //GCLatencyMode.
+//Screen.ScreenWidth = 1500;
+AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
+AppContext.SetSwitch("System.Runtime.TieredPGO", true);
+
+PartsWorldLib.RenderPartsWorld partsWorld = new();
 try
 {
-   // screen.Window.SetFramerateLimit(Screen.FPS_Limit);
     while (Screen.Window.IsOpen)
     {
+
         Screen.Window.DispatchEvents();
         Screen.Window.Clear();
 
         fpsChecker.StartRead();
 
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
-        RenderPartsWorld.Render(player);
 
 
         algorithm.CalculationAlgorithm();
@@ -246,12 +249,13 @@ try
 
         mapMini.Render();
 
+        partsWorld.Render(player);
 
         Screen.OutputPriority.DrawingByPriority();
         CircleShape point = new CircleShape(3)
         {
             FillColor = Color.Red,
-            Position = new Vector2f(Screen.Setting.HalfWidth, Screen.Setting.HalfHeight) // Центрируем точку
+            Position = new Vector2f(Screen.Setting.HalfWidth, Screen.Setting.HalfHeight)
         };
 
         Screen.Window.Draw(point);

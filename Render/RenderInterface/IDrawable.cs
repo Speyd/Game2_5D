@@ -18,7 +18,7 @@ namespace Render.RenderInterface
 
         public float BringingToStandard(float heightObj);
 
-        public float GetAveragedMult(float baseMult, float addMultFullScreen);
+        public float GetAveragedMult(float baseMult);
 
         public void DrawObject(Drawable drawObject);
 

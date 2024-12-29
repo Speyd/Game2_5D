@@ -135,8 +135,8 @@ namespace RayTracingLib
         {
             float epsilon = 0.000001f;
 
-            dx = (float)Math.Cos(entity.Angle);
-            dy = (float)Math.Sin(entity.Angle);
+            dx = entity.Direction.X;
+            dy = entity.Direction.Y;
 
             if (Math.Abs(dx) < epsilon) dx = dx < 0 ? -epsilon : epsilon;
             if (Math.Abs(dy) < epsilon) dy = dy < 0 ? -epsilon : epsilon;
@@ -160,9 +160,9 @@ namespace RayTracingLib
 
             while (true)
             {
-                if (map.ExistingObstacles.ContainsKey((gridX, gridY)))
+                if (map.Obstacles.ContainsKey((gridX, gridY)))
                 {               
-                    var detailedResult = DetailedSearchInCell(map.ExistingObstacles[(gridX, gridY)], entity, gridX, gridY, tileSize);
+                    var detailedResult = DetailedSearchInCell(map.Obstacles[(gridX, gridY)], entity, gridX, gridY, tileSize);
 
                     if (detailedResult is not null)
                         return detailedResult;

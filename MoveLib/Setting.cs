@@ -23,8 +23,8 @@ namespace MoveLib
         public bool IsMouseCaptured { get; set; } = true;
 
         //Settig Mouse
-        public static double MinVerticalAngle { get; } = -Math.PI / 2;
-        public static double MaxVerticalAngle { get; } = Math.PI / 2;
+        public static double MinVerticalAngle { get; set; } = -Math.PI / 2;
+        public static double MaxVerticalAngle { get; set; } = Math.PI / 2;
 
         public Setting() 
         {}

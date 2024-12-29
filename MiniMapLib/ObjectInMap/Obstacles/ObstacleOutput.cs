@@ -153,7 +153,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         public void RenderObstacle(RenderTexture Window)
         {
             SetMapСoordinatesPlayer();      
-            foreach (var obstacles in Map.ExistingObstacles.Values)
+            foreach (var obstacles in Map.Obstacles.Values)
             {
                 float sizeNormalization = Setting.MapTile / obstacles.Count;
                 foreach (var obstacle in obstacles)

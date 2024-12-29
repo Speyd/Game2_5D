@@ -17,13 +17,13 @@
   <ItemGroup>
     <ProjectReference Include="..\BresenhamAlgorithm\BresenhamAlgorithm.csproj" />
     <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
+    <ProjectReference Include="..\PartsWorldLib\PartsWorldLib.csproj" />
+    <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
     <ProjectReference Include="..\TextField\TextField.csproj" />
-    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
   </ItemGroup>
 
 </Project>

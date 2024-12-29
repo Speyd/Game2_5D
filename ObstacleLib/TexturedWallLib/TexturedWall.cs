@@ -145,17 +145,14 @@ namespace ObstacleLib.TexturedWallLib
             return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
         }
 
-        public float GetAveragedMult(float baseMult, float addMultFullScreen)
+        public float GetAveragedMult(float baseMult)
         {
             if (CurrentRenderTexture is null)
                 throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
 
-            float newMult = baseMult / Screen.MultHeight / Screen.MultWidth;
+            float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
             newMult *= (float)TextureObstacle.BaseHeight / CurrentRenderTexture.Base.Height;
-
-            if (Screen.Styles == Styles.Fullscreen)
-                return newMult + addMultFullScreen;
 
             return newMult;
         }

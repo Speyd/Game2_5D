@@ -45,7 +45,6 @@ namespace ControlLib
             this.map = map;
             SettingMove = new MoveLib.Setting();
             Drawing = new Drawing();
-            // CollisionDetection = new CollisionTextureDetection(map);
 
             MoveMouse = new MoveMouse(SettingMove);
             MovePositions = new MovePositions(new Collision(map, SettingMove), SettingMove);

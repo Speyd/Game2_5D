@@ -19,10 +19,10 @@ namespace Render.ResultAlgorithm
         public double ProjHeight { get; set; } = 0;
         public double CarAngle {  get; set; } = 0;
         public int Ray { get; set; } = 0;
-        public IRenderable obstacle { get; set; }
+        public IRenderable? obstacle { get; set; }
 
         private void RedefinitionValues(
-            ref ValueTuple<IRenderable, IRenderable> obstacles,
+            ref ValueTuple<IRenderable?, IRenderable?> obstacles,
             ref Entity entity,
             double depth_v, double depth_h,
             double hx, double vy,
@@ -32,25 +32,23 @@ namespace Render.ResultAlgorithm
             {
                 Offset = vy;
                 Depth = depth_v;
-
                 obstacle = obstacles.Item1;
             }
-            else if(depth_h < depth_v)
+            else
             {
                 Offset = hx;
                 Depth = depth_h;
-
                 obstacle = obstacles.Item2;
             }
 
-           
+
             Depth *= Math.Cos(entity.Angle - car_angle);
             Depth = Math.Max(Depth, 0.1);
             
         }
 
-        public void calculationSettingRender(ref Entity entity,
-            ref ValueTuple<IRenderable, IRenderable> obstacles, int ray,
+        public void CalculationSettingRender(Entity entity,
+            ref ValueTuple<IRenderable?, IRenderable?> obstacles, int ray,
             double depth_v, double depth_h,
             double hx, double vy,
             double car_angle)

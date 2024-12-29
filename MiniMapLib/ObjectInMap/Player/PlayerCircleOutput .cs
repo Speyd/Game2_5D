@@ -37,7 +37,7 @@ namespace MiniMapLib.ObjectInMap.Player
             Setting = setting;
 
             EntityShape = new CircleShape();
-            RadiusCircle = 5;
+            RadiusCircle = radiusCircle;
         }
 
 

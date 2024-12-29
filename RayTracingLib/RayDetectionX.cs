@@ -122,8 +122,8 @@ namespace RayTracingLib.Detection
         }
         static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
         {
-            sinAngle = (float)Math.Sin(entity.Angle);
-            cosAngle = (float)Math.Cos(entity.Angle);
+            cosAngle = entity.Direction.X;
+            sinAngle = entity.Direction.Y;
 
 
             ObjectSide wallDetermine = ObjectSide.Error;

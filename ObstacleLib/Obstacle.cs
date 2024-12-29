@@ -8,7 +8,6 @@ namespace ObstacleLib
 {
     public abstract class Obstacle : IRenderable
     {
-        //<int oldCoo, int newCoo> 
         public Action<Obstacle, double, double> OnPositionChanged;
 
 
@@ -19,7 +18,7 @@ namespace ObstacleLib
             get => _x;
             set
             {
-                if(Screen.Mapping(_x) != Screen.Mapping(value))
+                if(Screen.Mapping(_x) != Screen.Mapping(value) && OnPositionChanged is not null)
                     OnPositionChanged(this, value, _y);
 
                 _x = value;
@@ -34,7 +33,7 @@ namespace ObstacleLib
             get => _y;
             set
             {
-                if (Screen.Mapping(_y) != Screen.Mapping(value))
+                if (Screen.Mapping(_y) != Screen.Mapping(value) && OnPositionChanged is not null)
                     OnPositionChanged(this, _x, value);
 
                 _y = value;

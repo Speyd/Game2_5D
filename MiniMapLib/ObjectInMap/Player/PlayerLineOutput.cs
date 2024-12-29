@@ -34,12 +34,12 @@ namespace MiniMapLib.ObjectInMap.Player
         }
 
 
-        public void RenderLineSight(RenderTexture renderTexture, double entityA)
+        public void RenderLineSight(RenderTexture renderTexture, Vector2f Dir)
         {
             Line[0] = new Vertex(new Vector2f(Setting.CenterX, Setting.CenterY), Color.Green);
 
-            float endX = (float)(Setting.CenterX - SizeMainRayX * Math.Cos(entityA));
-            float endY = (float)(Setting.CenterY - SizeMainRayY * Math.Sin(entityA));
+            float endX = (float)(Setting.CenterX - SizeMainRayX * Dir.X);
+            float endY = (float)(Setting.CenterY - SizeMainRayY * Dir.Y);
             Line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
 
             renderTexture.Draw(Line);
