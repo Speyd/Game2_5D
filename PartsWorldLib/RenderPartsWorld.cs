@@ -14,7 +14,7 @@ namespace PartsWorldLib
     {
         public Floor Floor;
 
-        public UpperPart RenderUpperPart { get; set; } = UpperPart.None;
+        public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
         public Sky Sky {get; set;}
         public Ceiling Ceiling { get; set; }
 

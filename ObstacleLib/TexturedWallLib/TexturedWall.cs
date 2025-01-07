@@ -26,6 +26,8 @@ namespace ObstacleLib.TexturedWallLib
 {
     public class TexturedWall : Obstacle, IWall, IDrawable
     {
+        public uint LvlWall { get; set; } = 1;
+
         //----------------------Textures--------------------------
         public MultiTexturedObject MultiTextured { get; init; }
         public TexturedPair? CurrentRenderTexture { get; set; } = null;
@@ -110,9 +112,9 @@ namespace ObstacleLib.TexturedWallLib
         public override float NormalizePositionY(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
-                return (float)(Screen.Setting.HalfHeight * (1 + 1 * -angleVertical));
+                return (float)((Screen.Setting.HalfHeight) * (1 + 1 * -angleVertical));
             else
-                return (float)(Screen.Setting.HalfHeight / (1 + 1 * angleVertical));
+                return (float)((Screen.Setting.HalfHeight) / (1 + 1 * angleVertical));
         }
         public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
         #endregion
@@ -175,7 +177,12 @@ namespace ObstacleLib.TexturedWallLib
             CurrentRenderTexture.Mod.Display();
         }
         #endregion
+        public bool RayWallCollision()
+        {
 
+
+            return true;
+        }
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X = x;

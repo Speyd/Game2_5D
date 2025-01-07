@@ -8,5 +8,6 @@ namespace Render.RenderInterface
 {
     public interface IRayRenderable
     {
+        //public bool RayWallCollision();
     }
 }

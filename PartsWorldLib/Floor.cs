@@ -36,10 +36,10 @@ namespace PartsWorldLib
         bool IsDarkening { get; set; } = false;
         public float TextureDarkening { get; set; } = 12f;
 
-        bool IsAlphaCanal { get; set; } = false;
+        bool IsAlphaCanal { get; set; } = true;
         public float TextureAlphaCanal { get; set; } = 7f;
 
-        bool IsFog { get; set; } = true;
+        bool IsFog { get; set; } = false;
         public float TextureFog { get; set; } = 0.1f;
 
 

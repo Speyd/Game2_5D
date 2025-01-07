@@ -190,6 +190,7 @@ TexturedWall wall2 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 TexturedWall wall3 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 TexturedWall wall4 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
+wall2.LvlWall = 3;
 map.AddObstacle(10, 5, wall2);
 //map.AddObstacle(4, 7, wall2);
 

@@ -28,7 +28,7 @@ namespace ObstacleLib.TexturedWallLib.Render
         public static void CalculationTexturePosition(TexturedWall Wall, Result result, double angleVertical)
         {
             float positionX = Wall.CalcCooX(result.Ray);
-            float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2);
+            float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2 * Wall.LvlWall);
 
             Wall.RenderSprite.Position = new Vector2f(positionX, positionY);
         }
