@@ -25,10 +25,16 @@ namespace ObstacleLib.TexturedWallLib.Render
             float scaleY = (float)result.ProjHeight / Wall.CurrentRenderTexture.Base.Height;
             Wall.RenderSprite.Scale = new Vector2f(scaleX, scaleY);
         }
+        private static int NormalizeLvlWall(TexturedWall Wall)
+        {
+            return (int)Math.Round(Wall.LvlWall / 2f) + Wall.LvlWall; 
+        }
         public static void CalculationTexturePosition(TexturedWall Wall, Result result, double angleVertical)
         {
             float positionX = Wall.CalcCooX(result.Ray);
-            float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2 * Wall.LvlWall);
+
+            int lvlWall = NormalizeLvlWall(Wall);
+            float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2 * lvlWall);
 
             Wall.RenderSprite.Position = new Vector2f(positionX, positionY);
         }
@@ -36,7 +42,6 @@ namespace ObstacleLib.TexturedWallLib.Render
         public static void SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
         {
             ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
-
             Wall.CurrentRenderTexture = Wall.MultiTextured[wallDetermine];
         }
     }

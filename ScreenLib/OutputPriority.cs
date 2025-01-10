@@ -34,16 +34,5 @@ namespace ScreenLib
 
             TreePriority.Clear();
         }
-
-        public void DrawingByPriorityNo()
-        {
-            foreach (var pair in TreePriority)
-            {
-                foreach (var sprite in pair.Value)
-                {
-                    window.Draw(sprite);
-                }
-            }
-        }
     }
 }

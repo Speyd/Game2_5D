@@ -48,12 +48,28 @@ namespace Render.ResultAlgorithm
         }
 
         public void CalculationSettingRender(Entity entity,
-            ref ValueTuple<IRenderable?, IRenderable?> obstacles, int ray,
+            ValueTuple<IRenderable?, IRenderable?> obstacles, int ray,
             double depth_v, double depth_h,
             double hx, double vy,
             double car_angle)
         {
             RedefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
+
+            Ray = ray;
+            CarAngle = car_angle;
+
+            Offset = (int)Offset % Screen.Setting.Tile;
+            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
+        }
+
+        public void CalculationSettingRender(Entity entity, int ray,double depth, double a, double car_angle)
+        {
+            // RedefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
+            Offset = a;
+
+            Depth = depth;
+            Depth *= Math.Cos(entity.Angle - car_angle);
+            Depth = Math.Max(Depth, 0.1);
 
             Ray = ray;
             CarAngle = car_angle;

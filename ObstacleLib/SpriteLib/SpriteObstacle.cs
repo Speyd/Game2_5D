@@ -96,7 +96,7 @@ namespace ObstacleLib.SpriteLib
             Adder.AddTextures(this, paths);
         }
         #endregion
-
+        public override int GetLevelHeight() => Screen.Setting.Tile;
         #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {

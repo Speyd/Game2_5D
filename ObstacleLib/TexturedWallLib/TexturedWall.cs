@@ -26,7 +26,7 @@ namespace ObstacleLib.TexturedWallLib
 {
     public class TexturedWall : Obstacle, IWall, IDrawable
     {
-        public uint LvlWall { get; set; } = 1;
+        public int LvlWall { get; set; } = 1;
 
         //----------------------Textures--------------------------
         public MultiTexturedObject MultiTextured { get; init; }
@@ -90,7 +90,7 @@ namespace ObstacleLib.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
         }
         #endregion
-
+        public override int GetLevelHeight() => 1;
         #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
@@ -120,6 +120,8 @@ namespace ObstacleLib.TexturedWallLib
         #endregion
 
         #region IWall_Implementation
+        public void SetLevelWall(int lvl) => LvlWall = lvl;
+        public double GetNominalHeight() => Screen.Setting.Tile;
         public float CalcCooX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
@@ -213,6 +215,7 @@ namespace ObstacleLib.TexturedWallLib
             RenderOperation.CalculationTextureScale(this, result);
             RenderOperation.CalculationTexturePosition(this, result, entity.VerticalAngle);
 
+            result.Depth += LvlWall * 0.01;
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }
     }

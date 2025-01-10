@@ -153,6 +153,7 @@ namespace ObstacleLib
         public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
         public abstract void UpdateAdditionalInformation(double x, double y);//Update shift, sides
         public abstract float CoordinatesObjectOffsetOnMap(float baseOffset);
+        public abstract int GetLevelHeight();
 
     }
 }

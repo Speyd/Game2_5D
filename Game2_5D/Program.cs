@@ -37,8 +37,9 @@ using TextureLib;
 using ObstacleLib.SpriteLib.Animation;
 using static System.Formats.Asn1.AsnWriter;
 using PartsWorldLib;
+using ObstacleLib;
 //Screen screen = new Screen(1500, 1000);
-Screen.Initialize(1000,1000);
+Screen.Initialize(1500,1080);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -191,7 +192,7 @@ TexturedWall wall3 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 TexturedWall wall4 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 wall2.LvlWall = 3;
-map.AddObstacle(10, 5, wall2);
+//map.AddObstacle(10, 5, wall2);
 //map.AddObstacle(4, 7, wall2);
 
 
@@ -204,7 +205,7 @@ map.AddObstacle(7, 7,  wall);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
 map.AddObstacle(7, 11, new TexturedWall(@"Resources\Image\WallTexture\Wall4.png"));
 map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
-map.AddObstacle(7, 2,new TexturedWall(@"Resources\Image\WallTexture\Wall8.png"));
+//map.AddObstacle(7, 2,new TexturedWall(@"Resources\Image\WallTexture\Wall8.png"));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
 map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
@@ -229,6 +230,18 @@ FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\Fo
 AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
 AppContext.SetSwitch("System.Runtime.TieredPGO", true);
 
+MultiWall multiWall = new MultiWall();
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+
+MultiWall multiWall1 = new MultiWall();
+multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+
+map.AddObstacle(10, 5, multiWall);
+map.AddObstacle(10, 4, multiWall1);
+
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try
 {
@@ -241,7 +254,6 @@ try
         fpsChecker.StartRead();
 
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
-
 
         algorithm.CalculationAlgorithm();
 

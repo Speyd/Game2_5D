@@ -11,18 +11,80 @@ using Render.RenderInterface;
 using System.Collections.ObjectModel;
 using SFML.System;
 using SFML.Graphics;
+using ObstacleLib;
+using System;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
+using static SFML.Graphics.Font;
 
 namespace BresenhamAlgorithm
 {
+    //class InfoObject
+    //{
+    //    public int ray;
+    //    public double carAngle;
+    //    public double depth;
+    //    public double coordinate;
+    //    public Obstacle Obstacle;
+
+    //    public InfoObject(int ray, double carAngle, double depth, double coordinate, Obstacle Obstacle)
+    //    {
+    //        this.ray = ray;
+    //        this.carAngle = carAngle;
+    //        this.depth = depth;
+    //        this.coordinate = coordinate;
+    //        this.Obstacle = Obstacle;
+    //    }
+    //}
+    class InfoObject
+    {
+        public double depth;
+        public double coordinate;
+        public Obstacle Obstacle;
+
+        public InfoObject(double depth, double coordinate, Obstacle Obstacle)
+        {
+            this.depth = depth;
+            this.coordinate = coordinate;
+            this.Obstacle = Obstacle;
+        }
+    }
     public class Algorithm(Map map, Entity entity, Result result, ZBuffer zBuffer)
     {
+        static int _maxVertical = 1200;
+        static int MaxVerticalDistance 
+        {
+            get => _maxVertical;
+            set
+            {
+                if (value <= 0)
+                    throw new Exception("Error value MaxVerticalDistance(Algorithm)");
+                _maxVertical = value * Screen.Setting.Tile;
+            }
+        }
+       
+        static int _maxHorizontal = 1200;
+        static int MaxHorizontalDistance
+        {
+            get => _maxHorizontal;
+            set
+            {
+                if (value <= 0)
+                    throw new Exception("Error value MaxVerticalDistance(Algorithm)");
+                _maxHorizontal = value * Screen.Setting.Tile; 
+            }
+        }
+
         //--------------------------Object Selection--------------------------
-        private ValueTuple<IRenderable, IRenderable> obstacles = (null, null);
+        //private ValueTuple<IRenderable?, IRenderable?> obstacles = (null, null);
 
         //------------------------------Setting Render-------------------------------
         private HashSet<Type> UniqueSelfDrawableTypes { get; init; } = new HashSet<Type>();
         private bool HasNewTypes { get; set; } = false;
         private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
+
+        object locker = new object();
+
 
         public void PrepareRenderObjects()
         {
@@ -47,7 +109,48 @@ namespace BresenhamAlgorithm
                 del?.Invoke(result, entity);
             }
         }
-        private bool CheckAndAddObstacle(double x, double y, double auxiliary, bool isVertical)
+        private void CheckAndAddHeightObstacle(List<InfoObject> infoObject,
+            double x, double y, 
+            double depth_h, double depth_v,
+            double auxiliary, bool isVertical)
+        {
+            double mappedX = isVertical ? x + auxiliary : x;
+            double mappedY = isVertical ? y : y + auxiliary;
+
+
+            var key = Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile);
+            if (!map.Obstacles.ContainsKey(key))
+                return;
+
+
+            foreach (var obstacle in map.Obstacles[key])
+            {
+                if (obstacle is ISelfRenderable self)
+                {
+                    var type = self.GetType();
+                    if (!UniqueSelfDrawableTypes.Contains(type))
+                    {
+                        UniqueSelfDrawableTypes.Add(type);
+                        HasNewTypes = true;
+                    }
+                    self.AddObstacleToRenderList();
+                    continue;
+                }
+                else if (obstacle is IRayRenderable)
+                {
+                    if (isVertical && depth_v < MaxVerticalDistance)
+                        infoObject.Add(new InfoObject(depth_v, y, obstacle));
+                    else if (!isVertical && depth_h < MaxHorizontalDistance)
+                        infoObject.Add(new InfoObject(depth_h, x, obstacle));
+                }
+                else
+                    throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
+            }
+        }
+        private bool CheckAndAddLowerObstacle(ref (IRenderable?, IRenderable?) obstacles, 
+            double x, double y, 
+            double depth_h, double depth_v, 
+            double auxiliary, bool isVertical)
         {
             double mappedX = isVertical ? x + auxiliary : x;
             double mappedY = isVertical ? y : y + auxiliary;
@@ -73,21 +176,37 @@ namespace BresenhamAlgorithm
                 }
                 else if (obstacle is IRayRenderable)
                 {
-                    if (isVertical)
-                    {
+                    if (isVertical && depth_v < MaxVerticalDistance)
                         obstacles.Item1 = obstacle;
-                        return true;
-                    }
-                    else
-                    {
+                    else if(!isVertical && depth_h < MaxHorizontalDistance)
                         obstacles.Item2 = obstacle;
-                        return true;
-                    }
+
+                    return true;
                 }
                 else
                     throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
             }
             return false;
+        }
+        List<InfoObject> FilterVisibleObstacles(List<InfoObject> info)
+        {
+            if (info.Count == 0) return info;
+
+            InfoObject? current = null;
+
+            info.Sort((a, b) => a.depth.CompareTo(b.depth));
+            var filtered = new List<InfoObject>();
+
+            foreach (var item in info)
+            {
+                if (current == null || (item.depth > current.depth && item.Obstacle.GetLevelHeight() > current.Obstacle.GetLevelHeight()))
+                {
+                    filtered.Add(item);
+                    current = item;
+                }
+            }
+
+            return filtered;
         }
         private void CheckVericals(ref double a, ref double auxiliaryA, double mapA, double ratio)
         {
@@ -104,31 +223,101 @@ namespace BresenhamAlgorithm
             }
         }
 
-        public void CalculationAlgorithm()
+        private void RenderHigherObstacles()
         {
             double carAngle = entity.Angle - entity.HalfFov;
 
-            double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
-            double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
+            var coordinates = Screen.Mapping(entity.X, entity.Y);
+
+            Parallel.For(0, Screen.Setting.AmountRays, ray =>
+            {
+                double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
+                double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
+
+                double carAngleRay = carAngle + ray * entity.DeltaAngle;
+
+                double sinA = Math.Sin(carAngleRay);
+                double cosA = Math.Cos(carAngleRay);
+                List<InfoObject> InfoObject = new List<InfoObject> { };
+
+                CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
+                for (int j = 0; j < MaxVerticalDistance; j++)
+                {
+                    depth_v = (x - entity.X) / cosA;
+                    vy = entity.Y + depth_v * sinA;
+
+                    if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
+                        CheckAndAddHeightObstacle(InfoObject, x, vy, depth_h, depth_v, auxiliaryX, true);
+                    else
+                        break;
+
+                    x += auxiliaryX * Screen.Setting.Tile;
+                };
+
+                CheckVericals(ref y, ref auxiliaryY, coordinates.Item2, sinA);
+                for (int j = 0; j < MaxHorizontalDistance; j++)
+                {
+                    depth_h = (y - entity.Y) / sinA;
+                    hx = entity.X + depth_h * cosA;
+
+                    if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
+                        CheckAndAddHeightObstacle(InfoObject, hx, y, depth_h, depth_v, auxiliaryY, false);
+                    else
+                        break;
+
+                    y += auxiliaryY * Screen.Setting.Tile;
+                };
+
+                Result result1 = new Result();      
+                foreach (var obstacle in FilterVisibleObstacles(InfoObject))
+                {
+                    result1.CalculationSettingRender(entity, ray, obstacle.depth, obstacle.coordinate, carAngleRay);
+
+                    lock(locker)
+                        obstacle.Obstacle.Render(result1, entity);
+                }
+            });
+           
+            if (HasNewTypes)
+            {
+                PrepareRenderObjects();
+                HasNewTypes = false;
+            }
+
+            CachedDelegates.ForEach(cd => cd.Value(result, entity));
+
+            zBuffer.Render();
+        }
+        private void RenderLowerObstacles()
+        {
+            double carAngle = entity.Angle - entity.HalfFov;
+
 
             var coordinates = Screen.Mapping(entity.X, entity.Y);
 
-            double sinA, cosA;
 
-            for (int ray = 0; ray < Screen.Setting.AmountRays; ray++)
+            Parallel.For(0, Screen.Setting.AmountRays, ray =>
             {
-                sinA = Math.Sin(carAngle);
-                cosA = Math.Cos(carAngle);
+                ValueTuple<IRenderable?, IRenderable?> obstacles = (null, null);
+
+
+                double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
+                double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
+
+                double carAngleRay = carAngle + ray * entity.DeltaAngle;
+
+                double sinA = Math.Sin(carAngleRay);
+                double cosA = Math.Cos(carAngleRay);
 
                 CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
-                for (int j = 0; j < Screen.ScreenWidth; j += Screen.Setting.Tile)
+                for (int j = 0; j < MaxVerticalDistance; j += Screen.Setting.Tile)
                 {
                     depth_v = (x - entity.X) / cosA;
                     vy = entity.Y + depth_v * sinA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
                     {
-                        if (CheckAndAddObstacle(x, vy, auxiliaryX, true))
+                        if (CheckAndAddLowerObstacle(ref obstacles, x, vy, depth_h, depth_v, auxiliaryX, true))
                             break;
                     }
                     else
@@ -139,15 +328,15 @@ namespace BresenhamAlgorithm
 
 
                 CheckVericals(ref y, ref auxiliaryY, coordinates.Item2, sinA);
-                for (int j = 0; j < Screen.ScreenHeight; j += Screen.Setting.Tile)
+                for (int j = 0; j < MaxHorizontalDistance; j += Screen.Setting.Tile)
                 {
-                    
+
                     depth_h = (y - entity.Y) / sinA;
                     hx = entity.X + depth_h * cosA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
                     {
-                        if (CheckAndAddObstacle(hx, y, auxiliaryY, false))
+                        if (CheckAndAddLowerObstacle(ref obstacles, hx, y, depth_h, depth_v, auxiliaryY, false))
                             break;
                     }
                     else
@@ -156,14 +345,15 @@ namespace BresenhamAlgorithm
                     y += auxiliaryY * Screen.Setting.Tile;
                 }
 
+                Result result1 = new Result();
+                result1.CalculationSettingRender(entity, obstacles, ray, depth_v, depth_h, hx, vy, carAngleRay);
 
-                result.CalculationSettingRender(entity, ref obstacles, ray, depth_v, depth_h, hx, vy, carAngle);
-
-                if (result.obstacle is not null)
-                    result.obstacle.Render(result, entity);
-
-                carAngle += entity.DeltaAngle;
-            }
+                if (result1.obstacle is not null)
+                {
+                    lock (locker)
+                        result1.obstacle.Render(result1, entity);
+                }
+            });
 
             if (HasNewTypes)
             {
@@ -173,6 +363,13 @@ namespace BresenhamAlgorithm
             CachedDelegates.ForEach(cd => cd.Value(result, entity));
 
             zBuffer.Render();
+        }
+        public void CalculationAlgorithm(bool rayPassability = false)
+        {
+            if (rayPassability)
+                RenderHigherObstacles();
+            else
+                RenderLowerObstacles();
         }
     }
 }

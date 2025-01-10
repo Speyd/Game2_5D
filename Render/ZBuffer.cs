@@ -13,7 +13,8 @@ namespace Render.ZBufferRender
     public class ZBuffer
     {
         private static SortedList<double, Drawable> zBuffer = new SortedList<double, Drawable>(Comparer<double>.Create((x, y) => y.CompareTo(x)));
-
+        static object temp = new object();
+        
         public void Render()
         {
             foreach (var drawable in zBuffer.Values)
@@ -25,7 +26,10 @@ namespace Render.ZBufferRender
 
         public static void AddToZBuffer(Drawable drawable, double depth)
         {
-            zBuffer[depth] = drawable;
+            lock (temp)
+            {
+                zBuffer[depth] = drawable;
+            }
         }
     }
 }
