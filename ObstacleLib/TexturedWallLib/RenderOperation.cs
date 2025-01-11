@@ -27,13 +27,16 @@ namespace ObstacleLib.TexturedWallLib.Render
         }
         private static int NormalizeLvlWall(TexturedWall Wall)
         {
-            return (int)Math.Round(Wall.LvlWall / 2f) + Wall.LvlWall; 
+            return Wall.LvlWall - 1 + Wall.LvlWall;
         }
+
         public static void CalculationTexturePosition(TexturedWall Wall, Result result, double angleVertical)
         {
             float positionX = Wall.CalcCooX(result.Ray);
 
             int lvlWall = NormalizeLvlWall(Wall);
+
+
             float positionY = (float)(Wall.NormalizePositionY(angleVertical) - result.ProjHeight / 2 * lvlWall);
 
             Wall.RenderSprite.Position = new Vector2f(positionX, positionY);

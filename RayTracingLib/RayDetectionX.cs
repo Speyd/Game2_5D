@@ -131,7 +131,6 @@ namespace RayTracingLib.Detection
 
             CalculateDistanceToWall(obstacle, entity, wallDetermine);
 
-
             Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity);
             if (cornerHit.X > cornerHit.Y)
             {

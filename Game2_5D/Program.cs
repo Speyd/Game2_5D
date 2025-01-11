@@ -234,13 +234,10 @@ MultiWall multiWall = new MultiWall();
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
-
-MultiWall multiWall1 = new MultiWall();
-multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
-multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall12.png"));
 
 map.AddObstacle(10, 5, multiWall);
-map.AddObstacle(10, 4, multiWall1);
+
 
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try

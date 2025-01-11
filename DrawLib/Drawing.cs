@@ -18,17 +18,16 @@ namespace DrawLib
         public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
         {
             Obstacle? obstacle = Raycast.RaycastFun(map, entity);
-
             if (obstacle is not null && obstacle is IDrawable drawable)
             {
                 hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
 
                 float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
                 float height = drawable.BringingToStandard(heightObj);
                 float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
-                Vector2f pointPosition = new Vector2f(textureX, textureY);
+                Console.WriteLine(textureY);
+                Vector2f pointPosition = new Vector2f(textureX + height / 2, textureY);
 
                 CircleShape point = new CircleShape(heightObj)
                 {

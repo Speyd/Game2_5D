@@ -169,6 +169,14 @@ namespace ObstacleLib.TexturedWallLib
             float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
             return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
         }
+        public float CalculateTextureY(float verticalAngle, float ProjHeight, float mult, float addCoordinates)
+        {
+            if (CurrentRenderTexture is null)
+                throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
+
+            float textureY = ProjHeight * verticalAngle * mult;
+            return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
+        }
 
         public void DrawObject(Drawable drawObject)
         {

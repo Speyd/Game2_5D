@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using ObstacleLib.TexturedWallLib;
 using Render.InterfaceRender;
 using Render.RenderInterface;
 using Render.ResultAlgorithm;
@@ -16,8 +17,8 @@ namespace ObstacleLib
 {
     public class MultiWall : Obstacle, IDrawable,IRayRenderable
     {
-        private uint CurrentLevelWall { get; set; } = 0;
-        public List<IWall> Walls { get; private set; } = new List<IWall>();
+        private int CurrentLevelWall { get; set; } = 0;
+        public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
 
         //#region IDrawable_Implementation
         //public float CalculateTextureX(Entity entity, Vector2f UV, ObjectSide side)
@@ -80,7 +81,7 @@ namespace ObstacleLib
         {
 
         }
-        public override async  void Render(Result result, Entity entity)
+        public override void Render(Result result, Entity entity)
         {
             foreach (var wall in Walls) 
             { 
@@ -105,37 +106,78 @@ namespace ObstacleLib
         { }
         public float CalculateTextureX(Vector2f UV, ObjectSide side)
         {
+            if (Walls.Count == 0)
+                return 0;
 
+            
+            for (int i = 0; i < Walls.Count; i++)
+            {
+                if(i < Walls.Count - 1)
+                    Walls[i].CalculateTextureX(UV, side);
+                else
+                    return Walls[i].CalculateTextureX(UV, side);
+            }
 
             return 0;
         }
         public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
         {
+            for(int i = 0; i < Walls.Count; i++)
+            {
+                float coo = Walls[i].CalculateTextureY(entity, ProjHeight / (i + 1), mult * (i + 1), addCoordinates);
+                if(i != 0)
+                    coo = Walls[i].CurrentRenderTexture.Base.Height * i + coo;
+
+                Console.WriteLine("coo: " + coo);
+
+                if (coo > 0 && coo < Walls[i].CurrentRenderTexture?.Base.Height)
+                {
+                    CurrentLevelWall = i;
+                    return coo;
+                }
+            }
 
             return 0;
-
         }
-
+        protected override void ResetXSides(double value)
+        {
+            Left = value;
+            Right = value + Screen.Setting.Tile;
+        }
+        protected override void ResetYSides(double value)
+        {
+            Top = value;
+            Bottom = value + Screen.Setting.Tile;
+        }
         public float BringingToStandard(float heightObj)
         {
-            return 0;
+            if(Walls.Count == 0) return 0;
 
+            return Walls.First().BringingToStandard(heightObj);
         }
 
         public float GetAveragedMult(float baseMult)
         {
-            return 0;
+            if (Walls.Count == 0) return 0;
 
+            return Walls.First().GetAveragedMult(baseMult);
         }
 
         public void DrawObject(Drawable drawObject)
         {
+            if (CurrentLevelWall < 0 || CurrentLevelWall >= Walls.Count)
+                return;
+            else if (Walls[CurrentLevelWall].CurrentRenderTexture is null)
+                return;
 
+            Walls[CurrentLevelWall].CurrentRenderTexture.Mod.Draw(drawObject);
+            Walls[CurrentLevelWall].CurrentRenderTexture.Mod.Display();
         }
 
 
-        public void AddLevelWall(IWall wall)
+        public void AddLevelWall(TexturedWall wall)
         {
+            wall.UpdateAdditionalInformation(X, Y);
             Walls.Add(wall);
             wall.SetLevelWall(Walls.Count);
         }

@@ -26,10 +26,8 @@ namespace Render.ZBufferRender
 
         public static void AddToZBuffer(Drawable drawable, double depth)
         {
-            lock (temp)
-            {
+
                 zBuffer[depth] = drawable;
-            }
         }
     }
 }

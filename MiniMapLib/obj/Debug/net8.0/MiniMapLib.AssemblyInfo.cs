@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MiniMapLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0857282dc4e11c5c8712e49d4b9e8e4f212efa16")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0123752955dab428b773b8224a1a59aebda17ab8")]
 [assembly: System.Reflection.AssemblyProductAttribute("MiniMapLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MiniMapLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
