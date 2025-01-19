@@ -1,6 +1,6 @@
 x64
 .vs/
-obj/
-bin/
-!bin/**/Resources/
-!bin/**/Resources/**
+Game2_5D/bin/
+Game2_5D/obj/
+!Game2_5D/bin/**/Resources/
+!Game2_5D/bin/**/Resources/**
