@@ -20,6 +20,12 @@ using System.Numerics;
 using Render.RenderInterface;
 using Render;
 using System.Reflection.Metadata;
+using OpenTK.Graphics.OpenGL;
+using System.Text;
+using static SFML.Window.Mouse;
+using Microsoft.VisualBasic;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using ObstacleLib.SpriteLib.Hitbox;
 
 namespace ObstacleLib.SpriteLib
 {
@@ -151,44 +157,13 @@ namespace ObstacleLib.SpriteLib
             ShiftCubedY = ShiftCubedY;
         }
 
-        public bool IsRayTouchesObjectX(Entity entity, float currentRayX)
-        {
-            return (int)currentRayX > Left && (int)currentRayX < Right;
-        }
-
-        public bool IsRayTouchesObjectY(Entity entity, float currentRayY)
-        {
-            return (int)currentRayY > Top && (int)currentRayY < Bottom;
-        }
-        public bool IsRayTouchesObjectZ(Entity entity)
-        {
-            if (CurrentRenderTexture is null)
-                return true;
-
-
-            float distance = (float)Math.Sqrt(Math.Pow(X - entity.X, 2) + Math.Pow(Y - entity.Y, 2));
-
-
-            double vertAngle = Math.Clamp(entity.VerticalAngle, -Math.PI / 4, Math.PI / 4);
-            float entityViewZ = (float)(entity.CameraZ + Math.Tan(vertAngle) * distance);
-
-
-            float mult = IRayPassability.BaseRayPassObjectHeight / CurrentRenderTexture.Height;
-            mult = mult == 1 ? 0 : mult;
-
-
-            float supposedZ = (-Z + Scale);
-            float Top = -Z - (supposedZ / 2 * mult);
-            float Bottom = supposedZ + (mult == 0 ? supposedZ : supposedZ * mult);
-
-            return entityViewZ >= Top && entityViewZ <= Bottom;
-        }
-
         public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
         {
-            bool isCollidingX = IsRayTouchesObjectX(entity, currentRayX);
-            bool isCollidingY = IsRayTouchesObjectY(entity, currentRayY);
-            bool isCollidingZ = IsRayTouchesObjectZ(entity);
+
+
+            bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(this, entity, currentRayX);
+            bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(this, entity, currentRayY);
+            bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, entity);
 
 
             if ((isCollidingX && isCollidingY) == true && isCollidingZ == false)

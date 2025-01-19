@@ -364,7 +364,7 @@ namespace BresenhamAlgorithm
 
             zBuffer.Render();
         }
-        public void CalculationAlgorithm(bool rayPassability = false)
+        public void CalculationAlgorithm(bool rayPassability = true)
         {
             if (rayPassability)
                 RenderHigherObstacles();

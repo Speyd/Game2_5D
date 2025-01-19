@@ -14,50 +14,62 @@ namespace DrawLib
     public class Drawing()
     {
         HitPoint hitPoint;
+        List<(float, float)> ignoreCoo = new List<(float, float)>();
 
         public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
         {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
-            if (obstacle is not null && obstacle is IDrawable drawable)
+            while (true)
             {
-                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+                Obstacle? obstacle = Raycast.RaycastFun(map, entity, ignoreCoo);
 
-
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-                float height = drawable.BringingToStandard(heightObj);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
-                Console.WriteLine(textureY);
-                Vector2f pointPosition = new Vector2f(textureX + height / 2, textureY);
-
-                CircleShape point = new CircleShape(heightObj)
+                if (obstacle is not null && obstacle is IDrawable drawable)
                 {
-                    FillColor = colorFill,
-                    Position = pointPosition
-                };
+                    hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
-                drawable.DrawObject(point);
+
+                    float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+                    float height = drawable.BringingToStandard(heightObj);
+                    float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+                    if (textureY < 0 - height)
+                    {
+                        ignoreCoo.Add(((float)obstacle.X, (float)obstacle.Y));
+                        continue;
+                    }
+                    
+                    Vector2f pointPosition = new Vector2f(textureX + height / 2, textureY);
+
+                    CircleShape point = new CircleShape(heightObj)
+                    {
+                        FillColor = colorFill,
+                        Position = pointPosition
+                    };
+
+                    drawable.DrawObject(point);
+                }
+                ignoreCoo.Clear();
+                break;
             }
         }
 
         public void DrawingSprite(Map map, Entity entity, Sprite sprite)
         {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+            //Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 
-            if (obstacle is not null && obstacle is IDrawable drawable)
-            {
-                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+            //if (obstacle is not null && obstacle is IDrawable drawable)
+            //{
+            //    hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
 
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+            //    float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
 
-                float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+            //    float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
+            //    float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
 
-                Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
-                sprite.Position = dotPosition;
+            //    Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
+            //    sprite.Position = dotPosition;
 
-                drawable.DrawObject(sprite);
-            }
+            //    drawable.DrawObject(sprite);
+            //}
         }
     }
 }

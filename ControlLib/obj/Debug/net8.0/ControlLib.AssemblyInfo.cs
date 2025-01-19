@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ControlLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0123752955dab428b773b8224a1a59aebda17ab8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a6bb65e7a4d0500d8749bb73b280b240b54f13f6")]
 [assembly: System.Reflection.AssemblyProductAttribute("ControlLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ControlLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

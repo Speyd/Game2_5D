@@ -103,7 +103,7 @@ namespace EntityLib
         {
             Fov = fov;
             HalfFov = (float)Fov / 2;
-            CameraZ = 70;
+            CameraZ = 50;
 
 
             X = x <= 0 ? setting.HalfWidth : x;

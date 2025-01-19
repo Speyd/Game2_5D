@@ -71,7 +71,7 @@ namespace RayTracingLib
             var nonRayPassable = obstacles.Where(o => o is not IRayPassability).ToList();
             return (rayPassable, nonRayPassable);
         }
-
+       
         private static Obstacle? DetailedSearchInCell(List<Obstacle> obstacles, Entity entity, int cellX, int cellY, float baseStep)
         {
             float step = baseStep * percentOfMainStep;
@@ -80,6 +80,12 @@ namespace RayTracingLib
             float localStartX = startX + dx * (tMaxX < tMaxY ? tMaxX : tMaxY);
             float localStartY = startY + dy * (tMaxX < tMaxY ? tMaxX : tMaxY);
 
+            if (dx > 0 && Math.Abs(dx) > Math.Abs(dy))
+                localStartX -= Screen.Setting.Tile;
+            else if (dy > 0 && Math.Abs(dy) > Math.Abs(dx))
+                localStartY -= Screen.Setting.Tile;
+
+           // Console.WriteLine($"DX: {dx} |DY: {dy}");
 
             float localDeltaX = Math.Abs(subTileSize / dx);
             float localDeltaY = Math.Abs(subTileSize / dy);
@@ -87,8 +93,8 @@ namespace RayTracingLib
             float localGridX = localStartX;
             float localGridY = localStartY;
 
-            float localStepX = dx > 0 ? -step : step;
-            float localStepY = dy > 0 ? -step : step;
+            float localStepX = step;
+            float localStepY = step;
 
 
             float localMaxX = dx > 0 ? (localStartX + subTileSize - localStartX) / dx : (localStartX - localStartX) / -dx;
@@ -98,10 +104,11 @@ namespace RayTracingLib
             var (rayPassable, nonRayPassable) = SplitObstaclesByRayPassability(obstacles);
             if (rayPassable.Count == 0)
             {
-                return nonRayPassable.Count == 1 ? 
+                return nonRayPassable.Count == 1 ?
                     nonRayPassable.FirstOrDefault() :
                     GetNearestObject(entity, nonRayPassable);
             }
+
 
 
             while (true)
@@ -109,7 +116,7 @@ namespace RayTracingLib
                 var result = CheckingTouchingOfList(rayPassable, entity, localGridX, localGridY);
                 if (result.Item1 && result.Item2 is not null)
                     return result.Item2;
-                
+
 
                 if (localMaxX < localMaxY)
                 {
@@ -131,7 +138,7 @@ namespace RayTracingLib
 
             return null;
         }
-        public static Obstacle? RaycastFun(Map map, Entity entity)
+        public static Obstacle? RaycastFun(Map map, Entity entity, List<(float, float)> ignoreCoo)
         {
             float epsilon = 0.000001f;
 
@@ -160,7 +167,7 @@ namespace RayTracingLib
 
             while (true)
             {
-                if (map.Obstacles.ContainsKey((gridX, gridY)))
+                if (map.Obstacles.ContainsKey((gridX, gridY)) && !ignoreCoo.Contains((gridX, gridY)))
                 {               
                     var detailedResult = DetailedSearchInCell(map.Obstacles[(gridX, gridY)], entity, gridX, gridY, tileSize);
 
@@ -187,5 +194,6 @@ namespace RayTracingLib
                 }
             }
         }
+
     }
 }
