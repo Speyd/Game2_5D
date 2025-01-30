@@ -12,7 +12,7 @@ namespace ObstacleLib
 
 
         //---------------------Coordinates-----------------------
-        private double _x;
+        protected double _x;
         public virtual double X 
         {
             get => _x;
@@ -40,6 +40,13 @@ namespace ObstacleLib
                 OriginY = Screen.Mapping(value);
                 ResetYSides(value);
             }
+        }
+
+        protected double _z;
+        public virtual double Z
+        {
+            get => _z;
+            set => _z = value * Screen.MultHeight / Screen.MultWidth;
         }
 
         public int OriginX { get; private set; }
@@ -153,7 +160,8 @@ namespace ObstacleLib
         public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
         public abstract void UpdateAdditionalInformation(double x, double y);//Update shift, sides
         public abstract float CoordinatesObjectOffsetOnMap(float baseOffset);
-        public abstract int GetLevelHeight();
+        public abstract double GetZCoordinate(Entity entity);
+
 
     }
 }

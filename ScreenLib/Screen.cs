@@ -147,6 +147,7 @@ namespace ScreenLib
             WidthChangesFun += SetMultWidth;
             HeightChangesFun += SetMultHeight;
 
+
             ScreenWidth = (int)Window.Size.X;
             ScreenHeight = (int)Window.Size.Y;
 

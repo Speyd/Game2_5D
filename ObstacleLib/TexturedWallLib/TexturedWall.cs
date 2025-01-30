@@ -26,7 +26,7 @@ namespace ObstacleLib.TexturedWallLib
 {
     public class TexturedWall : Obstacle, IWall, IDrawable
     {
-        public int LvlWall { get; set; } = 1;
+
 
         //----------------------Textures--------------------------
         public MultiTexturedObject MultiTextured { get; init; }
@@ -35,9 +35,17 @@ namespace ObstacleLib.TexturedWallLib
 
         //----------------------Setting---------------------
         public override bool IsSingleAddable { get; init; } = true;
+        public int LvlWall { get; set; } = 1;
+        public override double Z
+        {
+            get => LvlWall * Screen.Setting.Tile;
+        }
 
         //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
+
+
+       
 
 
         #region Constructor
@@ -90,7 +98,7 @@ namespace ObstacleLib.TexturedWallLib
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
         }
         #endregion
-        public override int GetLevelHeight() => 1;
+
         #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
@@ -187,17 +195,12 @@ namespace ObstacleLib.TexturedWallLib
             CurrentRenderTexture.Mod.Display();
         }
         #endregion
-        public bool RayWallCollision()
-        {
 
-
-            return true;
-        }
+        #region MapAdder_Implementation
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X = x;
             Y = y;
-
         }
         protected override void ResetXSides(double value)
         {
@@ -209,6 +212,11 @@ namespace ObstacleLib.TexturedWallLib
             Top = value;
             Bottom = value + Screen.Setting.Tile;
         }
+        #endregion
+
+
+        public override double GetZCoordinate(Entity entity) => Z;
+
         public override void Render(Result result, Entity entity)
         {
             RenderOperation.SelectCurrentRenderTexture(this, result, entity);

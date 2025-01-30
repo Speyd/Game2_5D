@@ -15,104 +15,37 @@ using TextureLib;
 
 namespace ObstacleLib
 {
-    public class MultiWall : Obstacle, IDrawable,IRayRenderable
+    public class MultiWall : Obstacle, IDrawable, IRayRenderable
     {
-        private int CurrentLevelWall { get; set; } = 0;
+        //-------------------------Wall-------------------------
         public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
+        private int CurrentLevelWall { get; set; } = 0;
 
-        //#region IDrawable_Implementation
-        //public float CalculateTextureX(Entity entity, Vector2f UV, ObjectSide side)
-        //{
-        //    CurrentRenderTexture = MultiTextured[side];
-        //    if (CurrentRenderTexture is null)
-        //        throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
-
-        //    float textureX = UV.X > UV.Y ? UV.X : UV.Y;
-        //    textureX *= CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
-
-        //    return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
-        //}
-
-        //public float BringingToStandard(float heightObj)
-        //{
-        //    if (CurrentRenderTexture is null)
-        //        throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
-
-        //    return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
-        //}
-
-        //public float GetAveragedMult(float baseMult)
-        //{
-        //    if (CurrentRenderTexture is null)
-        //        throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
-
-
-        //    float newMult = baseMult * Screen.MultHeight / Screen.MultWidth;
-        //    newMult *= (float)TextureObstacle.BaseHeight / CurrentRenderTexture.Base.Height;
-
-        //    return newMult;
-        //}
-
-        //public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
-        //{
-        //    if (CurrentRenderTexture is null)
-        //        throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
-
-        //    float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-        //    return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
-        //}
-
-        //public void DrawObject(Drawable drawObject)
-        //{
-        //    if (CurrentRenderTexture is null)
-        //        return;
-
-        //    CurrentRenderTexture.Mod.Draw(drawObject);
-        //    CurrentRenderTexture.Mod.Display();
-        //}
-        //#endregion
-
-        public override int GetLevelHeight() => Walls.Count;
-        public override void BlackoutObstacle(double depth)
+        //-----------------------Setting----------------------
+        public override bool IsSingleAddable { get; init; } = true;      
+        public override double Z
         {
+            get => Walls.Count * Screen.Setting.Tile;
+        }
 
-        }
-        public override void FillingMiniMapShape(RectangleShape rectangleShape)
-        {
 
-        }
-        public override void Render(Result result, Entity entity)
+        public MultiWall() : base(0, 0, 'M', Color.Red, false) { }
+        public MultiWall(List<TexturedWall> walls) 
+            : base(0, 0, 'M', Color.Red, false)
         {
-            foreach (var wall in Walls) 
-            { 
-               wall.Render(result, entity);
-            }
+            AddLevelWall(walls);
         }
-        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
-        {
-            return 0;
-        }
-        public override float CoordinatesObjectOffsetOnMap(float baseOffset)
-        {
-            return 0;
-        }
-        public override void UpdateAdditionalInformation(double x, double y)
-        {
-            X = x;
-            Y = y;
-        }
-        public MultiWall() 
-            :base(0, 0, 'M', Color.Red, false)
-        { }
+
+        #region IDrawable_Implementation
         public float CalculateTextureX(Vector2f UV, ObjectSide side)
         {
             if (Walls.Count == 0)
                 return 0;
 
-            
+
             for (int i = 0; i < Walls.Count; i++)
             {
-                if(i < Walls.Count - 1)
+                if (i < Walls.Count - 1)
                     Walls[i].CalculateTextureX(UV, side);
                 else
                     return Walls[i].CalculateTextureX(UV, side);
@@ -122,22 +55,54 @@ namespace ObstacleLib
         }
         public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
         {
-            for(int i = 0; i < Walls.Count; i++)
+            for (int i = 0; i < Walls.Count; i++)
             {
-                float coo = Walls[i].CalculateTextureY(entity, ProjHeight / (i + 1), mult * (i + 1), addCoordinates);
-                if(i != 0)
-                    coo = Walls[i].CurrentRenderTexture.Base.Height * i + coo;
+                if (Walls[i].CurrentRenderTexture is null)
+                    continue;
 
-                Console.WriteLine("coo: " + coo);
+                float normalizedCoordinate = Walls[i].CalculateTextureY(entity, ProjHeight / (i + 1), mult * (i + 1), addCoordinates);
+                if (i != 0)
+                    normalizedCoordinate = Walls[i].CurrentRenderTexture.Base.Height * i + normalizedCoordinate;
 
-                if (coo > 0 && coo < Walls[i].CurrentRenderTexture?.Base.Height)
+
+                if (normalizedCoordinate > 0 && normalizedCoordinate < Walls[i].CurrentRenderTexture?.Base.Height)
                 {
                     CurrentLevelWall = i;
-                    return coo;
+                    return normalizedCoordinate;
                 }
             }
 
             return 0;
+        }
+        public float BringingToStandard(float heightObj)
+        {
+            if (Walls.Count == 0) return 0;
+
+            return Walls.First().BringingToStandard(heightObj);
+        }
+        public float GetAveragedMult(float baseMult)
+        {
+            if (Walls.Count == 0) return 0;
+
+            return Walls.First().GetAveragedMult(baseMult);
+        }
+        public void DrawObject(Drawable drawObject)
+        {
+            if (CurrentLevelWall < 0 || CurrentLevelWall >= Walls.Count)
+                return;
+            else if (Walls[CurrentLevelWall].CurrentRenderTexture is null)
+                return;
+
+            Walls[CurrentLevelWall].CurrentRenderTexture?.Mod.Draw(drawObject);
+            Walls[CurrentLevelWall].CurrentRenderTexture?.Mod.Display();
+        }
+        #endregion
+
+        #region MapAdder_Implementation
+        public override void UpdateAdditionalInformation(double x, double y)
+        {
+            X = x;
+            Y = y;
         }
         protected override void ResetXSides(double value)
         {
@@ -149,37 +114,84 @@ namespace ObstacleLib
             Top = value;
             Bottom = value + Screen.Setting.Tile;
         }
-        public float BringingToStandard(float heightObj)
+
+        #endregion
+
+        #region IRenderable_Implementation
+        public override void BlackoutObstacle(double depth) {}
+        public override float NormalizePositionY(double angleVertical, float addVariable = 0) => 0;
+        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
+        public override void FillingMiniMapShape(RectangleShape rectangleShape)
         {
-            if(Walls.Count == 0) return 0;
+            if (Walls.Count > 0)
+            {
+                foreach (var wall in Walls)
+                {
+                    TextureObstacle? textureInMap = wall.MultiTextured.UniqueTexture.GetFirstValue()?.Base;
 
-            return Walls.First().BringingToStandard(heightObj);
+                    if (textureInMap is not null)
+                    {
+                        rectangleShape.Texture = textureInMap.Texture;
+                        return;
+                    }
+                }
+            }
+
+            rectangleShape.FillColor = ColorInMap;
+
         }
+        #endregion
 
-        public float GetAveragedMult(float baseMult)
+
+        public override double GetZCoordinate(Entity entity)
         {
-            if (Walls.Count == 0) return 0;
+            if(Z <= entity.Z)
+                return Z;
 
-            return Walls.First().GetAveragedMult(baseMult);
+            for(int lvl = 1; lvl <= Walls.Count; lvl++)
+            {
+                double lvlWall = lvl * Screen.Setting.Tile;
+
+                if (lvlWall < entity.Z)
+                    continue;
+                else
+                    return lvl * Screen.Setting.Tile;
+            }
+
+            return Z;
         }
-
-        public void DrawObject(Drawable drawObject)
+        public override void Render(Result result, Entity entity)
         {
-            if (CurrentLevelWall < 0 || CurrentLevelWall >= Walls.Count)
-                return;
-            else if (Walls[CurrentLevelWall].CurrentRenderTexture is null)
-                return;
-
-            Walls[CurrentLevelWall].CurrentRenderTexture.Mod.Draw(drawObject);
-            Walls[CurrentLevelWall].CurrentRenderTexture.Mod.Display();
+            foreach (var wall in Walls) 
+                wall.Render(result, entity);
         }
-
+     
 
         public void AddLevelWall(TexturedWall wall)
         {
             wall.UpdateAdditionalInformation(X, Y);
             Walls.Add(wall);
             wall.SetLevelWall(Walls.Count);
+        }
+        public void AddLevelWall(List<TexturedWall> walls)
+        {
+            if(walls.Count == 0)
+                return;
+
+            foreach (var wall in walls)
+            {
+                wall.UpdateAdditionalInformation(X, Y);
+                Walls.Add(wall);
+                wall.SetLevelWall(Walls.Count);
+            }
+        }
+        public void DeleteWall(int lvl) //Lvl starts with 1
+        {
+            if(Walls.Count == 0 || lvl < 1 || lvl > Walls.Count) 
+                return;
+
+            lvl--;
+            Walls.RemoveAt(lvl);
         }
     }
 }

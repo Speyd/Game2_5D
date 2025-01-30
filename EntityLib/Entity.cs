@@ -87,11 +87,11 @@ namespace EntityLib
 
 
         //-----------------------Camera-----------------------
-        private double _cameraZ;
-        public double CameraZ
+        private double _z;
+        public double Z
         {
-            get => _cameraZ * Screen.MultHeight / Screen.MultWidth;
-            set => _cameraZ = value;
+            get => _z;
+            set => _z = value;
         }
 
 
@@ -103,7 +103,7 @@ namespace EntityLib
         {
             Fov = fov;
             HalfFov = (float)Fov / 2;
-            CameraZ = 50;
+            Z = Screen.Setting.Tile;
 
 
             X = x <= 0 ? setting.HalfWidth : x;

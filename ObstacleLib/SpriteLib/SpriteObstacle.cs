@@ -54,16 +54,6 @@ namespace ObstacleLib.SpriteLib
         //--------------------------Setting-----------------------------
         public override bool IsSingleAddable { get; init; } = false;
 
-        private float _z = 0;
-        public float Z 
-        {
-            get => _z * Screen.MultHeight / Screen.MultWidth;
-            set
-            {
-                _z = value;
-            } 
-        }
-
         private float scale = 1;
         public float Scale
         {
@@ -75,6 +65,8 @@ namespace ObstacleLib.SpriteLib
         public double Angle { get; set; }
         public double Distance { get; set; }
         public override bool IsOffsetMap { get; set; } = true;
+
+       
 
 
         #region Constructor
@@ -102,7 +94,7 @@ namespace ObstacleLib.SpriteLib
             Adder.AddTextures(this, paths);
         }
         #endregion
-        public override int GetLevelHeight() => Screen.Setting.Tile;
+
         #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth)
         {
@@ -199,6 +191,8 @@ namespace ObstacleLib.SpriteLib
             }
         }
         #endregion
+
+        public override double GetZCoordinate(Entity entity) => Z;
         public override void Render(Result result, Entity entity)
         {
             double spriteAngle = RenderOpertion.CalculationAngularDistance(this, entity);

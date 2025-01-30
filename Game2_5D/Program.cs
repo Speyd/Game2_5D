@@ -38,8 +38,10 @@ using ObstacleLib.SpriteLib.Animation;
 using static System.Formats.Asn1.AsnWriter;
 using PartsWorldLib;
 using ObstacleLib;
+using ObstacleLib.SpriteLib.Hitbox;
 //Screen screen = new Screen(1500, 1000);
-Screen.Initialize(1500,1080);
+//Screen.Initialize(800, 1100);
+Screen.Initialize(1500, 1000);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -116,7 +118,7 @@ SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
     Scale = 64,
     SideBT = 30,
     SideLR = 30,
-    Z = 125,
+    Z = 0,
     ShiftCubedX = 50,
     ShiftCubedY = 50,
 };
@@ -211,13 +213,13 @@ wall2.LvlWall = 3;
 
 sprite1.SetShifts(50);
 
-//map.AddObstacle(3, 5, barel);
+map.AddObstacle(3, 5, barel);
 //map.AddObstacle(3, 5, barel2);
 TexturedWall wall = new TexturedWall( @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png", @"Resources\Image\WallTexture\add.png", @"Resources\Image\WallTexture\Wall4.png");
 map.AddObstacle(7, 7,  wall);
 
 
-map.AddObstacle(3, 5, sprite2);
+//map.AddObstacle(3, 5, sprite2);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
 map.AddObstacle(7, 11, new TexturedWall(@"Resources\Image\WallTexture\Wall4.png"));
 map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
@@ -247,15 +249,20 @@ AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
 AppContext.SetSwitch("System.Runtime.TieredPGO", true);
 
 MultiWall multiWall = new MultiWall();
+map.AddObstacle(10, 5, multiWall);
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
-map.AddObstacle(10, 5, multiWall);
-//map.AddObstacle(9, 5, sprite1);
-map.AddObstacle(9, 5, barel2);
+//map.AddObstacle(10, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+
+map.AddObstacle(9, 5, sprite1);
+//map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
+player.X = 800;
+player.Y = 800;
+
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try
 {

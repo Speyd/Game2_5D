@@ -5,11 +5,13 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using EntityLib;
+using Render.InterfaceRender;
+using Render.RenderInterface;
 using Render.ResultAlgorithm;
 
 namespace Render
 {
-    public interface ISelfRenderable
+    public interface ISelfRenderable: IRenderable
     {
         public static string NameRenderFun { get; } = "RenderSelfDrawableList";
 

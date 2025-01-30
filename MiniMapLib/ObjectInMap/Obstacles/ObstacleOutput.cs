@@ -102,6 +102,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
 
             obstacle.FillingMiniMapShape(RectangleShape);
 
+
             sizeNormalization = obstacle.CoordinatesObjectOffsetOnMap(sizeNormalization);
             RectangleShape.Position = new Vector2f(
                 (float)(Setting.CenterX - (MapObstacle.X - MapPlayer.X) - sizeNormalization),
@@ -155,6 +156,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
             SetMapСoordinatesPlayer();      
             foreach (var obstacles in Map.Obstacles.Values)
             {
+              
                 float sizeNormalization = Setting.MapTile / obstacles.Count;
                 foreach (var obstacle in obstacles)
                 {

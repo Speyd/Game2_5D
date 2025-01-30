@@ -24,6 +24,8 @@ namespace MoveLib
             set => _radiusCheckTouch = value * Screen.Setting.Tile;
         }
 
+        public bool AccountHeight {  get; set; } = true;
+
         public Collision(Map map, MoveLib.Setting setting)
         {
             Map = map;
@@ -42,9 +44,16 @@ namespace MoveLib
 
             bool isCollidingX = playerRight > obstacle.Left && playerLeft < obstacle.Right;
             bool isCollidingY = playerBottom > obstacle.Top && playerTop < obstacle.Bottom;
+            bool isCollidingZ = entity.Z >= obstacle.GetZCoordinate(entity);
 
+            bool generalColliding = false;
+            if ((isCollidingX && isCollidingY) == true && isCollidingZ == true)
+                generalColliding = true;
+            else
+                generalColliding = false;
 
-            return isCollidingX && isCollidingY && !obstacle.IsPassability;
+            return AccountHeight? generalColliding && !obstacle.IsPassability : 
+                isCollidingX && isCollidingY && !obstacle.IsPassability;
         }
 
         private bool IsTouch(Entity entity, double nextX, double nextY)

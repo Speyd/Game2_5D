@@ -23,12 +23,10 @@ namespace ObstacleLib.BlankWallLib
         //--------------------Color For Render------------------
         public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
         public Color ColorFilling { get; set; }
-        int LvlWall { get; set; } = 1;
 
         //-------------------------Render Operation-----------------------
         private RenderOpertion RenderOperation = new RenderOpertion();
 
-        public override int GetLevelHeight() => Screen.Setting.Tile;
         //-------------------Setting--------------------
         public override bool IsSingleAddable { get; init; } = true;
 
@@ -79,9 +77,10 @@ namespace ObstacleLib.BlankWallLib
         #endregion
 
         #region IWall_Implementation
-        public void SetLevelWall(int lvl) => LvlWall = lvl;
 
         public double GetNominalHeight() => Screen.Setting.Tile;
+        public override double GetZCoordinate(Entity entity) => Z;
+
         public float CalcCooX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
@@ -112,5 +111,6 @@ namespace ObstacleLib.BlankWallLib
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);
         }
+
     }
 }

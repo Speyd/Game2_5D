@@ -80,12 +80,16 @@ namespace RayTracingLib
             float localStartX = startX + dx * (tMaxX < tMaxY ? tMaxX : tMaxY);
             float localStartY = startY + dy * (tMaxX < tMaxY ? tMaxX : tMaxY);
 
+
             if (dx > 0 && Math.Abs(dx) > Math.Abs(dy))
                 localStartX -= Screen.Setting.Tile;
             else if (dy > 0 && Math.Abs(dy) > Math.Abs(dx))
                 localStartY -= Screen.Setting.Tile;
+            else if (dx < 0 && dx > dy)
+                localStartX -= Screen.Setting.Tile / 5;
+            else if (dy < 0 && dy > dx)
+                localStartY -= Screen.Setting.Tile / 15;
 
-           // Console.WriteLine($"DX: {dx} |DY: {dy}");
 
             float localDeltaX = Math.Abs(subTileSize / dx);
             float localDeltaY = Math.Abs(subTileSize / dy);

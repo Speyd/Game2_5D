@@ -19,23 +19,6 @@ using static SFML.Graphics.Font;
 
 namespace BresenhamAlgorithm
 {
-    //class InfoObject
-    //{
-    //    public int ray;
-    //    public double carAngle;
-    //    public double depth;
-    //    public double coordinate;
-    //    public Obstacle Obstacle;
-
-    //    public InfoObject(int ray, double carAngle, double depth, double coordinate, Obstacle Obstacle)
-    //    {
-    //        this.ray = ray;
-    //        this.carAngle = carAngle;
-    //        this.depth = depth;
-    //        this.coordinate = coordinate;
-    //        this.Obstacle = Obstacle;
-    //    }
-    //}
     class InfoObject
     {
         public double depth;
@@ -84,8 +67,6 @@ namespace BresenhamAlgorithm
         private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
 
         object locker = new object();
-
-
         public void PrepareRenderObjects()
         {
             //Console.WriteLine($"uniqueSelfDrawableTypes count: {uniqueSelfDrawableTypes.Count}");
@@ -109,7 +90,10 @@ namespace BresenhamAlgorithm
                 del?.Invoke(result, entity);
             }
         }
-        private void CheckAndAddHeightObstacle(List<InfoObject> infoObject,
+
+
+
+        private void ProcessingHeightObstacle(List<InfoObject> infoObject,
             double x, double y, 
             double depth_h, double depth_v,
             double auxiliary, bool isVertical)
@@ -147,7 +131,8 @@ namespace BresenhamAlgorithm
                     throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
             }
         }
-        private bool CheckAndAddLowerObstacle(ref (IRenderable?, IRenderable?) obstacles, 
+
+        private bool ProcessingLowerObstacle(ref (IRenderable?, IRenderable?) obstacles, 
             double x, double y, 
             double depth_h, double depth_v, 
             double auxiliary, bool isVertical)
@@ -162,7 +147,7 @@ namespace BresenhamAlgorithm
 
 
             foreach (var obstacle in map.Obstacles[key])
-            {
+            { 
                 if (obstacle is ISelfRenderable self)
                 {
                     var type = self.GetType();
@@ -188,6 +173,9 @@ namespace BresenhamAlgorithm
             }
             return false;
         }
+
+
+
         List<InfoObject> FilterVisibleObstacles(List<InfoObject> info)
         {
             if (info.Count == 0) return info;
@@ -199,7 +187,7 @@ namespace BresenhamAlgorithm
 
             foreach (var item in info)
             {
-                if (current == null || (item.depth > current.depth && item.Obstacle.GetLevelHeight() > current.Obstacle.GetLevelHeight()))
+                if (current == null || (item.depth > current.depth && item.Obstacle.Z > current.Obstacle.Z))
                 {
                     filtered.Add(item);
                     current = item;
@@ -222,6 +210,7 @@ namespace BresenhamAlgorithm
                 auxiliaryA = -1;
             }
         }
+
 
         private void RenderHigherObstacles()
         {
@@ -247,7 +236,7 @@ namespace BresenhamAlgorithm
                     vy = entity.Y + depth_v * sinA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
-                        CheckAndAddHeightObstacle(InfoObject, x, vy, depth_h, depth_v, auxiliaryX, true);
+                        ProcessingHeightObstacle(InfoObject, x, vy, depth_h, depth_v, auxiliaryX, true);
                     else
                         break;
 
@@ -261,7 +250,7 @@ namespace BresenhamAlgorithm
                     hx = entity.X + depth_h * cosA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
-                        CheckAndAddHeightObstacle(InfoObject, hx, y, depth_h, depth_v, auxiliaryY, false);
+                        ProcessingHeightObstacle(InfoObject, hx, y, depth_h, depth_v, auxiliaryY, false);
                     else
                         break;
 
@@ -317,7 +306,7 @@ namespace BresenhamAlgorithm
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
                     {
-                        if (CheckAndAddLowerObstacle(ref obstacles, x, vy, depth_h, depth_v, auxiliaryX, true))
+                        if (ProcessingLowerObstacle(ref obstacles, x, vy, depth_h, depth_v, auxiliaryX, true))
                             break;
                     }
                     else
@@ -336,7 +325,7 @@ namespace BresenhamAlgorithm
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
                     {
-                        if (CheckAndAddLowerObstacle(ref obstacles, hx, y, depth_h, depth_v, auxiliaryY, false))
+                        if (ProcessingLowerObstacle(ref obstacles, hx, y, depth_h, depth_v, auxiliaryY, false))
                             break;
                     }
                     else
@@ -347,12 +336,8 @@ namespace BresenhamAlgorithm
 
                 Result result1 = new Result();
                 result1.CalculationSettingRender(entity, obstacles, ray, depth_v, depth_h, hx, vy, carAngleRay);
-
-                if (result1.obstacle is not null)
-                {
-                    lock (locker)
-                        result1.obstacle.Render(result1, entity);
-                }
+                lock (locker)
+                    result1.obstacle?.Render(result1, entity);
             });
 
             if (HasNewTypes)
@@ -364,6 +349,8 @@ namespace BresenhamAlgorithm
 
             zBuffer.Render();
         }
+
+
         public void CalculationAlgorithm(bool rayPassability = true)
         {
             if (rayPassability)
