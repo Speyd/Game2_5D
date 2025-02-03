@@ -24,9 +24,6 @@ namespace ObstacleLib.BlankWallLib
         public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
         public Color ColorFilling { get; set; }
 
-        //-------------------------Render Operation-----------------------
-        private RenderOpertion RenderOperation = new RenderOpertion();
-
         //-------------------Setting--------------------
         public override bool IsSingleAddable { get; init; } = true;
 
@@ -46,7 +43,32 @@ namespace ObstacleLib.BlankWallLib
         }
         #endregion
 
+
+         #region IMiniMapRenderable_Implementation
+        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        {
+            rectangleShape.OutlineThickness = OutlineThickness;
+            rectangleShape.FillColor = ColorInMap;
+        }
+        public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
+        public override Vector2f ConversionToMapCoordinates(float mapTile)
+        {
+            float x = (float)X / Screen.Setting.Tile * mapTile;
+            float y = (float)Y / Screen.Setting.Tile * mapTile;
+
+            return new Vector2f(x, y);
+        }
+        #endregion
+
         #region IRenderable_Implementation
+        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        {
+            float positionX = GetRayScreenX(result.Ray);
+            float positionY = NormalizeYPosition(entity.VerticalAngle, (float)result.ProjHeight / 2);
+
+            return new Vector2f(positionX, positionY);
+        }
+
         public override void BlackoutObstacle(double depth)
         {
             byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
@@ -57,12 +79,7 @@ namespace ObstacleLib.BlankWallLib
 
             ColorFilling = new Color(red, green, blue);
         }
-        public override void FillingMiniMapShape(RectangleShape rectangleShape)
-        {
-            rectangleShape.OutlineThickness = 1;
-            rectangleShape.FillColor = ColorInMap;
-        }
-        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
+        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
                 return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
@@ -73,15 +90,14 @@ namespace ObstacleLib.BlankWallLib
                 return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
-        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
         #endregion
 
         #region IWall_Implementation
 
-        public double GetNominalHeight() => Screen.Setting.Tile;
-        public override double GetZCoordinate(Entity entity) => Z;
+        public override double GetCollisionZ(Entity entity) => Z;
+        public override double GetZCoordinate() => Z;
 
-        public float CalcCooX(double ray)
+        public float GetRayScreenX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
         }
@@ -97,7 +113,12 @@ namespace ObstacleLib.BlankWallLib
             Top = Y;
             Bottom = Y + Screen.Setting.Tile;
         }
-       
+
+        public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
+        {
+            if (depth < maxDepth)
+                infoObject.Add(new InfoObject(depth, coordinate, this));
+        }
         public override void Render(Result result, Entity entity)
         {
             BlackoutObstacle(result.Depth);
@@ -106,7 +127,7 @@ namespace ObstacleLib.BlankWallLib
             RenderOperation.UpdateVertices(
                 this, renderWall,
                 RenderOperation.CalculationBlockScale(result),
-                RenderOperation.CalculationBlockPosition(this, result, entity)
+                GetCoordintePositionOnScreen(result, entity)
                 );
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using DataPipes.Pool;
 using EntityLib;
 using Render.InterfaceRender;
 using Render.RenderInterface;
@@ -15,7 +16,9 @@ namespace Render
     {
         public static string NameRenderFun { get; } = "RenderSelfDrawableList";
 
-        public void AddObstacleToRenderList();
-        public static abstract void RenderSelfDrawableList(Result result, Entity entity);
+        void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes);
+
+        void AddObstacleToRenderList();
+        static abstract void RenderSelfDrawableList(Result result, Entity entity);
     }
 }

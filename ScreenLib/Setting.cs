@@ -8,15 +8,15 @@ namespace ScreenLib.SettingScreen
 {
     public class Setting
     {
+        public int Tile { get; } = 100;
+
         public int HalfWidth { get; private set; }
         public int HalfHeight { get; private set; }
-        public int Tile { get; init; }// 100;
         public int AmountRays { get; private set; }
-        //public int MaxDepth { get; init; } // 800
         public int Scale { get; private set; }
         public int CenterRay { get; private set; }
 
-        public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800, int tile = 100)
+        public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800)
         {
             if (ScreenWidth <= 0 || ScreenHeight <= 0)
                 throw new Exception("Error builder 'Setting'");
@@ -28,8 +28,6 @@ namespace ScreenLib.SettingScreen
             AmountRays = amountRays <= 0 ? ScreenWidth :
                 amountRays > ScreenWidth ? throw new Exception("Amount ray more ScreenWidth"):
                 amountRays;
-
-            Tile = tile <= 0 ? 100 : tile;
 
             Scale = ScreenWidth / AmountRays;
 

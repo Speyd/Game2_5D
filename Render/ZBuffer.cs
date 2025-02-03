@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,15 +13,23 @@ namespace Render.ZBufferRender
 {
     public class ZBuffer
     {
-        private static SortedList<double, Drawable> zBuffer = new SortedList<double, Drawable>(Comparer<double>.Create((x, y) => y.CompareTo(x)));
-        static object temp = new object();
+        private static ConcurrentDictionary<double, Drawable> zBuffer = new ConcurrentDictionary<double, Drawable>();
+        static object lockObj = new object();
         
         public void Render()
         {
-            foreach (var drawable in zBuffer.Values)
+            List<KeyValuePair<double, Drawable>> sortedList;
+
+            lock (lockObj)
             {
-                Screen.OutputPriority.AddToPriority(2, drawable);
+                sortedList = zBuffer.OrderByDescending(kv => kv.Key).ToList();
             }
+
+            foreach (var kv in sortedList)
+            {
+                Screen.OutputPriority.AddToPriority(2, kv.Value);
+            }
+
             zBuffer.Clear();
         }
 

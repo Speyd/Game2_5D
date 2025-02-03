@@ -1089,6 +1089,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "DataPipes": "1.0.0",
           "MapLib": "1.0.0",
           "Render": "1.0.0"
         },
@@ -1115,6 +1116,16 @@
         },
         "runtime": {
           "bin/placeholder/ControlLib.dll": {}
+        }
+      },
+      "DataPipes/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/DataPipes.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataPipes.dll": {}
         }
       },
       "DrawLib/1.0.0": {
@@ -1259,6 +1270,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "DataPipes": "1.0.0",
           "EntityLib": "1.0.0",
           "OpenTK": "4.9.3",
           "ScreenLib": "1.0.0",
@@ -1304,24 +1316,14 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "ScreenLib": "1.0.0",
-          "UniqueDictionaryLib": "1.0.0"
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
         },
         "compile": {
           "bin/placeholder/TextureLib.dll": {}
         },
         "runtime": {
           "bin/placeholder/TextureLib.dll": {}
-        }
-      },
-      "UniqueDictionaryLib/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v8.0",
-        "compile": {
-          "bin/placeholder/UniqueDictionaryLib.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/UniqueDictionaryLib.dll": {}
         }
       }
     }
@@ -1930,6 +1932,11 @@
       "path": "../ControlLib/ControlLib.csproj",
       "msbuildProject": "../ControlLib/ControlLib.csproj"
     },
+    "DataPipes/1.0.0": {
+      "type": "project",
+      "path": "../DataPipes/DataPipes.csproj",
+      "msbuildProject": "../DataPipes/DataPipes.csproj"
+    },
     "DrawLib/1.0.0": {
       "type": "project",
       "path": "../DrawLib/DrawLib.csproj",
@@ -1994,11 +2001,6 @@
       "type": "project",
       "path": "../TextureLib/TextureLib.csproj",
       "msbuildProject": "../TextureLib/TextureLib.csproj"
-    },
-    "UniqueDictionaryLib/1.0.0": {
-      "type": "project",
-      "path": "../UniqueDictionaryLib/UniqueDictionaryLib.csproj",
-      "msbuildProject": "../UniqueDictionaryLib/UniqueDictionaryLib.csproj"
     }
   },
   "projectFileDependencyGroups": {

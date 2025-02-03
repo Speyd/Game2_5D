@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataPipes\DataPipes.csproj" />
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
     <ProjectReference Include="..\TextureLib\TextureLib.csproj" />

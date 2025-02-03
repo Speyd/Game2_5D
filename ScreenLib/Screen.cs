@@ -94,13 +94,33 @@ namespace ScreenLib
 
 
         //-------------Base Dimensions Screen-------------
-        public static int BaseScreenHeight { get; } = 1000;
-        public static int BaseScreenWidth { get; } = 1500;
+        public const int BaseScreenHeight = 1000;
+        public const int BaseScreenWidth = 1500;
 
 
         //-------------------------------------
-        public static float MultWidth { get; set; } = 1;
-        public static float MultHeight { get; set; }
+        static float _multWidth = 1;
+        public static float MultWidth 
+        { 
+            get => _multWidth; 
+            private set
+            {
+                _multWidth = value;
+                ScreenRatio = _multHeight / value;
+            } 
+        }
+        static float _multHeight = 1;
+        public static float MultHeight
+        {
+            get => _multHeight;
+            private set
+            {
+                _multHeight = value;
+                ScreenRatio = value / _multWidth;
+            }
+        }
+        public static float ScreenRatio { get; private set; } = 1;
+
         public static uint FPS_Limit { get; set; } = 60;
 
         //----------------------------Priority Draw--------------------------------

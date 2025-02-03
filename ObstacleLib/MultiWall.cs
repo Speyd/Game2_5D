@@ -1,5 +1,7 @@
 ﻿using EntityLib;
 using ObstacleLib.TexturedWallLib;
+using ObstacleLib.TexturedWallLib.Render;
+using Render;
 using Render.InterfaceRender;
 using Render.RenderInterface;
 using Render.ResultAlgorithm;
@@ -17,6 +19,12 @@ namespace ObstacleLib
 {
     public class MultiWall : Obstacle, IDrawable, IRayRenderable
     {
+        public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
+        {
+            if (depth < maxDepth)
+                infoObject.Add(new InfoObject(depth, coordinate, this));
+        }
+
         //-------------------------Wall-------------------------
         public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
         private int CurrentLevelWall { get; set; } = 0;
@@ -117,11 +125,8 @@ namespace ObstacleLib
 
         #endregion
 
-        #region IRenderable_Implementation
-        public override void BlackoutObstacle(double depth) {}
-        public override float NormalizePositionY(double angleVertical, float addVariable = 0) => 0;
-        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset;
-        public override void FillingMiniMapShape(RectangleShape rectangleShape)
+        #region IMiniMapRenderable_Implementation
+        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
         {
             if (Walls.Count > 0)
             {
@@ -138,17 +143,25 @@ namespace ObstacleLib
             }
 
             rectangleShape.FillColor = ColorInMap;
+        }
+        public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
+        public override Vector2f ConversionToMapCoordinates(float mapTile)
+        {
+            float x = (float)X / Screen.Setting.Tile * mapTile;
+            float y = (float)Y / Screen.Setting.Tile * mapTile;
 
+            return new Vector2f(x, y);
         }
         #endregion
 
-
-        public override double GetZCoordinate(Entity entity)
+        #region IRenderable_Implementation
+        public override void BlackoutObstacle(double depth) {}
+        public override double GetCollisionZ(Entity entity)
         {
-            if(Z <= entity.Z)
+            if (Z <= entity.Z)
                 return Z;
 
-            for(int lvl = 1; lvl <= Walls.Count; lvl++)
+            for (int lvl = 1; lvl <= Walls.Count; lvl++)
             {
                 double lvlWall = lvl * Screen.Setting.Tile;
 
@@ -160,12 +173,33 @@ namespace ObstacleLib
 
             return Z;
         }
+        public override double GetZCoordinate() => Z;
+
+        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
+        {
+            if (angleVertical <= 0)
+                return (float)((Screen.Setting.HalfHeight) * (1 + 1 * -angleVertical));
+            else
+                return (float)((Screen.Setting.HalfHeight) / (1 + 1 * angleVertical));
+        }
+        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        {
+            if (Walls.Count == 0)
+                return new Vector2f();
+
+            TexturedWall? lastWall = Walls.LastOrDefault();
+            return lastWall is not null? lastWall.GetCoordintePositionOnScreen(result, entity): new Vector2f();
+        }
+        #endregion
+
+
         public override void Render(Result result, Entity entity)
         {
-            foreach (var wall in Walls) 
+            foreach (var wall in Walls)
                 wall.Render(result, entity);
         }
      
+
 
         public void AddLevelWall(TexturedWall wall)
         {

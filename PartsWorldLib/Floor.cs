@@ -28,7 +28,7 @@ namespace PartsWorldLib
 
 
         public float Scale { get; set; } = 0.2f;
-        public int Raising { get; set; } = 3;
+        public int Raising { get; set; } = 2;
         public float DivisionCoefficient { get; set; } = 2.1f;
         public float NormalAngleGreaterZero { get; set; } = 1.8f;
         public float MaxDivisionCoefficient { get; set; } = 3;

@@ -3,6 +3,7 @@ using EntityLib.Player;
 using MapLib;
 using ObstacleLib;
 using Render.InterfaceRender;
+using Render.RenderInterface;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
@@ -19,7 +20,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
     {
         //----------Setting------------
         private SettingMap.Setting Setting { get; init; }
-        private delegate void Render(RenderTexture Window, IRenderable obstacle, float sizeNormalization);
+        private delegate void Render(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization);
 
 
         //---------------Render Mode----------------
@@ -95,15 +96,15 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         #endregion
 
 
-        private void SetRectangleShape(RenderTexture Window, IRenderable obstacle, float sizeNormalization)
+        private void SetRectangleShape(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
         {
             RectangleShape = new RectangleShape();
             RectangleShape.Size = new Vector2f(sizeNormalization, sizeNormalization);
 
-            obstacle.FillingMiniMapShape(RectangleShape);
+            obstacle.FillingShape(RectangleShape);
 
 
-            sizeNormalization = obstacle.CoordinatesObjectOffsetOnMap(sizeNormalization);
+            sizeNormalization = obstacle.CoordinatesOffsetMap(sizeNormalization);
             RectangleShape.Position = new Vector2f(
                 (float)(Setting.CenterX - (MapObstacle.X - MapPlayer.X) - sizeNormalization),
                 (float)(Setting.CenterY - (MapObstacle.Y - MapPlayer.Y) - sizeNormalization)
@@ -112,14 +113,14 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         }
 
 
-        private void RenderSpecificArea(RenderTexture Window, IRenderable obstacle, float sizeNormalization)
+        private void RenderSpecificArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
         {
             double distance = Math.Sqrt(Math.Pow(MapObstacle.X - MapPlayer.X, 2) + Math.Pow(MapObstacle.Y - MapPlayer.Y, 2));
 
             if (distance <= Player.MaxRayMapDistance)
                 SetRectangleShape(Window, obstacle, sizeNormalization);
         }
-        private void RenderEntireArea(RenderTexture Window, IRenderable obstacle, float sizeNormalization)
+        private void RenderEntireArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
         {
             SetRectangleShape(Window, obstacle, sizeNormalization);
         }
@@ -141,7 +142,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
 
             return Math.Atan2(dy, dx);
         }
-        private void RenderPlayersVisibilityArea(RenderTexture Window, IRenderable obstacle, float sizeNormalization)
+        private void RenderPlayersVisibilityArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
         {
             double angleToObstacle = NormalizationAngle(CalculationObstacleAngle());
 
@@ -160,7 +161,7 @@ namespace MiniMapLib.ObjectInMap.Obstacles
                 float sizeNormalization = Setting.MapTile / obstacles.Count;
                 foreach (var obstacle in obstacles)
                 {
-                    SetMapCoordinatesObstacle(obstacle);
+                    MapObstacle = obstacle.ConversionToMapCoordinates(Setting.MapTile);
 
                     RenderDelegate(Window, obstacle, sizeNormalization);
                 }

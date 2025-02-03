@@ -28,17 +28,17 @@ namespace ObstacleLib.SpriteLib.Hitbox
         }
 
 
-        private static double CalculateMultTop(SpriteObstacle sprite, double multTexture)
+        private static double CalculateMultTop(SpriteObstacle sprite, double multTexture, double distance)
         {
-            double mult = TopAdjustmentFactor * Screen.MultHeight / Screen.MultWidth;
-            mult += sprite.Z / 100 + multTexture / 10;
+            double mult = TopAdjustmentFactor * Screen.ScreenRatio;
+            mult += sprite.RatioZ / Screen.Setting.Tile + multTexture / 10 + distance / Screen.Setting.Tile;
 
             return mult;
         }
-        private static double CalculateMultBottom(SpriteObstacle sprite, double multTexture)
+        private static double CalculateMultBottom(SpriteObstacle sprite, double multTexture, double distance)
         {
-            double mult = BottomAdjustmentFactor * Screen.MultHeight / Screen.MultWidth;
-            mult = mult - sprite.Z / 100 * 2 - multTexture / 10;
+            double mult = BottomAdjustmentFactor * Screen.ScreenRatio;
+            mult = mult - sprite.RatioZ / Screen.Setting.Tile * 2 - multTexture / 10 + distance / Screen.Setting.Tile;
 
             return mult;
         }
@@ -54,42 +54,20 @@ namespace ObstacleLib.SpriteLib.Hitbox
                 return true;
 
             double multTexture = IRayPassability.BaseRayPassObjectHeight / sprite.CurrentRenderTexture.Height;
-            double distance = Math.Sqrt(Math.Pow(sprite.X - entity.X, 2) + Math.Pow(sprite.Y - entity.Y, 2)) / Screen.Setting.Tile;  
-            
+            double distance = Math.Sqrt(Math.Pow(sprite.X - entity.X, 2) + Math.Pow(sprite.Y - entity.Y, 2)) / Screen.Setting.Tile;
 
-            double Bottom = (sprite.Z - sprite.Scale / 2) / distance;
-            double Top = (sprite.Z + sprite.Scale / 2) / distance;
+            double Bottom = (sprite.RatioZ - sprite.Scale / 2) / distance;
+            double Top = (sprite.RatioZ + sprite.Scale / 2) / distance;
 
-            //double Z_ray = -entity.VerticalAngle * distance - sprite.Z / 100;
-            //double multTop = 1.2 * Screen.MultHeight / Screen.MultWidth + sprite.Z / 100 + multTexture / 10;
-            //double multBottom = 0.1 * Screen.MultHeight / Screen.MultWidth - sprite.Z / 100 * 2 - multTexture / 10;
+            double angleEntity = -entity.VerticalAngle * distance - sprite.RatioZ / 100;
 
-            //double aTop = Top - multTop + Z_ray;
-            //double aBottom = Bottom + multBottom + Z_ray;
-            double angleEntity = -entity.VerticalAngle * distance - sprite.Z / 100;
-
-            double multTop = CalculateMultTop(sprite, multTexture);
-            double multBottom = CalculateMultBottom(sprite, multTexture);
+            double multTop = CalculateMultTop(sprite, multTexture, distance);
+            double multBottom = CalculateMultBottom(sprite, multTexture, distance);
 
             double rayHitTop = CalculateRayHitBounds(Top, -multTop, angleEntity);
             double rayHitBottom = CalculateRayHitBounds(Bottom, multBottom, angleEntity);
 
-
-            //Console.WriteLine($"\nTop: {Top}");
-            //Console.WriteLine($"Bottom: {Bottom}");
-            //Console.WriteLine($"-----------------------------------");
-            //Console.WriteLine($"multTexture: {multTexture}");
-            //Console.WriteLine($"multBottom: {multBottom}");
-            //Console.WriteLine($"aTop: {aTop}");
-            //Console.WriteLine($"aBottom: {aBottom}");
-            //Console.WriteLine($"Angle: {Z_ray}");
-
-            //return (aBottom >= Bottom) && (aTop <= Top);
             return (rayHitBottom >= Bottom) && (rayHitTop <= Top);
-            //if (playerBottomAngle >= Bottom && playerTopAngle <= Top)
-            //    return true;
-            //else
-            //    return false;
         }
     }
 }

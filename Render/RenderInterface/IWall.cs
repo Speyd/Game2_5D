@@ -9,7 +9,7 @@ namespace Render.RenderInterface
 {
     public interface IWall : IRayRenderable
     {
-        float CalcCooX(double ray);
-        double GetNominalHeight();
+        //new int GetCoordintePositionOnScreen();
+        float GetRayScreenX(double ray);
     }
 }

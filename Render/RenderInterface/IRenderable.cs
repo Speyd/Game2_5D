@@ -9,6 +9,8 @@ using ScreenLib;
 using EntityLib;
 using Render.ResultAlgorithm;
 using Render.RenderInterface;
+using SFML.System;
+using DataPipes.Pool;
 
 namespace Render.InterfaceRender
 {
@@ -17,10 +19,14 @@ namespace Render.InterfaceRender
         public const double shadowMultiplier = 0.00001;
 
 
+        void ProcessForRendering()
+        {
+            throw new NotImplementedException("This method should be implemented in a derived interface");
+        }
         void BlackoutObstacle(double depth);
-        void FillingMiniMapShape(RectangleShape rectangleShape);
         void Render(Result result, Entity entity);
-        float NormalizePositionY(double angleVertical, float addVariable = 0);
-        float CoordinatesObjectOffsetOnMap(float baseOffset);
+        float NormalizeYPosition(double angleVertical, float addVariable = 0);
+        double GetZCoordinate();
+        Vector2f GetCoordintePositionOnScreen(Result result, Entity entity);
     }
 }

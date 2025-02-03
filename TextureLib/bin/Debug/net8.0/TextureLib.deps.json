@@ -8,8 +8,8 @@
     ".NETCoreApp,Version=v8.0": {
       "TextureLib/1.0.0": {
         "dependencies": {
-          "ScreenLib": "1.0.0",
-          "UniqueDictionaryLib": "1.0.0"
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
         },
         "runtime": {
           "TextureLib.dll": {}
@@ -973,6 +973,14 @@
           }
         }
       },
+      "DataPipes/1.0.0": {
+        "runtime": {
+          "DataPipes.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ScreenLib/1.0.0": {
         "dependencies": {
           "NGenerics": "1.5.3",
@@ -980,14 +988,6 @@
         },
         "runtime": {
           "ScreenLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "UniqueDictionaryLib/1.0.0": {
-        "runtime": {
-          "UniqueDictionaryLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1050,12 +1050,12 @@
       "path": "sfml.window/2.6.0",
       "hashPath": "sfml.window.2.6.0.nupkg.sha512"
     },
-    "ScreenLib/1.0.0": {
+    "DataPipes/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
-    "UniqueDictionaryLib/1.0.0": {
+    "ScreenLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

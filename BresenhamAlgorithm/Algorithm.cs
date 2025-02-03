@@ -15,25 +15,21 @@ using ObstacleLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using DataPipes.Pool;
+
 using static SFML.Graphics.Font;
+using static SFML.Window.Joystick;
 
 namespace BresenhamAlgorithm
-{
-    class InfoObject
-    {
-        public double depth;
-        public double coordinate;
-        public Obstacle Obstacle;
-
-        public InfoObject(double depth, double coordinate, Obstacle Obstacle)
-        {
-            this.depth = depth;
-            this.coordinate = coordinate;
-            this.Obstacle = Obstacle;
-        }
-    }
+{  
     public class Algorithm(Map map, Entity entity, Result result, ZBuffer zBuffer)
     {
+        //------------------------------Pool-------------------------------
+        static ObjectPool<Result> resultobjectPool = new ObjectPool<Result>();
+        static ListPool<InfoObject> infoObjectPool = new ListPool<InfoObject>();
+
+
+        //------------------------------Maximum Beam Ray-------------------------------
         static int _maxVertical = 1200;
         static int MaxVerticalDistance 
         {
@@ -58,15 +54,13 @@ namespace BresenhamAlgorithm
             }
         }
 
-        //--------------------------Object Selection--------------------------
-        //private ValueTuple<IRenderable?, IRenderable?> obstacles = (null, null);
 
         //------------------------------Setting Render-------------------------------
         private HashSet<Type> UniqueSelfDrawableTypes { get; init; } = new HashSet<Type>();
-        private bool HasNewTypes { get; set; } = false;
         private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
 
-        object locker = new object();
+        private bool HasNewTypes = false;
+
         public void PrepareRenderObjects()
         {
             //Console.WriteLine($"uniqueSelfDrawableTypes count: {uniqueSelfDrawableTypes.Count}");
@@ -93,50 +87,12 @@ namespace BresenhamAlgorithm
 
 
 
-        private void ProcessingHeightObstacle(List<InfoObject> infoObject,
+        private bool ProcessingHeightObstacle(List<InfoObject> infoObject,
             double x, double y, 
             double depth_h, double depth_v,
             double auxiliary, bool isVertical)
         {
-            double mappedX = isVertical ? x + auxiliary : x;
-            double mappedY = isVertical ? y : y + auxiliary;
-
-
-            var key = Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile);
-            if (!map.Obstacles.ContainsKey(key))
-                return;
-
-
-            foreach (var obstacle in map.Obstacles[key])
-            {
-                if (obstacle is ISelfRenderable self)
-                {
-                    var type = self.GetType();
-                    if (!UniqueSelfDrawableTypes.Contains(type))
-                    {
-                        UniqueSelfDrawableTypes.Add(type);
-                        HasNewTypes = true;
-                    }
-                    self.AddObstacleToRenderList();
-                    continue;
-                }
-                else if (obstacle is IRayRenderable)
-                {
-                    if (isVertical && depth_v < MaxVerticalDistance)
-                        infoObject.Add(new InfoObject(depth_v, y, obstacle));
-                    else if (!isVertical && depth_h < MaxHorizontalDistance)
-                        infoObject.Add(new InfoObject(depth_h, x, obstacle));
-                }
-                else
-                    throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
-            }
-        }
-
-        private bool ProcessingLowerObstacle(ref (IRenderable?, IRenderable?) obstacles, 
-            double x, double y, 
-            double depth_h, double depth_v, 
-            double auxiliary, bool isVertical)
-        {
+            bool isAdded = false;
             double mappedX = isVertical ? x + auxiliary : x;
             double mappedY = isVertical ? y : y + auxiliary;
 
@@ -145,40 +101,53 @@ namespace BresenhamAlgorithm
             if (!map.Obstacles.ContainsKey(key))
                 return false;
 
+            double coordinate = 0;
+            double depth = 0;
+            double maxDepth = 0;
+            if (isVertical)
+            {
+                coordinate = y;
+                depth = depth_v;
+                maxDepth = MaxVerticalDistance;
+            }
+            else
+            {
+                coordinate = x;
+                depth = depth_h;
+                maxDepth = MaxHorizontalDistance;
+            }
+
 
             foreach (var obstacle in map.Obstacles[key])
-            { 
-                if (obstacle is ISelfRenderable self)
+            {
+                switch (obstacle)
                 {
-                    var type = self.GetType();
-                    if (!UniqueSelfDrawableTypes.Contains(type))
-                    {
-                        UniqueSelfDrawableTypes.Add(type);
-                        HasNewTypes = true;
-                    }
-                    self.AddObstacleToRenderList();
-                    continue;
-                }
-                else if (obstacle is IRayRenderable)
-                {
-                    if (isVertical && depth_v < MaxVerticalDistance)
-                        obstacles.Item1 = obstacle;
-                    else if(!isVertical && depth_h < MaxHorizontalDistance)
-                        obstacles.Item2 = obstacle;
+                    case ISelfRenderable self:
+                        self.ProcessForRendering(UniqueSelfDrawableTypes, ref HasNewTypes);
+                        break;
 
-                    return true;
+                    case IRayRenderable ray:
+                        ray.ProcessForRendering(infoObject, coordinate, depth, maxDepth); isAdded = true;
+                        break;
+
+                    default:
+                        throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
                 }
-                else
-                    throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
             }
-            return false;
+
+            return isAdded;
         }
 
-
-
-        List<InfoObject> FilterVisibleObstacles(List<InfoObject> info)
+        List<InfoObject> FilterVisibleObstacles(List<InfoObject> info, bool rayPassability)
         {
-            if (info.Count == 0) return info;
+            if ( info.Count <= 1) return info;
+            else if (rayPassability == false && info.Count == 2)
+            {
+                if (info[0].depth < info[1].depth)
+                    return new List<InfoObject> { info[0] };
+                else
+                    return new List<InfoObject> { info[1] };
+            }
 
             InfoObject? current = null;
 
@@ -187,7 +156,8 @@ namespace BresenhamAlgorithm
 
             foreach (var item in info)
             {
-                if (current == null || (item.depth > current.depth && item.Obstacle.Z > current.Obstacle.Z))
+                if (current is null || (item.depth > current.depth &&
+                    item.Obstacle?.GetZCoordinate() > current.Obstacle?.GetZCoordinate()))
                 {
                     filtered.Add(item);
                     current = item;
@@ -196,23 +166,38 @@ namespace BresenhamAlgorithm
 
             return filtered;
         }
-        private void CheckVericals(ref double a, ref double auxiliaryA, double mapA, double ratio)
+        private void CheckVericals(ref double coordinate, ref double auxiliaryA, double mapCoordinate, double ratio)
         {
 
             if (ratio >= 0)
             {
-                a = mapA + Screen.Setting.Tile;
+                coordinate = mapCoordinate + Screen.Setting.Tile;
                 auxiliaryA = 1;
             }
             else
             {
-                a = mapA;
+                coordinate = mapCoordinate;
                 auxiliaryA = -1;
             }
         }
 
 
-        private void RenderHigherObstacles()
+
+        private void RenderRayObstacles(int ray, bool rayPassability, double carAngleRay, List<InfoObject> InfoObject, Result ParallelResult)
+        {
+            var visibleObstacles = FilterVisibleObstacles(InfoObject, rayPassability);
+
+            int sizeVisibleObst = visibleObstacles.Count;
+            for (int obst = 0; obst < sizeVisibleObst; obst++)
+            {
+                if (obst > 0 && sizeVisibleObst > 1)
+                    ParallelResult.PositionPreviousObject = visibleObstacles[obst - 1].Obstacle?.GetCoordintePositionOnScreen(ParallelResult, entity);
+
+                ParallelResult.CalculationSettingRender(entity, ray, visibleObstacles[obst].depth, visibleObstacles[obst].coordinate, carAngleRay);
+                visibleObstacles[obst].Obstacle?.Render(ParallelResult, entity);
+            }
+        }
+        public void CalculationAlgorithm(bool rayPassability = true)
         {
             double carAngle = entity.Angle - entity.HalfFov;
 
@@ -220,23 +205,28 @@ namespace BresenhamAlgorithm
 
             Parallel.For(0, Screen.Setting.AmountRays, ray =>
             {
+                var ParallelResult = resultobjectPool.Get();
+                var ParallelInfoObj = infoObjectPool.Get();
+
                 double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
                 double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
 
                 double carAngleRay = carAngle + ray * entity.DeltaAngle;
-
                 double sinA = Math.Sin(carAngleRay);
                 double cosA = Math.Cos(carAngleRay);
-                List<InfoObject> InfoObject = new List<InfoObject> { };
+             
 
                 CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
-                for (int j = 0; j < MaxVerticalDistance; j++)
+                for (int j = 0; j < MaxVerticalDistance; j++) 
                 {
                     depth_v = (x - entity.X) / cosA;
                     vy = entity.Y + depth_v * sinA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
-                        ProcessingHeightObstacle(InfoObject, x, vy, depth_h, depth_v, auxiliaryX, true);
+                    {
+                        if(ProcessingHeightObstacle(ParallelInfoObj, x, vy, depth_h, depth_v, auxiliaryX, true) && !rayPassability)
+                            break;
+                    }
                     else
                         break;
 
@@ -250,95 +240,21 @@ namespace BresenhamAlgorithm
                     hx = entity.X + depth_h * cosA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
-                        ProcessingHeightObstacle(InfoObject, hx, y, depth_h, depth_v, auxiliaryY, false);
+                    {
+                        if (ProcessingHeightObstacle(ParallelInfoObj, hx, y, depth_h, depth_v, auxiliaryY, false) && !rayPassability)
+                            break;
+                    }
                     else
                         break;
 
                     y += auxiliaryY * Screen.Setting.Tile;
                 };
 
-                Result result1 = new Result();      
-                foreach (var obstacle in FilterVisibleObstacles(InfoObject))
-                {
-                    result1.CalculationSettingRender(entity, ray, obstacle.depth, obstacle.coordinate, carAngleRay);
 
-                    lock(locker)
-                        obstacle.Obstacle.Render(result1, entity);
-                }
+                RenderRayObstacles(ray, rayPassability, carAngleRay, ParallelInfoObj, ParallelResult);
+                resultobjectPool.Return(ParallelResult);
             });
-           
-            if (HasNewTypes)
-            {
-                PrepareRenderObjects();
-                HasNewTypes = false;
-            }
 
-            CachedDelegates.ForEach(cd => cd.Value(result, entity));
-
-            zBuffer.Render();
-        }
-        private void RenderLowerObstacles()
-        {
-            double carAngle = entity.Angle - entity.HalfFov;
-
-
-            var coordinates = Screen.Mapping(entity.X, entity.Y);
-
-
-            Parallel.For(0, Screen.Setting.AmountRays, ray =>
-            {
-                ValueTuple<IRenderable?, IRenderable?> obstacles = (null, null);
-
-
-                double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
-                double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
-
-                double carAngleRay = carAngle + ray * entity.DeltaAngle;
-
-                double sinA = Math.Sin(carAngleRay);
-                double cosA = Math.Cos(carAngleRay);
-
-                CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
-                for (int j = 0; j < MaxVerticalDistance; j += Screen.Setting.Tile)
-                {
-                    depth_v = (x - entity.X) / cosA;
-                    vy = entity.Y + depth_v * sinA;
-
-                    if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
-                    {
-                        if (ProcessingLowerObstacle(ref obstacles, x, vy, depth_h, depth_v, auxiliaryX, true))
-                            break;
-                    }
-                    else
-                        break;
-
-                    x += auxiliaryX * Screen.Setting.Tile;
-                }
-
-
-                CheckVericals(ref y, ref auxiliaryY, coordinates.Item2, sinA);
-                for (int j = 0; j < MaxHorizontalDistance; j += Screen.Setting.Tile)
-                {
-
-                    depth_h = (y - entity.Y) / sinA;
-                    hx = entity.X + depth_h * cosA;
-
-                    if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
-                    {
-                        if (ProcessingLowerObstacle(ref obstacles, hx, y, depth_h, depth_v, auxiliaryY, false))
-                            break;
-                    }
-                    else
-                        break;
-
-                    y += auxiliaryY * Screen.Setting.Tile;
-                }
-
-                Result result1 = new Result();
-                result1.CalculationSettingRender(entity, obstacles, ray, depth_v, depth_h, hx, vy, carAngleRay);
-                lock (locker)
-                    result1.obstacle?.Render(result1, entity);
-            });
 
             if (HasNewTypes)
             {
@@ -346,17 +262,7 @@ namespace BresenhamAlgorithm
                 HasNewTypes = false;
             }
             CachedDelegates.ForEach(cd => cd.Value(result, entity));
-
             zBuffer.Render();
-        }
-
-
-        public void CalculationAlgorithm(bool rayPassability = true)
-        {
-            if (rayPassability)
-                RenderHigherObstacles();
-            else
-                RenderLowerObstacles();
         }
     }
 }

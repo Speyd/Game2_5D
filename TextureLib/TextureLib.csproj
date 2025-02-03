@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DataPipes\DataPipes.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
-    <ProjectReference Include="..\UniqueDictionaryLib\UniqueDictionaryLib.csproj" />
   </ItemGroup>
 
 </Project>

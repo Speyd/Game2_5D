@@ -19,7 +19,6 @@ D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\Render.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextField.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextureLib.dll
-D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\UniqueDictionaryLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\DrawLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EntityLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\MapLib.pdb
@@ -32,9 +31,10 @@ D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\RayTracingLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\Render.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\ScreenLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\TextureLib.pdb
-D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\UniqueDictionaryLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.csproj.Up2Date
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\refint\ControlLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ControlLib.pdb
 D:\C++ проекты\Game2_5D\ControlLib\obj\Debug\net8.0\ref\ControlLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\DataPipes.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\DataPipes.pdb

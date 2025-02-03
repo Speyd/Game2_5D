@@ -41,7 +41,7 @@ using ObstacleLib;
 using ObstacleLib.SpriteLib.Hitbox;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100);
-Screen.Initialize(1500, 1000);
+Screen.Initialize(1000, 800);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -206,7 +206,7 @@ TexturedWall wall2 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 TexturedWall wall3 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 TexturedWall wall4 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
-wall2.LvlWall = 3;
+//wall2.LvlWall = 3;
 //map.AddObstacle(10, 5, wall2);
 //map.AddObstacle(4, 7, wall2);
 
@@ -230,7 +230,10 @@ map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
 Player player = new Player(100);
-MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
+MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
+{
+    IsRender = false
+};
 
 
 Control control = new Control(map, mapMini.Zoom);
@@ -260,8 +263,8 @@ multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"
 map.AddObstacle(9, 5, sprite1);
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
-player.X = 800;
-player.Y = 800;
+player.X = 8 * Screen.Setting.Tile;
+player.Y = 8 * Screen.Setting.Tile;
 
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try

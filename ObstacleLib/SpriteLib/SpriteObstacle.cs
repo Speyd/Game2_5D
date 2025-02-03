@@ -26,6 +26,7 @@ using static SFML.Window.Mouse;
 using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ObstacleLib.SpriteLib.Hitbox;
+using DataPipes.Pool;
 
 namespace ObstacleLib.SpriteLib
 {
@@ -33,7 +34,7 @@ namespace ObstacleLib.SpriteLib
     {
 
         //-------------------List Sprites Render------------------
-        public static List<SpriteObstacle> SpritesToRender { get; } = new List<SpriteObstacle>();
+        public static List<SpriteObstacle> SpritesToRender { get; private set; } = new List<SpriteObstacle>();
         private bool IsAdded { get; set; } = false;
 
 
@@ -57,7 +58,7 @@ namespace ObstacleLib.SpriteLib
         private float scale = 1;
         public float Scale
         {
-            get => scale * Screen.MultHeight / Screen.MultWidth;
+            get => scale * Screen.ScreenRatio;
             set => scale = value == 0 ? 1 : value;
         }
 
@@ -95,19 +96,13 @@ namespace ObstacleLib.SpriteLib
         }
         #endregion
 
-        #region IRenderable_Implementation
-        public override void BlackoutObstacle(double depth)
-        {
-            byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            if (CurrentRenderTexture != null && CurrentRenderTexture.Texture != null)
-                RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
-        }
-        public override void FillingMiniMapShape(RectangleShape rectangleShape)
+        #region IMiniMapRenderable_Implementation
+        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
         {
             if (TextureInMap is not null)
                 rectangleShape.Texture = TextureInMap.Texture;
-            else if(TextureInMap is null && Textures.Count > 0)
+            else if (TextureInMap is null && Textures.Count > 0)
             {
                 TextureInMap = Textures.First();
                 rectangleShape.Texture = TextureInMap.Texture;
@@ -115,7 +110,32 @@ namespace ObstacleLib.SpriteLib
             else
                 rectangleShape.FillColor = ColorInMap;
         }
-        public override float NormalizePositionY(double angleVertical, float addVariable = 0)
+        public override float CoordinatesOffsetMap(float baseOffset) => baseOffset / 2;
+        public override Vector2f ConversionToMapCoordinates(float mapTile)
+        {
+            float x = (float)X / Screen.Setting.Tile * mapTile;
+            float y = (float)Y / Screen.Setting.Tile * mapTile;
+
+            return new Vector2f(x, y);
+        }
+        #endregion
+
+        #region IRenderable_Implementation
+        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        {
+            Distance = result.Depth;
+
+            float height = (float)(Screen.ScreenHeight / Distance * Scale);
+            return RenderOperation.GetPositionOnScreen(this, entity, height);
+        }
+        public override void BlackoutObstacle(double depth)
+        {
+            byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
+
+            if (CurrentRenderTexture != null && CurrentRenderTexture.Texture != null)
+                RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+        }
+        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
             if (angleVertical <= 0)
                 return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
@@ -126,7 +146,7 @@ namespace ObstacleLib.SpriteLib
                 return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
-        private double GetRenderX(Entity entity)
+        internal float GetXPositionOnScreen(Entity entity)
         {
             int delta_rays = (int)(Angle / entity.DeltaAngle);
             int current_ray = Screen.Setting.CenterRay + delta_rays;
@@ -136,7 +156,6 @@ namespace ObstacleLib.SpriteLib
 
             return current_ray;
         }
-        public override float CoordinatesObjectOffsetOnMap(float baseOffset) => baseOffset / 2;
         #endregion
 
         #region IRayPassability_Implementation
@@ -178,37 +197,48 @@ namespace ObstacleLib.SpriteLib
                 return;
 
             SpritesToRender.Add(this);
+            SpritesToRender = SpritesToRender
+                .OrderByDescending(sprite => sprite.Distance)
+                .ToList();
+
             IsAdded = true;
         }
         public static void RenderSelfDrawableList(Result result, Entity entity)
         {
-            var sortedSprites = SpritesToRender
-               .OrderByDescending(sprite => sprite.Distance)
-               .ToList();
-            foreach (var sprite in sortedSprites)
+            foreach (var sprite in SpritesToRender)
             {
                 sprite.Render(result, entity);
             }
         }
         #endregion
 
-        public override double GetZCoordinate(Entity entity) => Z;
+        public override double GetCollisionZ(Entity entity) => Z;
+        public override double GetZCoordinate() => Z;
+
+        public void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes)
+        {
+            var type = this.GetType();
+            if (!uniqueSelfDrawableTypes.Contains(type))
+            {
+                uniqueSelfDrawableTypes.Add(type);
+                hasNewTypes = true;
+            }
+            this.AddObstacleToRenderList();
+        }
         public override void Render(Result result, Entity entity)
         {
-            double spriteAngle = RenderOpertion.CalculationAngularDistance(this, entity);
+            double spriteAngle = RenderOperation.CalculationAngularDistance(this, entity);
             if (Distance > entity.MaxRaySpriteDistance)
                 return;
 
-            Angle = RenderOpertion.CalculationSpriteAngle(entity.Angle, spriteAngle);
+            Angle = RenderOperation.CalculationSpriteAngle(entity.Angle, spriteAngle);
 
             if (Math.Abs(Angle) <= entity.Fov)
             {
-                RenderOpertion.DefiningDesiredSprite(this, spriteAngle);
-
-                double renderX = GetRenderX(entity);
+                RenderOperation.DefiningDesiredSprite(this, spriteAngle);
                 float height = (float)(Screen.ScreenHeight / Distance * Scale);
 
-                RenderOpertion.DrawSprite(this, entity.VerticalAngle, renderX, height);
+                RenderOperation.DrawSprite(this, entity, height);
             }
             
         }        

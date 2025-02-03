@@ -63,15 +63,6 @@ namespace MapLib
                 }
             }
         }
-
-        private void AddToObstacles(Dictionary<ValueTuple<int, int>, List<Obstacle>> obst, Obstacle addObstacle, int x, int y)
-        {
-            if (!obst.ContainsKey((x, y)))
-                obst[(x, y)] = new List<Obstacle>();
-
-            obst[(x, y)].Add(addObstacle);
-        }
-
         private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)
         {
             if (!Obstacles.ContainsKey((x, y)))

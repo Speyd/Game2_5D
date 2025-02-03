@@ -22,7 +22,9 @@ namespace PartsWorldLib
         private RectangleShape RenderRectangle = new RectangleShape();
         public SFML.Graphics.Color Color { get; set; }
 
-        private const float normAngle = 180 / MathF.PI;
+        private const float normAngle = 180f / MathF.PI;
+
+
         public Sky(string texturePath = @"Resources\Image\PartsWorldTexture\SeamlessSky.jpg") 
         {
             if (!File.Exists(texturePath))

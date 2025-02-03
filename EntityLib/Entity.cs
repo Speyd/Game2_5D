@@ -106,17 +106,17 @@ namespace EntityLib
             Z = Screen.Setting.Tile;
 
 
-            X = x <= 0 ? setting.HalfWidth : x;
-            Y = y <= 0 ? setting.HalfHeight : y;
+            X = x <= 0 ? Screen.Setting.HalfWidth : x;
+            Y = y <= 0 ? Screen.Setting.HalfHeight : y;
 
 
             Angle = angle;
             VerticalAngle = verticalAngle;
-            DeltaAngle = (float)Fov / setting.AmountRays;
+            DeltaAngle = (float)Fov / Screen.Setting.AmountRays;
 
 
-            float dist = setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
-            ProjCoeff = dist * setting.Tile;
+            float dist = Screen.Setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
+            ProjCoeff = dist * Screen.Setting.Tile;
             Screen.WidthChangesFun += EntitySettingChangesFun;
 
             MaxRayMapDistance = maxDistance;

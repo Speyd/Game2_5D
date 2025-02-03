@@ -1128,6 +1128,14 @@
         }
       },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
+      "DataPipes/1.0.0": {
+        "runtime": {
+          "DataPipes.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "EntityLib/1.0.0": {
         "dependencies": {
           "ScreenLib": "1.0.0"
@@ -1182,6 +1190,7 @@
       },
       "Render/1.0.0": {
         "dependencies": {
+          "DataPipes": "1.0.0",
           "EntityLib": "1.0.0",
           "OpenTK": "4.9.3",
           "ScreenLib": "1.0.0",
@@ -1208,8 +1217,8 @@
       },
       "TextureLib/1.0.0": {
         "dependencies": {
-          "ScreenLib": "1.0.0",
-          "UniqueDictionaryLib": "1.0.0"
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
         },
         "runtime": {
           "TextureLib.dll": {
@@ -1218,10 +1227,10 @@
           }
         }
       },
-      "UniqueDictionaryLib/1.0.0": {
+      "UniqueDictionaryLib/1.0.0.0": {
         "runtime": {
           "UniqueDictionaryLib.dll": {
-            "assemblyVersion": "1.0.0",
+            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -1374,6 +1383,11 @@
       "path": "system.runtime.compilerservices.unsafe/6.0.0",
       "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     },
+    "DataPipes/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "EntityLib/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1409,8 +1423,8 @@
       "serviceable": false,
       "sha512": ""
     },
-    "UniqueDictionaryLib/1.0.0": {
-      "type": "project",
+    "UniqueDictionaryLib/1.0.0.0": {
+      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

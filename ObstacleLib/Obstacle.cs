@@ -3,12 +3,14 @@ using Render.InterfaceRender;
 using Render.ResultAlgorithm;
 using EntityLib;
 using ScreenLib;
+using SFML.System;
+using Render.RenderInterface;
 
 namespace ObstacleLib
 {
-    public abstract class Obstacle : IRenderable
+    public abstract class Obstacle : IRenderable, IMiniMapRenderable
     {
-        public Action<Obstacle, double, double> OnPositionChanged;
+        public Action<Obstacle, double, double>? OnPositionChanged;
 
 
         //---------------------Coordinates-----------------------
@@ -46,7 +48,19 @@ namespace ObstacleLib
         public virtual double Z
         {
             get => _z;
-            set => _z = value * Screen.MultHeight / Screen.MultWidth;
+            set
+            {
+                _z = value;
+                RatioZ = value;
+            }
+
+        }
+
+        public double _ratioZ;
+        public double RatioZ 
+        {
+            get => _ratioZ;
+            private set => _ratioZ = value * Screen.ScreenRatio;
         }
 
         public int OriginX { get; private set; }
@@ -153,15 +167,17 @@ namespace ObstacleLib
 
 
 
-        //public abstract bool Collision(double x, double y, double playerSide);
         public abstract void BlackoutObstacle(double depth);
-        public abstract void FillingMiniMapShape(RectangleShape rectangleShape);
         public abstract void Render(Result result, Entity entity);
-        public abstract float NormalizePositionY(double angleVertical, float addVariable = 0);
-        public abstract void UpdateAdditionalInformation(double x, double y);//Update shift, sides
-        public abstract float CoordinatesObjectOffsetOnMap(float baseOffset);
-        public abstract double GetZCoordinate(Entity entity);
+        public abstract float NormalizeYPosition(double angleVertical, float addVariable = 0);
+        public abstract void UpdateAdditionalInformation(double x, double y);
+        public abstract double GetCollisionZ(Entity entity);
+        public abstract  double GetZCoordinate();
+        public abstract Vector2f GetCoordintePositionOnScreen(Result result, Entity entity);
 
 
+        public abstract void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1);
+        public abstract float CoordinatesOffsetMap(float baseOffset);
+        public abstract Vector2f ConversionToMapCoordinates(float mapTile);  
     }
 }

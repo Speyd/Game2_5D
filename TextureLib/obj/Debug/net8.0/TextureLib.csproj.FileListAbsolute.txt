@@ -2,9 +2,7 @@ D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\TextureLib.deps.json
 D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\TextureLib.pdb
 D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\ScreenLib.dll
-D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\UniqueDictionaryLib.dll
 D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\ScreenLib.pdb
-D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\UniqueDictionaryLib.pdb
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\TextureLib.csproj.AssemblyReference.cache
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\TextureLib.GeneratedMSBuildEditorConfig.editorconfig
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\TextureLib.AssemblyInfoInputs.cache
@@ -16,3 +14,5 @@ D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\refint\TextureLib.dll
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\TextureLib.pdb
 D:\C++ проекты\Game2_5D\TextureLib\obj\Debug\net8.0\ref\TextureLib.dll
+D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\DataPipes.dll
+D:\C++ проекты\Game2_5D\TextureLib\bin\Debug\net8.0\DataPipes.pdb

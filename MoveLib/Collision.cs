@@ -44,7 +44,7 @@ namespace MoveLib
 
             bool isCollidingX = playerRight > obstacle.Left && playerLeft < obstacle.Right;
             bool isCollidingY = playerBottom > obstacle.Top && playerTop < obstacle.Bottom;
-            bool isCollidingZ = entity.Z >= obstacle.GetZCoordinate(entity);
+            bool isCollidingZ = entity.Z >= obstacle.GetCollisionZ(entity);
 
             bool generalColliding = false;
             if ((isCollidingX && isCollidingY) == true && isCollidingZ == true)

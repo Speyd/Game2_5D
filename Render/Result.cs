@@ -7,10 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Render.InterfaceRender;
+using Render.RenderInterface;
+using DataPipes.Pool;
+using SFML.System;
 
 namespace Render.ResultAlgorithm
 {
-    public class Result
+    public class Result : IResettable
     {
         private const int textureStretchingCloseUp = 8;
 
@@ -19,63 +22,32 @@ namespace Render.ResultAlgorithm
         public double ProjHeight { get; set; } = 0;
         public double CarAngle {  get; set; } = 0;
         public int Ray { get; set; } = 0;
-        public IRenderable? obstacle { get; set; }
+        public Vector2f? PositionPreviousObject { get; set; } = null;
 
-        private void RedefinitionValues(
-            ref ValueTuple<IRenderable?, IRenderable?> obstacles,
-            ref Entity entity,
-            double depth_v, double depth_h,
-            double hx, double vy,
-            double car_angle)
+        public void CalculationSettingRender(Entity entity, int ray, double depth, double coordinate, double carAngle)
         {
-            if (depth_v < depth_h)
-            {
-                Offset = vy;
-                Depth = depth_v;
-                obstacle = obstacles.Item1;
-            }
-            else
-            {
-                Offset = hx;
-                Depth = depth_h;
-                obstacle = obstacles.Item2;
-            }
-
-
-            Depth *= Math.Cos(entity.Angle - car_angle);
-            Depth = Math.Max(Depth, 0.1);
-            
-        }
-
-        public void CalculationSettingRender(Entity entity,
-            ValueTuple<IRenderable?, IRenderable?> obstacles, int ray,
-            double depth_v, double depth_h,
-            double hx, double vy,
-            double car_angle)
-        {
-            RedefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
-
-            Ray = ray;
-            CarAngle = car_angle;
-
-            Offset = (int)Offset % Screen.Setting.Tile;
-            ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
-        }
-
-        public void CalculationSettingRender(Entity entity, int ray,double depth, double a, double car_angle)
-        {
-            // RedefinitionValues(ref obstacles, ref entity, depth_v, depth_h, hx, vy, car_angle);
-            Offset = a;
+            Offset = coordinate;
 
             Depth = depth;
-            Depth *= Math.Cos(entity.Angle - car_angle);
+            Depth *= Math.Cos(entity.Angle - carAngle);
             Depth = Math.Max(Depth, 0.1);
 
             Ray = ray;
-            CarAngle = car_angle;
+            CarAngle = carAngle;
 
             Offset = (int)Offset % Screen.Setting.Tile;
             ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
         }
+
+        public void Reset()
+        {
+            Depth = 0;
+            Offset = 0;
+            ProjHeight = 0;
+            CarAngle = 0;
+            Ray = 0;
+            PositionPreviousObject = null;
+        }
+
     }
 }
