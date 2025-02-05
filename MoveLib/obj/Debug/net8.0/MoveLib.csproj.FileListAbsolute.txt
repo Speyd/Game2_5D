@@ -28,3 +28,5 @@ D:\C++ проекты\Game2_5D\MoveLib\obj\Debug\net8.0\MoveLib.pdb
 D:\C++ проекты\Game2_5D\MoveLib\obj\Debug\net8.0\ref\MoveLib.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\DataPipes.pdb
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\HitBoxLib.dll
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\HitBoxLib.pdb

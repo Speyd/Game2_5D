@@ -71,8 +71,8 @@ namespace ObstacleLib.SpriteLib.Render
         }
         public static double CalculationAngularDistance(SpriteObstacle sprite, Entity player)
         {
-            double dx = sprite.X - player.X;
-            double dy = sprite.Y - player.Y;
+            double dx = sprite.X.Axis - player.X.Axis;
+            double dy = sprite.Y.Axis - player.Y.Axis;
 
             sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
             return Math.Atan2(dy, dx);

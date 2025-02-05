@@ -176,7 +176,7 @@ namespace TextureLib
 
         public TexturedPair? this[ObjectSide side]
         {
-            get => UniqueTexture.GetTexture(side);
+            get => UniqueTexture.GetValue(side);
         }
     }
 }

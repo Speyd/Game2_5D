@@ -15,6 +15,7 @@ using System.Numerics;
 using ObstacleLib.BlankWallLib.Render;
 using Render;
 using Render.RenderInterface;
+using HitBoxLib;
 
 namespace ObstacleLib.BlankWallLib
 {
@@ -53,8 +54,8 @@ namespace ObstacleLib.BlankWallLib
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
-            float x = (float)X / Screen.Setting.Tile * mapTile;
-            float y = (float)Y / Screen.Setting.Tile * mapTile;
+            float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
+            float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
 
             return new Vector2f(x, y);
         }
@@ -93,25 +94,22 @@ namespace ObstacleLib.BlankWallLib
         #endregion
 
         #region IWall_Implementation
-
-        public override double GetCollisionZ(Entity entity) => Z;
-        public override double GetZCoordinate() => Z;
+        public override double GetZCoordinate() => Z.Axis;
 
         public float GetRayScreenX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
         }
         #endregion
-
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            X = x;
-            Y = y;
+            HitBox[HitBoxSideType.Right]?.SetOffset(0);
+            HitBox[HitBoxSideType.Bottom]?.SetOffset(0);
+            HitBox[HitBoxSideType.DownSide]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.UpSide]?.SetOffset(Screen.Setting.Tile);
 
-            Left = X;
-            Right = X + Screen.Setting.Tile;
-            Top = Y;
-            Bottom = Y + Screen.Setting.Tile;
+            X.Axis = x;
+            Y.Axis = y;
         }
 
         public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)

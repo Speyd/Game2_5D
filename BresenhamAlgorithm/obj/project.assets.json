@@ -1049,6 +1049,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "HitBoxLib": "1.0.0",
           "ScreenLib": "1.0.0"
         },
         "compile": {
@@ -1056,6 +1057,20 @@
         },
         "runtime": {
           "bin/placeholder/EntityLib.dll": {}
+        }
+      },
+      "HitBoxLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/HitBoxLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HitBoxLib.dll": {}
         }
       },
       "MapLib/1.0.0": {
@@ -1081,6 +1096,7 @@
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
           "EntityLib": "1.0.0",
+          "HitBoxLib": "1.0.0",
           "Render": "1.0.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.6"
@@ -1653,6 +1669,11 @@
       "type": "project",
       "path": "../EntityLib/EntityLib.csproj",
       "msbuildProject": "../EntityLib/EntityLib.csproj"
+    },
+    "HitBoxLib/1.0.0": {
+      "type": "project",
+      "path": "../HitBoxLib/HitBoxLib.csproj",
+      "msbuildProject": "../HitBoxLib/HitBoxLib.csproj"
     },
     "MapLib/1.0.0": {
       "type": "project",

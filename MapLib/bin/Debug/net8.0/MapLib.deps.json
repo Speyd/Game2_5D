@@ -1140,6 +1140,7 @@
       },
       "EntityLib/1.0.0": {
         "dependencies": {
+          "HitBoxLib": "1.0.0",
           "ScreenLib": "1.0.0"
         },
         "runtime": {
@@ -1149,9 +1150,22 @@
           }
         }
       },
+      "HitBoxLib/1.0.0": {
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "HitBoxLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "ObstacleLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
+          "HitBoxLib": "1.0.0",
           "Render": "1.0.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.6"
@@ -1198,14 +1212,6 @@
         "runtime": {
           "TextureLib.dll": {
             "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "UniqueDictionaryLib/1.0.0.0": {
-        "runtime": {
-          "UniqueDictionaryLib.dll": {
-            "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
           }
         }
@@ -1368,6 +1374,11 @@
       "serviceable": false,
       "sha512": ""
     },
+    "HitBoxLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "ObstacleLib/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1385,11 +1396,6 @@
     },
     "TextureLib/1.0.0": {
       "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "UniqueDictionaryLib/1.0.0.0": {
-      "type": "reference",
       "serviceable": false,
       "sha512": ""
     }

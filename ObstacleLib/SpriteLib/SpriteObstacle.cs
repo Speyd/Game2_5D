@@ -113,8 +113,8 @@ namespace ObstacleLib.SpriteLib
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset / 2;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
-            float x = (float)X / Screen.Setting.Tile * mapTile;
-            float y = (float)Y / Screen.Setting.Tile * mapTile;
+            float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
+            float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
 
             return new Vector2f(x, y);
         }
@@ -161,8 +161,8 @@ namespace ObstacleLib.SpriteLib
         #region IRayPassability_Implementation
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            X = x;
-            Y = y;
+            X.Axis = x;
+            Y.Axis = y;
 
             ShiftCubedX = ShiftCubedX;
             ShiftCubedY = ShiftCubedY;
@@ -175,7 +175,6 @@ namespace ObstacleLib.SpriteLib
             bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(this, entity, currentRayX);
             bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(this, entity, currentRayY);
             bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, entity);
-
 
             if ((isCollidingX && isCollidingY) == true && isCollidingZ == false)
                 return false;
@@ -211,9 +210,7 @@ namespace ObstacleLib.SpriteLib
             }
         }
         #endregion
-
-        public override double GetCollisionZ(Entity entity) => Z;
-        public override double GetZCoordinate() => Z;
+        public override double GetZCoordinate() => Z.Axis;
 
         public void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes)
         {

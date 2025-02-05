@@ -85,13 +85,13 @@ namespace MiniMapLib.ObjectInMap.Obstacles
         #region Coordinates
         private void SetMapСoordinatesPlayer()
         {
-            MapPlayer.X = (int)(Player.X / Setting.MapScale);
-            MapPlayer.Y = (int)(Player.Y / Setting.MapScale);
+            MapPlayer.X = (int)(Player.X.Axis / Setting.MapScale);
+            MapPlayer.Y = (int)(Player.Y.Axis / Setting.MapScale);
         }
         private void SetMapCoordinatesObstacle(Obstacle obstacle)
         {
-            MapObstacle.X = (float)obstacle.X / Screen.Setting.Tile * Setting.MapTile;
-            MapObstacle.Y = (float)obstacle.Y / Screen.Setting.Tile * Setting.MapTile;
+            MapObstacle.X = (float)obstacle.X.Axis / Screen.Setting.Tile * Setting.MapTile;
+            MapObstacle.Y = (float)obstacle.Y.Axis / Screen.Setting.Tile * Setting.MapTile;
         }
         #endregion
 

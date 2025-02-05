@@ -812,6 +812,30 @@
           }
         }
       },
+      "DataPipes/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/DataPipes.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/DataPipes.dll": {}
+        }
+      },
+      "HitBoxLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/HitBoxLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/HitBoxLib.dll": {}
+        }
+      },
       "ScreenLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -1108,6 +1132,16 @@
         "sfml.window.nuspec"
       ]
     },
+    "DataPipes/1.0.0": {
+      "type": "project",
+      "path": "../DataPipes/DataPipes.csproj",
+      "msbuildProject": "../DataPipes/DataPipes.csproj"
+    },
+    "HitBoxLib/1.0.0": {
+      "type": "project",
+      "path": "../HitBoxLib/HitBoxLib.csproj",
+      "msbuildProject": "../HitBoxLib/HitBoxLib.csproj"
+    },
     "ScreenLib/1.0.0": {
       "type": "project",
       "path": "../ScreenLib/ScreenLib.csproj",
@@ -1116,6 +1150,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "HitBoxLib >= 1.0.0",
       "ScreenLib >= 1.0.0"
     ]
   },
@@ -1151,6 +1186,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj"
+            },
             "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
             }

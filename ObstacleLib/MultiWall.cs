@@ -14,6 +14,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
 
 namespace ObstacleLib
 {
@@ -30,14 +32,11 @@ namespace ObstacleLib
         private int CurrentLevelWall { get; set; } = 0;
 
         //-----------------------Setting----------------------
-        public override bool IsSingleAddable { get; init; } = true;      
-        public override double Z
-        {
-            get => Walls.Count * Screen.Setting.Tile;
-        }
+        public override bool IsSingleAddable { get; init; } = true;
+        private static object lockObj = new object();
 
 
-        public MultiWall() : base(0, 0, 'M', Color.Red, false) { }
+        public MultiWall() : base(0, 0, 'M', Color.Red, false) {}
         public MultiWall(List<TexturedWall> walls) 
             : base(0, 0, 'M', Color.Red, false)
         {
@@ -107,22 +106,21 @@ namespace ObstacleLib
         #endregion
 
         #region MapAdder_Implementation
+        private void UpdateHeightHitBox(double newZ)
+        {
+            HitBox[HitBoxSideType.DownSide]?.SetOffset(newZ);
+            HitBox[HitBoxSideType.UpSide]?.SetOffset(0);
+        }
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            X = x;
-            Y = y;
-        }
-        protected override void ResetXSides(double value)
-        {
-            Left = value;
-            Right = value + Screen.Setting.Tile;
-        }
-        protected override void ResetYSides(double value)
-        {
-            Top = value;
-            Bottom = value + Screen.Setting.Tile;
-        }
+            HitBox[HitBoxSideType.Left]?.SetOffset(0);
+            HitBox[HitBoxSideType.Top]?.SetOffset(0);
+            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
 
+            X.Axis = x;
+            Y.Axis = y;
+        }
         #endregion
 
         #region IMiniMapRenderable_Implementation
@@ -147,8 +145,8 @@ namespace ObstacleLib
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
-            float x = (float)X / Screen.Setting.Tile * mapTile;
-            float y = (float)Y / Screen.Setting.Tile * mapTile;
+            float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
+            float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
 
             return new Vector2f(x, y);
         }
@@ -156,24 +154,7 @@ namespace ObstacleLib
 
         #region IRenderable_Implementation
         public override void BlackoutObstacle(double depth) {}
-        public override double GetCollisionZ(Entity entity)
-        {
-            if (Z <= entity.Z)
-                return Z;
-
-            for (int lvl = 1; lvl <= Walls.Count; lvl++)
-            {
-                double lvlWall = lvl * Screen.Setting.Tile;
-
-                if (lvlWall < entity.Z)
-                    continue;
-                else
-                    return lvl * Screen.Setting.Tile;
-            }
-
-            return Z;
-        }
-        public override double GetZCoordinate() => Z;
+        public override double GetZCoordinate() => Z.Axis;
 
         public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
@@ -203,9 +184,12 @@ namespace ObstacleLib
 
         public void AddLevelWall(TexturedWall wall)
         {
-            wall.UpdateAdditionalInformation(X, Y);
+            wall.UpdateAdditionalInformation(X.Axis, Y.Axis);
             Walls.Add(wall);
             wall.SetLevelWall(Walls.Count);
+
+            UpdateHeightHitBox(Walls.Count * Screen.Setting.Tile);
+            Z.Axis = Walls.Count * Screen.Setting.Tile;
         }
         public void AddLevelWall(List<TexturedWall> walls)
         {
@@ -214,10 +198,13 @@ namespace ObstacleLib
 
             foreach (var wall in walls)
             {
-                wall.UpdateAdditionalInformation(X, Y);
+                wall.UpdateAdditionalInformation(X.Axis, Y.Axis);
                 Walls.Add(wall);
                 wall.SetLevelWall(Walls.Count);
             }
+
+            UpdateHeightHitBox(Walls.Count * Screen.Setting.Tile);
+            Z.Axis = Walls.Count * Screen.Setting.Tile;
         }
         public void DeleteWall(int lvl) //Lvl starts with 1
         {

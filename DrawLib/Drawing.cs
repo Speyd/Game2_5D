@@ -33,7 +33,7 @@ namespace DrawLib
                     float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
                     if (textureY < 0 - height)
                     {
-                        ignoreCoo.Add(((float)obstacle.X, (float)obstacle.Y));
+                        ignoreCoo.Add(((float)obstacle.X.Axis, (float)obstacle.Y.Axis));
                         continue;
                     }
                     
@@ -69,7 +69,7 @@ namespace DrawLib
                     float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
                     if (textureY < 0 - height)
                     {
-                        ignoreCoo.Add(((float)obstacle.X, (float)obstacle.Y));
+                        ignoreCoo.Add(((float)obstacle.X.Axis, (float)obstacle.Y.Axis));
                         continue;
                     }
                     Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);

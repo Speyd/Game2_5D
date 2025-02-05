@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using static SFML.Window.Mouse;
 using ScreenLib;
 using Render.ResultAlgorithm;
+using HitBoxLib;
 
 namespace ObstacleLib.SpriteLib.Hitbox
 {
@@ -20,24 +21,28 @@ namespace ObstacleLib.SpriteLib.Hitbox
 
         public static bool IsRayTouchesObjectX(SpriteObstacle sprite, Entity entity, float currentRayX)
         {
-            return currentRayX > sprite.Left && currentRayX < sprite.Right;
+            return currentRayX > sprite.HitBox[HitBoxSideType.Left]?.Side &&
+                   currentRayX < sprite.HitBox[HitBoxSideType.Right]?.Side;
         }
         public static bool IsRayTouchesObjectY(SpriteObstacle sprite, Entity entity, float currentRayY)
         {
-            return currentRayY > sprite.Top && currentRayY < sprite.Bottom;
+            return currentRayY > sprite.HitBox[HitBoxSideType.Top]?.Side &&
+                   currentRayY < sprite.HitBox[HitBoxSideType.Bottom]?.Side;
         }
 
 
         private static double CalculateMultTop(SpriteObstacle sprite, double multTexture, double distance)
         {
-            double mult = TopAdjustmentFactor * Screen.ScreenRatio;
+            double topOffset = (sprite.HitBox[HitBoxSideType.DownSide]?.Side ?? 0) / Screen.Setting.Tile;
+            double mult = (TopAdjustmentFactor + topOffset) * Screen.ScreenRatio;
             mult += sprite.RatioZ / Screen.Setting.Tile + multTexture / 10 + distance / Screen.Setting.Tile;
 
             return mult;
         }
         private static double CalculateMultBottom(SpriteObstacle sprite, double multTexture, double distance)
         {
-            double mult = BottomAdjustmentFactor * Screen.ScreenRatio;
+            double bottomOffset = (sprite.HitBox[HitBoxSideType.DownSide]?.Side ?? 0) / Screen.Setting.Tile;
+            double mult = (BottomAdjustmentFactor + bottomOffset) * Screen.ScreenRatio;
             mult = mult - sprite.RatioZ / Screen.Setting.Tile * 2 - multTexture / 10 + distance / Screen.Setting.Tile;
 
             return mult;
@@ -54,7 +59,7 @@ namespace ObstacleLib.SpriteLib.Hitbox
                 return true;
 
             double multTexture = IRayPassability.BaseRayPassObjectHeight / sprite.CurrentRenderTexture.Height;
-            double distance = Math.Sqrt(Math.Pow(sprite.X - entity.X, 2) + Math.Pow(sprite.Y - entity.Y, 2)) / Screen.Setting.Tile;
+            double distance = Math.Sqrt(Math.Pow(sprite.X.Axis - entity.X.Axis, 2) + Math.Pow(sprite.Y.Axis - entity.Y.Axis, 2)) / Screen.Setting.Tile;
 
             double Bottom = (sprite.RatioZ - sprite.Scale / 2) / distance;
             double Top = (sprite.RatioZ + sprite.Scale / 2) / distance;

@@ -10,6 +10,8 @@ using ScreenLib;
 using ScreenLib.SettingScreen;
 using SFML.System;
 using SFML.Window;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EntityLib
@@ -22,11 +24,9 @@ namespace EntityLib
         {
             get
             {
-                return new Vector2f((float)X, (float)Y) / Screen.Setting.Tile;
+                return new Vector2f((float)X.Axis, (float)Y.Axis) / Screen.Setting.Tile;
             }
         }
-
-
 
 
         //-----------------Fov-----------------
@@ -53,13 +53,11 @@ namespace EntityLib
         public double ProjCoeff { get; private set; }
 
 
-        //---------------------Collision Setting----------------------
-        public double Side { get; set; } = 10;
-
-
         //---------------------Coordinates----------------------
-        public double Y { get; set; }
-        public double X { get; set; }
+        public HitBox HitBox { get; init; }
+        public Coordinate Y { get; init; }
+        public Coordinate X { get; init; }
+        public Coordinate Z { get; init; }
 
 
         //-----------------------Angle-----------------------
@@ -86,14 +84,6 @@ namespace EntityLib
         public double VerticalAngle { get; set; }
 
 
-        //-----------------------Camera-----------------------
-        private double _z;
-        public double Z
-        {
-            get => _z;
-            set => _z = value;
-        }
-
 
 
         public Entity(Setting setting, double maxDistance,
@@ -103,20 +93,17 @@ namespace EntityLib
         {
             Fov = fov;
             HalfFov = (float)Fov / 2;
-            Z = Screen.Setting.Tile;
 
-
-            X = x <= 0 ? Screen.Setting.HalfWidth : x;
-            Y = y <= 0 ? Screen.Setting.HalfHeight : y;
-
+            HitBox = new HitBox();
+            X = new Coordinate(CoordinatePlane.X, HitBox);
+            Y = new Coordinate(CoordinatePlane.Y, HitBox);
+            Z = new Coordinate(CoordinatePlane.Z, HitBox);
+            Z.Axis = 50;
 
             Angle = angle;
             VerticalAngle = verticalAngle;
-            DeltaAngle = (float)Fov / Screen.Setting.AmountRays;
 
-
-            float dist = Screen.Setting.AmountRays / (2 * (float)Math.Tan(HalfFov));
-            ProjCoeff = dist * Screen.Setting.Tile;
+            EntitySettingChangesFun();
             Screen.WidthChangesFun += EntitySettingChangesFun;
 
             MaxRayMapDistance = maxDistance;
@@ -133,14 +120,14 @@ namespace EntityLib
         }
         public (double nextX, double nextY) CalculateNextPosition(double deltaX, double deltaY)
         {
-            double nextX = X + deltaX;
-            double nextY = Y + deltaY;
+            double nextX = X.Axis + deltaX;
+            double nextY = Y.Axis + deltaY;
             return (nextX, nextY);
         }
         public (float x1, float y1) CalculateEndPoint()
         {
-            float x1 = (float)(X + MaxRayMapDistance * Math.Cos(Angle));
-            float y1 = (float)(Y + MaxRayMapDistance * Math.Sin(Angle));
+            float x1 = (float)(X.Axis + MaxRayMapDistance * Math.Cos(Angle));
+            float y1 = (float)(Y.Axis + MaxRayMapDistance * Math.Sin(Angle));
 
             return (x1, y1);
         }

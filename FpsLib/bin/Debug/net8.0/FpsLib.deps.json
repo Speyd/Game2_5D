@@ -1127,10 +1127,23 @@
       },
       "EntityLib/1.0.0": {
         "dependencies": {
+          "HitBoxLib": "1.0.0",
           "ScreenLib": "1.0.0"
         },
         "runtime": {
           "EntityLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "HitBoxLib/1.0.0": {
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "HitBoxLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1322,6 +1335,11 @@
       "sha512": ""
     },
     "EntityLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "HitBoxLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

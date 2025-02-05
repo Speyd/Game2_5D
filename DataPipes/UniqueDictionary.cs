@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 namespace DataPipes.Dictionary
 {
     public class UniqueDictionary<KEY, VALUE>
+        where KEY : notnull
+        where VALUE : notnull
     {
         private Dictionary<KEY, VALUE> myMap = new Dictionary<KEY, VALUE>();
         private Dictionary<VALUE, bool> valuePresence = new Dictionary<VALUE, bool>();
@@ -34,7 +36,7 @@ namespace DataPipes.Dictionary
             return true;
         }
 
-        public VALUE? GetTexture(KEY key)
+        public VALUE? GetValue(KEY key)
         {
             if (myMap.TryGetValue(key, out VALUE? value))
             {
@@ -55,13 +57,25 @@ namespace DataPipes.Dictionary
             return myMap.ContainsKey(key);
         }
 
-        public Dictionary<KEY, VALUE> getUniqueDictionary() => myMap;
+        public Dictionary<KEY, VALUE> GetUniqueDictionary() => myMap;
 
         public void Print()
         {
             foreach (var pair in myMap)
             {
                 Console.WriteLine($"{pair.Key}: {pair.Value}");
+            }
+        }
+
+        public VALUE? this[KEY key]
+        {
+            get
+            {
+                if (myMap.TryGetValue(key, out VALUE? value))
+                {
+                    return value;
+                }
+                return default;
             }
         }
     }

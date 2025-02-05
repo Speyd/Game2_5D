@@ -39,6 +39,8 @@ using static System.Formats.Asn1.AsnWriter;
 using PartsWorldLib;
 using ObstacleLib;
 using ObstacleLib.SpriteLib.Hitbox;
+using DataPipes.Dictionary;
+using HitBoxLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100);
 Screen.Initialize(1000, 800);
@@ -116,60 +118,69 @@ List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
 {
     Scale = 64,
-    SideBT = 30,
-    SideLR = 30,
-    Z = 0,
+    //SideBT = 30,
+    //SideLR = 30,
+    //Z = 0,
     ShiftCubedX = 50,
     ShiftCubedY = 50,
 };
-SpriteObstacle sprite2 = new SpriteObstacle(textureObstacles)
-{
-    Scale = 64,
-    SideBT = 30,
-    SideLR = 30,
-    Z = -50,
-    ShiftCubedX = 50,
-    ShiftCubedY = 50,
-};
-SpriteObstacle barel = new SpriteObstacle(@"Resources\Image\Sprite\Barel\", true)
-{
+sprite1.Z.Axis = 0;
+sprite1.HitBox[HitBoxSideType.Left]?.SetOffset(10);
+sprite1.HitBox[HitBoxSideType.Right]?.SetOffset(10);
+sprite1.HitBox[HitBoxSideType.Top]?.SetOffset(10);
+sprite1.HitBox[HitBoxSideType.Bottom]?.SetOffset(10);
+sprite1.HitBox[HitBoxSideType.UpSide]?.SetOffset(40);
+sprite1.HitBox[HitBoxSideType.DownSide]?.SetOffset(40);
 
-    Scale = 64,
-    Z = -70,
-    CurrentAnimation = new AnimationState()
-    {
-        Speed = 30,
-        IsAnimation = true,
-    },
-    ShiftCubedX = 20,
-    ShiftCubedY = 95,
-    SideBT = 40,
-    SideLR = 40,
-    IsSingleAddable = false,
-};
 
-SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
-{
-    //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
-    //{
-    //    ScaleMultSprite = 64,
+//SpriteObstacle sprite2 = new SpriteObstacle(textureObstacles)
+//{
+//    Scale = 64,
+//    SideBT = 30,
+//    SideLR = 30,
+//    Z = -50,
+//    ShiftCubedX = 50,
+//    ShiftCubedY = 50,
+//};
+//SpriteObstacle barel = new SpriteObstacle(@"Resources\Image\Sprite\Barel\", true)
+//{
 
-    //},
-    Scale = 64,
-    Z = 125,
-    CurrentAnimation = new AnimationState()
-    {
-        Speed = 30,
-        IsAnimation = true,
-    },
-    //ShiftCubedX = 20,
-    //ShiftCubedY = 5,
-    ShiftCubedX = 50,
-    ShiftCubedY = 50,
-    SideBT = 30,
-    SideLR = 30,
-    IsSingleAddable = false,
-};
+//    Scale = 64,
+//    Z = -70,
+//    CurrentAnimation = new AnimationState()
+//    {
+//        Speed = 30,
+//        IsAnimation = true,
+//    },
+//    ShiftCubedX = 20,
+//    ShiftCubedY = 95,
+//    SideBT = 40,
+//    SideLR = 40,
+//    IsSingleAddable = false,
+//};
+
+//SpriteObstacle barel2 = new SpriteObstacle(textureBarel)
+//{
+//    //Setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
+//    //{
+//    //    ScaleMultSprite = 64,
+
+//    //},
+//    Scale = 64,
+//    Z = 125,
+//    CurrentAnimation = new AnimationState()
+//    {
+//        Speed = 30,
+//        IsAnimation = true,
+//    },
+//    //ShiftCubedX = 20,
+//    //ShiftCubedY = 5,
+//    ShiftCubedX = 50,
+//    ShiftCubedY = 50,
+//    SideBT = 30,
+//    SideLR = 30,
+//    IsSingleAddable = false,
+//};
 //SpriteObstacle sprite2 = new SpriteObstacle(0, 0, 'A', textureObstacles1)
 //{
 //    setting = new MapLib.Obstacles.DiversityObstacle.SpriteLib.SettingSprite.Setting()
@@ -213,7 +224,7 @@ TexturedWall wall4 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 sprite1.SetShifts(50);
 
-map.AddObstacle(3, 5, barel);
+//map.AddObstacle(3, 5, barel);
 //map.AddObstacle(3, 5, barel2);
 TexturedWall wall = new TexturedWall( @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png", @"Resources\Image\WallTexture\add.png", @"Resources\Image\WallTexture\Wall4.png");
 map.AddObstacle(7, 7,  wall);
@@ -230,9 +241,20 @@ map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
 Player player = new Player(100);
+player.X.Axis = 5 * Screen.Setting.Tile;
+player.Y.Axis = 3 * Screen.Setting.Tile;
+player.Z.Axis = 0;
+player.HitBox[HitBoxSideType.Left]?.SetOffset(10);
+player.HitBox[HitBoxSideType.Right]?.SetOffset(10);
+player.HitBox[HitBoxSideType.Top]?.SetOffset(10);
+player.HitBox[HitBoxSideType.Bottom]?.SetOffset(10);
+player.HitBox[HitBoxSideType.UpSide]?.SetOffset(50);
+player.HitBox[HitBoxSideType.DownSide]?.SetOffset(0);
+
+
 MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
 {
-    IsRender = false
+    //IsRender = false
 };
 
 
@@ -263,8 +285,7 @@ multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"
 map.AddObstacle(9, 5, sprite1);
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
-player.X = 8 * Screen.Setting.Tile;
-player.Y = 8 * Screen.Setting.Tile;
+
 
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try
@@ -279,7 +300,7 @@ try
 
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
 
-        algorithm.CalculationAlgorithm();
+       algorithm.CalculationAlgorithm();
 
 
         fpsChecker.EndRead();

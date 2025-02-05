@@ -125,13 +125,13 @@ namespace MapLib
             if (!CheckTrueCoordinates(x, y))
                 throw new Exception("Error update coordinates(UpdateCoordinatesObstacle)");
 
-            if(!Obstacles.ContainsKey((obstacle.OriginX, obstacle.OriginY)))
+            if(!Obstacles.ContainsKey((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))))
                 throw new Exception("Coordinates to update not found(UpdateCoordinatesObstacle)");
 
-            if (!Obstacles[(obstacle.OriginX, obstacle.OriginY)].Contains(obstacle))
+            if (!Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Contains(obstacle))
                 throw new Exception("Object to update not found(UpdateCoordinatesObstacle)");
 
-            Obstacles[(obstacle.OriginX, obstacle.OriginY)].Remove(obstacle);
+            Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Remove(obstacle);
             Obstacles[(Screen.Mapping(x), Screen.Mapping(y))].Add(obstacle);
         }
 
@@ -139,10 +139,10 @@ namespace MapLib
 
         private void RemoveObstacle(Obstacle obstacle)
         {
-            Obstacles[(obstacle.OriginX, obstacle.OriginY)].Remove(obstacle);
+            Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Remove(obstacle);
 
-            if (Obstacles[(obstacle.OriginX, obstacle.OriginY)].Count == 0)
-                Obstacles.Remove((obstacle.OriginX, obstacle.OriginY));
+            if (Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Count == 0)
+                Obstacles.Remove((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)));
         }
         public void DeleteAllCellObstacles(int x, int y)
         {
@@ -165,7 +165,7 @@ namespace MapLib
             else if (!Obstacles.ContainsKey((mX, mY)))
                 throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
 
-            Obstacle? tempObst = Obstacles[(mX, mY)].FirstOrDefault(o => o.X == x && o.Y == y);
+            Obstacle? tempObst = Obstacles[(mX, mY)].FirstOrDefault(o => o.X.Axis == x && o.Y.Axis == y);
             if (tempObst is null)
                 throw new Exception("There is no such object in this cell(DeleteAllCellObstacle)");
 
@@ -173,11 +173,11 @@ namespace MapLib
         }
         public void DeleteObstacle(Obstacle obstacle)
         {
-            if (!CheckTrueCoordinates(obstacle.OriginX, obstacle.OriginY))
+            if (!CheckTrueCoordinates(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)))
                 throw new Exception("Deletion in this area is not allowed(DeleteAllCellObstacle)");
-            else if (!Obstacles.ContainsKey((obstacle.OriginX, obstacle.OriginY)))
+            else if (!Obstacles.ContainsKey((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))))
                 throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
-            else if (!Obstacles[(obstacle.OriginX, obstacle.OriginY)].Contains(obstacle))
+            else if (!Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Contains(obstacle))
                 throw new Exception("There is no such object in this cell(DeleteAllCellObstacle)");
 
             RemoveObstacle(obstacle);

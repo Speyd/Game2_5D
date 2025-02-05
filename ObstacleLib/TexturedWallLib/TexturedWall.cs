@@ -25,6 +25,9 @@ using System.Net.Sockets;
 using DataPipes.Pool;
 using Render;
 using ScreenLib.SettingScreen;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
+using System.Runtime.CompilerServices;
 
 namespace ObstacleLib.TexturedWallLib
 {
@@ -37,12 +40,9 @@ namespace ObstacleLib.TexturedWallLib
 
         //----------------------Setting---------------------
         public override bool IsSingleAddable { get; init; } = true;
-        static object lockObj = new object();
         public int LvlWall { get; private set; } = 1;
-        public override double Z
-        {
-            get => LvlWall * Screen.Setting.Tile;
-        }
+
+        private static object lockObj = new object();
 
         //-----------------------Render----------------------
         public Sprite RenderSprite { get; set; } = new Sprite();
@@ -51,10 +51,11 @@ namespace ObstacleLib.TexturedWallLib
 
         #region Constructor
         public TexturedWall(TexturedWall textured)
-        : base(textured.X, textured.Y, textured.Symbol, textured.ColorInMap, textured.IsPassability)
+        : base(textured.X.Axis, textured.Y.Axis, textured.Symbol, textured.ColorInMap, textured.IsPassability)
         {
             MultiTextured = new MultiTexturedObject(textured.MultiTextured);
-            TextureInMiniMap = new TextureObstacle(textured.MultiTextured.UniqueTexture.GetFirstValue().Base);
+            TextureInMiniMap = new TextureObstacle(textured.MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
+                                                   throw new Exception("Error load Texture(TexturedWall)"));
 
             RenderSprite = new Sprite(textured.RenderSprite.Texture)
             {
@@ -62,15 +63,20 @@ namespace ObstacleLib.TexturedWallLib
                 Scale = textured.RenderSprite.Scale,
                 Rotation = textured.RenderSprite.Rotation,
                 Color = textured.RenderSprite.Color
-            };    
+            };
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string path, bool isPassability = false)
 
             : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(path);
-
             MultiTextured = new MultiTexturedObject(path);
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string pathLR, string pathBT, bool isPassability = false)
 
@@ -78,6 +84,9 @@ namespace ObstacleLib.TexturedWallLib
         {
             TextureInMiniMap = new TextureObstacle(pathLR);
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string pathL, string pathR, string pathB, string pathT, bool isPassability = false)
 
@@ -85,18 +94,29 @@ namespace ObstacleLib.TexturedWallLib
         {
             TextureInMiniMap = new TextureObstacle(pathL);
             MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
             : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
-            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
+            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
+                                                   throw new Exception("Error load Texture(TexturedWall)"));
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
             : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
-            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue().Base);
+            TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
+                                                   throw new Exception("Error load Texture(TexturedWall)"));
+
+            UpdateHeightHitBox();
+            Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         #endregion
 
@@ -111,8 +131,8 @@ namespace ObstacleLib.TexturedWallLib
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
-            float x = (float)X / Screen.Setting.Tile * mapTile;
-            float y = (float)Y / Screen.Setting.Tile * mapTile;
+            float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
+            float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
 
             return new Vector2f(x, y);
         }
@@ -145,8 +165,7 @@ namespace ObstacleLib.TexturedWallLib
             else
                 return (float)((Screen.Setting.HalfHeight) / (1 + 1 * angleVertical));
         }
-        public override double GetCollisionZ(Entity entity) => Z;
-        public override double GetZCoordinate() => Z;
+        public override double GetZCoordinate() => Z.Axis;
         public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
         {
             if (depth < maxDepth)
@@ -156,7 +175,17 @@ namespace ObstacleLib.TexturedWallLib
         #endregion
 
         #region IWall_Implementation
-        public void SetLevelWall(int lvl) => LvlWall = lvl;
+
+        private void UpdateHeightHitBox()
+        {
+            HitBox[HitBoxSideType.DownSide]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.UpSide]?.SetOffset(0);
+        }
+        public void SetLevelWall(int lvl)
+        {
+            LvlWall = lvl;
+            Z.Axis = lvl * Screen.Setting.Tile;
+        }
         public float GetRayScreenX(double ray)
         {
             return (float)ray * Screen.Setting.Scale;
@@ -226,18 +255,13 @@ namespace ObstacleLib.TexturedWallLib
         #region MapAdder_Implementation
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            X = x;
-            Y = y;
-        }
-        protected override void ResetXSides(double value)
-        {
-            Left = value;
-            Right = value + Screen.Setting.Tile;
-        }
-        protected override void ResetYSides(double value)
-        {
-            Top = value;
-            Bottom = value + Screen.Setting.Tile;
+            HitBox[HitBoxSideType.Left]?.SetOffset(0);
+            HitBox[HitBoxSideType.Top]?.SetOffset(0);
+            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
+
+            X.Axis = x;
+            Y.Axis = y;
         }
         #endregion
 

@@ -26,3 +26,5 @@ D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\TextField.pdb
 D:\C++ проекты\Game2_5D\TextField\obj\Debug\net8.0\ref\TextField.dll
 D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\DataPipes.pdb
+D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\HitBoxLib.dll
+D:\C++ проекты\Game2_5D\TextField\bin\Debug\net8.0\HitBoxLib.pdb

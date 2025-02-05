@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
 
 namespace RayTracingLib.Detection
 {
@@ -20,43 +22,49 @@ namespace RayTracingLib.Detection
 
         static float sinAngle = 0;
         static float cosAngle = 0;
+
+        static float left = 0f;
+        static float right = 0f;
+        static float bottom = 0f;
+        static float top = 0f;
+
         static private Vector2f CalculateTextureHitPoint(Obstacle obstacle, Entity entity)
         {
             float tempValue = float.MaxValue;
 
             if (cosAngle != 0)
             {
-                float tVerticalLeft = (float)(obstacle.Left - entity.X) / cosAngle;
+                float tVerticalLeft = (float)(left - entity.X.Axis) / cosAngle;
                 if (tVerticalLeft >= 0)
                 {
-                    float hitYLeft = (float)entity.Y + tVerticalLeft * sinAngle;
-                    if (hitYLeft >= obstacle.Top && hitYLeft <= obstacle.Bottom)
+                    float hitYLeft = (float)entity.Y.Axis + tVerticalLeft * sinAngle;
+                    if (hitYLeft >= top && hitYLeft <= bottom)
                         tempValue = tVerticalLeft;
                 }
 
-                float tVerticalRight = (float)(obstacle.Right - entity.X) / cosAngle;
+                float tVerticalRight = (float)(right - entity.X.Axis) / cosAngle;
                 if (tVerticalRight >= 0)
                 {
-                    float hitYRight = (float)entity.Y + tVerticalRight * sinAngle;
-                    if (hitYRight >= obstacle.Top && hitYRight <= obstacle.Bottom)
+                    float hitYRight = (float)entity.Y.Axis + tVerticalRight * sinAngle;
+                    if (hitYRight >= top && hitYRight <= bottom)
                         tempValue = Math.Min(tempValue, tVerticalRight);
                 }
             }
             if (sinAngle != 0)
             {
-                float tHorizontalTop = (float)(obstacle.Top - entity.Y) / sinAngle;
+                float tHorizontalTop = (float)(top - entity.Y.Axis) / sinAngle;
                 if (tHorizontalTop >= 0)
                 {
-                    float hitXTop = (float)entity.X + tHorizontalTop * cosAngle;
-                    if (hitXTop >= obstacle.Left && hitXTop <= obstacle.Right)
+                    float hitXTop = (float)entity.X.Axis + tHorizontalTop * cosAngle;
+                    if (hitXTop >= left && hitXTop <= right)
                         tempValue = Math.Min(tempValue, tHorizontalTop);
                 }
 
-                float tHorizontalBottom = (float)(obstacle.Bottom - entity.Y) / sinAngle;
+                float tHorizontalBottom = (float)(bottom - entity.Y.Axis) / sinAngle;
                 if (tHorizontalBottom >= 0)
                 {
-                    float hitXBottom = (float)entity.X + tHorizontalBottom * cosAngle;
-                    if (hitXBottom >= obstacle.Left && hitXBottom <= obstacle.Right)
+                    float hitXBottom = (float)entity.X.Axis + tHorizontalBottom * cosAngle;
+                    if (hitXBottom >= left && hitXBottom <= right)
                         tempValue = Math.Min(tempValue, tHorizontalBottom);
                 }
             }
@@ -64,27 +72,27 @@ namespace RayTracingLib.Detection
             if (tempValue == float.MaxValue)
                 return new Vector2f(-1, -1);
 
-            float hitX = (float)entity.X + tempValue * cosAngle - (float)obstacle.X;
-            float hitY = (float)entity.Y + tempValue * sinAngle - (float)obstacle.Y;
+            float hitX = (float)entity.X.Axis + tempValue * cosAngle - (float)obstacle.X.Axis;
+            float hitY = (float)entity.Y.Axis + tempValue * sinAngle - (float)obstacle.Y.Axis;
             distanceToPoint = tempValue;
 
             return new Vector2f(hitX, hitY);
         }
-        static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity)
+        static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity)   
         {
-            if (entity.Y >= obstacle.Top && entity.Y <= obstacle.Bottom)
+            if (entity.Y.Axis >= top && entity.Y.Axis <= bottom)
             {
-                if (cosAngle > 0 && entity.X <= obstacle.Right)
+                if (cosAngle > 0 && entity.X.Axis <= right)
                     return ObjectSide.Right;
-                else if (cosAngle < 0 && entity.X >= obstacle.Left)
+                else if (cosAngle < 0 && entity.X.Axis >= left)
                     return ObjectSide.Left;
             }
 
-            if (entity.X >= obstacle.Left && entity.X <= obstacle.Right)
+            if (entity.X.Axis >= left && entity.X.Axis <= right)
             {
-                if (sinAngle > 0 && entity.Y <= obstacle.Bottom)
+                if (sinAngle > 0 && entity.Y.Axis <= bottom)
                     return ObjectSide.Bottom;
-                else if (sinAngle < 0 && entity.Y >= obstacle.Top)
+                else if (sinAngle < 0 && entity.Y.Axis >= top)
                     return ObjectSide.Top;
             }
 
@@ -113,8 +121,8 @@ namespace RayTracingLib.Detection
         }
         static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, ObjectSide wallDetermine)
         {
-            double deltaX = obstacle.X - entity.X;
-            double deltaY = obstacle.Y - entity.Y;
+            double deltaX = obstacle.X.Axis - entity.X.Axis;
+            double deltaY = obstacle.Y.Axis - entity.Y.Axis;
             distanceToWall = (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
 
             if (wallDetermine == ObjectSide.Top || wallDetermine == ObjectSide.Left)
@@ -124,6 +132,11 @@ namespace RayTracingLib.Detection
         {
             cosAngle = entity.Direction.X;
             sinAngle = entity.Direction.Y;
+
+            left = (float)(obstacle.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
+            right = (float)(obstacle.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
+            bottom = (float)(obstacle.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
+            top = (float)(obstacle.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
 
 
             ObjectSide wallDetermine = ObjectSide.Error;

@@ -28,7 +28,12 @@ namespace RayTracingLib
         private static float tMaxY;
         private static float dy;
 
-        private static float percentOfMainStep = 0.01f;
+        private static int gridX;
+        private static int gridY;
+
+        private const float epsilon = 0.000001f;
+        private const float percentOfMainStep = 0.01f;
+
         private static (bool, Obstacle?) CheckingTouchingOfList(List<Obstacle> obstacles, Entity entity, float currentRayX, float currentRayY)
         {
             foreach (var obstacle in obstacles)
@@ -44,15 +49,14 @@ namespace RayTracingLib
             }
             return (false, null);
         }
-
         private static Obstacle? GetNearestObject(Entity entity, List<Obstacle> nonRayPassable)
         {
             (double, Obstacle?) nearObj = (-1, null);
 
             foreach(var obstacle in nonRayPassable)
             {
-                double X = entity.X - obstacle.X;
-                double Y = entity.Y - obstacle.Y;
+                double X = entity.X.Axis - obstacle.X.Axis;
+                double Y = entity.Y.Axis - obstacle.Y.Axis;
 
                 double dist = Math.Sqrt(X * X + Y * Y);
 
@@ -64,46 +68,24 @@ namespace RayTracingLib
 
             return nearObj.Item2;
         }
-
         private static (List<Obstacle> rayPassable, List<Obstacle> nonRayPassable) SplitObstaclesByRayPassability(List<Obstacle> obstacles)
         {
             var rayPassable = obstacles.Where(o => o is IRayPassability).ToList();
             var nonRayPassable = obstacles.Where(o => o is not IRayPassability).ToList();
             return (rayPassable, nonRayPassable);
-        }
-       
-        private static Obstacle? DetailedSearchInCell(List<Obstacle> obstacles, Entity entity, int cellX, int cellY, float baseStep)
+        }    
+        private static Obstacle? DetailedSearchInCell(List<Obstacle> obstacles, Entity entity, float baseStep)
         {
-            float step = baseStep * percentOfMainStep;
-            int subTileSize = (int)(baseStep * percentOfMainStep);
+            float distance = (float)Math.Sqrt((gridX - entity.X.Axis) * (gridX - entity.X.Axis) + (gridY - entity.Y.Axis) * (gridY - entity.Y.Axis));
+            float stepSize = baseStep * percentOfMainStep;
 
-            float localStartX = startX + dx * (tMaxX < tMaxY ? tMaxX : tMaxY);
-            float localStartY = startY + dy * (tMaxX < tMaxY ? tMaxX : tMaxY);
+            float entryDist = Math.Min(tMaxX, tMaxY);
+            float checkX = startX;
+            float checkY = startY;
 
-
-            if (dx > 0 && Math.Abs(dx) > Math.Abs(dy))
-                localStartX -= Screen.Setting.Tile;
-            else if (dy > 0 && Math.Abs(dy) > Math.Abs(dx))
-                localStartY -= Screen.Setting.Tile;
-            else if (dx < 0 && dx > dy)
-                localStartX -= Screen.Setting.Tile / 5;
-            else if (dy < 0 && dy > dx)
-                localStartY -= Screen.Setting.Tile / 15;
-
-
-            float localDeltaX = Math.Abs(subTileSize / dx);
-            float localDeltaY = Math.Abs(subTileSize / dy);
-
-            float localGridX = localStartX;
-            float localGridY = localStartY;
-
-            float localStepX = step;
-            float localStepY = step;
-
-
-            float localMaxX = dx > 0 ? (localStartX + subTileSize - localStartX) / dx : (localStartX - localStartX) / -dx;
-            float localMaxY = dy > 0 ? (localStartY + subTileSize - localStartY) / dy : (localStartY - localStartY) / -dy;
-
+            float length = (float)Math.Sqrt(dx * dx + dy * dy);
+            float stepX = (dx / length) * stepSize;
+            float stepY = (dy / length) * stepSize;
 
             var (rayPassable, nonRayPassable) = SplitObstaclesByRayPassability(obstacles);
             if (rayPassable.Count == 0)
@@ -113,39 +95,26 @@ namespace RayTracingLib
                     GetNearestObject(entity, nonRayPassable);
             }
 
-
-
-            while (true)
+            while (checkX >= gridX - distance && checkX < gridX + distance &&
+                   checkY >= gridY - distance && checkY < gridY + distance)
             {
-                var result = CheckingTouchingOfList(rayPassable, entity, localGridX, localGridY);
+                var result = CheckingTouchingOfList(rayPassable, entity, checkX, checkY);
                 if (result.Item1 && result.Item2 is not null)
+                {
+                    Console.WriteLine(result.Item1);
                     return result.Item2;
-
-
-                if (localMaxX < localMaxY)
-                {
-                    localGridX += localStepX;
-                    localMaxX += localDeltaX;
                 }
-                else
-                {
-                    localGridY += localStepY;
-                    localMaxY += localDeltaY;
-                }
+                checkX += stepX;
+                checkY += stepY;
 
-                if (localGridX <= cellX - Screen.Setting.Tile || localGridX >= cellX + Screen.Setting.Tile ||
-                    localGridY <= cellY - Screen.Setting.Tile || localGridY >= cellY + Screen.Setting.Tile)
-                {
+                if (Math.Abs(stepX) < epsilon && Math.Abs(stepY) < epsilon)
                     break;
-                }
             }
 
             return null;
         }
         public static Obstacle? RaycastFun(Map map, Entity entity, List<(float, float)> ignoreCoo)
         {
-            float epsilon = 0.000001f;
-
             dx = entity.Direction.X;
             dy = entity.Direction.Y;
 
@@ -154,11 +123,11 @@ namespace RayTracingLib
 
             int tileSize = Screen.Setting.Tile;
 
-            startX = (float)entity.X;
-            startY = (float)entity.Y;
+            startX = (float)entity.X.Axis;
+            startY = (float)entity.Y.Axis;
 
-            int gridX = (int)(startX / tileSize) * tileSize;
-            int gridY = (int)(startY / tileSize) * tileSize;
+            gridX = (int)(startX / tileSize) * tileSize;
+            gridY = (int)(startY / tileSize) * tileSize;
 
             int stepX = dx > 0 ? tileSize : -tileSize;
             int stepY = dy > 0 ? tileSize : -tileSize;
@@ -173,7 +142,7 @@ namespace RayTracingLib
             {
                 if (map.Obstacles.ContainsKey((gridX, gridY)) && !ignoreCoo.Contains((gridX, gridY)))
                 {               
-                    var detailedResult = DetailedSearchInCell(map.Obstacles[(gridX, gridY)], entity, gridX, gridY, tileSize);
+                    var detailedResult = DetailedSearchInCell(map.Obstacles[(gridX, gridY)], entity, tileSize);
 
                     if (detailedResult is not null)
                         return detailedResult;

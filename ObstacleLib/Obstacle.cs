@@ -5,6 +5,9 @@ using EntityLib;
 using ScreenLib;
 using SFML.System;
 using Render.RenderInterface;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
+
 
 namespace ObstacleLib
 {
@@ -12,106 +15,16 @@ namespace ObstacleLib
     {
         public Action<Obstacle, double, double>? OnPositionChanged;
 
+        public HitBox HitBox { get; set; } = new HitBox();
+        public Coordinate X { get; init; }
+        public Coordinate Y { get; init; }
+        public Coordinate Z { get; init; }
 
-        //---------------------Coordinates-----------------------
-        protected double _x;
-        public virtual double X 
-        {
-            get => _x;
-            set
-            {
-                if(Screen.Mapping(_x) != Screen.Mapping(value) && OnPositionChanged is not null)
-                    OnPositionChanged(this, value, _y);
 
-                _x = value;
-                OriginX = Screen.Mapping(value);
-                ResetXSides(value);
-            }
-        }
-
-        protected double _y;
-        public virtual double Y 
-        {
-            get => _y;
-            set
-            {
-                if (Screen.Mapping(_y) != Screen.Mapping(value) && OnPositionChanged is not null)
-                    OnPositionChanged(this, _x, value);
-
-                _y = value;
-                OriginY = Screen.Mapping(value);
-                ResetYSides(value);
-            }
-        }
-
-        protected double _z;
-        public virtual double Z
-        {
-            get => _z;
-            set
-            {
-                _z = value;
-                RatioZ = value;
-            }
-
-        }
-
-        public double _ratioZ;
         public double RatioZ 
         {
-            get => _ratioZ;
-            private set => _ratioZ = value * Screen.ScreenRatio;
+            get => Z.Axis * Screen.ScreenRatio;
         }
-
-        public int OriginX { get; private set; }
-        public int OriginY { get; private set; }
-
-
-        //-----------------Sides----------------
-        public virtual double Left { get; set; } = 0;
-        public virtual double Right { get; set; } = 0;
-        public virtual double Top { get; set; } = 0;
-        public virtual double Bottom { get; set; } = 0;
-        protected virtual void ResetXSides(double value)
-        {
-            Left = value - _sideLR;
-            Right = value + _sideLR;
-        }
-        protected virtual void ResetYSides(double value)
-        {
-            Top = value - _sideBT;
-            Bottom = value + _sideBT;
-        }
-
-
-
-        //----------------------Imaginry square---------------------
-
-        //The size of the imaginary square for left and Right side
-        private double _sideLR = 0;
-        public virtual double SideLR 
-        {
-            get => _sideLR;
-            set
-            {
-                _sideLR = value;
-                ResetXSides(_x);
-            } 
-        }
-
-        //The size of the imaginary square for Bottom and Top side
-        private double _sideBT = 0;
-        public virtual double SideBT
-        {
-            get => _sideBT;
-            set
-            {
-                _sideBT = value;
-                ResetYSides(_y);
-            }
-        }
-
-
 
         //--------------------Shift-------------------------
         #region Shift
@@ -122,7 +35,7 @@ namespace ObstacleLib
             set
             {
                 shiftCubedX = value < 0 ? 1 : value > 99 ? 99 : value;
-                X = Screen.Mapping(X, Screen.Setting.Tile) + shiftCubedX;
+                X.Axis = Screen.Mapping(X.Axis, Screen.Setting.Tile) + shiftCubedX;
             }
         }
 
@@ -133,7 +46,7 @@ namespace ObstacleLib
             set
             {
                 shiftCubedY = value < 0 ? 1 : value > 99 ? 99 : value;
-                Y = Screen.Mapping(Y, Screen.Setting.Tile) + shiftCubedY;
+                Y.Axis = Screen.Mapping(Y.Axis, Screen.Setting.Tile) + shiftCubedY;
             }
         }
 
@@ -141,6 +54,11 @@ namespace ObstacleLib
         {
             ShiftCubedX = shifts;
             ShiftCubedY = shifts;
+        }
+        public void SetShifts(double shiftsX, double shiftsY)
+        {
+            ShiftCubedX = shiftsX;
+            ShiftCubedY = shiftsY;
         }
         #endregion
 
@@ -163,6 +81,10 @@ namespace ObstacleLib
             Symbol = symbol;
             ColorInMap = colorInMap;
             IsPassability = isPassability;
+
+            X = new Coordinate(CoordinatePlane.X, HitBox);
+            Y = new Coordinate(CoordinatePlane.Y, HitBox);
+            Z = new Coordinate(CoordinatePlane.Z, HitBox);
         }
 
 
@@ -171,7 +93,6 @@ namespace ObstacleLib
         public abstract void Render(Result result, Entity entity);
         public abstract float NormalizeYPosition(double angleVertical, float addVariable = 0);
         public abstract void UpdateAdditionalInformation(double x, double y);
-        public abstract double GetCollisionZ(Entity entity);
         public abstract  double GetZCoordinate();
         public abstract Vector2f GetCoordintePositionOnScreen(Result result, Entity entity);
 

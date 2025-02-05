@@ -26,3 +26,5 @@ D:\C++ проекты\Game2_5D\BresenhamAlgorithm\obj\Debug\net8.0\BresenhamAlgo
 D:\C++ проекты\Game2_5D\BresenhamAlgorithm\obj\Debug\net8.0\ref\BresenhamAlgorithm.dll
 D:\C++ проекты\Game2_5D\BresenhamAlgorithm\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\BresenhamAlgorithm\bin\Debug\net8.0\DataPipes.pdb
+D:\C++ проекты\Game2_5D\BresenhamAlgorithm\bin\Debug\net8.0\HitBoxLib.dll
+D:\C++ проекты\Game2_5D\BresenhamAlgorithm\bin\Debug\net8.0\HitBoxLib.pdb

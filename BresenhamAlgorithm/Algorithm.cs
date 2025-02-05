@@ -201,7 +201,7 @@ namespace BresenhamAlgorithm
         {
             double carAngle = entity.Angle - entity.HalfFov;
 
-            var coordinates = Screen.Mapping(entity.X, entity.Y);
+            var coordinates = Screen.Mapping(entity.X.Axis, entity.Y.Axis);
 
             Parallel.For(0, Screen.Setting.AmountRays, ray =>
             {
@@ -219,8 +219,8 @@ namespace BresenhamAlgorithm
                 CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
                 for (int j = 0; j < MaxVerticalDistance; j++) 
                 {
-                    depth_v = (x - entity.X) / cosA;
-                    vy = entity.Y + depth_v * sinA;
+                    depth_v = (x - entity.X.Axis) / cosA;
+                    vy = entity.Y.Axis + depth_v * sinA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
                     {
@@ -236,8 +236,8 @@ namespace BresenhamAlgorithm
                 CheckVericals(ref y, ref auxiliaryY, coordinates.Item2, sinA);
                 for (int j = 0; j < MaxHorizontalDistance; j++)
                 {
-                    depth_h = (y - entity.Y) / sinA;
-                    hx = entity.X + depth_h * cosA;
+                    depth_h = (y - entity.Y.Axis) / sinA;
+                    hx = entity.X.Axis + depth_h * cosA;
 
                     if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
                     {

@@ -10,6 +10,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ObstacleLib.TexturedWallLib;
 using TextureLib;
+using HitBoxLib;
+using HitBoxLib.PositionObject;
 
 namespace ObstacleLib.TexturedWallLib.Determine
 {
@@ -18,43 +20,49 @@ namespace ObstacleLib.TexturedWallLib.Determine
         static float sinAngle = 0;
         static float cosAngle = 0;
 
+        static float left = 0f;
+        static float right = 0f;
+        static float bottom = 0f;
+        static float top = 0f;
+
+
         static private Vector2f DetermineCornerWallSide(TexturedWall wall, Entity entity)
         {
             float tempValue = float.MaxValue;
 
             if (cosAngle != 0)
             {
-                float tVerticalLeft = (float)(wall.Left - entity.X) / cosAngle;
+                float tVerticalLeft = (float)(left - entity.X.Axis) / cosAngle;
                 if (tVerticalLeft >= 0)
                 {
-                    float hitYLeft = (float)entity.Y + tVerticalLeft * sinAngle;
-                    if (hitYLeft >= wall.Top && hitYLeft <= wall.Bottom)
+                    float hitYLeft = (float)entity.Y.Axis + tVerticalLeft * sinAngle;
+                    if (hitYLeft >= top && hitYLeft <= bottom)
                         tempValue = tVerticalLeft;
                 }
 
-                float tVerticalRight = (float)(wall.Right - entity.X) / cosAngle;
+                float tVerticalRight = (float)(right - entity.X.Axis) / cosAngle;
                 if (tVerticalRight >= 0)
                 {
-                    float hitYRight = (float)entity.Y + tVerticalRight * sinAngle;
-                    if (hitYRight >= wall.Top && hitYRight <= wall.Bottom)
+                    float hitYRight = (float)entity.Y.Axis + tVerticalRight * sinAngle;
+                    if (hitYRight >= top && hitYRight <= bottom)
                         tempValue = Math.Min(tempValue, tVerticalRight);
                 }
             }
             if (sinAngle != 0)
             {
-                float tHorizontalTop = (float)(wall.Top - entity.Y) / sinAngle;
+                float tHorizontalTop = (float)(top - entity.Y.Axis) / sinAngle;
                 if (tHorizontalTop >= 0)
                 {
-                    float hitXTop = (float)entity.X + tHorizontalTop * cosAngle;
-                    if (hitXTop >= wall.Left && hitXTop <= wall.Right)
+                    float hitXTop = (float)entity.X.Axis + tHorizontalTop * cosAngle;
+                    if (hitXTop >= left && hitXTop <= right)
                         tempValue = Math.Min(tempValue, tHorizontalTop);
                 }
 
-                float tHorizontalBottom = (float)(wall.Bottom - entity.Y) / sinAngle;
+                float tHorizontalBottom = (float)(bottom - entity.Y.Axis) / sinAngle;
                 if (tHorizontalBottom >= 0)
                 {
-                    float hitXBottom = (float)entity.X + tHorizontalBottom * cosAngle;
-                    if (hitXBottom >= wall.Left && hitXBottom <= wall.Right)
+                    float hitXBottom = (float)entity.X.Axis + tHorizontalBottom * cosAngle;
+                    if (hitXBottom >= left && hitXBottom <= right)
                         tempValue = Math.Min(tempValue, tHorizontalBottom);
                 }
             }
@@ -62,27 +70,27 @@ namespace ObstacleLib.TexturedWallLib.Determine
             if (tempValue == float.MaxValue)
                 return new Vector2f(-1, -1);
 
-            float hitX = (float)entity.X + tempValue * cosAngle - (float)wall.X;
-            float hitY = (float)entity.Y + tempValue * sinAngle - (float)wall.Y;
+            float hitX = (float)entity.X.Axis + tempValue * cosAngle - (float)wall.X.Axis;
+            float hitY = (float)entity.Y.Axis + tempValue * sinAngle - (float)wall.Y.Axis;
 
             return new Vector2f(hitX, hitY);
         }
 
         static private ObjectSide DetermineMineWallSide(TexturedWall wall, Entity entity)
         {
-            if (entity.Y >= wall.Top && entity.Y <= wall.Bottom)
+            if (entity.Y.Axis >= top && entity.Y.Axis <= bottom)
             {
-                if (cosAngle > 0 && entity.X <= wall.Right)
+                if (cosAngle > 0 && entity.X.Axis <= right)
                     return ObjectSide.Right;
-                else if (cosAngle < 0 && entity.X >= wall.Left)
+                else if (cosAngle < 0 && entity.X.Axis >= left)
                     return ObjectSide.Left;
             }
 
-            if (entity.X >= wall.Left && entity.X <= wall.Right)
+            if (entity.X.Axis >= left && entity.X.Axis <= right)
             {
-                if (sinAngle > 0 && entity.Y <= wall.Bottom)
+                if (sinAngle > 0 && entity.Y.Axis <= bottom)
                     return ObjectSide.Bottom;
-                else if (sinAngle < 0 && entity.Y >= wall.Top)
+                else if (sinAngle < 0 && entity.Y.Axis >= top)
                     return ObjectSide.Top;
             }
 
@@ -93,6 +101,11 @@ namespace ObstacleLib.TexturedWallLib.Determine
         {
             cosAngle = entity.Direction.X;
             sinAngle = entity.Direction.Y;
+
+            left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
+            right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
+            bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
+            top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
 
 
             ObjectSide wallDetermine = ObjectSide.Error;
@@ -123,7 +136,12 @@ namespace ObstacleLib.TexturedWallLib.Determine
         {
             cosAngle = (float)Math.Cos(addAngle);
             sinAngle = (float)Math.Sin(addAngle);
-            
+
+            left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
+            right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
+            bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
+            top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
+
 
             ObjectSide wallDetermine = ObjectSide.Error;
             wallDetermine = DetermineMineWallSide(wall, entity);
