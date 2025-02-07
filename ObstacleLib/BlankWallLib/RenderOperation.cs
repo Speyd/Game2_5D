@@ -21,12 +21,12 @@ namespace ObstacleLib.BlankWallLib.Render
             return new Vector2f(scaleX, scaleY);
         }
 
-        public static void UpdateVertices(BlankWall blankWall, VertexArray renderWall, Vector2f scale, Vector2f position)
+        public static void UpdateVertices(BlankWall blankWall, VertexArray renderWall, Vector2f scale, Vector2f position, Color ColorFilling)
         {
-            renderWall[0] = new Vertex(position, blankWall.ColorFilling);
-            renderWall[1] = new Vertex(position + new Vector2f(scale.X, 0), blankWall.ColorFilling);
-            renderWall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), blankWall.ColorFilling);
-            renderWall[3] = new Vertex(position + new Vector2f(0, scale.Y), blankWall.ColorFilling);
+            renderWall[0] = new Vertex(position, ColorFilling);
+            renderWall[1] = new Vertex(position + new Vector2f(scale.X, 0), ColorFilling);
+            renderWall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), ColorFilling);
+            renderWall[3] = new Vertex(position + new Vector2f(0, scale.Y), ColorFilling);
         }
 
     }

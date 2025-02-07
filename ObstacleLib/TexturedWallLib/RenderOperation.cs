@@ -16,13 +16,13 @@ namespace ObstacleLib.TexturedWallLib.Render
 {
     internal static class RenderOperation
     {
-        internal static Vector2f CalculationTextureScale(TexturedWall Wall, Result result)
+        internal static Vector2f CalculationTextureScale(Result result, TexturedPair CurrentRenderTexture)
         {
-            if (Wall.CurrentRenderTexture is null)
+            if (CurrentRenderTexture is null)
                 return new Vector2f(0, 0);
 
-            float scaleX = (float)Wall.CurrentRenderTexture.Base.Scale / Wall.CurrentRenderTexture.Base.Width;
-            float scaleY = (float)result.ProjHeight / Wall.CurrentRenderTexture.Base.Height;
+            float scaleX = (float)CurrentRenderTexture.Base.Scale / CurrentRenderTexture.Base.Width;
+            float scaleY = (float)result.ProjHeight / CurrentRenderTexture.Base.Height;
            return new Vector2f(scaleX, scaleY);
         }
         internal static int NormalizeLvlWall(TexturedWall Wall)
@@ -31,8 +31,8 @@ namespace ObstacleLib.TexturedWallLib.Render
         }
         internal static TexturedPair? SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
         {
-            ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result.CarAngle);
-            return wallDetermine == ObjectSide.Error? null: Wall.MultiTextured[wallDetermine];
+            ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result);
+            return wallDetermine == ObjectSide.Error ? null : Wall.MultiTextured.UniqueTexture.GetValue(wallDetermine);
         }
     }
 }

@@ -88,24 +88,21 @@ namespace MoveLib
         {
             var (playerCellX, playerCellY) = Screen.Mapping(entity.X.Axis, entity.Y.Axis);
 
-            int minX = Screen.Mapping(playerCellX) - RadiusCheckTouch;
-            int maxX = Screen.Mapping(playerCellX) + RadiusCheckTouch;
-            int minY = Screen.Mapping(playerCellY) - RadiusCheckTouch;
-            int maxY = Screen.Mapping(playerCellY) + RadiusCheckTouch;
+            int minX = playerCellX - RadiusCheckTouch;
+            int maxX = playerCellX + RadiusCheckTouch;
+            int minY = playerCellY - RadiusCheckTouch;
+            int maxY = playerCellY + RadiusCheckTouch;
 
             for (int x = minX; x <= maxX; x += Screen.Setting.Tile)
             {
                 for (int y = minY; y <= maxY; y += Screen.Setting.Tile)
                 {
-                    int worldX = x;
-                    int worldY = y;
-
-                    if (!Map.Obstacles.ContainsKey((worldX, worldY)))
+                    if (!Map.Obstacles.ContainsKey((x, y)))
                         continue;
 
-                    foreach (var obstacle in Map.Obstacles[(worldX, worldY)])
+                    foreach (var obstacle in Map.Obstacles[(x, y)])
                     {
-                        if(IsCollision(obstacle, entity, nextX, nextY))
+                        if (IsCollision(obstacle, entity, nextX, nextY))
                             return true;
                     }
                 }
@@ -113,6 +110,7 @@ namespace MoveLib
 
             return false;
         }
+
 
         public void IsCollision(Entity entity, double nextX, double nextY)
         {

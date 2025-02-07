@@ -39,10 +39,13 @@ namespace TextureLib
         public uint HulfWidth { get; set; }
         public uint HulfHeight { get; set; }
         public static uint BaseHeight { get; } = 1308;
+        public static uint BaseWidth { get; } = 1920;
+
 
         //-----------------------Setting---------------------
         public int Scale { get; set; }
         public uint PixelCount { get; set; }
+        public static bool IsSmooth = false;
 
         //-------------------------Available formats------------------------
         private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
@@ -67,6 +70,9 @@ namespace TextureLib
             IsTruePath(path);
 
             Texture = new SFML.Graphics.Texture(path);
+            Texture.Smooth = IsSmooth;
+            Texture.GenerateMipmap();
+
             Width = Texture.Size.X;
             Height = Texture.Size.Y;
             SetTile();
@@ -76,6 +82,9 @@ namespace TextureLib
         public TextureObstacle(SFML.Graphics.Texture texture)
         {
             Texture = texture;
+            Texture.Smooth = IsSmooth;
+            Texture.GenerateMipmap();
+
             Width = texture.Size.X;
             Height = texture.Size.Y;
             SetTile();
@@ -86,6 +95,9 @@ namespace TextureLib
         public TextureObstacle(TextureObstacle textureObstacle)
         {
             Texture = textureObstacle.Texture;
+            Texture.Smooth = IsSmooth;
+            Texture.GenerateMipmap();
+
             Width = textureObstacle.Width;
             Height = textureObstacle.Height;
             Scale = textureObstacle.Scale;
@@ -100,6 +112,9 @@ namespace TextureLib
                 IsTruePath(path);
 
                 Texture = new SFML.Graphics.Texture(path);
+                Texture.Smooth = IsSmooth;
+                Texture.GenerateMipmap();
+
                 Width = Texture.Size.X;
                 Height = Texture.Size.Y;
                 SetTile();
@@ -119,7 +134,7 @@ namespace TextureLib
         }
 
         public static float DifferenceHeight(float height) => height / BaseHeight;
-
+        public static float DifferenceWidth(float width) => width / BaseWidth;
         public static SFML.Graphics.IntRect SetOffset(int offset, int screenTile, TextureObstacle texture)
         {
             int left = offset * texture.Scale;

@@ -12,21 +12,16 @@ using ObstacleLib.TexturedWallLib;
 using TextureLib;
 using HitBoxLib;
 using HitBoxLib.PositionObject;
+using Render.ResultAlgorithm;
 
 namespace ObstacleLib.TexturedWallLib.Determine
 {
     static internal class DetermineSide
     {
-        static float sinAngle = 0;
-        static float cosAngle = 0;
 
-        static float left = 0f;
-        static float right = 0f;
-        static float bottom = 0f;
-        static float top = 0f;
-
-
-        static private Vector2f DetermineCornerWallSide(TexturedWall wall, Entity entity)
+        static private Vector2f DetermineCornerWallSide(TexturedWall wall, Entity entity,
+    float cosAngle, float sinAngle,
+    float left, float right, float bottom, float top)
         {
             float tempValue = float.MaxValue;
 
@@ -76,7 +71,9 @@ namespace ObstacleLib.TexturedWallLib.Determine
             return new Vector2f(hitX, hitY);
         }
 
-        static private ObjectSide DetermineMineWallSide(TexturedWall wall, Entity entity)
+        static private ObjectSide DetermineMineWallSide(TexturedWall wall, Entity entity,
+    float cosAngle, float sinAngle,
+    float left, float right, float bottom, float top)
         {
             if (entity.Y.Axis >= top && entity.Y.Axis <= bottom)
             {
@@ -99,21 +96,21 @@ namespace ObstacleLib.TexturedWallLib.Determine
 
         static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity)
         {
-            cosAngle = entity.Direction.X;
-            sinAngle = entity.Direction.Y;
+            float  cosAngle = entity.Direction.X;
+            float  sinAngle = entity.Direction.Y;
 
-            left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
-            right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
-            bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
-            top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
+            float  left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
+            float  right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
+            float  bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
+            float  top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
 
 
             ObjectSide wallDetermine = ObjectSide.Error;
-            wallDetermine = DetermineMineWallSide(wall, entity);
+            wallDetermine = DetermineMineWallSide(wall, entity, cosAngle, sinAngle, left, right, bottom, top);
             if (wallDetermine != ObjectSide.Error)
                 return wallDetermine;
 
-            Vector2f cornerHit = DetermineCornerWallSide(wall, entity);
+            Vector2f cornerHit = DetermineCornerWallSide(wall, entity, cosAngle, sinAngle, left, right, bottom, top);
             if (cornerHit.X > cornerHit.Y)
             {
                 cornerHit.X /= Screen.Setting.Tile;
@@ -132,24 +129,24 @@ namespace ObstacleLib.TexturedWallLib.Determine
             }
         }
 
-        static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity, double addAngle)
+        static public ObjectSide DetermineWallAllSides(TexturedWall wall, Entity entity, Result result)
         {
-            cosAngle = (float)Math.Cos(addAngle);
-            sinAngle = (float)Math.Sin(addAngle);
+            float cosAngle = (float)result.CosCarAngle;
+            float sinAngle = (float)result.SinCarAngle;
 
-            left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
-            right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
-            bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
-            top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
+            float left = (float)(wall.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
+            float right = (float)(wall.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
+            float bottom = (float)(wall.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
+            float top = (float)(wall.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
 
 
             ObjectSide wallDetermine = ObjectSide.Error;
-            wallDetermine = DetermineMineWallSide(wall, entity);
+            wallDetermine = DetermineMineWallSide(wall, entity, cosAngle, sinAngle, left, right, bottom, top);
 
             if (wallDetermine != ObjectSide.Error)
                 return wallDetermine;
 
-            Vector2f cornerHit = DetermineCornerWallSide(wall, entity);
+            Vector2f cornerHit = DetermineCornerWallSide(wall, entity, cosAngle, sinAngle, left, right, bottom, top);
             if (cornerHit.X > cornerHit.Y)
             {
                 cornerHit.X /= Screen.Setting.Tile;

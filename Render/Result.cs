@@ -21,6 +21,8 @@ namespace Render.ResultAlgorithm
         public double Offset { get; set; } = 0;
         public double ProjHeight { get; set; } = 0;
         public double CarAngle {  get; set; } = 0;
+        public double SinCarAngle { get; set; } = 0; 
+        public double CosCarAngle { get; set; } = 0;
         public int Ray { get; set; } = 0;
         public Vector2f? PositionPreviousObject { get; set; } = null;
 

@@ -64,7 +64,6 @@ namespace ObstacleLib
 
 
         //----------------------Map Setting-----------------
-        public char Symbol {  get; set; }
         public SFML.Graphics.Color ColorInMap { get; set; }
         public virtual bool IsOffsetMap { get; set; } = false;
         //true - MapTile in MiniMap will be divided by 2 (positioning will be from the center of the object and not from the top corner)
@@ -76,9 +75,8 @@ namespace ObstacleLib
 
 
 
-        public Obstacle(double x, double y, char symbol, SFML.Graphics.Color colorInMap, bool isPassability)
+        public Obstacle(double x, double y, SFML.Graphics.Color colorInMap, bool isPassability)
         {
-            Symbol = symbol;
             ColorInMap = colorInMap;
             IsPassability = isPassability;
 
@@ -89,15 +87,18 @@ namespace ObstacleLib
 
 
 
-        public abstract void BlackoutObstacle(double depth);
+        public abstract SFML.Graphics.Color BlackoutObstacle(double depth);
         public abstract void Render(Result result, Entity entity);
         public abstract float NormalizeYPosition(double angleVertical, float addVariable = 0);
         public abstract void UpdateAdditionalInformation(double x, double y);
+
         public abstract  double GetZCoordinate();
         public abstract Vector2f GetCoordintePositionOnScreen(Result result, Entity entity);
 
 
-        public abstract void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1);
+        public abstract void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1);
+        public abstract void FillingTextureShape(RectangleShape rectangleShape);
+
         public abstract float CoordinatesOffsetMap(float baseOffset);
         public abstract Vector2f ConversionToMapCoordinates(float mapTile);  
     }

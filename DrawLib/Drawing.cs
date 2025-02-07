@@ -8,12 +8,13 @@ using ScreenLib;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
 using Render.RenderInterface;
+using TextureLib;
 
 namespace DrawLib
 {
     public class Drawing()
     {
-        HitPoint hitPoint;
+        HitPoint hitPoint = new HitPoint();
         List<(float, float)> ignoreCoo = new List<(float, float)>();
 
         public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
@@ -31,14 +32,15 @@ namespace DrawLib
 
                     float height = drawable.BringingToStandard(heightObj);
                     float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+
                     if (textureY < 0 - height)
                     {
                         ignoreCoo.Add(((float)obstacle.X.Axis, (float)obstacle.Y.Axis));
                         continue;
                     }
                     
-                    Vector2f pointPosition = new Vector2f(textureX + height / 2, textureY);
-                    CircleShape point = new CircleShape(heightObj)
+                    Vector2f pointPosition = new Vector2f(textureX + heightObj, textureY);
+                    CircleShape point = new CircleShape(height)
                     {
                         FillColor = colorFill,
                         Position = pointPosition

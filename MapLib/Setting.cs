@@ -15,7 +15,6 @@ namespace MapLib.SettingLib
         public int MapTileWidth { get; init; }
         public int MapTileHeight { get; init; }
 
-        public const char empty = ' ';
         public Setting(int mapWidth, int mapHeight)
         {
             MapWidth = mapWidth > 0 ? mapWidth : throw new Exception("mapWidth <= 0");

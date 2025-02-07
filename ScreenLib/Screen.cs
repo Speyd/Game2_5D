@@ -239,6 +239,13 @@ namespace ScreenLib
             (int)(x / Setting.Tile) * Setting.Tile,
             (int)(y / Setting.Tile) * Setting.Tile);
         }
+
+        public static Vector2i MappingVector(double x, double y)
+        {
+            return new Vector2i(
+            (int)(x / Setting.Tile) * Setting.Tile,
+            (int)(y / Setting.Tile) * Setting.Tile);
+        }
         public static int Mapping(double value, int tile)
         {
             return (int)(value / tile) * tile;

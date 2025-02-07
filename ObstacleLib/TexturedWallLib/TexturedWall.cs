@@ -42,92 +42,85 @@ namespace ObstacleLib.TexturedWallLib
         public override bool IsSingleAddable { get; init; } = true;
         public int LvlWall { get; private set; } = 1;
 
-        private static object lockObj = new object();
-
-        //-----------------------Render----------------------
-        public Sprite RenderSprite { get; set; } = new Sprite();
-
 
 
         #region Constructor
         public TexturedWall(TexturedWall textured)
-        : base(textured.X.Axis, textured.Y.Axis, textured.Symbol, textured.ColorInMap, textured.IsPassability)
+        : base(textured.X.Axis, textured.Y.Axis, textured.ColorInMap, textured.IsPassability)
         {
             MultiTextured = new MultiTexturedObject(textured.MultiTextured);
             TextureInMiniMap = new TextureObstacle(textured.MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
-            RenderSprite = new Sprite(textured.RenderSprite.Texture)
-            {
-                Position = textured.RenderSprite.Position,
-                Scale = textured.RenderSprite.Scale,
-                Rotation = textured.RenderSprite.Rotation,
-                Color = textured.RenderSprite.Color
-            };
-
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string path, bool isPassability = false)
 
-            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(path);
             MultiTextured = new MultiTexturedObject(path);
 
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string pathLR, string pathBT, bool isPassability = false)
 
-            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(pathLR);
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
 
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(string pathL, string pathR, string pathB, string pathT, bool isPassability = false)
 
-            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, SFML.Graphics.Color.Red, isPassability)
         {
             TextureInMiniMap = new TextureObstacle(pathL);
             MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
 
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
-            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
-            : base(0, 0, 'T', SFML.Graphics.Color.Red, isPassability)
+            : base(0, 0, SFML.Graphics.Color.Red, isPassability)
         {
             MultiTextured = new MultiTexturedObject(textures);
             TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
-            UpdateHeightHitBox();
+            UpdateBaseHeightHitBox();
             Z.Axis = LvlWall * Screen.Setting.Tile;
         }
         #endregion
 
         #region IMiniMapRenderable_Implementation
-        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        {
+            rectangleShape.OutlineThickness = OutlineThickness;
+            rectangleShape.FillColor = ColorInMap;
+        }
+        public override void FillingTextureShape(RectangleShape rectangleShape)
         {
             if (TextureInMiniMap is not null)
                 rectangleShape.Texture = TextureInMiniMap.Texture;
             else
                 rectangleShape.FillColor = ColorInMap;
         }
+
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
@@ -148,15 +141,11 @@ namespace ObstacleLib.TexturedWallLib
 
             return new Vector2f(positionX, positionY);
         }
-        public override void BlackoutObstacle(double depth)
+        public override SFML.Graphics.Color BlackoutObstacle(double depth)
         {
-            if (CurrentRenderTexture is null || CurrentRenderTexture.Base.Texture is null || RenderSprite is null)
-                return;
-
-
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+            return new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
         public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
@@ -176,7 +165,7 @@ namespace ObstacleLib.TexturedWallLib
 
         #region IWall_Implementation
 
-        private void UpdateHeightHitBox()
+        private void UpdateBaseHeightHitBox()
         {
             HitBox[HitBoxSideType.DownSide]?.SetOffset(Screen.Setting.Tile);
             HitBox[HitBoxSideType.UpSide]?.SetOffset(0);
@@ -210,7 +199,8 @@ namespace ObstacleLib.TexturedWallLib
             if (CurrentRenderTexture is null)
                 throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
 
-            return heightObj * TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
+            heightObj *= TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
+            return heightObj;
         }
 
         public float GetAveragedMult(float baseMult)
@@ -278,28 +268,25 @@ namespace ObstacleLib.TexturedWallLib
         }
         public override void Render(Result result, Entity entity)
         {
-            lock (lockObj)
-            {
-                CurrentRenderTexture = RenderOperation.SelectCurrentRenderTexture(this, result, entity);
-                if (CurrentRenderTexture is null)
-                    return;
+            TexturedPair? CurrentRenderTexture = RenderOperation.SelectCurrentRenderTexture(this, result, entity);
+            if (CurrentRenderTexture is null)
+                return;
 
 
-                IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
-                Vector2f position = GetCoordintePositionOnScreen(result, entity);
-                if (IsOffScreen(result, position, textureRect))
-                    return;
+            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
+            Vector2f position = GetCoordintePositionOnScreen(result, entity);
+            if (IsOffScreen(result, position, textureRect))
+                return;
 
-                RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
-                BlackoutObstacle(result.Depth);
+            Sprite RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
+            RenderSprite.Color = BlackoutObstacle(result.Depth);
 
-                RenderSprite.Position = position;
-                RenderSprite.Scale = RenderOperation.CalculationTextureScale(this, result);
+            RenderSprite.Position = position;
+            RenderSprite.Scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
 
 
-                result.Depth += LvlWall * 0.01;
-                ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
-            }
+            result.Depth += LvlWall * 0.01;
+            ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
         }
     }
 }

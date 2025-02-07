@@ -12,7 +12,9 @@ namespace Render.RenderInterface
 {
     public interface IMiniMapRenderable
     {
-        void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1);
+        void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1);
+        void FillingTextureShape(RectangleShape rectangleShape);
+
         float CoordinatesOffsetMap(float baseOffset);
         Vector2f ConversionToMapCoordinates(float mapTile);
     }

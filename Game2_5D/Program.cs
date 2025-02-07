@@ -41,6 +41,8 @@ using ObstacleLib;
 using ObstacleLib.SpriteLib.Hitbox;
 using DataPipes.Dictionary;
 using HitBoxLib;
+using OpenTK.Windowing.GraphicsLibraryFramework;
+using ObstacleLib.BlankWallLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100);
 Screen.Initialize(1000, 800);
@@ -238,9 +240,13 @@ map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png")
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
 map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
+map.AddObstacle(3, 5, new BlankWall(122, 12, 200));
 map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
-Player player = new Player(100);
+Player player = new Player(100)
+{
+    MaxRenderTile = 1200,
+};
 player.X.Axis = 5 * Screen.Setting.Tile;
 player.Y.Axis = 3 * Screen.Setting.Tile;
 player.Z.Axis = 0;
@@ -254,14 +260,15 @@ player.HitBox[HitBoxSideType.DownSide]?.SetOffset(0);
 
 MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
 {
-    //IsRender = false
+    //IsRender = true
 };
 
+mapMini.Setting.OutputRenderMethod = OutputRenderMethod.Color;
 
 Control control = new Control(map, mapMini.Zoom);
 player.OnControlAction = control.MakePressed;
 
-Algorithm algorithm = new Algorithm(map, player, new Render.ResultAlgorithm.Result(), new ZBuffer());
+Algorithm algorithm = new Algorithm(map, player);
 
 DateTime from = DateTime.Now;
 FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\FontText\ArialBold.ttf", Color.White);
@@ -282,11 +289,10 @@ multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"
 
 //map.AddObstacle(10, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
-map.AddObstacle(9, 5, sprite1);
+//map.AddObstacle(9, 5, sprite1);
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
-
-
+//Console.WriteLine(map.Obstacles.Count);
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 try
 {

@@ -11,7 +11,6 @@ namespace ScreenLib
     public class OutputPriority(RenderWindow window)
     {
         public SortedDictionary<int, List<Drawable>> TreePriority { get; init; } = new SortedDictionary<int, List<Drawable>>();
-
         public void AddToPriority(int priority, Drawable sprite)
         {
             if (!TreePriority.ContainsKey(priority))

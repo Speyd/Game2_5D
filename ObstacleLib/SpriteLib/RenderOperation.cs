@@ -92,7 +92,7 @@ namespace ObstacleLib.SpriteLib.Render
                 return;
 
             sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.CurrentRenderTexture.Texture);
-            sprite.BlackoutObstacle(sprite.Distance);
+            sprite.RenderSprite.Color = sprite.BlackoutObstacle(sprite.Distance);
 
             sprite.RenderSprite.Origin = new Vector2f(sprite.CurrentRenderTexture.Width / 2, sprite.CurrentRenderTexture.Height / 2);
             sprite.RenderSprite.Position = GetPositionOnScreen(sprite, entity, height);

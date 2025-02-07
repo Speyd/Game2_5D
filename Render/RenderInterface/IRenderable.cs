@@ -23,7 +23,7 @@ namespace Render.InterfaceRender
         {
             throw new NotImplementedException("This method should be implemented in a derived interface");
         }
-        void BlackoutObstacle(double depth);
+        SFML.Graphics.Color BlackoutObstacle(double depth);
         void Render(Result result, Entity entity);
         float NormalizeYPosition(double angleVertical, float addVariable = 0);
         double GetZCoordinate();

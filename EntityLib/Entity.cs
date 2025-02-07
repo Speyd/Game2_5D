@@ -44,9 +44,7 @@ namespace EntityLib
 
 
         //---------------------Ray Setting----------------------
-        public double MaxRayMapDistance { get; private set; }
-        public double MaxRaySpriteDistance { get; private set; }
-
+        public double MaxRenderTile { get; set; }
 
         //---------------------Render Setting----------------------
         public double DeltaAngle { get; private set; }
@@ -105,9 +103,6 @@ namespace EntityLib
 
             EntitySettingChangesFun();
             Screen.WidthChangesFun += EntitySettingChangesFun;
-
-            MaxRayMapDistance = maxDistance;
-            MaxRaySpriteDistance = 1000;
         }
 
 
@@ -123,13 +118,6 @@ namespace EntityLib
             double nextX = X.Axis + deltaX;
             double nextY = Y.Axis + deltaY;
             return (nextX, nextY);
-        }
-        public (float x1, float y1) CalculateEndPoint()
-        {
-            float x1 = (float)(X.Axis + MaxRayMapDistance * Math.Cos(Angle));
-            float y1 = (float)(Y.Axis + MaxRayMapDistance * Math.Sin(Angle));
-
-            return (x1, y1);
         }
     }
 }

@@ -23,22 +23,20 @@ namespace ObstacleLib.BlankWallLib
     {
         //--------------------Color For Render------------------
         public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
-        public Color ColorFilling { get; set; }
+       // public Color ColorFilling { get; set; }
 
         //-------------------Setting--------------------
         public override bool IsSingleAddable { get; init; } = true;
 
         #region Constructor
         public BlankWall(Color color, bool isPassability = false)
-
-            : base(0, 0, 'B', color, isPassability)
+            : base(0, 0, color, isPassability)
         {
             StandartColorFilling = color;
         }
 
         public BlankWall(byte r, byte g, byte b, bool isPassability = false)
-
-            : base(0, 0, 'B', new Color(r, g, b), isPassability)
+            : base(0, 0, new Color(r, g, b), isPassability)
         {
             StandartColorFilling = new Color(r, g, b);
         }
@@ -46,9 +44,14 @@ namespace ObstacleLib.BlankWallLib
 
 
          #region IMiniMapRenderable_Implementation
-        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
         {
             rectangleShape.OutlineThickness = OutlineThickness;
+            rectangleShape.FillColor = ColorInMap;
+        }
+        public override void FillingTextureShape(RectangleShape rectangleShape)
+        {
+            rectangleShape.OutlineThickness = 1;
             rectangleShape.FillColor = ColorInMap;
         }
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
@@ -70,7 +73,7 @@ namespace ObstacleLib.BlankWallLib
             return new Vector2f(positionX, positionY);
         }
 
-        public override void BlackoutObstacle(double depth)
+        public override SFML.Graphics.Color BlackoutObstacle(double depth)
         {
             byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
@@ -78,7 +81,7 @@ namespace ObstacleLib.BlankWallLib
             byte green = (byte)Math.Min(StandartColorFilling.G * darkened / 255, 255);
             byte blue = (byte)Math.Min(StandartColorFilling.B * darkened / 255, 255);
 
-            ColorFilling = new Color(red, green, blue);
+            return new Color(red, green, blue);
         }
         public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
@@ -103,10 +106,10 @@ namespace ObstacleLib.BlankWallLib
         #endregion
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            HitBox[HitBoxSideType.Right]?.SetOffset(0);
-            HitBox[HitBoxSideType.Bottom]?.SetOffset(0);
-            HitBox[HitBoxSideType.DownSide]?.SetOffset(Screen.Setting.Tile);
-            HitBox[HitBoxSideType.UpSide]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.Left]?.SetOffset(0);
+            HitBox[HitBoxSideType.Top]?.SetOffset(0);
+            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
+            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
 
             X.Axis = x;
             Y.Axis = y;
@@ -119,13 +122,14 @@ namespace ObstacleLib.BlankWallLib
         }
         public override void Render(Result result, Entity entity)
         {
-            BlackoutObstacle(result.Depth);
+            Color ColorFilling = BlackoutObstacle(result.Depth);
 
             VertexArray renderWall = new VertexArray(PrimitiveType.Quads, 4);
             RenderOperation.UpdateVertices(
                 this, renderWall,
                 RenderOperation.CalculationBlockScale(result),
-                GetCoordintePositionOnScreen(result, entity)
+                GetCoordintePositionOnScreen(result, entity),
+                ColorFilling
                 );
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);

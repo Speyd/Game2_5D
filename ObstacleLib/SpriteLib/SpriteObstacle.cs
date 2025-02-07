@@ -72,17 +72,17 @@ namespace ObstacleLib.SpriteLib
 
         #region Constructor
         public SpriteObstacle(List<TextureObstacle> textures, bool isPassability = false)
-            : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
+            : base(0, 0, SFML.Graphics.Color.White, isPassability)
         {
             Adder.AddTextures(this, textures);
         }
         public SpriteObstacle(TextureObstacle texture, bool isPassability = false)
-           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
+           : base(0, 0, SFML.Graphics.Color.White, isPassability)
         {
             Adder.AddTexture(this, texture);
         }
         public SpriteObstacle(string path, bool isDirectory, bool isPassability = false, bool folderAccounting = false)
-           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
+           : base(0, 0, SFML.Graphics.Color.White, isPassability)
         {
             if(isDirectory)
                 Adder.AddTextureFromFolder(this, path, folderAccounting);
@@ -90,7 +90,7 @@ namespace ObstacleLib.SpriteLib
                 Adder.AddTexture(this, path);
         }
         public SpriteObstacle(List<string> paths, bool isPassability = false)
-           : base(0, 0, 'S', SFML.Graphics.Color.White, isPassability)
+           : base(0, 0, SFML.Graphics.Color.White, isPassability)
         {
             Adder.AddTextures(this, paths);
         }
@@ -98,7 +98,12 @@ namespace ObstacleLib.SpriteLib
 
 
         #region IMiniMapRenderable_Implementation
-        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        {
+            rectangleShape.OutlineThickness = OutlineThickness;
+            rectangleShape.FillColor = ColorInMap;
+        }
+        public override void FillingTextureShape(RectangleShape rectangleShape)
         {
             if (TextureInMap is not null)
                 rectangleShape.Texture = TextureInMap.Texture;
@@ -110,6 +115,8 @@ namespace ObstacleLib.SpriteLib
             else
                 rectangleShape.FillColor = ColorInMap;
         }
+
+
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset / 2;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
@@ -128,12 +135,14 @@ namespace ObstacleLib.SpriteLib
             float height = (float)(Screen.ScreenHeight / Distance * Scale);
             return RenderOperation.GetPositionOnScreen(this, entity, height);
         }
-        public override void BlackoutObstacle(double depth)
+        public override SFML.Graphics.Color BlackoutObstacle(double depth)
         {
             byte darknessFactor = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
 
-            if (CurrentRenderTexture != null && CurrentRenderTexture.Texture != null)
-                RenderSprite.Color = new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+            if (CurrentRenderTexture is null || CurrentRenderTexture.Texture is null)
+                throw new Exception("Error blackout Texture");
+
+            return new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
         public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
         {
@@ -146,19 +155,11 @@ namespace ObstacleLib.SpriteLib
                 return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
             }
         }
-        internal float GetXPositionOnScreen(Entity entity)
-        {
-            int delta_rays = (int)(Angle / entity.DeltaAngle);
-            int current_ray = Screen.Setting.CenterRay + delta_rays;
-
-            if (Distance >= Screen.Setting.Tile)
-                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
-
-            return current_ray;
-        }
+        public override double GetZCoordinate() => Z.Axis;
         #endregion
 
         #region IRayPassability_Implementation
+
         public override void UpdateAdditionalInformation(double x, double y)
         {
             X.Axis = x;
@@ -188,6 +189,16 @@ namespace ObstacleLib.SpriteLib
         #endregion
 
         #region ISelfDrawable_Implementation
+        public void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes)
+        {
+            var type = this.GetType();
+            if (!uniqueSelfDrawableTypes.Contains(type))
+            {
+                uniqueSelfDrawableTypes.Add(type);
+                hasNewTypes = true;
+            }
+            this.AddObstacleToRenderList();
+        }
         public void AddObstacleToRenderList()
         {
             if (IsAdded == true)
@@ -210,22 +221,22 @@ namespace ObstacleLib.SpriteLib
             }
         }
         #endregion
-        public override double GetZCoordinate() => Z.Axis;
 
-        public void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes)
+     
+        internal float GetXPositionOnScreen(Entity entity)
         {
-            var type = this.GetType();
-            if (!uniqueSelfDrawableTypes.Contains(type))
-            {
-                uniqueSelfDrawableTypes.Add(type);
-                hasNewTypes = true;
-            }
-            this.AddObstacleToRenderList();
+            int delta_rays = (int)(Angle / entity.DeltaAngle);
+            int current_ray = Screen.Setting.CenterRay + delta_rays;
+
+            if (Distance >= Screen.Setting.Tile)
+                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
+
+            return current_ray;
         }
         public override void Render(Result result, Entity entity)
         {
             double spriteAngle = RenderOperation.CalculationAngularDistance(this, entity);
-            if (Distance > entity.MaxRaySpriteDistance)
+            if (Distance > entity.MaxRenderTile)
                 return;
 
             Angle = RenderOperation.CalculationSpriteAngle(entity.Angle, spriteAngle);

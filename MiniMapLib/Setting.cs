@@ -13,9 +13,7 @@ namespace MiniMapLib.SettingMap
 {
     public class Setting
     {
-        private float _centerX;
         public float CenterX { get; private set; }
-        private float _centerY;
         public float CenterY { get; private set; }
 
         public void SetCenterWindow(RenderTexture Window)
@@ -47,6 +45,9 @@ namespace MiniMapLib.SettingMap
 
         public PositionsMiniMap Positions { get; set; }
         public Vector2f coorinatesPositionWindow;
+
+        public OutputRenderMethod OutputRenderMethod { get; set; }
+        public int OutLine { get; set; } = 1;
 
         public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
         {

@@ -16,7 +16,7 @@ namespace Render.ZBufferRender
         private static ConcurrentDictionary<double, Drawable> zBuffer = new ConcurrentDictionary<double, Drawable>();
         static object lockObj = new object();
         
-        public void Render()
+        public static void Render()
         {
             List<KeyValuePair<double, Drawable>> sortedList;
 

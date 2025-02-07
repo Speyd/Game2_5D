@@ -21,12 +21,6 @@ namespace MapLib
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
-
-        //---------------------Map String-----------------------
-        public StringBuilder MapStr { get; init; } = new StringBuilder();
-
-
-
         public Map(int height, int width)
         {
             Setting = new Setting(height, width);
@@ -35,24 +29,9 @@ namespace MapLib
             RefillingObstacles();
         }
 
-        private void CreatMap()
-        {
-
-            MapStr.Append(new string(StandartBlock.Symbol, Setting.MapWidth));
-
-            for (int i = 0; i < Setting.MapHeight - 2; i++)
-            {
-                MapStr.Append(StandartBlock.Symbol + new string(Setting.empty, Setting.MapWidth - 2) + StandartBlock.Symbol);
-            }
-
-            MapStr.Append(new string(StandartBlock.Symbol, Setting.MapWidth));
-        }
         private void RefillingObstacles()
         {
             Obstacles.Clear();
-            MapStr.Clear();
-
-            CreatMap();
 
             for (int y = 0; y < Setting.MapHeight; y++)
             {
@@ -107,11 +86,6 @@ namespace MapLib
             if (y < 0 || y >= Setting.MapHeight ||
                x < 0 || x >= Setting.MapWidth)
                 throw new Exception("Index out of range 'addEmptyToMap'");
-            else if (addObstacle.Symbol == Setting.empty)
-                return;
-
-
-            MapStr[y * Setting.MapWidth + x] = addObstacle.Symbol;
 
             x *= Screen.Setting.Tile;
             y *= Screen.Setting.Tile;
@@ -195,34 +169,6 @@ namespace MapLib
         public bool CheckTrueCoordinates(ValueTuple<int, int> coo)
         {
             return coo.Item1 >= 0 && coo.Item2 >= 0 && coo.Item1 < Setting.MapTileWidth && coo.Item2 < Setting.MapTileHeight;
-        }
-
-
-        public List<ValueTuple<int, int>> GetMapWorld(int TILE, Map map)
-        {
-            List<ValueTuple<int, int>> values = new List<(int, int)>();
-            for (int i = 0; i < map.Setting.MapHeight; i++)
-            {
-                for (int j = 0; j < map.Setting.MapWidth; j++)
-                {
-                    if (map.MapStr[i * map.Setting.MapWidth + j] == '#')
-                        values.Add((j * TILE, i * TILE));
-                }
-
-            }
-
-            return values;
-        }
-        public void PrintMap()
-        {
-            for(int i = 0; i < Setting.MapHeight; i++)
-            {
-                for(int  j = 0; j < Setting.MapWidth; j++)
-                {
-                    Console.Write(MapStr[i * Setting.MapWidth + j]);
-                }
-                Console.WriteLine();
-            }
         }
     }
 }

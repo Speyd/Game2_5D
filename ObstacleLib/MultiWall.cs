@@ -21,24 +21,17 @@ namespace ObstacleLib
 {
     public class MultiWall : Obstacle, IDrawable, IRayRenderable
     {
-        public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
-        {
-            if (depth < maxDepth)
-                infoObject.Add(new InfoObject(depth, coordinate, this));
-        }
-
         //-------------------------Wall-------------------------
         public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
         private int CurrentLevelWall { get; set; } = 0;
 
         //-----------------------Setting----------------------
         public override bool IsSingleAddable { get; init; } = true;
-        private static object lockObj = new object();
 
 
-        public MultiWall() : base(0, 0, 'M', Color.Red, false) {}
+        public MultiWall() : base(0, 0, Color.Red, false) {}
         public MultiWall(List<TexturedWall> walls) 
-            : base(0, 0, 'M', Color.Red, false)
+            : base(0, 0, Color.Red, false)
         {
             AddLevelWall(walls);
         }
@@ -124,7 +117,12 @@ namespace ObstacleLib
         #endregion
 
         #region IMiniMapRenderable_Implementation
-        public override void FillingShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
+        {
+            rectangleShape.OutlineThickness = OutlineThickness;
+            rectangleShape.FillColor = ColorInMap;
+        }
+        public override void FillingTextureShape(RectangleShape rectangleShape)
         {
             if (Walls.Count > 0)
             {
@@ -142,6 +140,7 @@ namespace ObstacleLib
 
             rectangleShape.FillColor = ColorInMap;
         }
+
         public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
         public override Vector2f ConversionToMapCoordinates(float mapTile)
         {
@@ -153,7 +152,13 @@ namespace ObstacleLib
         #endregion
 
         #region IRenderable_Implementation
-        public override void BlackoutObstacle(double depth) {}
+        public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
+        {
+            if (depth < maxDepth)
+                infoObject.Add(new InfoObject(depth, coordinate, this));
+        }
+
+        public override SFML.Graphics.Color BlackoutObstacle(double depth) => new Color(255, 255, 255, 255);
         public override double GetZCoordinate() => Z.Axis;
 
         public override float NormalizeYPosition(double angleVertical, float addVariable = 0)

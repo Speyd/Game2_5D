@@ -19,10 +19,11 @@ using DataPipes.Pool;
 
 using static SFML.Graphics.Font;
 using static SFML.Window.Joystick;
+using System.Buffers;
 
 namespace BresenhamAlgorithm
 {  
-    public class Algorithm(Map map, Entity entity, Result result, ZBuffer zBuffer)
+    public class Algorithm(Map map, Entity entity)
     {
         //------------------------------Pool-------------------------------
         static ObjectPool<Result> resultobjectPool = new ObjectPool<Result>();
@@ -54,7 +55,6 @@ namespace BresenhamAlgorithm
             }
         }
 
-
         //------------------------------Setting Render-------------------------------
         private HashSet<Type> UniqueSelfDrawableTypes { get; init; } = new HashSet<Type>();
         private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
@@ -81,7 +81,7 @@ namespace BresenhamAlgorithm
                         //Console.WriteLine($"Method RenderSelfDrawableList not found for {type.Name}");
                     }
                 }
-                del?.Invoke(result, entity);
+                del?.Invoke(new Result(), entity);
             }
         }
 
@@ -103,18 +103,15 @@ namespace BresenhamAlgorithm
 
             double coordinate = 0;
             double depth = 0;
-            double maxDepth = 0;
             if (isVertical)
             {
                 coordinate = y;
                 depth = depth_v;
-                maxDepth = MaxVerticalDistance;
             }
             else
             {
                 coordinate = x;
                 depth = depth_h;
-                maxDepth = MaxHorizontalDistance;
             }
 
 
@@ -127,7 +124,7 @@ namespace BresenhamAlgorithm
                         break;
 
                     case IRayRenderable ray:
-                        ray.ProcessForRendering(infoObject, coordinate, depth, maxDepth); isAdded = true;
+                        ray.ProcessForRendering(infoObject, coordinate, depth, entity.MaxRenderTile); isAdded = true;
                         break;
 
                     default:
@@ -186,7 +183,6 @@ namespace BresenhamAlgorithm
         private void RenderRayObstacles(int ray, bool rayPassability, double carAngleRay, List<InfoObject> InfoObject, Result ParallelResult)
         {
             var visibleObstacles = FilterVisibleObstacles(InfoObject, rayPassability);
-
             int sizeVisibleObst = visibleObstacles.Count;
             for (int obst = 0; obst < sizeVisibleObst; obst++)
             {
@@ -201,9 +197,9 @@ namespace BresenhamAlgorithm
         {
             double carAngle = entity.Angle - entity.HalfFov;
 
-            var coordinates = Screen.Mapping(entity.X.Axis, entity.Y.Axis);
+            Vector2i coordinates = Screen.MappingVector(entity.X.Axis, entity.Y.Axis);
 
-            Parallel.For(0, Screen.Setting.AmountRays, ray =>
+            Parallel.For(0, Screen.Setting.AmountRays, Screen.Setting.ParallelOptions, ray =>
             {
                 var ParallelResult = resultobjectPool.Get();
                 var ParallelInfoObj = infoObjectPool.Get();
@@ -214,10 +210,11 @@ namespace BresenhamAlgorithm
                 double carAngleRay = carAngle + ray * entity.DeltaAngle;
                 double sinA = Math.Sin(carAngleRay);
                 double cosA = Math.Cos(carAngleRay);
-             
+                ParallelResult.SinCarAngle = sinA;
+                ParallelResult.CosCarAngle = cosA;
 
-                CheckVericals(ref x, ref auxiliaryX, coordinates.Item1, cosA);
-                for (int j = 0; j < MaxVerticalDistance; j++) 
+                CheckVericals(ref x, ref auxiliaryX, coordinates.X, cosA);
+                for (int j = 0; j < entity.MaxRenderTile; j += Screen.Setting.Tile) 
                 {
                     depth_v = (x - entity.X.Axis) / cosA;
                     vy = entity.Y.Axis + depth_v * sinA;
@@ -233,8 +230,8 @@ namespace BresenhamAlgorithm
                     x += auxiliaryX * Screen.Setting.Tile;
                 };
 
-                CheckVericals(ref y, ref auxiliaryY, coordinates.Item2, sinA);
-                for (int j = 0; j < MaxHorizontalDistance; j++)
+                CheckVericals(ref y, ref auxiliaryY, coordinates.Y, sinA);
+                for (int j = 0; j < entity.MaxRenderTile; j += Screen.Setting.Tile)
                 {
                     depth_h = (y - entity.Y.Axis) / sinA;
                     hx = entity.X.Axis + depth_h * cosA;
@@ -261,8 +258,8 @@ namespace BresenhamAlgorithm
                 PrepareRenderObjects();
                 HasNewTypes = false;
             }
-            CachedDelegates.ForEach(cd => cd.Value(result, entity));
-            zBuffer.Render();
+            CachedDelegates.ForEach(cd => cd.Value(new Result(), entity));
+            ZBuffer.Render();
         }
     }
 }
