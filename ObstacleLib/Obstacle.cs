@@ -132,6 +132,7 @@ namespace ObstacleLib
             distance /= Screen.Setting.Tile;
             return WorldToScreenY(verticalAngle) - (float)(side / distance);
         }
+
         public virtual HitboxObjectInfo GetHitboxObjectInfo()
         {
             HitboxObjectInfo hitboxObjectInfo = new HitboxObjectInfo();

@@ -163,7 +163,7 @@ namespace ObstacleLib.SpriteLib
         #region IRayPassability_Implementation
         private bool IsTouches(bool isCollidingX, bool isCollidingY, bool isCollidingZ)
         {
-            if ((isCollidingX && isCollidingY) == true && isCollidingZ == true)
+            if ((isCollidingX || isCollidingY) == true && isCollidingZ == true)
                 return true;
            
             else 
@@ -189,7 +189,11 @@ namespace ObstacleLib.SpriteLib
             bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(HitBox.MainHitBox, entity, currentRayX);
             bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(HitBox.MainHitBox, entity, currentRayY);
             bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, HitBox.MainHitBox, entity);
-            Console.WriteLine(isCollidingZ);
+            Console.WriteLine($"isCollidingX: {isCollidingX}");
+            Console.WriteLine($"isCollidingY: {isCollidingY}");
+            Console.WriteLine($"isCollidingZ: {isCollidingZ}");
+
+
             bool result = IsTouches(isCollidingX, isCollidingY, isCollidingZ);    
             if (result == true)
                 CheckTouchesSegmentHitBox(entity, currentRayX, currentRayY);

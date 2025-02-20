@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using EntityLib;
 using HitBoxLib;
 using MapLib;
+using ObstacleLib.SpriteLib;
 using Render.ZBufferRender;
 using SFML.Graphics;
 
@@ -23,10 +24,13 @@ namespace BresenhamAlgorithm
             {
                 foreach (var obstacle in obstList.Value)
                 {
-                    HitboxObjectInfo hitboxObjectInfo = obstacle.GetHitboxObjectInfo();
-                    VertexArray vertex = HitBoxLib.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo);
+                    if (obstacle is SpriteObstacle sprite)
+                    {
+                        HitboxObjectInfo hitboxObjectInfo = obstacle.GetHitboxObjectInfo();
+                        VertexArray vertex = HitBoxLib.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo);
 
-                    ZBuffer.AddToZBuffer(vertex, index);
+                        ZBuffer.AddToZBuffer(vertex, index);
+                    }
                     index += step;
                 }
             }
