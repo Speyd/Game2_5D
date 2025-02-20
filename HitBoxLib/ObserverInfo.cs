@@ -13,6 +13,7 @@ namespace HitBoxLib
         public double vertivalAngle;
         public double fov;
         public double deltaAngle;
+        public double ProjCoeff;
         public Vector2f position;
     }
 }

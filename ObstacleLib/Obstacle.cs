@@ -126,7 +126,12 @@ namespace ObstacleLib
         public abstract Vector2f ConversionToMapCoordinates(float mapTile);
 
 
-        public abstract float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject);
+        public virtual float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        {
+            distance *= Math.Cos(angleObject);
+            distance /= Screen.Setting.Tile;
+            return WorldToScreenY(verticalAngle) - (float)(side / distance);
+        }
         public virtual HitboxObjectInfo GetHitboxObjectInfo()
         {
             HitboxObjectInfo hitboxObjectInfo = new HitboxObjectInfo();

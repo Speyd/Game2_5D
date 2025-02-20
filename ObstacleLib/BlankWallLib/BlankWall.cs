@@ -50,17 +50,11 @@ namespace ObstacleLib.BlankWallLib
         #endregion
 
 
-        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
-        {
-            distance *= Math.Cos(angleObject);
-            return WorldToScreenY(verticalAngle, 0) - (float)(side * Screen.ScreenHeight / distance);
-        }
-
         #region MapAdder_Implementation
         private void UpdateBaseHeightHitBox()
         {
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
         }
         public override void UpdateAdditionalInformation(double x, double y)
         {

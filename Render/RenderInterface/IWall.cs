@@ -9,7 +9,7 @@ namespace Render.RenderInterface
 {
     public interface IWall : IRayRenderable
     {
-        const float baseMultHeightOnScreen = 0.7f;
-        const int minLvlWall = 0;
+        const float baseMultHeightOnScreen = 8.5f;
+        const int minLvlWall = 1;
     }
 }

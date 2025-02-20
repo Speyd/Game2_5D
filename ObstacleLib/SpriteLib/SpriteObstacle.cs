@@ -256,14 +256,9 @@ namespace ObstacleLib.SpriteLib
         public override HitboxObjectInfo GetHitboxObjectInfo()
         {
             HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
-            hitboxObjectInfo.useEdgeForHeight = false;
+            hitboxObjectInfo.useEdgeForHeight = true;
 
             return hitboxObjectInfo;
-        }
-        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
-        {
-            float height = (float)(Screen.ScreenHeight / Distance * Scale);
-            return WorldToScreenY(verticalAngle, height / 2) - (float)(side / 2 * Screen.ScreenHeight / distance);
         }
     }
 }

@@ -17,41 +17,16 @@ namespace ObstacleLib.SpriteLib.Hitbox
     public static class CollisionHitbox
     {
 
-        const double UpAdjustmentFactor = 0.6;
-        const double DownAdjustmentFactor = 0.6;
+        const double UpAdjustmentFactor = -0.3;
+        const double DownAdjustmentFactor = 0.3;
 
         public static bool IsRayTouchesObjectX(Box hitBox, Entity entity, float currentRayX)
         {
-            // currentRayX += entity.Direction.X * 10;
-            //if (hitBox[HitBoxSideType.Right]?.Offset == 80)
-            //{
-            //    Console.WriteLine($"\n---------------------------");
-            //    Console.WriteLine($"currentRayX: {currentRayX}");
-            //    Console.WriteLine($"Left: {hitBox[HitBoxSideType.Left]?.Side}");
-            //    Console.WriteLine($"Right: {hitBox[HitBoxSideType.Right]?.Side}");
-
-            //    bool gf = currentRayX > hitBox[HitBoxSideType.Left]?.Side &&
-            //           currentRayX < hitBox[HitBoxSideType.Right]?.Side;
-            //    Console.WriteLine($"res: {gf}");
-            //}
             return currentRayX > hitBox[HitBoxSideType.Left]?.Side &&
                    currentRayX < hitBox[HitBoxSideType.Right]?.Side;
         }
         public static bool IsRayTouchesObjectY(Box hitBox, Entity entity, float currentRayY)
         {
-            //currentRayY += entity.Direction.Y * 10;
-            //if (hitBox[HitBoxSideType.Bottom]?.Offset == 80)
-            //{
-            //    Console.WriteLine($"\n---------------------------");
-            //    Console.WriteLine($"currentRayY: {currentRayY}");
-            //    Console.WriteLine($"Top: {hitBox[HitBoxSideType.Top]?.Side}");
-            //    Console.WriteLine($"Bottom: {hitBox[HitBoxSideType.Bottom]?.Side}");
-
-
-            //    bool gf = currentRayY > hitBox[HitBoxSideType.Top]?.Side &&
-            //           currentRayY < hitBox[HitBoxSideType.Bottom]?.Side;
-            //    Console.WriteLine($"res: {gf}");
-            //}
             return currentRayY > hitBox[HitBoxSideType.Top]?.Side &&
                    currentRayY < hitBox[HitBoxSideType.Bottom]?.Side;
         }

@@ -36,7 +36,7 @@ namespace Render.ResultAlgorithm
 
             Ray = ray;
             CarAngle = carAngle;
-
+;
             Offset = (int)Offset % Screen.Setting.Tile;
             ProjHeight = Math.Min((int)(entity.ProjCoeff / Depth), textureStretchingCloseUp * Screen.ScreenHeight);
         }

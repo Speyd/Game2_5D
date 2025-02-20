@@ -42,7 +42,7 @@ namespace ObstacleLib.TexturedWallLib
 
         //----------------------Setting---------------------
         public override bool IsSingleAddable { get; init; } = true;
-        public int LvlWall { get; private set; } = 0;
+        public int LvlWall { get; private set; } = 1;
 
 
 
@@ -55,7 +55,7 @@ namespace ObstacleLib.TexturedWallLib
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         public TexturedWall(string path, bool isPassability = false)
 
@@ -65,7 +65,7 @@ namespace ObstacleLib.TexturedWallLib
             MultiTextured = new MultiTexturedObject(path);
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         public TexturedWall(string pathLR, string pathBT, bool isPassability = false)
 
@@ -75,7 +75,7 @@ namespace ObstacleLib.TexturedWallLib
             MultiTextured = new MultiTexturedObject(pathLR, pathBT);
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         public TexturedWall(string pathL, string pathR, string pathB, string pathT, bool isPassability = false)
 
@@ -85,7 +85,7 @@ namespace ObstacleLib.TexturedWallLib
             MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
             : base(0, 0, SFML.Graphics.Color.Red, isPassability)
@@ -95,7 +95,7 @@ namespace ObstacleLib.TexturedWallLib
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
             : base(0, 0, SFML.Graphics.Color.Red, isPassability)
@@ -105,15 +105,15 @@ namespace ObstacleLib.TexturedWallLib
                                                    throw new Exception("Error load Texture(TexturedWall)"));
 
             UpdateBaseHeightHitBox();
-            Z.Axis = LvlWall * Screen.Setting.Tile;
+            Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
         }
         #endregion
 
         #region MapAdder_Implementation
         private void UpdateBaseHeightHitBox()
         {
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
         }
         public override void UpdateAdditionalInformation(double x, double y)
         {
@@ -182,7 +182,7 @@ namespace ObstacleLib.TexturedWallLib
         public void SetLevelWall(int lvl)
         {
             LvlWall = lvl;
-            Z.Axis = lvl * Screen.Setting.Tile;
+            Z.Axis = (lvl - 1) * Screen.Setting.HalfTile;
         }
         #endregion
 
@@ -287,11 +287,6 @@ namespace ObstacleLib.TexturedWallLib
             hitboxObjectInfo.useEdgeForHeight = true;
 
             return hitboxObjectInfo;
-        }
-        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
-        {
-            distance *= Math.Cos(angleObject);
-            return WorldToScreenY(verticalAngle) - (float)(side * Screen.ScreenHeight / distance);
         }
     }
 }

@@ -131,8 +131,8 @@ sprite1.HitBox[HitBoxSideType.Left]?.SetOffset(80);
 sprite1.HitBox[HitBoxSideType.Right]?.SetOffset(80);
 sprite1.HitBox[HitBoxSideType.Top]?.SetOffset(80);
 sprite1.HitBox[HitBoxSideType.Bottom]?.SetOffset(80);
-sprite1.HitBox[HitBoxSideType.Up]?.SetOffset(20);
-sprite1.HitBox[HitBoxSideType.Down]?.SetOffset(60);
+sprite1.HitBox[HitBoxSideType.Up]?.SetOffset(50);
+sprite1.HitBox[HitBoxSideType.Down]?.SetOffset(50);
 
 HitBox box = new HitBox();
 box[HitBoxSideType.Left]?.SetOffset(20);
@@ -293,11 +293,12 @@ map.AddObstacle(10, 5, multiWall);
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 //multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 //multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
 //map.AddObstacle(10, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
-//map.AddObstacle(9, 5, sprite1);
+map.AddObstacle(9, 5, sprite1);
+sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
 //Console.WriteLine(map.Obstacles.Count);

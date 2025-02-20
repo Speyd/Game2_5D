@@ -102,8 +102,13 @@ namespace ObstacleLib
         #region MapAdder_Implementation
         private void UpdateHeightHitBox(double newZ)
         {
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(newZ * (IWall.baseMultHeightOnScreen * Walls.Count));
-            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(newZ * (IWall.baseMultHeightOnScreen * Walls.Count));
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(newZ);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(newZ);
+        }
+        private void UpdateHeight()
+        {
+            UpdateHeightHitBox(Walls.Count * Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
+            Z.Axis = (Walls.Count - 1) * Screen.Setting.HalfTile;
         }
         public override void UpdateAdditionalInformation(double x, double y)
         {
@@ -186,11 +191,8 @@ namespace ObstacleLib
             wall.UpdateAdditionalInformation(X.Axis, Y.Axis);
             Walls.Add(wall);
 
-            int count = Walls.Count - 1;
-            wall.SetLevelWall(count);
-
-            UpdateHeightHitBox((count <= 0 ? 1 : count) * Screen.Setting.Tile );
-            Z.Axis = count * Screen.Setting.Tile * IWall.baseMultHeightOnScreen;
+            wall.SetLevelWall(Walls.Count);
+            UpdateHeight();
         }
 
 
@@ -206,9 +208,7 @@ namespace ObstacleLib
                 Walls.Add(wall);
                 wall.SetLevelWall(Walls.Count);
             }
-            int count = Walls.Count - 1;
-            UpdateHeightHitBox((count <= 0? 1: count) * Screen.Setting.Tile);
-            Z.Axis = count * Screen.Setting.Tile;
+            UpdateHeight();
         }
         public void DeleteWall(int lvl) //Lvl starts with 0
         {
@@ -219,13 +219,6 @@ namespace ObstacleLib
             Walls.RemoveAt(lvl);
         }
 
-
-
-        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
-        {
-            distance *= Math.Cos(angleObject);
-            return WorldToScreenY(verticalAngle, 0) - (float)(side * Screen.ScreenHeight / distance);
-        }
 
         public override HitboxObjectInfo GetHitboxObjectInfo()
         {

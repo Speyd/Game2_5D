@@ -127,6 +127,7 @@ namespace EntityLib
             observerInfo.angle = Angle;
             observerInfo.deltaAngle = DeltaAngle;
             observerInfo.position = OriginPosition;
+            observerInfo.ProjCoeff = ProjCoeff;
 
             return observerInfo;
         }

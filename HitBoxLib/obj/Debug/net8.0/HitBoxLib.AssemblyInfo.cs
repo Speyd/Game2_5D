@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("HitBoxLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9b33b80b3dad53503e6489bd7f4f27128ad0ce23")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bb24804abb73198c4654ffabd5a32596d682bc6e")]
 [assembly: System.Reflection.AssemblyProductAttribute("HitBoxLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("HitBoxLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
