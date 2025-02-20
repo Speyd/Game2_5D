@@ -27,6 +27,8 @@ using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using ObstacleLib.SpriteLib.Hitbox;
 using DataPipes.Pool;
+using HitBoxLib;
+using NGenerics.DataStructures.General;
 
 namespace ObstacleLib.SpriteLib
 {
@@ -96,6 +98,17 @@ namespace ObstacleLib.SpriteLib
         }
         #endregion
 
+        #region MapAdder_Implementation
+        public override void UpdateAdditionalInformation(double x, double y)
+        {
+            X.Axis = x;
+            Y.Axis = y;
+
+            ShiftCubedX = ShiftCubedX;
+            ShiftCubedY = ShiftCubedY;
+        }
+
+        #endregion
 
         #region IMiniMapRenderable_Implementation
         public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
@@ -128,7 +141,7 @@ namespace ObstacleLib.SpriteLib
         #endregion
 
         #region IRenderable_Implementation
-        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        public override Vector2f GetPositionOnScreen(Result result, Entity entity)
         {
             Distance = result.Depth;
 
@@ -144,47 +157,44 @@ namespace ObstacleLib.SpriteLib
 
             return new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
-        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
-        {
-            if (angleVertical <= 0)
-                return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
-            else
-            {
-                angleVertical += 1;
-
-                return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
-            }
-        }
         public override double GetZCoordinate() => Z.Axis;
         #endregion
 
         #region IRayPassability_Implementation
-
-        public override void UpdateAdditionalInformation(double x, double y)
+        private bool IsTouches(bool isCollidingX, bool isCollidingY, bool isCollidingZ)
         {
-            X.Axis = x;
-            Y.Axis = y;
-
-            ShiftCubedX = ShiftCubedX;
-            ShiftCubedY = ShiftCubedY;
+            if ((isCollidingX && isCollidingY) == true && isCollidingZ == true)
+                return true;
+           
+            else 
+                return false;
         }
+        private void CheckTouchesSegmentHitBox(Entity entity, float currentRayX, float currentRayY)
+        {
+           
+            foreach (var hitBox in HitBox.SegmentedHitbox)
+            {
+                bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(hitBox, entity, currentRayX);
+                bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(hitBox, entity, currentRayY);
+                bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, hitBox, entity);
 
+                if (IsTouches(isCollidingX, isCollidingY, isCollidingZ) == true)
+                    Console.WriteLine(hitBox.Title);
+                else
+                    Console.WriteLine(HitBox.MainHitBox.Title);
+            }
+        }
         public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
         {
+            bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(HitBox.MainHitBox, entity, currentRayX);
+            bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(HitBox.MainHitBox, entity, currentRayY);
+            bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, HitBox.MainHitBox, entity);
+            Console.WriteLine(isCollidingZ);
+            bool result = IsTouches(isCollidingX, isCollidingY, isCollidingZ);    
+            if (result == true)
+                CheckTouchesSegmentHitBox(entity, currentRayX, currentRayY);
 
-
-            bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(this, entity, currentRayX);
-            bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(this, entity, currentRayY);
-            bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, entity);
-
-            if ((isCollidingX && isCollidingY) == true && isCollidingZ == false)
-                return false;
-            else if ((isCollidingX && isCollidingY) == false && isCollidingZ == true)
-                return false;
-            else if ((isCollidingX && isCollidingY) == false && isCollidingZ == false)
-                return false;
-            else
-                return true;
+            return result;
         }
         #endregion
 
@@ -222,17 +232,6 @@ namespace ObstacleLib.SpriteLib
         }
         #endregion
 
-     
-        internal float GetXPositionOnScreen(Entity entity)
-        {
-            int delta_rays = (int)(Angle / entity.DeltaAngle);
-            int current_ray = Screen.Setting.CenterRay + delta_rays;
-
-            if (Distance >= Screen.Setting.Tile)
-                Distance *= Math.Cos(entity.HalfFov - current_ray * entity.DeltaAngle);
-
-            return current_ray;
-        }
         public override void Render(Result result, Entity entity)
         {
             double spriteAngle = RenderOperation.CalculationAngularDistance(this, entity);
@@ -249,6 +248,22 @@ namespace ObstacleLib.SpriteLib
                 RenderOperation.DrawSprite(this, entity, height);
             }
             
-        }        
+        }
+
+
+
+
+        public override HitboxObjectInfo GetHitboxObjectInfo()
+        {
+            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
+            hitboxObjectInfo.useEdgeForHeight = false;
+
+            return hitboxObjectInfo;
+        }
+        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        {
+            float height = (float)(Screen.ScreenHeight / Distance * Scale);
+            return WorldToScreenY(verticalAngle, height / 2) - (float)(side / 2 * Screen.ScreenHeight / distance);
+        }
     }
 }

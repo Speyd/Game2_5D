@@ -16,7 +16,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace EntityLib
 {
-    public class Entity
+    public class Entity: IObserver
     {
         
 
@@ -27,7 +27,13 @@ namespace EntityLib
                 return new Vector2f((float)X.Axis, (float)Y.Axis) / Screen.Setting.Tile;
             }
         }
-
+        public Vector2f OriginPosition
+        {
+            get
+            {
+                return new Vector2f((float)X.Axis, (float)Y.Axis);
+            }
+        }
 
         //-----------------Fov-----------------
         private double _fov;
@@ -112,6 +118,17 @@ namespace EntityLib
             ProjCoeff = dist * Screen.Setting.Tile;
 
             DeltaAngle = (float)Fov / Screen.Setting.AmountRays;
+        }
+        public ObserverInfo GetObserverInfo()
+        {
+            ObserverInfo observerInfo = new ObserverInfo();
+            observerInfo.fov = Fov;
+            observerInfo.vertivalAngle = VerticalAngle;
+            observerInfo.angle = Angle;
+            observerInfo.deltaAngle = DeltaAngle;
+            observerInfo.position = OriginPosition;
+
+            return observerInfo;
         }
         public (double nextX, double nextY) CalculateNextPosition(double deltaX, double deltaY)
         {

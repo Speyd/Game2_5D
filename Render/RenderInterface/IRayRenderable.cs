@@ -11,6 +11,7 @@ namespace Render.RenderInterface
     public interface IRayRenderable : IRenderable
     {
         void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth);
+        //float WorldToScreenX(int ray);
         // int GetCoordintePositionOnScreen();
         //public bool RayWallCollision();
     }

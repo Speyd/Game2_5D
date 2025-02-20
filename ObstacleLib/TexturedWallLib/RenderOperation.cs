@@ -27,7 +27,7 @@ namespace ObstacleLib.TexturedWallLib.Render
         }
         internal static int NormalizeLvlWall(TexturedWall Wall)
         {
-            return Wall.LvlWall - 1 + Wall.LvlWall;
+            return Math.Abs(Wall.LvlWall - 1 + Wall.LvlWall);
         }
         internal static TexturedPair? SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
         {

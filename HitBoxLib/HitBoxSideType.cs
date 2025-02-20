@@ -12,7 +12,7 @@ namespace HitBoxLib
         Right,
         Top,
         Bottom,
-        UpSide,
-        DownSide
+        Up,
+        Down
     }
 }

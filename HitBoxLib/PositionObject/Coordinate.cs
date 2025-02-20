@@ -23,11 +23,10 @@ namespace HitBoxLib.PositionObject
             _hitBox = hitBox;
         }
 
-        private void SetAxis(double value, HitBox hitBox)
+        public void SetAxis(double value, HitBox hitBox)
         {
             _axis = value;
-            foreach (var hitBoxSide in hitBox[CoordinatePlane])
-                hitBoxSide.SetSide(this);
+            hitBox.SetSide(this);
         }
     }
 }

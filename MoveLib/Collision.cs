@@ -39,14 +39,14 @@ namespace MoveLib
 
         public bool CollisionZ(Obstacle obstacle, Entity entity)
         {
-            if(entity.HitBox[HitBoxSideType.DownSide]?.Side >= obstacle.HitBox[HitBoxSideType.DownSide]?.Side &&
-               entity.HitBox[HitBoxSideType.UpSide]?.Side <= obstacle.HitBox[HitBoxSideType.UpSide]?.Side) 
+            if(entity.HitBox[HitBoxSideType.Down]?.Side >= obstacle.HitBox[HitBoxSideType.Down]?.Side &&
+               entity.HitBox[HitBoxSideType.Up]?.Side <= obstacle.HitBox[HitBoxSideType.Up]?.Side) 
             {
                 return true;
             }
-            else if (entity.HitBox[HitBoxSideType.DownSide]?.Side >= obstacle.HitBox[HitBoxSideType.DownSide]?.Side &&
-                     entity.HitBox[HitBoxSideType.DownSide]?.Side <= obstacle.HitBox[HitBoxSideType.UpSide]?.Side &&
-                     entity.HitBox[HitBoxSideType.UpSide]?.Side >= obstacle.HitBox[HitBoxSideType.UpSide]?.Side)
+            else if (entity.HitBox[HitBoxSideType.Down]?.Side >= obstacle.HitBox[HitBoxSideType.Down]?.Side &&
+                     entity.HitBox[HitBoxSideType.Down]?.Side <= obstacle.HitBox[HitBoxSideType.Up]?.Side &&
+                     entity.HitBox[HitBoxSideType.Up]?.Side >= obstacle.HitBox[HitBoxSideType.Up]?.Side)
             {
                 return true;
             }

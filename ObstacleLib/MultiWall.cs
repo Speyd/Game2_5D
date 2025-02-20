@@ -16,10 +16,11 @@ using System.Threading.Tasks;
 using TextureLib;
 using HitBoxLib;
 using HitBoxLib.PositionObject;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace ObstacleLib
 {
-    public class MultiWall : Obstacle, IDrawable, IRayRenderable
+    public class MultiWall : Obstacle, IDrawable, IWall
     {
         //-------------------------Wall-------------------------
         public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
@@ -101,15 +102,15 @@ namespace ObstacleLib
         #region MapAdder_Implementation
         private void UpdateHeightHitBox(double newZ)
         {
-            HitBox[HitBoxSideType.DownSide]?.SetOffset(newZ);
-            HitBox[HitBoxSideType.UpSide]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(newZ * (IWall.baseMultHeightOnScreen * Walls.Count));
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(newZ * (IWall.baseMultHeightOnScreen * Walls.Count));
         }
         public override void UpdateAdditionalInformation(double x, double y)
         {
-            HitBox[HitBoxSideType.Left]?.SetOffset(0);
-            HitBox[HitBoxSideType.Top]?.SetOffset(0);
-            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
-            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
 
             X.Axis = x;
             Y.Axis = y;
@@ -161,20 +162,13 @@ namespace ObstacleLib
         public override SFML.Graphics.Color BlackoutObstacle(double depth) => new Color(255, 255, 255, 255);
         public override double GetZCoordinate() => Z.Axis;
 
-        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
-        {
-            if (angleVertical <= 0)
-                return (float)((Screen.Setting.HalfHeight) * (1 + 1 * -angleVertical));
-            else
-                return (float)((Screen.Setting.HalfHeight) / (1 + 1 * angleVertical));
-        }
-        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        public override Vector2f GetPositionOnScreen(Result result, Entity entity)
         {
             if (Walls.Count == 0)
                 return new Vector2f();
 
             TexturedWall? lastWall = Walls.LastOrDefault();
-            return lastWall is not null? lastWall.GetCoordintePositionOnScreen(result, entity): new Vector2f();
+            return lastWall is not null? lastWall.GetPositionOnScreen(result, entity): new Vector2f();
         }
         #endregion
 
@@ -191,11 +185,16 @@ namespace ObstacleLib
         {
             wall.UpdateAdditionalInformation(X.Axis, Y.Axis);
             Walls.Add(wall);
-            wall.SetLevelWall(Walls.Count);
 
-            UpdateHeightHitBox(Walls.Count * Screen.Setting.Tile);
-            Z.Axis = Walls.Count * Screen.Setting.Tile;
+            int count = Walls.Count - 1;
+            wall.SetLevelWall(count);
+
+            UpdateHeightHitBox((count <= 0 ? 1 : count) * Screen.Setting.Tile );
+            Z.Axis = count * Screen.Setting.Tile * IWall.baseMultHeightOnScreen;
         }
+
+
+
         public void AddLevelWall(List<TexturedWall> walls)
         {
             if(walls.Count == 0)
@@ -207,17 +206,33 @@ namespace ObstacleLib
                 Walls.Add(wall);
                 wall.SetLevelWall(Walls.Count);
             }
-
-            UpdateHeightHitBox(Walls.Count * Screen.Setting.Tile);
-            Z.Axis = Walls.Count * Screen.Setting.Tile;
+            int count = Walls.Count - 1;
+            UpdateHeightHitBox((count <= 0? 1: count) * Screen.Setting.Tile);
+            Z.Axis = count * Screen.Setting.Tile;
         }
-        public void DeleteWall(int lvl) //Lvl starts with 1
+        public void DeleteWall(int lvl) //Lvl starts with 0
         {
             if(Walls.Count == 0 || lvl < 1 || lvl > Walls.Count) 
                 return;
 
             lvl--;
             Walls.RemoveAt(lvl);
+        }
+
+
+
+        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        {
+            distance *= Math.Cos(angleObject);
+            return WorldToScreenY(verticalAngle, 0) - (float)(side * Screen.ScreenHeight / distance);
+        }
+
+        public override HitboxObjectInfo GetHitboxObjectInfo()
+        {
+            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
+            hitboxObjectInfo.useEdgeForHeight = true;
+
+            return hitboxObjectInfo;
         }
     }
 }

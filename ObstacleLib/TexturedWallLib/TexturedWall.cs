@@ -28,6 +28,8 @@ using ScreenLib.SettingScreen;
 using HitBoxLib;
 using HitBoxLib.PositionObject;
 using System.Runtime.CompilerServices;
+using NGenerics.DataStructures.General;
+using static HitBoxLib.HitboxObjectInfo;
 
 namespace ObstacleLib.TexturedWallLib
 {
@@ -40,7 +42,7 @@ namespace ObstacleLib.TexturedWallLib
 
         //----------------------Setting---------------------
         public override bool IsSingleAddable { get; init; } = true;
-        public int LvlWall { get; private set; } = 1;
+        public int LvlWall { get; private set; } = 0;
 
 
 
@@ -107,6 +109,24 @@ namespace ObstacleLib.TexturedWallLib
         }
         #endregion
 
+        #region MapAdder_Implementation
+        private void UpdateBaseHeightHitBox()
+        {
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+        }
+        public override void UpdateAdditionalInformation(double x, double y)
+        {
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+
+            X.Axis = x;
+            Y.Axis = y;
+        }
+        #endregion
+
         #region IMiniMapRenderable_Implementation
         public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
         {
@@ -132,12 +152,12 @@ namespace ObstacleLib.TexturedWallLib
         #endregion
 
         #region IRenderable_Implementation
-        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        public override Vector2f GetPositionOnScreen(Result result, Entity entity)
         {
-            float positionX = GetRayScreenX(result.Ray);
+            float positionX = WorldToScreenX(result.Ray);
 
             int lvlWall = RenderOperation.NormalizeLvlWall(this);
-            float positionY = (float)(NormalizeYPosition(entity.VerticalAngle) - result.ProjHeight / 2 * lvlWall);
+            float positionY = (float)(WorldToScreenY(entity.VerticalAngle) - result.ProjHeight / 2 * lvlWall);
 
             return new Vector2f(positionX, positionY);
         }
@@ -147,13 +167,7 @@ namespace ObstacleLib.TexturedWallLib
 
             return new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
         }
-        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
-        {
-            if (angleVertical <= 0)
-                return (float)((Screen.Setting.HalfHeight) * (1 + 1 * -angleVertical));
-            else
-                return (float)((Screen.Setting.HalfHeight) / (1 + 1 * angleVertical));
-        }
+
         public override double GetZCoordinate() => Z.Axis;
         public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
         {
@@ -165,19 +179,10 @@ namespace ObstacleLib.TexturedWallLib
 
         #region IWall_Implementation
 
-        private void UpdateBaseHeightHitBox()
-        {
-            HitBox[HitBoxSideType.DownSide]?.SetOffset(Screen.Setting.Tile);
-            HitBox[HitBoxSideType.UpSide]?.SetOffset(0);
-        }
         public void SetLevelWall(int lvl)
         {
             LvlWall = lvl;
             Z.Axis = lvl * Screen.Setting.Tile;
-        }
-        public float GetRayScreenX(double ray)
-        {
-            return (float)ray * Screen.Setting.Scale;
         }
         #endregion
 
@@ -242,24 +247,11 @@ namespace ObstacleLib.TexturedWallLib
         }
         #endregion
 
-        #region MapAdder_Implementation
-        public override void UpdateAdditionalInformation(double x, double y)
-        {
-            HitBox[HitBoxSideType.Left]?.SetOffset(0);
-            HitBox[HitBoxSideType.Top]?.SetOffset(0);
-            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
-            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
-
-            X.Axis = x;
-            Y.Axis = y;
-        }
-        #endregion
-
         public bool IsOffScreen(Result result, Vector2f position, IntRect textureRect)
         {
             if (result.PositionPreviousObject is not null && position.Y > result.PositionPreviousObject.Value.Y)
                 return true;
-            if (LvlWall > 1 && position.Y < 0 && -position.Y * LvlWall - Screen.Setting.Tile * LvlWall >= position.Y + textureRect.Height )
+            if (LvlWall > IWall.minLvlWall && position.Y < 0 && -position.Y * LvlWall - Screen.Setting.Tile * LvlWall >= position.Y + textureRect.Height)
                 return true;
             if (position.Y > Screen.ScreenHeight)
                 return true;
@@ -274,7 +266,7 @@ namespace ObstacleLib.TexturedWallLib
 
 
             IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
-            Vector2f position = GetCoordintePositionOnScreen(result, entity);
+            Vector2f position = GetPositionOnScreen(result, entity);
             if (IsOffScreen(result, position, textureRect))
                 return;
 
@@ -284,9 +276,22 @@ namespace ObstacleLib.TexturedWallLib
             RenderSprite.Position = position;
             RenderSprite.Scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
 
-
-            result.Depth += LvlWall * 0.01;
+            result.Depth += (LvlWall + 1) * 0.01;
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
+        }
+
+
+        public override HitboxObjectInfo GetHitboxObjectInfo()
+        {
+            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
+            hitboxObjectInfo.useEdgeForHeight = true;
+
+            return hitboxObjectInfo;
+        }
+        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        {
+            distance *= Math.Cos(angleObject);
+            return WorldToScreenY(verticalAngle) - (float)(side * Screen.ScreenHeight / distance);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using HitBoxLib;
 using Render.InterfaceRender;
 using Render.ZBufferRender;
 using ScreenLib;
@@ -11,6 +12,9 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using static SFML.Window.Mouse;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace ObstacleLib.SpriteLib.Render
 {
@@ -78,14 +82,24 @@ namespace ObstacleLib.SpriteLib.Render
             return Math.Atan2(dy, dx);
         }
 
+        public static double CalculationAA(List<HitBoxSide> side, Entity player)
+        {
+            double dx = side[0].Side - player.X.Axis;
+            double dy = side[1].Side - player.Y.Axis;
+
+            return Math.Atan2(dy, dx);
+        }
+
+
         public static Vector2f GetPositionOnScreen(SpriteObstacle sprite, Entity entity, float height)
         {
-            float x = sprite.GetXPositionOnScreen(entity);
-            float y = sprite.NormalizeYPosition(entity.VerticalAngle, height / 2)
+            float x = sprite.WorldToScreenX(sprite.Angle, entity.DeltaAngle);
+            float y = sprite.WorldToScreenY(entity.VerticalAngle, height / 2)
                 - (float)(sprite.RatioZ * Screen.ScreenHeight / Math.Max(sprite.Distance, 0.1));
 
             return new Vector2f(x, y);
         }
+
         public static void DrawSprite(SpriteObstacle sprite, Entity entity, float height)
         {
             if (sprite.CurrentRenderTexture is null)
@@ -102,7 +116,6 @@ namespace ObstacleLib.SpriteLib.Render
                 (float)height / sprite.CurrentRenderTexture.Width,
                 (float)height / sprite.CurrentRenderTexture.Height
                 );
-           
             ZBuffer.AddToZBuffer(sprite.RenderSprite, sprite.Distance);
         }
 

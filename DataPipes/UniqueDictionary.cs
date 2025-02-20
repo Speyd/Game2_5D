@@ -44,7 +44,18 @@ namespace DataPipes.Dictionary
             }
             return default;
         }
+        public List<VALUE> GetValues()
+        {
+            List <VALUE> values = new();
+            foreach(VALUE value in myMap.Values)
+                values.Add(value);
 
+            return values;
+        }
+        public List<KEY> GetAllKey()
+        {      
+            return myMap.Keys.ToList();
+        }
         public VALUE? GetFirstValue()
         {
             if (Count == 0)

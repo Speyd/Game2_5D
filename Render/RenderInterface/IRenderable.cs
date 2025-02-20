@@ -25,8 +25,14 @@ namespace Render.InterfaceRender
         }
         SFML.Graphics.Color BlackoutObstacle(double depth);
         void Render(Result result, Entity entity);
-        float NormalizeYPosition(double angleVertical, float addVariable = 0);
         double GetZCoordinate();
-        Vector2f GetCoordintePositionOnScreen(Result result, Entity entity);
+
+
+        float WorldToScreenY(double angleVertical, float addVariable = 0);
+        float WorldToScreenX(double Angle, double DeltaAngle);
+        float WorldToScreenX(int ray);
+
+
+        Vector2f GetPositionOnScreen(Result result, Entity entity);
     }
 }

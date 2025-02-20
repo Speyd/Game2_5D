@@ -20,6 +20,8 @@ using DataPipes.Pool;
 using static SFML.Graphics.Font;
 using static SFML.Window.Joystick;
 using System.Buffers;
+using EntityLib.Player;
+using ObstacleLib.SpriteLib;
 
 namespace BresenhamAlgorithm
 {  
@@ -187,7 +189,7 @@ namespace BresenhamAlgorithm
             for (int obst = 0; obst < sizeVisibleObst; obst++)
             {
                 if (obst > 0 && sizeVisibleObst > 1)
-                    ParallelResult.PositionPreviousObject = visibleObstacles[obst - 1].Obstacle?.GetCoordintePositionOnScreen(ParallelResult, entity);
+                    ParallelResult.PositionPreviousObject = visibleObstacles[obst - 1].Obstacle?.GetPositionOnScreen(ParallelResult, entity);
 
                 ParallelResult.CalculationSettingRender(entity, ray, visibleObstacles[obst].depth, visibleObstacles[obst].coordinate, carAngleRay);
                 visibleObstacles[obst].Obstacle?.Render(ParallelResult, entity);
@@ -259,7 +261,17 @@ namespace BresenhamAlgorithm
                 HasNewTypes = false;
             }
             CachedDelegates.ForEach(cd => cd.Value(new Result(), entity));
+
             ZBuffer.Render();
         }
+
+        //float GetDistance(Vector2f point1, Vector2f point2)
+        //{
+        //    float dx = point2.X - point1.X;
+        //    float dy = point2.Y - point1.Y;
+        //    return MathF.Sqrt(dx * dx + dy * dy);
+        //}
+
+
     }
 }

@@ -78,7 +78,7 @@ namespace HitBoxLib
         public void SetOffset(double offset)
         {
             Offset = offset;
-            Side = OrginalSide + Offset;           
+            Side = OrginalSide + Offset;
         }
         public void SetSide(Coordinate coordinate)
         {

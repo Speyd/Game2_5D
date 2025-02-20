@@ -20,8 +20,8 @@ namespace ObstacleLib.TexturedWallLib.Determine
     {
 
         static private Vector2f DetermineCornerWallSide(TexturedWall wall, Entity entity,
-    float cosAngle, float sinAngle,
-    float left, float right, float bottom, float top)
+            float cosAngle, float sinAngle,
+            float left, float right, float bottom, float top)
         {
             float tempValue = float.MaxValue;
 

@@ -16,6 +16,7 @@ using ObstacleLib.BlankWallLib.Render;
 using Render;
 using Render.RenderInterface;
 using HitBoxLib;
+using HitBoxLib.PositionObject;
 
 namespace ObstacleLib.BlankWallLib
 {
@@ -33,17 +34,47 @@ namespace ObstacleLib.BlankWallLib
             : base(0, 0, color, isPassability)
         {
             StandartColorFilling = color;
+
+            UpdateBaseHeightHitBox();
+            Z.Axis = 0;
         }
 
         public BlankWall(byte r, byte g, byte b, bool isPassability = false)
             : base(0, 0, new Color(r, g, b), isPassability)
         {
             StandartColorFilling = new Color(r, g, b);
+
+            UpdateBaseHeightHitBox();
+            Z.Axis = 0;
         }
         #endregion
 
 
-         #region IMiniMapRenderable_Implementation
+        public override float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        {
+            distance *= Math.Cos(angleObject);
+            return WorldToScreenY(verticalAngle, 0) - (float)(side * Screen.ScreenHeight / distance);
+        }
+
+        #region MapAdder_Implementation
+        private void UpdateBaseHeightHitBox()
+        {
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+            HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.Tile * IWall.baseMultHeightOnScreen);
+        }
+        public override void UpdateAdditionalInformation(double x, double y)
+        {
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+
+            X.Axis = x;
+            Y.Axis = y;
+        }
+        #endregion
+
+        #region IMiniMapRenderable_Implementation
         public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
         {
             rectangleShape.OutlineThickness = OutlineThickness;
@@ -65,10 +96,10 @@ namespace ObstacleLib.BlankWallLib
         #endregion
 
         #region IRenderable_Implementation
-        public override Vector2f GetCoordintePositionOnScreen(Result result, Entity entity)
+        public override Vector2f GetPositionOnScreen(Result result, Entity entity)
         {
-            float positionX = GetRayScreenX(result.Ray);
-            float positionY = NormalizeYPosition(entity.VerticalAngle, (float)result.ProjHeight / 2);
+            float positionX = WorldToScreenX(result.Ray);
+            float positionY = WorldToScreenY(entity.VerticalAngle, (float)result.ProjHeight / 2);
 
             return new Vector2f(positionX, positionY);
         }
@@ -83,38 +114,11 @@ namespace ObstacleLib.BlankWallLib
 
             return new Color(red, green, blue);
         }
-        public override float NormalizeYPosition(double angleVertical, float addVariable = 0)
-        {
-            if (angleVertical <= 0)
-                return (float)(Screen.Setting.HalfHeight - Screen.Setting.HalfHeight * angleVertical - addVariable);
-            else
-            {
-                angleVertical += 1;
-
-                return (float)(Screen.Setting.HalfHeight / angleVertical - addVariable);
-            }
-        }
         #endregion
 
         #region IWall_Implementation
         public override double GetZCoordinate() => Z.Axis;
-
-        public float GetRayScreenX(double ray)
-        {
-            return (float)ray * Screen.Setting.Scale;
-        }
         #endregion
-        public override void UpdateAdditionalInformation(double x, double y)
-        {
-            HitBox[HitBoxSideType.Left]?.SetOffset(0);
-            HitBox[HitBoxSideType.Top]?.SetOffset(0);
-            HitBox[HitBoxSideType.Right]?.SetOffset(Screen.Setting.Tile);
-            HitBox[HitBoxSideType.Bottom]?.SetOffset(Screen.Setting.Tile);
-
-            X.Axis = x;
-            Y.Axis = y;
-        }
-
         public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
         {
             if (depth < maxDepth)
@@ -128,12 +132,19 @@ namespace ObstacleLib.BlankWallLib
             RenderOperation.UpdateVertices(
                 this, renderWall,
                 RenderOperation.CalculationBlockScale(result),
-                GetCoordintePositionOnScreen(result, entity),
+                GetPositionOnScreen(result, entity),
                 ColorFilling
                 );
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);
         }
 
+        public override HitboxObjectInfo GetHitboxObjectInfo()
+        {
+            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
+            hitboxObjectInfo.useEdgeForHeight = true;
+
+            return hitboxObjectInfo;
+        }
     }
 }

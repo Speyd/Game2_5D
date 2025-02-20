@@ -9,7 +9,7 @@ namespace Render.RenderInterface
 {
     public interface IWall : IRayRenderable
     {
-        //new int GetCoordintePositionOnScreen();
-        float GetRayScreenX(double ray);
+        const float baseMultHeightOnScreen = 0.7f;
+        const int minLvlWall = 0;
     }
 }

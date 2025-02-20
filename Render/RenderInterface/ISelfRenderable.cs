@@ -17,6 +17,8 @@ namespace Render
         public static string NameRenderFun { get; } = "RenderSelfDrawableList";
 
         void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes);
+        //float WorldToScreenX(Entity entity);
+
 
         void AddObstacleToRenderList();
         static abstract void RenderSelfDrawableList(Result result, Entity entity);
