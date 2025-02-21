@@ -110,7 +110,7 @@ namespace TextField
             renderTexture.Draw(inputText);
             renderTexture.Display();
 
-            Screen.OutputPriority.AddToPriority(4, RenderedSprite);
+            Screen.OutputPriority.AddToPriority(RenderPriority.Enter, RenderedSprite);
         }
     }
 }

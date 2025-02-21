@@ -10,8 +10,8 @@ namespace ScreenLib
 {
     public class OutputPriority(RenderWindow window)
     {
-        public SortedDictionary<int, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
-        public void AddToPriority(int priority, Drawable sprite, RenderStates? state = null)
+        public SortedDictionary<RenderPriority, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
+        public void AddToPriority(RenderPriority priority, Drawable sprite, RenderStates? state = null)
         {
             if (!TreePriority.ContainsKey(priority))
             {

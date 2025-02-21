@@ -27,7 +27,7 @@ namespace Render.ZBufferRender
 
             foreach (var kv in sortedList)
             {
-                Screen.OutputPriority.AddToPriority(2, kv.Value.Item1, kv.Value.Item2);
+                Screen.OutputPriority.AddToPriority(RenderPriority.Background, kv.Value.Item1, kv.Value.Item2);
             }
 
             zBuffer.Clear();

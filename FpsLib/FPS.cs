@@ -43,7 +43,7 @@ namespace FpsLib
                 renderText.DisplayedString = "FPS: " + fps.ToString("0");
                 fpsTimer = 0;
             }
-            Screen.OutputPriority.AddToPriority(3, renderText);
+            Screen.OutputPriority.AddToPriority(RenderPriority.Interface, renderText);
         }
 
         public float GetDeltaTime() => deltaTime;

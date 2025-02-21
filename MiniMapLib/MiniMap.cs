@@ -98,8 +98,8 @@ namespace MiniMapLib
             MiniMapWindow.SetRenderSprite(PositionDef.CooPositions);
             BorderMapWindow.SetRenderSprite(PositionDef.CooPositions);
 
-            Screen.OutputPriority.AddToPriority(4, MiniMapWindow.RenderSprite);
-            Screen.OutputPriority.AddToPriority(4, BorderMapWindow.RenderSprite);
+            Screen.OutputPriority.AddToPriority(RenderPriority.Interface, MiniMapWindow.RenderSprite);
+            Screen.OutputPriority.AddToPriority(RenderPriority.Interface, BorderMapWindow.RenderSprite);
         }
     }
 }

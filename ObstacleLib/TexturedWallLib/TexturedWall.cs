@@ -43,7 +43,7 @@ namespace ObstacleLib.TexturedWallLib
         //----------------------Setting---------------------
 
         public override bool IsSingleAddable { get; init; } = true;
-        public int LvlWall { get; private set; } = 1;
+        public int LvlWall { get; private set; } = IWall.minLvlWall;
 
 
 
