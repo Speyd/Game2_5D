@@ -94,8 +94,7 @@ namespace ObstacleLib.SpriteLib.Render
         public static Vector2f GetPositionOnScreen(SpriteObstacle sprite, Entity entity, float height)
         {
             float x = sprite.WorldToScreenX(sprite.Angle, entity.DeltaAngle);
-            float y = sprite.WorldToScreenY(entity.VerticalAngle)
-                - (float)(sprite.RatioZ * Screen.ScreenHeight / Math.Max(sprite.Distance, 0.1));
+            float y = sprite.WorldToScreenY(entity.VerticalAngle) - (float)(sprite.Z.Axis / sprite.Distance);
 
             return new Vector2f(x, y);
         }

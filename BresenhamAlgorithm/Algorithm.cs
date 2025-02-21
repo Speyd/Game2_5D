@@ -32,62 +32,28 @@ namespace BresenhamAlgorithm
         static ListPool<InfoObject> infoObjectPool = new ListPool<InfoObject>();
 
 
-        //------------------------------Maximum Beam Ray-------------------------------
-        static int _maxVertical = 1200;
-        static int MaxVerticalDistance 
-        {
-            get => _maxVertical;
-            set
-            {
-                if (value <= 0)
-                    throw new Exception("Error value MaxVerticalDistance(Algorithm)");
-                _maxVertical = value * Screen.Setting.Tile;
-            }
-        }
-       
-        static int _maxHorizontal = 1200;
-        static int MaxHorizontalDistance
-        {
-            get => _maxHorizontal;
-            set
-            {
-                if (value <= 0)
-                    throw new Exception("Error value MaxVerticalDistance(Algorithm)");
-                _maxHorizontal = value * Screen.Setting.Tile; 
-            }
-        }
-
         //------------------------------Setting Render-------------------------------
-        private HashSet<Type> UniqueSelfDrawableTypes { get; init; } = new HashSet<Type>();
+        private ConcurrentDictionary<Type, bool> UniqueSelfDrawableTypes { get; init; } = new();
         private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
 
         private bool HasNewTypes = false;
 
         public void PrepareRenderObjects()
         {
-            //Console.WriteLine($"uniqueSelfDrawableTypes count: {uniqueSelfDrawableTypes.Count}");
-            foreach (var type in UniqueSelfDrawableTypes)
+            foreach (var type in UniqueSelfDrawableTypes.Keys)
             {
-                //Console.WriteLine($"Processing type: {type.Name}");
                 if (!CachedDelegates.TryGetValue(type, out var del))
                 {
                     var method = type.GetMethod(ISelfRenderable.NameRenderFun, BindingFlags.Public | BindingFlags.Static);
                     if (method != null)
                     {
-                        //Console.WriteLine($"Creating delegate for {type.Name}");
                         del = (Action<Result, Entity>)Delegate.CreateDelegate(typeof(Action<Result, Entity>), method);
                         CachedDelegates[type] = del;
-                    }
-                    else
-                    {
-                        //Console.WriteLine($"Method RenderSelfDrawableList not found for {type.Name}");
                     }
                 }
                 del?.Invoke(new Result(), entity);
             }
         }
-
-
 
         private bool ProcessingHeightObstacle(List<InfoObject> infoObject,
             double x, double y, 
@@ -264,14 +230,5 @@ namespace BresenhamAlgorithm
 
             ZBuffer.Render();
         }
-
-        //float GetDistance(Vector2f point1, Vector2f point2)
-        //{
-        //    float dx = point2.X - point1.X;
-        //    float dy = point2.Y - point1.Y;
-        //    return MathF.Sqrt(dx * dx + dy * dy);
-        //}
-
-
     }
 }

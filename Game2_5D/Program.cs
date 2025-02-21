@@ -38,14 +38,13 @@ using ObstacleLib.SpriteLib.Animation;
 using static System.Formats.Asn1.AsnWriter;
 using PartsWorldLib;
 using ObstacleLib;
-using ObstacleLib.SpriteLib.Hitbox;
 using DataPipes.Dictionary;
 using HitBoxLib;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ObstacleLib.BlankWallLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
-Screen.Initialize(1000, 800);
+Screen.Initialize(1000, 600);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);

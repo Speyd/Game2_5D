@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -16,7 +17,7 @@ namespace Render
     {
         public static string NameRenderFun { get; } = "RenderSelfDrawableList";
 
-        void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes);
+        void ProcessForRendering(ConcurrentDictionary<Type, bool> uniqueSelfDrawableTypes, ref bool hasNewTypes);
         //float WorldToScreenX(Entity entity);
 
 

@@ -25,14 +25,14 @@ using System.Text;
 using static SFML.Window.Mouse;
 using Microsoft.VisualBasic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using ObstacleLib.SpriteLib.Hitbox;
 using DataPipes.Pool;
 using HitBoxLib;
 using NGenerics.DataStructures.General;
+using System.Collections.Concurrent;
 
 namespace ObstacleLib.SpriteLib
 {
-    public class SpriteObstacle : Obstacle, ISelfRenderable, IRayPassability
+    public class SpriteObstacle : Obstacle, ISelfRenderable
     {
 
         //-------------------List Sprites Render------------------
@@ -160,57 +160,13 @@ namespace ObstacleLib.SpriteLib
         public override double GetZCoordinate() => Z.Axis;
         #endregion
 
-        #region IRayPassability_Implementation
-        private bool IsTouches(bool isCollidingX, bool isCollidingY, bool isCollidingZ)
-        {
-            if ((isCollidingX || isCollidingY) == true && isCollidingZ == true)
-                return true;
-           
-            else 
-                return false;
-        }
-        private void CheckTouchesSegmentHitBox(Entity entity, float currentRayX, float currentRayY)
-        {
-           
-            foreach (var hitBox in HitBox.SegmentedHitbox)
-            {
-                bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(hitBox, entity, currentRayX);
-                bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(hitBox, entity, currentRayY);
-                bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, hitBox, entity);
-
-                if (IsTouches(isCollidingX, isCollidingY, isCollidingZ) == true)
-                    Console.WriteLine(hitBox.Title);
-                else
-                    Console.WriteLine(HitBox.MainHitBox.Title);
-            }
-        }
-        public bool IsRayTouchesObject(Entity entity, float currentRayX, float currentRayY)
-        {
-            bool isCollidingX = CollisionHitbox.IsRayTouchesObjectX(HitBox.MainHitBox, entity, currentRayX);
-            bool isCollidingY = CollisionHitbox.IsRayTouchesObjectY(HitBox.MainHitBox, entity, currentRayY);
-            bool isCollidingZ = CollisionHitbox.IsRayTouchesObjectZ(this, HitBox.MainHitBox, entity);
-            Console.WriteLine($"isCollidingX: {isCollidingX}");
-            Console.WriteLine($"isCollidingY: {isCollidingY}");
-            Console.WriteLine($"isCollidingZ: {isCollidingZ}");
-
-
-            bool result = IsTouches(isCollidingX, isCollidingY, isCollidingZ);    
-            if (result == true)
-                CheckTouchesSegmentHitBox(entity, currentRayX, currentRayY);
-
-            return result;
-        }
-        #endregion
-
         #region ISelfDrawable_Implementation
-        public void ProcessForRendering(HashSet<Type> uniqueSelfDrawableTypes, ref bool hasNewTypes)
+        public void ProcessForRendering(ConcurrentDictionary<Type, bool> uniqueSelfDrawableTypes, ref bool hasNewTypes)
         {
             var type = this.GetType();
-            if (!uniqueSelfDrawableTypes.Contains(type))
-            {
-                uniqueSelfDrawableTypes.Add(type);
+            if (uniqueSelfDrawableTypes.TryAdd(type, true))
                 hasNewTypes = true;
-            }
+
             this.AddObstacleToRenderList();
         }
         public void AddObstacleToRenderList()
@@ -229,6 +185,9 @@ namespace ObstacleLib.SpriteLib
         }
         public static void RenderSelfDrawableList(Result result, Entity entity)
         {
+            if(SpritesToRender.Count == 0) 
+                return;
+
             foreach (var sprite in SpritesToRender)
             {
                 sprite.Render(result, entity);
@@ -247,6 +206,9 @@ namespace ObstacleLib.SpriteLib
             if (Math.Abs(Angle) <= entity.Fov)
             {
                 RenderOperation.DefiningDesiredSprite(this, spriteAngle);
+
+                Distance *= Math.Cos(Angle);
+                Distance = Math.Max(Distance, 0.1);
                 float height = (float)(Screen.ScreenHeight / Distance * Scale);
 
                 RenderOperation.DrawSprite(this, entity, height);

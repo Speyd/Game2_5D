@@ -30,7 +30,8 @@ namespace DrawLib
                 float height = drawable.BringingToStandard(heightObj);
                 float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
 
-                Vector2f pointPosition = new Vector2f(textureX + heightObj, textureY);
+                float addHeight = height > heightObj ? 0f : heightObj;
+                Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
                 CircleShape point = new CircleShape(height)
                 {
                     FillColor = colorFill,
