@@ -247,11 +247,11 @@ namespace ObstacleLib.TexturedWallLib
         }
         #endregion
 
-        public bool IsOffScreen(Result result, Vector2f position, IntRect textureRect)
+        public bool IsOffScreen(Result result, Vector2f position, IntRect textureRect, Vector2f scale)
         {
             if (result.PositionPreviousObject is not null && position.Y > result.PositionPreviousObject.Value.Y)
                 return true;
-            if (LvlWall > IWall.minLvlWall && position.Y < 0 && -position.Y * LvlWall - Screen.Setting.Tile * LvlWall >= position.Y + textureRect.Height)
+            if (position.Y + scale.Y * textureRect.Height < 0)
                 return true;
             if (position.Y > Screen.ScreenHeight)
                 return true;
@@ -265,28 +265,21 @@ namespace ObstacleLib.TexturedWallLib
                 return;
 
 
-            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
+            IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);     
             Vector2f position = GetPositionOnScreen(result, entity);
-            if (IsOffScreen(result, position, textureRect))
+            Vector2f scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
+
+            if (IsOffScreen(result, position, textureRect, scale))
                 return;
 
             Sprite RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
             RenderSprite.Color = BlackoutObstacle(result.Depth);
 
             RenderSprite.Position = position;
-            RenderSprite.Scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
+            RenderSprite.Scale = scale;
 
             result.Depth += (LvlWall + 1) * 0.01;
             ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
-        }
-
-
-        public override HitboxObjectInfo GetHitboxObjectInfo()
-        {
-            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
-            hitboxObjectInfo.useEdgeForHeight = true;
-
-            return hitboxObjectInfo;
         }
     }
 }

@@ -253,16 +253,5 @@ namespace ObstacleLib.SpriteLib
             }
             
         }
-
-
-
-
-        public override HitboxObjectInfo GetHitboxObjectInfo()
-        {
-            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
-            hitboxObjectInfo.useEdgeForHeight = true;
-
-            return hitboxObjectInfo;
-        }
     }
 }

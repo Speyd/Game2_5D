@@ -9,7 +9,7 @@ namespace HitBoxLib
 {
     public struct HitboxObjectInfo
     {
-        public delegate float WorldToScreenY(double side, double distance, double verticalAngle, double angle, double angleObject);
+        public delegate float WorldToScreenY(double side, double distance, double verticalAngle, double angleObject);
         public delegate float WorldToScreenX(double normalizedAngleToObject, double observerDeltaAngle);
 
         public WorldToScreenY worldToScreenY;
@@ -18,7 +18,5 @@ namespace HitBoxLib
 
         public Box body;
         public Vector2f position;
-        public bool useEdgeForHeight;
-
     }
 }

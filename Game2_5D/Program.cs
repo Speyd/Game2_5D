@@ -45,7 +45,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using ObstacleLib.BlankWallLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
-Screen.Initialize(1000, 600);
+Screen.Initialize(1000, 800);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -291,14 +291,14 @@ AppContext.SetSwitch("System.Runtime.TieredPGO", true);
 MultiWall multiWall = new MultiWall();
 map.AddObstacle(10, 5, multiWall);
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 //multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
 //map.AddObstacle(10, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
 map.AddObstacle(9, 5, sprite1);
-sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
+//sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
 //Console.WriteLine(map.Obstacles.Count);
@@ -317,7 +317,7 @@ try
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
 
         algorithm.CalculationAlgorithm();
-        visualizerHitBox.Render(player);
+       // visualizerHitBox.Render(player);
 
         fpsChecker.EndRead();
 

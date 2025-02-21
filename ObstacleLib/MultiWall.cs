@@ -107,8 +107,11 @@ namespace ObstacleLib
         }
         private void UpdateHeight()
         {
+            float multiHeight = Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen;
+
             UpdateHeightHitBox(Walls.Count * Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
-            Z.Axis = (Walls.Count - 1) * Screen.Setting.HalfTile;
+
+            Z.Axis = (Walls.Count - 1) * multiHeight;
         }
         public override void UpdateAdditionalInformation(double x, double y)
         {
@@ -217,15 +220,6 @@ namespace ObstacleLib
 
             lvl--;
             Walls.RemoveAt(lvl);
-        }
-
-
-        public override HitboxObjectInfo GetHitboxObjectInfo()
-        {
-            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
-            hitboxObjectInfo.useEdgeForHeight = true;
-
-            return hitboxObjectInfo;
         }
     }
 }

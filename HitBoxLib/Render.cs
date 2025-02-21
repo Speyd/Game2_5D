@@ -83,11 +83,15 @@ public static class Render
     }
     private static Vector2f GetPositionForAngle(HitboxObjectInfo objectHitBox, Vector3f vertex, Vector2f center)
     {
-        Vector2f position = objectHitBox.useEdgeForHeight ?
-                new Vector2f(vertex.Z, vertex.X) :
-                new Vector2f(center.X, center.Y);
-
-        return position;
+        switch(objectHitBox.body.HeightRenderMode)
+        {
+            case HitboxHeightMode.EdgeBased:
+                return new Vector2f(vertex.Z, vertex.X);
+            case HitboxHeightMode.CenterBased:
+                return new Vector2f(center.X, center.Y);
+            default:
+                return new Vector2f();
+        }
     }
     private static List<Vector2f> GetHitboxCoordinatesOnScreen(ref int countNonRender, HitboxObjectInfo objectHitBox, ObserverInfo observer)
     {
@@ -106,7 +110,7 @@ public static class Render
             double normalizedAngle = CalculationAngle(observer.angle, angleDistance);
 
             float screenX = objectHitBox.worldToScreenX(normalizedAngle, observer.deltaAngle);
-            float screenY = objectHitBox.worldToScreenY(vertex.Y, safeDistance, observer.vertivalAngle, observer.angle, normalizedAngle);
+            float screenY = objectHitBox.worldToScreenY(vertex.Y, safeDistance, observer.vertivalAngle, normalizedAngle);
 
 
             if (Math.Abs(normalizedAngle) > observer.fov ||

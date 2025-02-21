@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace HitBoxLib
 {
-    public interface IHitBoxProcessor
+    public enum HitboxHeightMode
     {
-        float WorldToScreenSideY(double side, double distance, double verticalAngle, double angleObject);
-        
+        EdgeBased,
+        CenterBased
     }
 }

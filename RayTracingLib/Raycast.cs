@@ -20,109 +20,90 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using HitBoxLib.PositionObject;
 using System.Numerics;
 using HitBoxLib;
+using SFML.System;
 
 
 namespace RayTracingLib
 {
     public static class Raycast
     {
-        private static float startX;
-        private static float tMaxX;
-        private static float dx;
-
-        private static float startY;
-        private static float tMaxY;
-        private static float dy;
-
-        private static int gridX;
-        private static int gridY;
-
         private const float epsilon = 0.000001f;
-        private const float percentOfMainStep = 0.01f;
 
-        private static (bool, Obstacle?) CheckingTouchingOfList(List<Obstacle> obstacles, Entity entity, float currentRayX, float currentRayY)
+        public static int _scanRadius = 1;
+        private static int ScanRadius 
         {
-            foreach (var obstacle in obstacles)
+            get => _scanRadius;
+            set
             {
-
-                if (obstacle is IRayPassability rayPassability)
-                {
-                    if (rayPassability.IsRayTouchesObject(entity, currentRayX, currentRayY))
-                        return (true, obstacle);
-                }
+                if (value < 0)
+                    _scanRadius = 0;
                 else
-                    return (true, obstacle);
+                    _scanRadius = value;
             }
-            return (false, null);
         }
-        private static Obstacle? GetNearestObject(Entity entity, List<Obstacle> nonRayPassable)
-        {
-            (double, Obstacle?) nearObj = (-1, null);
 
-            foreach(var obstacle in nonRayPassable)
+
+        public static List<double> GetIntersectionParameter(Entity entity,
+                    float minX, float maxX,
+                    float minY, float maxY)
+        {
+            List<double> tValues = new();
+            double dirX = entity.Direction.X;
+            double dirY = entity.Direction.Y;
+
+            if (dirX != 0)
             {
-                double X = entity.X.Axis - obstacle.X.Axis;
-                double Y = entity.Y.Axis - obstacle.Y.Axis;
+                double t1 = (minX - entity.X.Axis) / dirX;
+                double t2 = (maxX - entity.X.Axis) / dirX;
 
-                double dist = Math.Sqrt(X * X + Y * Y);
+                tValues.Add(t1);
+                tValues.Add(t2);
+            }
+            if (dirY != 0)
+            {
+                double t3 = (minY - entity.Y.Axis) / dirY;
+                double t4 = (maxY - entity.Y.Axis) / dirY;
 
-                if (nearObj.Item1 == -1 || nearObj.Item1 > dist)
-                {
-                    nearObj = (dist, obstacle);
-                }
+                tValues.Add(t3);
+                tValues.Add(t4);
             }
 
-            return nearObj.Item2;
+            return tValues;
         }
-        private static (List<Obstacle> rayPassable, List<Obstacle> nonRayPassable) SplitObstaclesByRayPassability(List<Obstacle> obstacles)
+        public static bool IntersectionCalculation(Obstacle obstacle, 
+                    Entity entity, double tValue,
+                    float minX, float maxX,
+                    float minY, float maxY)
         {
-            var rayPassable = obstacles.Where(o => o is IRayPassability).ToList();
-            var nonRayPassable = obstacles.Where(o => o is not IRayPassability).ToList();
-            return (rayPassable, nonRayPassable);
-        }    
+            Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
+
+            double xInter = entity.X.Axis + tValue * entity.Direction.X;
+            double yInter = entity.Y.Axis + tValue * entity.Direction.Y;
+
+            bool result = HitBoxLib.Collision.IsRayTouchesObject(obstaclePos, entity.GetObserverInfo(), obstacle.HitBox.MainHitBox, xInter, yInter);
+
+            return result;
+        }
+
         private static void DetailedSearchInCell(List<Obstacle> colisionObstacle, List<Obstacle> obstacles, Entity entity)
         {
-            double startX = entity.X.Axis;
-            double startY = entity.Y.Axis;
 
             foreach (var obstacle in obstacles)
             {
+                Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
+
                 float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
                 float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
                 float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
                 float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
 
-                List<double> tValues = new();
+                List<double> tValues = GetIntersectionParameter(entity, minX, maxX, minY, maxY);
 
-                if (dx != 0)
-                {
-                    double t1 = (minX - startX) / dx;
-                    double t2 = (maxX - startX) / dx;
-
-                    tValues.Add(t1);
-                    tValues.Add(t2);
-                }
-
-                if (dy != 0)
-                {
-                    double t3 = (minY - startY) / dy;
-                    double t4 = (maxY - startY) / dy;
-
-                    tValues.Add(t3);
-                    tValues.Add(t4);
-                }
-       
                 foreach (var tValue in tValues)
                 {
                     if (tValue < 0) continue;
 
-                    double xInter = startX + tValue * dx;
-                    double yInter = startY + tValue * dy;
-
-                    bool X = xInter >= minX && xInter <= maxX;
-                    bool Y = yInter >= minY && yInter <= maxY;
-
-                    if (X && Y)
+                    if (IntersectionCalculation(obstacle, entity, tValue, minX, maxX, minY, maxY))
                     {
                         colisionObstacle.Add(obstacle);
                         break;
@@ -130,65 +111,30 @@ namespace RayTracingLib
                 }
             }
         }
-
         public static Obstacle? GetFirstTouchedObject(List<Obstacle> colisionObstacle, Entity entity)
         {
             Obstacle? nearestObstacle = null;
             double nearestDistance = double.MaxValue;
 
-            double entityX = entity.X.Axis;
-            double entityY = entity.Y.Axis;
-            double dirX = entity.Direction.X;
-            double dirY = entity.Direction.Y;
-
             foreach (var obstacle in colisionObstacle)
             {
+                Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
+
                 float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
                 float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
                 float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
                 float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
 
-                List<double> tValues = new();
+                List<double> tValues = GetIntersectionParameter(entity, minX, maxX, minY, maxY);
 
-                if (dirX != 0)
+                foreach (var tValue in tValues)
                 {
-                    double t1 = (minX - entityX) / dirX;
-                    double t2 = (maxX - entityX) / dirX;
-                    tValues.Add(t1);
-                    tValues.Add(t2);
-                }
-                if (dirY != 0)
-                {
-                    double t3 = (minY - entityY) / dirY;
-                    double t4 = (maxY - entityY) / dirY;
-                    tValues.Add(t3);
-                    tValues.Add(t4);
-                }
+                    if (tValue < 0) continue;
 
-                foreach (var t in tValues)
-                {
-                    if (t < 0) continue;
-
-                    double interX = entityX + t * dirX;
-                    double interY = entityY + t * dirY;
-
-
-                    bool insideX = interX >= minX && interX <= maxX;
-                    bool insideY = interY >= minY && interY <= maxY;
-
-                    if (insideX && insideY)
+                    if (IntersectionCalculation(obstacle, entity, tValue, minX, maxX, minY, maxY) && tValue < nearestDistance)
                     {
-                        if (t < nearestDistance)
-                        {
-                            bool yea = true;
-                            if (obstacle is SpriteObstacle o)
-                                yea = o.IsRayTouchesObject(entity, (float)interX, (float)interY);
-                            if (yea == true)
-                            {
-                                nearestDistance = t;
-                                nearestObstacle = obstacle;
-                            }
-                        }
+                        nearestDistance = tValue;
+                        nearestObstacle = obstacle;
                     }
                 }
             }
@@ -196,36 +142,37 @@ namespace RayTracingLib
             return nearestObstacle;
         }
 
-        public static Obstacle? RaycastFun(Map map, Entity entity, List<(float, float)> ignoreCoo)
+
+        public static Obstacle? RaycastFun(Map map, Entity entity)
         {
-            dx = entity.Direction.X;
-            dy = entity.Direction.Y;
+            double dx = entity.Direction.X;
+            double dy = entity.Direction.Y;
 
             if (Math.Abs(dx) < epsilon) dx = dx < 0 ? -epsilon : epsilon;
             if (Math.Abs(dy) < epsilon) dy = dy < 0 ? -epsilon : epsilon;
 
             int tileSize = Screen.Setting.Tile;
 
-            startX = (float)entity.X.Axis;
-            startY = (float)entity.Y.Axis;
-            
-            gridX = (int)(startX / tileSize) * tileSize;
-            gridY = (int)(startY / tileSize) * tileSize;
+            double startX = entity.X.Axis;
+            double startY = entity.Y.Axis;
+
+            int gridX = (int)(startX / tileSize) * tileSize;
+            int gridY = (int)(startY / tileSize) * tileSize;
 
             int stepX = dx > 0 ? tileSize : -tileSize;
             int stepY = dy > 0 ? tileSize : -tileSize;
 
-            float tDeltaX = Math.Abs(Screen.Setting.Tile / dx);
-            float tDeltaY = Math.Abs(Screen.Setting.Tile / dy);
+            double tDeltaX = Math.Abs(Screen.Setting.Tile / dx);
+            double tDeltaY = Math.Abs(Screen.Setting.Tile / dy);
 
-            tMaxX = dx > 0 ? (gridX + tileSize - startX) / dx : (startX - gridX) / -dx;
-            tMaxY = dy > 0 ? (gridY + tileSize - startY) / dy : (startY - gridY) / -dy;
-            int scanRadius = 2;
+            double tMaxX = dx > 0 ? (gridX + tileSize - startX) / dx : (startX - gridX) / -dx;
+            double tMaxY = dy > 0 ? (gridY + tileSize - startY) / dy : (startY - gridY) / -dy;
+
             while (true)
             {
                 List<Obstacle> colisionObstacle = new();
 
-                for (int radius = 0; radius <= scanRadius; radius++)
+                for (int radius = 0; radius <= ScanRadius; radius++)
                 {
                     for (int xOffset = -radius; xOffset <= radius; xOffset++)
                     {
@@ -234,14 +181,13 @@ namespace RayTracingLib
                             var scanX = gridX + xOffset * tileSize;
                             var scanY = gridY + yOffset * tileSize;
 
-                            if (map.Obstacles.ContainsKey((scanX, scanY)) && !ignoreCoo.Contains((scanX, scanY)))
+                            if (map.Obstacles.ContainsKey((scanX, scanY)))
                                 DetailedSearchInCell(colisionObstacle, map.Obstacles[(scanX, scanY)], entity);
                         }
                     }
                 }
 
                 Obstacle? findObstacle = GetFirstTouchedObject(colisionObstacle, entity);
-
                 if (findObstacle != null)
                     return findObstacle;
 

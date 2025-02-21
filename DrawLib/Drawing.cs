@@ -15,72 +15,50 @@ namespace DrawLib
     public class Drawing()
     {
         HitPoint hitPoint = new HitPoint();
-        List<(float, float)> ignoreCoo = new List<(float, float)>();
 
         public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
         {
-            while (true)
+            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+
+            if (obstacle is not null && obstacle is IDrawable drawable)
             {
-                Obstacle? obstacle = Raycast.RaycastFun(map, entity, ignoreCoo);
+                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
-                if (obstacle is not null && obstacle is IDrawable drawable)
+
+                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+
+                float height = drawable.BringingToStandard(heightObj);
+                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+
+                Vector2f pointPosition = new Vector2f(textureX + heightObj, textureY);
+                CircleShape point = new CircleShape(height)
                 {
-                    hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+                    FillColor = colorFill,
+                    Position = pointPosition
+                };
 
-
-                    float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
-                    float height = drawable.BringingToStandard(heightObj);
-                    float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
-
-                    if (textureY < 0 - height)
-                    {
-                        ignoreCoo.Add(((float)obstacle.X.Axis, (float)obstacle.Y.Axis));
-                        continue;
-                    }
-                    
-                    Vector2f pointPosition = new Vector2f(textureX + heightObj, textureY);
-                    CircleShape point = new CircleShape(height)
-                    {
-                        FillColor = colorFill,
-                        Position = pointPosition
-                    };
-
-                    drawable.DrawObject(point);
-                }
-
-                ignoreCoo.Clear();
-                break;
+                drawable.DrawObject(point);
             }
         }
 
         public void DrawingSprite(Map map, Entity entity, Sprite sprite)
         {
-            while (true)
+            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+
+            if (obstacle is not null && obstacle is IDrawable drawable)
             {
-                Obstacle? obstacle = Raycast.RaycastFun(map, entity, ignoreCoo);
-
-                if (obstacle is not null && obstacle is IDrawable drawable)
-                {
-                    hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
 
-                    float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
 
-                    float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
-                    float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
-                    if (textureY < 0 - height)
-                    {
-                        ignoreCoo.Add(((float)obstacle.X.Axis, (float)obstacle.Y.Axis));
-                        continue;
-                    }
-                    Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
-                    sprite.Position = dotPosition;
+                float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
+                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
 
-                    drawable.DrawObject(sprite);
-                }
-                ignoreCoo.Clear();
-                break;
+                Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
+                sprite.Position = dotPosition;
+
+                drawable.DrawObject(sprite);
             }
         }
     }

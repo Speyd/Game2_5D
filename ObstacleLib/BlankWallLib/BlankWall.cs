@@ -132,13 +132,5 @@ namespace ObstacleLib.BlankWallLib
 
             ZBuffer.AddToZBuffer(renderWall, result.Depth);
         }
-
-        public override HitboxObjectInfo GetHitboxObjectInfo()
-        {
-            HitboxObjectInfo hitboxObjectInfo = base.GetHitboxObjectInfo();
-            hitboxObjectInfo.useEdgeForHeight = true;
-
-            return hitboxObjectInfo;
-        }
     }
 }

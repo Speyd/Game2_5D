@@ -126,10 +126,11 @@ namespace ObstacleLib
         public abstract Vector2f ConversionToMapCoordinates(float mapTile);
 
 
-        public virtual float WorldToScreenSideY(double side, double distance, double verticalAngle, double angle, double angleObject)
+        public virtual float WorldToScreenSideY(double side, double distance, double verticalAngle, double angleObject)
         {
-            distance *= Math.Cos(angleObject);
             distance /= Screen.Setting.Tile;
+            distance *= Math.Cos(angleObject);
+            distance  = Math.Max(distance, 0.4);
             return WorldToScreenY(verticalAngle) - (float)(side / distance);
         }
 
@@ -140,7 +141,6 @@ namespace ObstacleLib
             hitboxObjectInfo.body = HitBox.MainHitBox;
             hitboxObjectInfo.worldToScreenY = WorldToScreenSideY;
             hitboxObjectInfo.worldToScreenX = WorldToScreenX;
-            hitboxObjectInfo.useEdgeForHeight = true;
 
             return hitboxObjectInfo;
         }
