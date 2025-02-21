@@ -328,6 +328,8 @@ map.AddObstacle(9, 5, sprite1);
 //Console.WriteLine(map.Obstacles.Count);
 PartsWorldLib.RenderPartsWorld partsWorld = new();
 VisualizerHitBox visualizerHitBox = new VisualizerHitBox(map);
+visualizerHitBox.VisualizerType = VisualizerType.VisualizeRayRenderable;
+visualizerHitBox.IsDistanceLimited = true;
 try
 {
     while (Screen.Window.IsOpen)
@@ -341,7 +343,7 @@ try
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
 
         algorithm.CalculationAlgorithm();
-        // visualizerHitBox.Render(player);
+        visualizerHitBox.Render(player);
         fpsChecker.EndRead();
 
         mapMini.Render();

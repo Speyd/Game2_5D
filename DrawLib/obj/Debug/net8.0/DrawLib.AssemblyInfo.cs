@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DrawLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d77d5e92208d87ae7ea6f9e8730a50e8dc4a7b3d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a37421e4355980bbd07863e57810539582d5330")]
 [assembly: System.Reflection.AssemblyProductAttribute("DrawLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DrawLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

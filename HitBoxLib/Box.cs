@@ -18,7 +18,7 @@ namespace HitBoxLib
     public class Box
     {
         public SFML.Graphics.Color RenderColor { get; set; } = Color.Red;
-        public HitboxHeightMode HeightRenderMode { get; set; } = HitboxHeightMode.CenterBased;
+        public HitboxHeightMode HeightRenderMode { get; set; } = HitboxHeightMode.EdgeBased;
 
         public UniqueDictionary<HitBoxSideType, HitBoxSide> Body { get; set; } = new();
         public string Title { get; set; } = string.Empty;
