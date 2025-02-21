@@ -10,15 +10,15 @@ namespace ScreenLib
 {
     public class OutputPriority(RenderWindow window)
     {
-        public SortedDictionary<int, List<Drawable>> TreePriority { get; init; } = new SortedDictionary<int, List<Drawable>>();
-        public void AddToPriority(int priority, Drawable sprite)
+        public SortedDictionary<int, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
+        public void AddToPriority(int priority, Drawable sprite, RenderStates? state = null)
         {
             if (!TreePriority.ContainsKey(priority))
             {
-                TreePriority[priority] = new List<Drawable>();
+                TreePriority[priority] = new List<(Drawable, RenderStates?)>();
             }
 
-            TreePriority[priority].Add(sprite);
+            TreePriority[priority].Add((sprite, state));
         }
 
         public void DrawingByPriority()
@@ -27,7 +27,10 @@ namespace ScreenLib
             {
                 foreach (var sprite in pair.Value)
                 {
-                    window.Draw(sprite);
+                    if (sprite.Item2.HasValue)
+                        window.Draw(sprite.Item1, sprite.Item2.Value);
+                    else
+                        window.Draw(sprite.Item1);
                 }
             }
 

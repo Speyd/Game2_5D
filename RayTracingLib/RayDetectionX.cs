@@ -19,52 +19,45 @@ namespace RayTracingLib.Detection
     {
         static float distanceToPoint = 0;
         static float distanceToWall = 0;
-
-        static float sinAngle = 0;
-        static float cosAngle = 0;
-
-        static float left = 0f;
-        static float right = 0f;
-        static float bottom = 0f;
-        static float top = 0f;
-
-        static private Vector2f CalculateTextureHitPoint(Obstacle obstacle, Entity entity)
+        static private Vector2f CalculateTextureHitPoint(Obstacle obstacle, Entity entity,
+            float cosAngle, float sinAngle,
+            float minX, float maxX, float maxY, float minY)
         {
             float tempValue = float.MaxValue;
 
             if (cosAngle != 0)
             {
-                float tVerticalLeft = (float)(left - entity.X.Axis) / cosAngle;
+                float tVerticalLeft = (float)(minX - entity.X.Axis) / cosAngle;
                 if (tVerticalLeft >= 0)
                 {
                     float hitYLeft = (float)entity.Y.Axis + tVerticalLeft * sinAngle;
-                    if (hitYLeft >= top && hitYLeft <= bottom)
+                    if (hitYLeft >= minY && hitYLeft <= maxY)
                         tempValue = tVerticalLeft;
                 }
 
-                float tVerticalRight = (float)(right - entity.X.Axis) / cosAngle;
+                float tVerticalRight = (float)(maxX - entity.X.Axis) / cosAngle;
                 if (tVerticalRight >= 0)
                 {
                     float hitYRight = (float)entity.Y.Axis + tVerticalRight * sinAngle;
-                    if (hitYRight >= top && hitYRight <= bottom)
+                    if (hitYRight >= minY && hitYRight <= maxY)
                         tempValue = Math.Min(tempValue, tVerticalRight);
                 }
             }
             if (sinAngle != 0)
             {
-                float tHorizontalTop = (float)(top - entity.Y.Axis) / sinAngle;
+                float tHorizontalTop = (float)(minY - entity.Y.Axis) / sinAngle;
                 if (tHorizontalTop >= 0)
                 {
                     float hitXTop = (float)entity.X.Axis + tHorizontalTop * cosAngle;
-                    if (hitXTop >= left && hitXTop <= right)
+                    if (hitXTop >= minX && hitXTop <= maxX)
                         tempValue = Math.Min(tempValue, tHorizontalTop);
                 }
 
-                float tHorizontalBottom = (float)(bottom - entity.Y.Axis) / sinAngle;
+                float tHorizontalBottom = (float)(maxY - entity.Y.Axis) / sinAngle;
                 if (tHorizontalBottom >= 0)
                 {
                     float hitXBottom = (float)entity.X.Axis + tHorizontalBottom * cosAngle;
-                    if (hitXBottom >= left && hitXBottom <= right)
+                    if (hitXBottom >= minX && hitXBottom <= maxX)
                         tempValue = Math.Min(tempValue, tHorizontalBottom);
                 }
             }
@@ -78,26 +71,31 @@ namespace RayTracingLib.Detection
 
             return new Vector2f(hitX, hitY);
         }
-        static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity)   
+        static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity,
+            float cosAngle, float sinAngle,
+            float minX, float maxX, float maxY, float minY)   
         {
-            if (entity.Y.Axis >= top && entity.Y.Axis <= bottom)
+            if (entity.Y.Axis >= minY && entity.Y.Axis <= maxY)
             {
-                if (cosAngle > 0 && entity.X.Axis <= right)
+                if (cosAngle > 0 && entity.X.Axis <= maxX)
                     return ObjectSide.Right;
-                else if (cosAngle < 0 && entity.X.Axis >= left)
+                else if (cosAngle < 0 && entity.X.Axis >= minX)
                     return ObjectSide.Left;
             }
 
-            if (entity.X.Axis >= left && entity.X.Axis <= right)
+            if (entity.X.Axis >= minX && entity.X.Axis <= maxX)
             {
-                if (sinAngle > 0 && entity.Y.Axis <= bottom)
+                if (sinAngle > 0 && entity.Y.Axis <= maxY)
                     return ObjectSide.Bottom;
-                else if (sinAngle < 0 && entity.Y.Axis >= top)
+                else if (sinAngle < 0 && entity.Y.Axis >= minY)
                     return ObjectSide.Top;
             }
 
             return ObjectSide.Error;
         }
+
+
+
         static private void SetTextureWall(ref ObjectSide oldWallTexture, ObjectSide newWallTexture)
         {
             if (oldWallTexture == ObjectSide.Error)
@@ -119,6 +117,8 @@ namespace RayTracingLib.Detection
                     return wallDetermine;
             }
         }
+
+
         static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, ObjectSide wallDetermine)
         {
             double deltaX = obstacle.X.Axis - entity.X.Axis;
@@ -128,23 +128,8 @@ namespace RayTracingLib.Detection
             if (wallDetermine == ObjectSide.Top || wallDetermine == ObjectSide.Left)
                 distanceToWall -= -(Screen.Setting.Tile * 3);
         }
-        static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
+        static private HitPoint CalculateHitPoint(Vector2f cornerHit, ObjectSide wallDetermine)
         {
-            cosAngle = entity.Direction.X;
-            sinAngle = entity.Direction.Y;
-
-            left = (float)(obstacle.HitBox[HitBoxSideType.Left]?.Side ?? 0f);
-            right = (float)(obstacle.HitBox[HitBoxSideType.Right]?.Side ?? 0f);
-            bottom = (float)(obstacle.HitBox[HitBoxSideType.Bottom]?.Side ?? 0f);
-            top = (float)(obstacle.HitBox[HitBoxSideType.Top]?.Side ?? 0f);
-
-
-            ObjectSide wallDetermine = ObjectSide.Error;
-            wallDetermine = DetermineWallSide(obstacle, entity);
-
-            CalculateDistanceToWall(obstacle, entity, wallDetermine);
-
-            Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity);
             if (cornerHit.X > cornerHit.Y)
             {
                 cornerHit.X /= Screen.Setting.Tile;
@@ -172,6 +157,27 @@ namespace RayTracingLib.Detection
 
             ObjectSide textureWallDetermine = RedefiningWallSides(wallDetermine);
             return new HitPoint(cornerHit, distanceToPoint, distanceToWall, wallDetermine, textureWallDetermine);
+        }
+
+
+        static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
+        {
+            float cosAngle = entity.Direction.X;
+            float sinAngle = entity.Direction.Y;
+
+            float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
+            float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0f);
+            float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0f);
+            float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0f);
+
+
+            ObjectSide wallDetermine = ObjectSide.Error;
+            wallDetermine = DetermineWallSide(obstacle, entity, cosAngle, sinAngle, minX, maxX, maxY, minY);
+
+            CalculateDistanceToWall(obstacle, entity, wallDetermine);
+
+            Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity, cosAngle, sinAngle, minX, maxX, maxY, minY);
+            return CalculateHitPoint(cornerHit, wallDetermine);
         }
     }
 }

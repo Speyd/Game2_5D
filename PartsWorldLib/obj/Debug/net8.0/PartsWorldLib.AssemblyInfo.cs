@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PartsWorldLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dee0c5c12971caef9e60667fc82b3e7cb363350d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d20e77f4b13dab5e7a208f111f56f377c9804500")]
 [assembly: System.Reflection.AssemblyProductAttribute("PartsWorldLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PartsWorldLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

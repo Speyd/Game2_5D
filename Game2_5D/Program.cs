@@ -48,8 +48,8 @@ Screen.Initialize(1000, 600);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
-map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));
-map.AddObstacle(2, 5, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(2, 5, new TexturedWall(Map.StandartBlock));
 
 int t = Screen.Setting.Tile;
 
@@ -246,10 +246,10 @@ map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png")
 //map.AddObstacle(7, 2,new TexturedWall(@"Resources\Image\WallTexture\Wall8.png"));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
-map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
-map.AddObstacle(3, 5, new BlankWall(122, 12, 200));
-map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
-map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(3, 5, new BlankWall(122, 12, 200));
+//map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
 Player player = new Player(100)
 {
     MaxRenderTile = 1200,
@@ -292,6 +292,31 @@ map.AddObstacle(10, 5, multiWall);
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//MultiWall multiWall1 = new MultiWall();
+//map.AddObstacle(10, 4, multiWall1);
+//multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//MultiWall multiWall2 = new MultiWall();
+//map.AddObstacle(10, 3, multiWall2);
+//multiWall2.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall2.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall2.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//MultiWall multiWall3 = new MultiWall();
+//map.AddObstacle(10, 6, multiWall3);
+//multiWall3.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall3.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall3.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//MultiWall multiWall4 = new MultiWall();
+//map.AddObstacle(10, 7, multiWall4);
+//multiWall4.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall4.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall4.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//MultiWall multiWall5 = new MultiWall();
+//map.AddObstacle(10, 2, multiWall5);
+//multiWall5.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall5.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+//multiWall5.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 //multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 
 //map.AddObstacle(10, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
@@ -316,8 +341,7 @@ try
         player.OnControlAction(fpsChecker.GetDeltaTime(), player);
 
         algorithm.CalculationAlgorithm();
-       // visualizerHitBox.Render(player);
-
+        // visualizerHitBox.Render(player);
         fpsChecker.EndRead();
 
         mapMini.Render();
@@ -332,6 +356,8 @@ try
         };
 
         Screen.Window.Draw(point);
+
+
         Screen.Window.Display();
     }
 }

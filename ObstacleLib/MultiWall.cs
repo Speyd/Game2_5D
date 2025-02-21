@@ -36,7 +36,12 @@ namespace ObstacleLib
         {
             AddLevelWall(walls);
         }
-
+        public MultiWall(MultiWall multiWall)
+           : base(0, 0, Color.Red, false)
+        {
+            Walls = multiWall.Walls;
+            Z = multiWall.Z;
+        }
         #region IDrawable_Implementation
         public float CalculateTextureX(Vector2f UV, ObjectSide side)
         {

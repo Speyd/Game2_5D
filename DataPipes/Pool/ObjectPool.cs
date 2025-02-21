@@ -9,13 +9,21 @@ namespace DataPipes.Pool
 {
     public class ObjectPool<T> where T : IResettable, new()
     {
-        private ConcurrentBag<T> _pool = new ConcurrentBag<T>();
+        private readonly ConcurrentBag<T> _pool = new ConcurrentBag<T>();
+        private readonly int _maxCapacity;
+        private int _count = 0;
+
+        public ObjectPool(int maxCapacity = 1500) 
+        {
+            _maxCapacity = maxCapacity;
+        }
 
         public T Get()
         {
             if (_pool.TryTake(out var item))
             {
                 item.Reset();
+                Interlocked.Decrement(ref _count);
                 return item;
             }
 
@@ -25,8 +33,16 @@ namespace DataPipes.Pool
         public void Return(T item)
         {
             item.Reset();
-            _pool.Add(item);
-        }
 
+            if (Interlocked.Increment(ref _count) <= _maxCapacity)
+            {
+                _pool.Add(item);
+            }
+            else
+            {
+                Interlocked.Decrement(ref _count); 
+            }
+        }
     }
+
 }

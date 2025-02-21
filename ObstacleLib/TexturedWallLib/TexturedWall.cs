@@ -41,6 +41,7 @@ namespace ObstacleLib.TexturedWallLib
         public TextureObstacle? TextureInMiniMap { get; set; }
 
         //----------------------Setting---------------------
+
         public override bool IsSingleAddable { get; init; } = true;
         public int LvlWall { get; private set; } = 1;
 
@@ -272,14 +273,29 @@ namespace ObstacleLib.TexturedWallLib
             if (IsOffScreen(result, position, textureRect, scale))
                 return;
 
-            Sprite RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
-            RenderSprite.Color = BlackoutObstacle(result.Depth);
+            VertexArray vertexArray = new VertexArray(PrimitiveType.Quads, 4);
+            SFML.Graphics.Color blackoutColor = BlackoutObstacle(result.Depth);
 
-            RenderSprite.Position = position;
-            RenderSprite.Scale = scale;
+            Vector2f topLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top);
+            Vector2f topRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top);
+            Vector2f bottomRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top + textureRect.Height);
+            Vector2f bottomLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top + textureRect.Height);
+
+
+            Vector2f topLeftPosition = position;
+            Vector2f topRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y);
+            Vector2f bottomRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y + scale.Y * textureRect.Height);
+            Vector2f bottomLeftPosition = new Vector2f(position.X, position.Y + scale.Y * textureRect.Height);
+
+            vertexArray[0] = new Vertex(topLeftPosition, blackoutColor, topLeftTexCoords);
+            vertexArray[1] = new Vertex(topRightPosition, blackoutColor, topRightTexCoords);
+            vertexArray[2] = new Vertex(bottomRightPosition, blackoutColor, bottomRightTexCoords);
+            vertexArray[3] = new Vertex(bottomLeftPosition, blackoutColor, bottomLeftTexCoords); 
+
+            RenderStates renderStates = new RenderStates(CurrentRenderTexture.Mod.Texture);
 
             result.Depth += (LvlWall + 1) * 0.01;
-            ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
+            ZBuffer.AddToZBuffer(vertexArray, result.Depth, renderStates);
         }
     }
 }

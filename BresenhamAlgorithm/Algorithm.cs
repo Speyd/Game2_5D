@@ -65,8 +65,7 @@ namespace BresenhamAlgorithm
             double mappedY = isVertical ? y : y + auxiliary;
 
 
-            var key = Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile);
-            if (!map.Obstacles.ContainsKey(key))
+            if (!map.Obstacles.TryGetValue(Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile), out var obstacles))
                 return false;
 
             double coordinate = 0;
@@ -83,7 +82,7 @@ namespace BresenhamAlgorithm
             }
 
 
-            foreach (var obstacle in map.Obstacles[key])
+            foreach (var obstacle in obstacles)
             {
                 switch (obstacle)
                 {
@@ -217,7 +216,9 @@ namespace BresenhamAlgorithm
 
 
                 RenderRayObstacles(ray, rayPassability, carAngleRay, ParallelInfoObj, ParallelResult);
+
                 resultobjectPool.Return(ParallelResult);
+                infoObjectPool.Return(ParallelInfoObj);
             });
 
 

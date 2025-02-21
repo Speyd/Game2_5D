@@ -18,12 +18,9 @@ namespace ObstacleLib.TexturedWallLib.Render
     {
         internal static Vector2f CalculationTextureScale(Result result, TexturedPair CurrentRenderTexture)
         {
-            if (CurrentRenderTexture is null)
-                return new Vector2f(0, 0);
-
             float scaleX = (float)CurrentRenderTexture.Base.Scale / CurrentRenderTexture.Base.Width;
             float scaleY = (float)result.ProjHeight / CurrentRenderTexture.Base.Height;
-           return new Vector2f(scaleX, scaleY);
+            return new Vector2f(scaleX, scaleY);
         }
         internal static int NormalizeLvlWall(TexturedWall Wall)
         {

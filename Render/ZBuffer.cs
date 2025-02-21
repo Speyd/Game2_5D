@@ -13,12 +13,12 @@ namespace Render.ZBufferRender
 {
     public class ZBuffer
     {
-        private static ConcurrentDictionary<double, Drawable> zBuffer = new ConcurrentDictionary<double, Drawable>();
+        private static ConcurrentDictionary<double, (Drawable, RenderStates?)> zBuffer = new();
         static object lockObj = new object();
         
         public static void Render()
         {
-            List<KeyValuePair<double, Drawable>> sortedList;
+            List<KeyValuePair<double, (Drawable, RenderStates?)>> sortedList;
 
             lock (lockObj)
             {
@@ -27,15 +27,15 @@ namespace Render.ZBufferRender
 
             foreach (var kv in sortedList)
             {
-                Screen.OutputPriority.AddToPriority(2, kv.Value);
+                Screen.OutputPriority.AddToPriority(2, kv.Value.Item1, kv.Value.Item2);
             }
 
             zBuffer.Clear();
         }
 
-        public static void AddToZBuffer(Drawable drawable, double depth)
+        public static void AddToZBuffer(Drawable drawable, double depth, RenderStates? renderStates = null)
         {
-            zBuffer[depth] = drawable;
+            zBuffer[depth] = (drawable, renderStates);
         }
     }
 }
