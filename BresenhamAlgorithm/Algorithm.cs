@@ -101,27 +101,27 @@ namespace BresenhamAlgorithm
 
             return isAdded;
         }
-
         List<InfoObject> FilterVisibleObstacles(List<InfoObject> info, bool rayPassability)
         {
-            if ( info.Count <= 1) return info;
-            else if (rayPassability == false && info.Count == 2)
+            if (info.Count <= 1) return info;
+            if (info.Any(item => item.depth != info[0].depth))
             {
-                if (info[0].depth < info[1].depth)
-                    return new List<InfoObject> { info[0] };
-                else
-                    return new List<InfoObject> { info[1] };
+                info.Sort((a, b) => a.depth.CompareTo(b.depth));
+            }
+            if (!rayPassability && info.Count == 2)
+            {
+                return new List<InfoObject> { info[0].depth < info[1].depth ? info[0] : info[1] };
             }
 
             InfoObject? current = null;
-
-            info.Sort((a, b) => a.depth.CompareTo(b.depth));
             var filtered = new List<InfoObject>();
 
             foreach (var item in info)
             {
-                if (current is null || (item.depth > current.depth &&
-                    item.Obstacle?.GetZCoordinate() > current.Obstacle?.GetZCoordinate()))
+                var zCoordinate = item.Obstacle?.GetZCoordinate();
+
+                if (current == null ||
+                    (item.depth > current.depth && zCoordinate.HasValue && zCoordinate > current.Obstacle?.GetZCoordinate()))
                 {
                     filtered.Add(item);
                     current = item;
@@ -130,6 +130,7 @@ namespace BresenhamAlgorithm
 
             return filtered;
         }
+
         private void CheckVericals(ref double coordinate, ref double auxiliaryA, double mapCoordinate, double ratio)
         {
 

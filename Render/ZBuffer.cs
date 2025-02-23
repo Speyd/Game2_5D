@@ -14,20 +14,11 @@ namespace Render.ZBufferRender
     public class ZBuffer
     {
         private static ConcurrentDictionary<double, (Drawable, RenderStates?)> zBuffer = new();
-        static object lockObj = new object();
-        
         public static void Render()
         {
-            List<KeyValuePair<double, (Drawable, RenderStates?)>> sortedList;
-
-            lock (lockObj)
+            foreach (var kv in zBuffer.OrderByDescending(kv => kv.Key))
             {
-                sortedList = zBuffer.OrderByDescending(kv => kv.Key).ToList();
-            }
-
-            foreach (var kv in sortedList)
-            {
-                Screen.OutputPriority.AddToPriority(RenderPriority.Background, kv.Value.Item1, kv.Value.Item2);
+                Screen.OutputPriority.AddToPriority(RenderPriority.ZBufferRender, kv.Value.Item1, kv.Value.Item2);
             }
 
             zBuffer.Clear();

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
 using System.Linq;
+using System.Collections.Concurrent;
 
 namespace MapLib
 {
@@ -17,14 +18,14 @@ namespace MapLib
 
 
         //---------------------Obstacles-----------------------
-        public Dictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles{ get; init; }
+        public ConcurrentDictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles{ get; init; }
         public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
         public Map(int height, int width)
         {
             Setting = new Setting(height, width);
-            Obstacles = new Dictionary<(int X, int Y), List<Obstacle>>();
+            Obstacles = new ConcurrentDictionary<(int X, int Y), List<Obstacle>>();
 
             RefillingObstacles();
         }
@@ -32,7 +33,6 @@ namespace MapLib
         private void RefillingObstacles()
         {
             Obstacles.Clear();
-
             for (int y = 0; y < Setting.MapHeight; y++)
             {
                 for (int x = 0; x < Setting.MapWidth; x++)
@@ -49,8 +49,7 @@ namespace MapLib
                 if (!CheckTrueCoordinates(x, y))
                     throw new Exception("The coordinates for adding the object are not correct(CheckTrueAddObstacle)");
 
-                Obstacles[(x, y)] = new List<Obstacle>() 
-                                         { addObstacle };
+                Obstacles[(x, y)] = new List<Obstacle>() { addObstacle };
             }
             else if (Obstacles[(x, y)].Count == 0)
             {
@@ -116,7 +115,10 @@ namespace MapLib
             Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Remove(obstacle);
 
             if (Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Count == 0)
-                Obstacles.Remove((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)));
+            {
+                List<Obstacle>? removedObstacles;
+                Obstacles.Remove((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)), out removedObstacles);
+            }
         }
         public void DeleteAllCellObstacles(int x, int y)
         {
@@ -126,7 +128,8 @@ namespace MapLib
             else if(!Obstacles.ContainsKey((x, y)))
                 throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
 
-            Obstacles.Remove((x, y));
+            List<Obstacle>? removedObstacles;
+            Obstacles.Remove((x, y), out removedObstacles);
         }
         public void DeleteObstacle(double x, double y)
         {

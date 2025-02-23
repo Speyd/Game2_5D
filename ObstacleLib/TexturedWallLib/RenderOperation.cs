@@ -31,5 +31,10 @@ namespace ObstacleLib.TexturedWallLib.Render
             ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result);
             return wallDetermine == ObjectSide.Error ? null : Wall.MultiTextured.UniqueTexture.GetValue(wallDetermine);
         }
+        internal static ObjectSide SelectCurrentObjectSide(TexturedWall Wall, Result result, Entity entity)
+        {
+            ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result);
+            return wallDetermine;
+        }
     }
 }

@@ -13,12 +13,13 @@ namespace ScreenLib
         public SortedDictionary<RenderPriority, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
         public void AddToPriority(RenderPriority priority, Drawable sprite, RenderStates? state = null)
         {
-            if (!TreePriority.ContainsKey(priority))
+            if (!TreePriority.TryGetValue(priority, out var list))
             {
-                TreePriority[priority] = new List<(Drawable, RenderStates?)>();
+                list = new List<(Drawable, RenderStates?)>();
+                TreePriority[priority] = list;
             }
 
-            TreePriority[priority].Add((sprite, state));
+            list.Add((sprite, state));
         }
 
         public void DrawingByPriority()

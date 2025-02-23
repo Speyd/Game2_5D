@@ -53,6 +53,10 @@ namespace PartsWorldLib
 
             Texture = new Texture(texturePath);
             Shader = new Shader(null, null, shaderPath);
+            if (Shader.IsAvailable)
+                Console.WriteLine("Shaders are supported!");
+            else
+                Console.WriteLine("Shaders are NOT supported!");
             RenderTexture = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
             Sprite = new Sprite(RenderTexture.Texture);
         }

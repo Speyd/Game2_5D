@@ -188,8 +188,13 @@ namespace ObstacleLib
 
         public override void Render(Result result, Entity entity)
         {
+            if (Walls.Count <= 0)
+                return;
+
+            ObjectSide objectSide =  RenderOperation.SelectCurrentObjectSide(Walls.First(), result, entity);
+
             foreach (var wall in Walls)
-                wall.Render(result, entity);
+                wall.RenderMultiWall(result, entity, objectSide);
         }
      
 

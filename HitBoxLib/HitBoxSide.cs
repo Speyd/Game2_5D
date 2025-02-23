@@ -24,10 +24,11 @@ namespace HitBoxLib
         /// </summary>
         public double OrginalSide { get; private set; } = 0;
 
+
+        private double _offset = 0;
         /// <summary>
         /// A number that represents the offset from the center of the hitbox.
         /// </summary>
-        private double _offset = 0;
         public double Offset 
         {
             get => _offset;
