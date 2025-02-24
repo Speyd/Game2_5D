@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib.ObjectInMap.Obstacles
+
+namespace MiniMapLib.ObjectInMap.Obstacles;
+public enum DisplayRenderMode
 {
-    public enum DisplayRenderMode
-    {
-        SpecificArea,
-        EntireArea,
-        PlayersVisibilityArea
-    }
+    SpecificArea,
+    EntireArea,
+    PlayersVisibilityArea
 }

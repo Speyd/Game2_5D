@@ -18,88 +18,87 @@ using MiniMapLib.ObjectInMap.Positions;
 using MiniMapLib.Window;
 using MiniMapLib.ObjectInMap.Obstacles;
 
-namespace MiniMapLib
+
+namespace MiniMapLib;
+public class MiniMap
 {
-    public class MiniMap
+
+    //-------------------Window--------------------
+    private WindowRender MiniMapWindow { get; init; }
+    private WindowRender BorderMapWindow { get; init; }
+
+
+    //-------------------Custom--------------------
+    public Color BackgroundColor { get; set; } = Color.Blue;
+    private Border Border { get; init; }
+
+
+    //-----------------Setting------------------
+    public Setting Setting { get; init; }
+    public bool IsRender { get; set; } = true;
+    public PositionDefinition PositionDef { get; init; }
+
+
+    //-----------------Player------------------
+    private Entity Player { get; init; }
+    private PlayerCircleOutput PlayerCircle { get; init; }
+    private PlayerLineOutput PlayerLine { get; init; }
+
+
+    //----------------Barriers------------------
+    private ObstacleOutput Obstacle { get; init; }
+
+
+    //------------------Zoom--------------------
+    public ZoomMiniMap Zoom { get; init; }
+
+
+
+
+    public MiniMap(Map map, Entity player, float mapScale, PositionsMiniMap positionMiniMap, string? pathBorder = null)
     {
+        Player = player;
 
-        //-------------------Window--------------------
-        private WindowRender MiniMapWindow { get; init; }
-        private WindowRender BorderMapWindow { get; init; }
+        Setting = new Setting(positionMiniMap, mapScale);
+        MiniMapWindow = new WindowRender(Setting);
 
-
-        //-------------------Custom--------------------
-        public Color BackgroundColor { get; set; } = Color.Blue;
-        private Border Border { get; init; }
+        PositionDef = new PositionDefinition(Setting);
 
 
-        //-----------------Setting------------------
-        public Setting Setting { get; init; }
-        public bool IsRender { get; set; } = true;
-        public PositionDefinition PositionDef { get; init; }
+        BorderMapWindow = new WindowRender(Setting);
+        Border = new Border(pathBorder);
 
 
-        //-----------------Player------------------
-        private Entity Player { get; init; }
-        private PlayerCircleOutput PlayerCircle { get; init; }
-        private PlayerLineOutput PlayerLine { get; init; }
+        PlayerCircle = new PlayerCircleOutput(Setting);
+        PlayerLine = new PlayerLineOutput(Setting);
 
 
-        //----------------Barriers------------------
-        private ObstacleOutput Obstacle { get; init; }
+        Obstacle = new ObstacleOutput(map, Player, Setting);
+
+        Zoom = new ZoomMiniMap(Setting);
+    }
+    public void Render()
+    {
+        if (!IsRender)
+            return;
+
+        MiniMapWindow.Window.Clear(BackgroundColor);
 
 
-        //------------------Zoom--------------------
-        public ZoomMiniMap Zoom { get; init; }
+        PlayerLine.RenderLineSight(MiniMapWindow.Window, Player.Direction);
+        PlayerCircle.RenderEntityShape(MiniMapWindow.Window);
+
+        Zoom.ZoomToCoordinate(MiniMapWindow.Window);
+        Obstacle.RenderObstacle(MiniMapWindow.Window);
 
 
+        Border.DrawMiniMapBorder(BorderMapWindow.Window);
 
 
-        public MiniMap(Map map, Entity player, float mapScale, PositionsMiniMap positionMiniMap, string? pathBorder = null)
-        {
-            Player = player;
+        MiniMapWindow.SetRenderSprite(PositionDef.CooPositions);
+        BorderMapWindow.SetRenderSprite(PositionDef.CooPositions);
 
-            Setting = new Setting(positionMiniMap, mapScale);
-            MiniMapWindow = new WindowRender(Setting);
-
-            PositionDef = new PositionDefinition(Setting);
-
-
-            BorderMapWindow = new WindowRender(Setting);
-            Border = new Border(pathBorder);
-
-
-            PlayerCircle = new PlayerCircleOutput(Setting);
-            PlayerLine = new PlayerLineOutput(Setting);
-
-
-            Obstacle = new ObstacleOutput(map, Player, Setting);
-
-            Zoom = new ZoomMiniMap(Setting);
-        }
-        public void Render()
-        {
-            if (!IsRender)
-                return;
-
-            MiniMapWindow.Window.Clear(BackgroundColor);
-
-
-            PlayerLine.RenderLineSight(MiniMapWindow.Window, Player.Direction);
-            PlayerCircle.RenderEntityShape(MiniMapWindow.Window);
-
-            Zoom.ZoomToCoordinate(MiniMapWindow.Window);
-            Obstacle.RenderObstacle(MiniMapWindow.Window);
-
-
-            Border.DrawMiniMapBorder(BorderMapWindow.Window);
-
-
-            MiniMapWindow.SetRenderSprite(PositionDef.CooPositions);
-            BorderMapWindow.SetRenderSprite(PositionDef.CooPositions);
-
-            Screen.OutputPriority.AddToPriority(RenderPriority.Interface, MiniMapWindow.RenderSprite);
-            Screen.OutputPriority.AddToPriority(RenderPriority.Interface, BorderMapWindow.RenderSprite);
-        }
+        Screen.OutputPriority.AddToPriority(RenderPriority.Interface, MiniMapWindow.RenderSprite);
+        Screen.OutputPriority.AddToPriority(RenderPriority.Interface, BorderMapWindow.RenderSprite);
     }
 }

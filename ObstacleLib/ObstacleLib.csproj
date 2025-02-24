@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\EffectLib\EffectLib.csproj" />
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\HitBoxLib\HitBoxLib.csproj" />
     <ProjectReference Include="..\Render\Render.csproj" />

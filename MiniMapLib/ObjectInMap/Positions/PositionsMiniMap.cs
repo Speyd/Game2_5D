@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib.ObjectInMap.Positions
+
+namespace MiniMapLib.ObjectInMap.Positions;
+public enum PositionsMiniMap
 {
-    public enum PositionsMiniMap
-    {
-        UpperLeftCorner,
-        LowerLeftCorner,
-        UpperRightCorner,
-        LowerRightCorner,
-    }
+    UpperLeftCorner,
+    LowerLeftCorner,
+    UpperRightCorner,
+    LowerRightCorner,
 }

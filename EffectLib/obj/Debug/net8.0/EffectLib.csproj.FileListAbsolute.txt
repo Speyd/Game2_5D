@@ -1,0 +1,16 @@
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\EffectLib.deps.json
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\EffectLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\EffectLib.pdb
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.csproj.AssemblyReference.cache
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.GeneratedMSBuildEditorConfig.editorconfig
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.AssemblyInfoInputs.cache
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.AssemblyInfo.cs
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.csproj.CoreCompileInputs.cache
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.sourcelink.json
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\refint\EffectLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.pdb
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\ref\EffectLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\ScreenLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\ScreenLib.pdb
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.csproj.Up2Date

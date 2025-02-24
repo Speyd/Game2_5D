@@ -9,26 +9,25 @@ using SFML.System;
 using SFML.Window;
 using System.Reflection.Metadata;
 
-namespace EntityLib.Player
+
+namespace EntityLib.Player;
+public class Player : Entity
 {
-    public class Player : Entity
+    public delegate void ControlAction(double deltaTime, Entity entity);
+    public ControlAction OnControlAction;
+
+    public Player(double maxDistance,
+        double entityFov = Math.PI / 3,
+        double entityX = 0, float entityY = 0,
+        double entityA = 0)
+
+        :base(Screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
+    {}
+
+    public void MakePressed(double deltaTime)
     {
-        public delegate void ControlAction(double deltaTime, Entity entity);
-        public ControlAction OnControlAction;
-
-        public Player(double maxDistance,
-            double entityFov = Math.PI / 3,
-            double entityX = 0, float entityY = 0,
-            double entityA = 0)
-
-            :base(Screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
-        {}
-
-        public void MakePressed(double deltaTime)
-        {
-            OnControlAction?.Invoke(deltaTime, this);
-        }
-
-
+        OnControlAction?.Invoke(deltaTime, this);
     }
+
+
 }

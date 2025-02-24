@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScreenLib
+
+namespace ScreenLib;
+public enum RenderPriority
 {
-    public enum RenderPriority
-    {
-        Enter,
-        Interface,
-        ZBufferRender,
-        Background,
-    }
+    Background,
+    ZBufferRender,
+    Interface,
+    Enter,
 }

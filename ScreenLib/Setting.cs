@@ -4,54 +4,53 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ScreenLib.SettingScreen
+
+namespace ScreenLib.SettingScreen;
+public class Setting
 {
-    public class Setting
+    public const int _tile = 100;
+    public int Tile { get => _tile; }
+    public int HalfTile { get; } = _tile / 2;
+
+    public ParallelOptions ParallelOptions { get; init; } = new ParallelOptions
     {
-        public const int _tile = 100;
-        public int Tile { get => _tile; }
-        public int HalfTile { get; } = _tile / 2;
+        MaxDegreeOfParallelism = Environment.ProcessorCount
+    };
 
-        public ParallelOptions ParallelOptions { get; init; } = new ParallelOptions
-        {
-            MaxDegreeOfParallelism = Environment.ProcessorCount
-        };
+    public int HalfWidth { get; private set; }
+    public int HalfHeight { get; private set; }
+    public int AmountRays { get; private set; }
+    public int Scale { get; private set; }
+    public int CenterRay { get; private set; }
 
-        public int HalfWidth { get; private set; }
-        public int HalfHeight { get; private set; }
-        public int AmountRays { get; private set; }
-        public int Scale { get; private set; }
-        public int CenterRay { get; private set; }
+    public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800)
+    {
+        if (ScreenWidth <= 0 || ScreenHeight <= 0)
+            throw new Exception("Error builder 'Setting'");
 
-        public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800)
-        {
-            if (ScreenWidth <= 0 || ScreenHeight <= 0)
-                throw new Exception("Error builder 'Setting'");
-
-            HalfWidth = ScreenWidth / 2;
-            HalfHeight = ScreenHeight / 2;
+        HalfWidth = ScreenWidth / 2;
+        HalfHeight = ScreenHeight / 2;
 
 
-            AmountRays = amountRays <= 0 ? ScreenWidth :
-                amountRays > ScreenWidth ? throw new Exception("Amount ray more ScreenWidth"):
-                amountRays;
+        AmountRays = amountRays <= 0 ? ScreenWidth :
+            amountRays > ScreenWidth ? throw new Exception("Amount ray more ScreenWidth"):
+            amountRays;
 
-            Scale = ScreenWidth / AmountRays;
+        Scale = ScreenWidth / AmountRays;
 
-            CenterRay = AmountRays / 2 - 1;
-        }
+        CenterRay = AmountRays / 2 - 1;
+    }
 
-        public void ResetScreenWidthSetting()
-        {
-            HalfWidth = Screen.ScreenWidth / 2;
+    public void ResetScreenWidthSetting()
+    {
+        HalfWidth = Screen.ScreenWidth / 2;
 
-            AmountRays = Screen.ScreenWidth;
-            Scale = Screen.ScreenWidth / AmountRays;
-            CenterRay = AmountRays / 2 - 1;
-        }
-        public void ResetScreenHeightSetting()
-        {
-            HalfHeight = Screen.ScreenHeight / 2;
-        }
+        AmountRays = Screen.ScreenWidth;
+        Scale = Screen.ScreenWidth / AmountRays;
+        CenterRay = AmountRays / 2 - 1;
+    }
+    public void ResetScreenHeightSetting()
+    {
+        HalfHeight = Screen.ScreenHeight / 2;
     }
 }

@@ -9,65 +9,63 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib.SettingMap
+namespace MiniMapLib.SettingMap;
+public class Setting
 {
-    public class Setting
+    public float CenterX { get; private set; }
+    public float CenterY { get; private set; }
+
+    public void SetCenterWindow(RenderTexture Window)
     {
-        public float CenterX { get; private set; }
-        public float CenterY { get; private set; }
+        CenterX = Window.Size.X / 2;
+        CenterY = Window.Size.Y / 2;
+    }
 
-        public void SetCenterWindow(RenderTexture Window)
+    public float MapTile { get; private set; }
+
+    //----------------MapScale----------------
+    private void SetMiniMapTile()
+    {
+        MapTile = Screen.Setting.Tile / MapScale;
+    }
+
+
+    public Action MapScaleChangesFun;
+    private float _mapScale;
+    public float MapScale 
+    {
+        get => _mapScale;
+        set
         {
-            CenterX = Window.Size.X / 2;
-            CenterY = Window.Size.Y / 2;
+            _mapScale = value;
+            MapScaleChangesFun();               
         }
+    }
 
-        public float MapTile { get; private set; }
+    public PositionsMiniMap Positions { get; set; }
+    public Vector2f coorinatesPositionWindow;
 
-        //----------------MapScale----------------
-        private void SetMiniMapTile()
-        {
-            MapTile = Screen.Setting.Tile / MapScale;
-        }
+    public OutputRenderMethod OutputRenderMethod { get; set; }
+    public int OutLine { get; set; } = 1;
 
+    public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
+    {
+        MapScaleChangesFun += SetMiniMapTile;
 
-        public Action MapScaleChangesFun;
-        private float _mapScale;
-        public float MapScale 
-        {
-            get => _mapScale;
-            set
-            {
-                _mapScale = value;
-                MapScaleChangesFun();               
-            }
-        }
+        MapScale = mapScale;
+        Positions = positions;
 
-        public PositionsMiniMap Positions { get; set; }
-        public Vector2f coorinatesPositionWindow;
+        SetCenterWindow(Window);
+    }
 
-        public OutputRenderMethod OutputRenderMethod { get; set; }
-        public int OutLine { get; set; } = 1;
+    public Setting(PositionsMiniMap positions, float mapScale = 5)
+    {
+        MapScaleChangesFun += SetMiniMapTile;
 
-        public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
-        {
-            MapScaleChangesFun += SetMiniMapTile;
+        MapScale = mapScale;
+        Positions = positions;
 
-            MapScale = mapScale;
-            Positions = positions;
-
-            SetCenterWindow(Window);
-        }
-
-        public Setting(PositionsMiniMap positions, float mapScale = 5)
-        {
-            MapScaleChangesFun += SetMiniMapTile;
-
-            MapScale = mapScale;
-            Positions = positions;
-
-            CenterX = 1;
-            CenterY = 1;
-        }
+        CenterX = 1;
+        CenterY = 1;
     }
 }

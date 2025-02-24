@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib
+namespace MiniMapLib;
+public enum OutputRenderMethod
 {
-    public enum OutputRenderMethod
-    {
-        Texture,
-        Color,
-    }
+    Texture,
+    Color,
 }

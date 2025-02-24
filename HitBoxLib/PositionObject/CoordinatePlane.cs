@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HitBoxLib.PositionObject
+
+namespace HitBoxLib.PositionObject;
+public enum CoordinatePlane
 {
-    public enum CoordinatePlane
-    {
-        X,
-        Y,
-        Z,
-    }
+    X,
+    Y,
+    Z,
 }

@@ -7,60 +7,59 @@ using SFML.Graphics;
 using ScreenLib;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
-using Render.RenderInterface;
 using TextureLib;
+using Render.Object;
 
-namespace DrawLib
+
+namespace DrawLib;
+public class Drawing()
 {
-    public class Drawing()
+    HitPoint hitPoint = new HitPoint();
+
+    public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
     {
-        HitPoint hitPoint = new HitPoint();
+        Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 
-        public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
+        if (obstacle is not null && obstacle is IDrawable drawable)
         {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+            hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
-            if (obstacle is not null && obstacle is IDrawable drawable)
+
+            float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+
+            float height = drawable.BringingToStandard(heightObj);
+            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+
+            float addHeight = height > heightObj ? 0f : heightObj;
+            Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
+            CircleShape point = new CircleShape(height)
             {
-                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+                FillColor = colorFill,
+                Position = pointPosition
+            };
 
-
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
-                float height = drawable.BringingToStandard(heightObj);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
-
-                float addHeight = height > heightObj ? 0f : heightObj;
-                Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
-                CircleShape point = new CircleShape(height)
-                {
-                    FillColor = colorFill,
-                    Position = pointPosition
-                };
-
-                drawable.DrawObject(point);
-            }
+            drawable.DrawObject(point);
         }
+    }
 
-        public void DrawingSprite(Map map, Entity entity, Sprite sprite)
+    public void DrawingSprite(Map map, Entity entity, Sprite sprite)
+    {
+        Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+
+        if (obstacle is not null && obstacle is IDrawable drawable)
         {
-            Obstacle? obstacle = Raycast.RaycastFun(map, entity);
-
-            if (obstacle is not null && obstacle is IDrawable drawable)
-            {
-                hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+            hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
 
 
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+            float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
 
-                float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
+            float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
+            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, entity, height);
 
-                Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
-                sprite.Position = dotPosition;
+            Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
+            sprite.Position = dotPosition;
 
-                drawable.DrawObject(sprite);
-            }
+            drawable.DrawObject(sprite);
         }
     }
 }

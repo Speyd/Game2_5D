@@ -17,9 +17,6 @@ using ScreenLib;
 using EntityLib;
 using EntityLib.Player;
 using Render;
-using Render.ZBufferRender;
-using Render.ResultAlgorithm;
-using Render.RenderText;
 using System.Collections.Generic;
 using System.Data.Common;
 using MiniMapLib;
@@ -29,7 +26,6 @@ using ControlLib;
 using BresenhamAlgorithm;
 using ObstacleLib.SpriteLib;
 using ObstacleLib.TexturedWallLib;
-using Render.InterfaceRender;
 using TextField;
 using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
@@ -39,12 +35,13 @@ using static System.Formats.Asn1.AsnWriter;
 using PartsWorldLib;
 using ObstacleLib;
 using DataPipes.Dictionary;
-using HitBoxLib;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using ObstacleLib.BlankWallLib;
+using HitBoxLib.HitBoxSegment;
+using HitBoxLib.Segment.SignsTypeSide;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
-Screen.Initialize(1000, 600);
+Screen.Initialize(1000, 600, true);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -126,20 +123,20 @@ SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
     ShiftCubedY = 50,
 };
 sprite1.Z.Axis = 0;
-sprite1.HitBox[HitBoxSideType.Left]?.SetOffset(80);
-sprite1.HitBox[HitBoxSideType.Right]?.SetOffset(80);
-sprite1.HitBox[HitBoxSideType.Top]?.SetOffset(80);
-sprite1.HitBox[HitBoxSideType.Bottom]?.SetOffset(80);
-sprite1.HitBox[HitBoxSideType.Up]?.SetOffset(50);
-sprite1.HitBox[HitBoxSideType.Down]?.SetOffset(50);
+sprite1.HitBox[SideType.Left]?.SetOffset(80);
+sprite1.HitBox[SideType.Right]?.SetOffset(80);
+sprite1.HitBox[SideType.Top]?.SetOffset(80);
+sprite1.HitBox[SideType.Bottom]?.SetOffset(80);
+sprite1.HitBox[SideType.Up]?.SetOffset(50);
+sprite1.HitBox[SideType.Down]?.SetOffset(50);
 sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
 HitBox box = new HitBox();
-box[HitBoxSideType.Left]?.SetOffset(20);
-box[HitBoxSideType.Right]?.SetOffset(20);
-box[HitBoxSideType.Top]?.SetOffset(20);
-box[HitBoxSideType.Bottom]?.SetOffset(20);
-box[HitBoxSideType.Up]?.SetOffset(50);
-box[HitBoxSideType.Down]?.SetOffset(0);
+box[SideType.Left]?.SetOffset(20);
+box[SideType.Right]?.SetOffset(20);
+box[SideType.Top]?.SetOffset(20);
+box[SideType.Bottom]?.SetOffset(20);
+box[SideType.Up]?.SetOffset(50);
+box[SideType.Down]?.SetOffset(0);
 sprite1.HitBox.AddSegmentHitBox(box.MainHitBox.Body, "Center");
 
 //SpriteObstacle sprite2 = new SpriteObstacle(textureObstacles)
@@ -257,12 +254,12 @@ Player player = new Player(100)
 player.X.Axis = 5 * Screen.Setting.Tile;
 player.Y.Axis = 3 * Screen.Setting.Tile;
 player.Z.Axis = 0;
-player.HitBox[HitBoxSideType.Left]?.SetOffset(10);
-player.HitBox[HitBoxSideType.Right]?.SetOffset(10);
-player.HitBox[HitBoxSideType.Top]?.SetOffset(10);
-player.HitBox[HitBoxSideType.Bottom]?.SetOffset(10);
-player.HitBox[HitBoxSideType.Up]?.SetOffset(50);
-player.HitBox[HitBoxSideType.Down]?.SetOffset(0);
+player.HitBox[SideType.Left]?.SetOffset(10);
+player.HitBox[SideType.Right]?.SetOffset(10);
+player.HitBox[SideType.Top]?.SetOffset(10);
+player.HitBox[SideType.Bottom]?.SetOffset(10);
+player.HitBox[SideType.Up]?.SetOffset(50);
+player.HitBox[SideType.Down]?.SetOffset(0);
 
 
 MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
@@ -287,11 +284,11 @@ FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\Fo
 AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
 AppContext.SetSwitch("System.Runtime.TieredPGO", true);
 
-//MultiWall multiWall = new MultiWall();
-//map.AddObstacle(10, 5, multiWall);
-//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-//multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+MultiWall multiWall = new MultiWall();
+map.AddObstacle(10, 5, multiWall);
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
 //MultiWall multiWall1 = new MultiWall();
 //map.AddObstacle(10, 4, multiWall1);
 //multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
@@ -348,7 +345,7 @@ try
 
         mapMini.Render();
 
-        //partsWorld.Render(player);
+        partsWorld.Render(player);
 
         Screen.OutputPriority.DrawingByPriority();
         CircleShape point = new CircleShape(3)

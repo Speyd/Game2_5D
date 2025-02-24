@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataPipes.Pool
+
+namespace DataPipes.Pool;
+public interface IResettable
 {
-    public interface IResettable
-    {
-        void Reset();
-    }
+    void Reset();
 }

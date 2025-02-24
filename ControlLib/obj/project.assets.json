@@ -1061,6 +1061,20 @@
           "bin/placeholder/DrawLib.dll": {}
         }
       },
+      "EffectLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SFML.Graphics": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EffectLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EffectLib.dll": {}
+        }
+      },
       "EntityLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -1156,6 +1170,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "EffectLib": "1.0.0",
           "EntityLib": "1.0.0",
           "HitBoxLib": "1.0.0",
           "Render": "1.0.0",
@@ -1762,6 +1777,11 @@
       "type": "project",
       "path": "../DrawLib/DrawLib.csproj",
       "msbuildProject": "../DrawLib/DrawLib.csproj"
+    },
+    "EffectLib/1.0.0": {
+      "type": "project",
+      "path": "../EffectLib/EffectLib.csproj",
+      "msbuildProject": "../EffectLib/EffectLib.csproj"
     },
     "EntityLib/1.0.0": {
       "type": "project",

@@ -7,35 +7,34 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MoveLib
+
+namespace MoveLib;
+public class MoveMouse(MoveLib.Setting setting)
 {
-    public class MoveMouse(MoveLib.Setting setting)
+    private void SetAngleMouse(Vector2i currentMousePosition)
     {
-        private void SetAngleMouse(Vector2i currentMousePosition)
-        {
-            int actualMousePositionX = currentMousePosition.X - Screen.Setting.HalfWidth;
-            float normalizedSensitivity = setting.MouseSensitivity * Screen.ScreenRatio;
+        int actualMousePositionX = currentMousePosition.X - Screen.Setting.HalfWidth;
+        float normalizedSensitivity = setting.MouseSensitivity * Screen.ScreenRatio;
 
-            setting.TempAngle += actualMousePositionX * normalizedSensitivity;
-        }
-        private void SetVerticalAngleMouse(Vector2i currentMousePosition)
-        {
-            int actualMousePositionY = currentMousePosition.Y - Screen.Setting.HalfHeight;
-            float normalizedSensitivity = setting.MouseSensitivity * Screen.ScreenRatio;
+        setting.TempAngle += actualMousePositionX * normalizedSensitivity;
+    }
+    private void SetVerticalAngleMouse(Vector2i currentMousePosition)
+    {
+        int actualMousePositionY = currentMousePosition.Y - Screen.Setting.HalfHeight;
+        float normalizedSensitivity = setting.MouseSensitivity * Screen.ScreenRatio;
 
-            setting.TempVerticalAngle += actualMousePositionY * normalizedSensitivity;
-            setting.TempVerticalAngle = (float)Math.Clamp(setting.TempVerticalAngle, MoveLib.Setting.MinVerticalAngle, MoveLib.Setting.MaxVerticalAngle);
-        }
+        setting.TempVerticalAngle += actualMousePositionY * normalizedSensitivity;
+        setting.TempVerticalAngle = (float)Math.Clamp(setting.TempVerticalAngle, MoveLib.Setting.MinVerticalAngle, MoveLib.Setting.MaxVerticalAngle);
+    }
 
-        public void OnMouseMoved(object sender, MouseMoveEventArgs e)
-        {
-            if (!setting.IsMouseCaptured)
-                return;
-            Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
-            Mouse.SetPosition(new Vector2i(Screen.Setting.HalfWidth, Screen.Setting.HalfHeight), Screen.Window);
+    public void OnMouseMoved(object sender, MouseMoveEventArgs e)
+    {
+        if (!setting.IsMouseCaptured)
+            return;
+        Vector2i currentMousePosition = new Vector2i(e.X, e.Y);
+        Mouse.SetPosition(new Vector2i(Screen.Setting.HalfWidth, Screen.Setting.HalfHeight), Screen.Window);
 
-            SetAngleMouse(currentMousePosition);
-            SetVerticalAngleMouse(currentMousePosition);
-        }
+        SetAngleMouse(currentMousePosition);
+        SetVerticalAngleMouse(currentMousePosition);
     }
 }

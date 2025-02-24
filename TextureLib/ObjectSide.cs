@@ -4,18 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace TextureLib
+
+namespace TextureLib;
+public enum ObjectSide
 {
-    public enum ObjectSide
-    {
-        Error,
-        Left,
-        Right,
-        Top,
-        Bottom,
-        BottomCorner,
-        TopCorner,
-        LeftCorner,
-        RightCorner,
-    }
+    Error,
+    Left,
+    Right,
+    Top,
+    Bottom,
+    BottomCorner,
+    TopCorner,
+    LeftCorner,
+    RightCorner,
 }

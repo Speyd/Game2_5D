@@ -4,13 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BresenhamAlgorithm
+
+namespace BresenhamAlgorithm;
+public enum VisualizerType
 {
-    public enum VisualizerType
-    {
-        None,
-        VisualizeAll,
-        VisualizeRayRenderable,
-        VisualizeSelfRenderable,
-    }
+    None,
+    VisualizeAll,
+    VisualizeRayRenderable,
+    VisualizeSelfRenderable,
 }

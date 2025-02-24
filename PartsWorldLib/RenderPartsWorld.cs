@@ -1,4 +1,7 @@
 ﻿using EntityLib.Player;
+using PartsWorldLib.Down;
+using PartsWorldLib.RenderParts;
+using PartsWorldLib.Up;
 using ScreenLib;
 using System;
 using System.Collections.Generic;
@@ -8,100 +11,112 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PartsWorldLib
+
+namespace PartsWorldLib;
+public class RenderPartsWorld
 {
-    public class RenderPartsWorld
+    public TexturedFloor TexturedFloor;
+
+    public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
+    public DownPart RenderDownPart { get; set; } = DownPart.Floor;
+    public Sky Sky {get; set;}
+    public TexturedCeiling TexturedCeiling { get; set; }
+
+
+    public int TopRectHeight { get; private set;}
+    public int BottomRectHeight { get; private set; }
+
+    const float angleFactor = 0.5f;
+
+    public RenderPartsWorld()
     {
-        public Floor Floor;
+        TexturedFloor = new TexturedFloor();
 
-        public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
-        public Sky Sky {get; set;}
-        public Ceiling Ceiling { get; set; }
+        Sky = new Sky();
+        TexturedCeiling = new TexturedCeiling();
+    }
+    public RenderPartsWorld(TexturedFloor floor, Sky sky)
+    {
+        TexturedFloor = floor;
+        Sky = sky;
+
+        TexturedCeiling = new TexturedCeiling();
+    }
+    public RenderPartsWorld(TexturedFloor floor, TexturedCeiling ceiling)
+    {
+        TexturedFloor = floor;
+        TexturedCeiling = ceiling;
+
+        Sky = new Sky();
+    }
+    public RenderPartsWorld(TexturedFloor floor)
+    {
+        TexturedFloor = floor;
+        Sky = new Sky();
+        TexturedCeiling = new TexturedCeiling();
+    }
+    public RenderPartsWorld(TexturedCeiling ceiling)
+    {
+        TexturedCeiling = ceiling;
+
+        TexturedFloor = new TexturedFloor();
+        Sky = new Sky();
+    }
+    public RenderPartsWorld(Sky sky)
+    {
+        Sky = sky;
+
+        TexturedFloor = new TexturedFloor();
+        TexturedCeiling = new TexturedCeiling();
+    }
 
 
-        public int TopRectHeight { get; private set;}
-        public int BottomRectHeight { get; private set; }
+    public void SetCoordinate(Player player)
+    {
+        float adjustedAngle = MathF.Abs((float)player.VerticalAngle) * angleFactor;
 
-        const float angleFactor = 0.5f;
-
-        public RenderPartsWorld()
+        if (player.VerticalAngle > 0)
         {
-            Floor = new Floor();
-
-            Sky = new Sky();
-            Ceiling = new Ceiling();
+            TopRectHeight = (int)(Screen.Setting.HalfHeight - adjustedAngle * Screen.Setting.HalfHeight);
+            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
         }
-        public RenderPartsWorld(Floor floor, Sky sky)
+        else if (player.VerticalAngle < 0)
         {
-            Floor = floor;
-            Sky = sky;
-
-            Ceiling = new Ceiling();
+            TopRectHeight = (int)(Screen.Setting.HalfHeight + adjustedAngle * Screen.Setting.HalfHeight);
+            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
         }
-        public RenderPartsWorld(Floor floor, Ceiling ceiling)
+        else
         {
-            Floor = floor;
-            Ceiling = ceiling;
-
-            Sky = new Sky();
+            TopRectHeight = Screen.Setting.HalfHeight;
+            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
         }
-        public RenderPartsWorld(Floor floor)
-        {
-            Floor = floor;
-            Sky = new Sky();
-            Ceiling = new Ceiling();
-        }
-        public RenderPartsWorld(Ceiling ceiling)
-        {
-            Ceiling = ceiling;
+    }
 
-            Floor = new Floor();
-            Sky = new Sky();
-        }
-        public RenderPartsWorld(Sky sky)
-        {
-            Sky = sky;
+    public void Render(Player player)
+    {
+        SetCoordinate(player);
 
-            Floor = new Floor();
-            Ceiling = new Ceiling();
+        switch (RenderUpperPart)
+        {
+            case UpperPart.Sky: 
+                Sky.Render(player, TopRectHeight); 
+                break;
+            case UpperPart.Ceiling:
+                TexturedCeiling.Render(player);
+                break;
+            default:
+                Ceiling.Render(player, TopRectHeight);
+                break;
         }
 
-
-        public void SetCoordinate(Player player)
+        switch (RenderDownPart)
         {
-            float adjustedAngle = MathF.Abs((float)player.VerticalAngle) * angleFactor;
-
-            if (player.VerticalAngle > 0)
-            {
-                TopRectHeight = (int)(Screen.Setting.HalfHeight - adjustedAngle * Screen.Setting.HalfHeight);
-                BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-            }
-            else if (player.VerticalAngle < 0)
-            {
-                TopRectHeight = (int)(Screen.Setting.HalfHeight + adjustedAngle * Screen.Setting.HalfHeight);
-                BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-            }
-            else
-            {
-                TopRectHeight = Screen.Setting.HalfHeight;
-                BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-            }
-        }
-
-        public void Render(Player player)
-        {
-            SetCoordinate(player);
-
-            switch (RenderUpperPart)
-            {
-                case UpperPart.Sky: Sky.Render(player, TopRectHeight); 
-                    break;
-                case UpperPart.Ceiling:
-                    Ceiling.Render(player, BottomRectHeight, TopRectHeight);
-                    break;
-            }
-
-            Floor.Render(player, BottomRectHeight, TopRectHeight);
+            case DownPart.Floor:
+                TexturedFloor.Render(player);
+                break;
+            default:
+                Floor.Render(player, BottomRectHeight, TopRectHeight);
+                break;
         }
     }
 }

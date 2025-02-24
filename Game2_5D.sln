@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataPipes", "DataPipes\Data
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HitBoxLib", "HitBoxLib\HitBoxLib.csproj", "{67377590-560D-4BF2-938A-71DC45C56BA1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EffectLib", "EffectLib\EffectLib.csproj", "{73D7671A-0716-4E75-9EC3-73DF6E71FF9B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{67377590-560D-4BF2-938A-71DC45C56BA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67377590-560D-4BF2-938A-71DC45C56BA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67377590-560D-4BF2-938A-71DC45C56BA1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73D7671A-0716-4E75-9EC3-73DF6E71FF9B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73D7671A-0716-4E75-9EC3-73DF6E71FF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73D7671A-0716-4E75-9EC3-73DF6E71FF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73D7671A-0716-4E75-9EC3-73DF6E71FF9B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

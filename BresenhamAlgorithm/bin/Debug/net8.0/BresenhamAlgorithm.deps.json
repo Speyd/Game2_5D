@@ -1135,6 +1135,18 @@
           }
         }
       },
+      "EffectLib/1.0.0": {
+        "dependencies": {
+          "SFML.Graphics": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "EffectLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "EntityLib/1.0.0": {
         "dependencies": {
           "HitBoxLib": "1.0.0",
@@ -1177,6 +1189,7 @@
       },
       "ObstacleLib/1.0.0": {
         "dependencies": {
+          "EffectLib": "1.0.0",
           "EntityLib": "1.0.0",
           "HitBoxLib": "1.0.0",
           "Render": "1.0.0",
@@ -1378,6 +1391,11 @@
       "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     },
     "DataPipes/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "EffectLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

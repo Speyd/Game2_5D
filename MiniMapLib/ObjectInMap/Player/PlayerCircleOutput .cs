@@ -6,52 +6,51 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MiniMapLib.ObjectInMap.Player
+
+namespace MiniMapLib.ObjectInMap.Player;
+internal class PlayerCircleOutput
 {
-    internal class PlayerCircleOutput
+    //----------Setting MiniMap------------
+    private SettingMap.Setting Setting { get; init; }
+
+
+    //----------Setting Circle------------
+    private int radiusCircle;
+    public int RadiusCircle
     {
-        //----------Setting MiniMap------------
-        private SettingMap.Setting Setting { get; init; }
-
-
-        //----------Setting Circle------------
-        private int radiusCircle;
-        public int RadiusCircle
+        get => radiusCircle;
+        set
         {
-            get => radiusCircle;
-            set
-            {
-                radiusCircle = value <= 0 ? 5 : value;
-                EntityShape.Radius = radiusCircle;
-            }
+            radiusCircle = value <= 0 ? 5 : value;
+            EntityShape.Radius = radiusCircle;
         }
+    }
 
-        public Color ColorCircle { get; set; } = Color.Red;
+    public Color ColorCircle { get; set; } = Color.Red;
 
-        //-----------------Circle--------------------
-        private CircleShape EntityShape { get; init; }
-
-
-        public PlayerCircleOutput(SettingMap.Setting setting, int radiusCircle = 5)
-        {
-            Setting = setting;
-
-            EntityShape = new CircleShape();
-            RadiusCircle = radiusCircle;
-        }
+    //-----------------Circle--------------------
+    private CircleShape EntityShape { get; init; }
 
 
+    public PlayerCircleOutput(SettingMap.Setting setting, int radiusCircle = 5)
+    {
+        Setting = setting;
 
-        public void RenderEntityShape(RenderTexture renderTexture)
-        {
-            float x = Setting.CenterX - RadiusCircle;
-            float y = Setting.CenterY - RadiusCircle;
+        EntityShape = new CircleShape();
+        RadiusCircle = radiusCircle;
+    }
 
-            EntityShape.Position = new Vector2f(x, y);
 
-            EntityShape.FillColor = ColorCircle;
 
-            renderTexture.Draw(EntityShape);
-        }
+    public void RenderEntityShape(RenderTexture renderTexture)
+    {
+        float x = Setting.CenterX - RadiusCircle;
+        float y = Setting.CenterY - RadiusCircle;
+
+        EntityShape.Position = new Vector2f(x, y);
+
+        EntityShape.FillColor = ColorCircle;
+
+        renderTexture.Draw(EntityShape);
     }
 }

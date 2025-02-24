@@ -40,3 +40,5 @@ D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\DataPipes.pdb
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\HitBoxLib.pdb
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EffectLib.dll
+D:\C++ проекты\Game2_5D\ControlLib\bin\Debug\net8.0\EffectLib.pdb

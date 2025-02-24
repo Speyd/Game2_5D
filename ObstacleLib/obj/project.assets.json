@@ -1045,6 +1045,20 @@
           "bin/placeholder/DataPipes.dll": {}
         }
       },
+      "EffectLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "SFML.Graphics": "2.6.0",
+          "ScreenLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/EffectLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/EffectLib.dll": {}
+        }
+      },
       "EntityLib/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -1630,6 +1644,11 @@
       "path": "../DataPipes/DataPipes.csproj",
       "msbuildProject": "../DataPipes/DataPipes.csproj"
     },
+    "EffectLib/1.0.0": {
+      "type": "project",
+      "path": "../EffectLib/EffectLib.csproj",
+      "msbuildProject": "../EffectLib/EffectLib.csproj"
+    },
     "EntityLib/1.0.0": {
       "type": "project",
       "path": "../EntityLib/EntityLib.csproj",
@@ -1658,6 +1677,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "EffectLib >= 1.0.0",
       "EntityLib >= 1.0.0",
       "HitBoxLib >= 1.0.0",
       "Render >= 1.0.0",
@@ -1697,6 +1717,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
+            "D:\\C++ проекты\\Game2_5D\\EffectLib\\EffectLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\EffectLib\\EffectLib.csproj"
+            },
             "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
             },
