@@ -101,4 +101,8 @@ public class MiniMap
         Screen.OutputPriority.AddToPriority(RenderPriority.Interface, MiniMapWindow.RenderSprite);
         Screen.OutputPriority.AddToPriority(RenderPriority.Interface, BorderMapWindow.RenderSprite);
     }
+    public void Hide()
+    {
+        IsRender = !IsRender;
+    }
 }

@@ -1,19 +1,17 @@
 ﻿using EntityLib;
 using FpsLib;
-
+using MapLib;
 
 namespace MoveLib;
-public class MovePositions(Collision collision, MoveLib.Setting setting)
+public static class MovePositions
 {
-    double cosAngle = 1;
-    double sinAngle = 1;
-
-    public void Move(Entity entity, double deltaTime, double directionX, double directionY)
+    public static void Move(Map map, Entity entity, double directionX, double directionY)
     {
-        double speed = setting.MoveSpeed * (1 / FPS.fps);
 
-        cosAngle = entity.Direction.X;
-        sinAngle = entity.Direction.Y;
+        double speed = MoveLib.Setting.MoveSpeed * (1 / FPS.fps);
+
+        double cosAngle = entity.Direction.X;
+        double sinAngle = entity.Direction.Y;
 
         double rx = cosAngle * directionX - sinAngle * directionY;
         double ry = sinAngle * directionX + cosAngle * directionY;
@@ -21,6 +19,6 @@ public class MovePositions(Collision collision, MoveLib.Setting setting)
         rx *= speed;
         ry *= speed;
 
-        collision.IsCollision(entity, rx, ry);
+        Collision.IsCollision(map, entity, rx, ry);
     }
 }

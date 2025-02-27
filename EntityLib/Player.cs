@@ -13,7 +13,7 @@ using System.Reflection.Metadata;
 namespace EntityLib.Player;
 public class Player : Entity
 {
-    public delegate void ControlAction(double deltaTime, Entity entity);
+    public delegate void ControlAction(Entity entity);
     public ControlAction OnControlAction;
 
     public Player(double maxDistance,
@@ -24,9 +24,9 @@ public class Player : Entity
         :base(Screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
     {}
 
-    public void MakePressed(double deltaTime)
+    public void MakePressed()
     {
-        OnControlAction?.Invoke(deltaTime, this);
+        OnControlAction?.Invoke(this);
     }
 
 

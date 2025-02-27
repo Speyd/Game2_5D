@@ -15,29 +15,16 @@ using HitBoxLib.Segment.SignsTypeSide;
 
 
 namespace MoveLib;
-public class Collision
+public static class Collision
 {
-    private Map Map { get; init; }
-    private MoveLib.Setting Setting { get; init; }
-
-    private int _radiusCheckTouch;
-    public int RadiusCheckTouch 
+    private static int _radiusCheckTouch = Screen.Setting.Tile;
+    public static int RadiusCheckTouch 
     {
         get => _radiusCheckTouch;
         set => _radiusCheckTouch = value * Screen.Setting.Tile;
     }
 
-    public bool AccountHeight {  get; set; } = true;
-
-    public Collision(Map map, MoveLib.Setting setting)
-    {
-        Map = map;
-        Setting = setting;
-
-        RadiusCheckTouch = 2;
-    }
-
-    public bool CollisionZ(Obstacle obstacle, Entity entity)
+    public static bool CollisionZ(Obstacle obstacle, Entity entity)
     {
         if(entity.HitBox[SideType.Down]?.Side >= obstacle.HitBox[SideType.Down]?.Side &&
            entity.HitBox[SideType.Up]?.Side <= obstacle.HitBox[SideType.Up]?.Side) 
@@ -53,7 +40,7 @@ public class Collision
 
         return false;
     }
-    public bool IsCollision(Obstacle obstacle, Entity entity, double nextX, double nextY)
+    public static bool IsCollision(Obstacle obstacle, Entity entity, double nextX, double nextY)
     {
         double originalEntityX = entity.X.Axis;
         double originalEntityY = entity.Y.Axis;
@@ -80,11 +67,10 @@ public class Collision
         else
             generalColliding = false;
 
-        return AccountHeight? generalColliding && !obstacle.IsPassability : 
-            isCollidingX && isCollidingY && !obstacle.IsPassability;
+        return generalColliding && !obstacle.IsPassability;
     }
 
-    private bool IsTouch(Entity entity, double nextX, double nextY)
+    private static bool IsTouch(Map Map, Entity entity, double nextX, double nextY)
     {
         var (playerCellX, playerCellY) = Screen.Mapping(entity.X.Axis, entity.Y.Axis);
 
@@ -112,14 +98,14 @@ public class Collision
     }
 
 
-    public void IsCollision(Entity entity, double nextX, double nextY)
+    public static void IsCollision(Map Map, Entity entity, double nextX, double nextY)
     {
         double deltaX = Setting.MinDistanceFromWall / 2 * Math.Sign(nextX);
         double deltaY = Setting.MinDistanceFromWall / 2 * Math.Sign(nextY);
 
-        if(nextX != 0 && !IsTouch(entity, entity.X.Axis + nextX + deltaX, entity.Y.Axis))
+        if(nextX != 0 && !IsTouch(Map, entity, entity.X.Axis + nextX + deltaX, entity.Y.Axis))
             entity.X.Axis += nextX;
-        if (nextY != 0 && !IsTouch(entity, entity.X.Axis, entity.Y.Axis + nextY + deltaY))
+        if (nextY != 0 && !IsTouch(Map, entity, entity.X.Axis, entity.Y.Axis + nextY + deltaY))
             entity.Y.Axis += nextY;
     }
 }

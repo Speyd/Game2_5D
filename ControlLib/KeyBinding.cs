@@ -24,6 +24,9 @@ namespace ControlLib
             ExecutableFunction = executableFunction;
             FixedParameters = fixedParameters;
         }
+        public KeyBinding(List<Bottom> bottoms, Delegate executableFunction)
+             : this(bottoms, executableFunction, new object[0])
+        {}
         public KeyBinding(Bottom bottom, Delegate executableFunction, object[] fixedParameters)
             : this(new List<Bottom>() { bottom }, executableFunction, fixedParameters)
         {}
@@ -48,10 +51,6 @@ namespace ControlLib
 
             Bottoms.Add(bottom);    
         }
-        private bool IsKeyPressed(int keyCode)
-        {
-            return (GetAsyncKeyState(keyCode) & 0x8000) != 0;
-        }
 
         private void PracticingPressing(params object[] externalParams)
         {
@@ -66,9 +65,9 @@ namespace ControlLib
         public void Listen(params object[] externalParams)
         {
             int countTurnBottom = 0;
-            foreach (var bottoms in Bottoms)
+            foreach (var bottom in Bottoms)
             {
-                if (IsKeyPressed((int)bottoms.Key))
+                if (bottom.IsKeyPressed())
                     countTurnBottom++;
             }
 

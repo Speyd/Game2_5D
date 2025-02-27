@@ -38,7 +38,7 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
     }
 
 
-    private void UpdateZoom(float value)
+    public void UpdateZoom(float value)
     {
         if (value < _minZoom)
             _zoom = _minZoom;
@@ -46,6 +46,17 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
             _zoom = _maxZoom;
         else
             _zoom = value;
+    }
+    public void UpdateZoomMult(float mult)
+    {
+        float newZoom = _zoom += mult;
+
+        if (newZoom < _minZoom)
+            _zoom = _minZoom;
+        else if (newZoom > _maxZoom)
+            _zoom = _maxZoom;
+        else
+            _zoom = newZoom;
     }
     private float _zoom = 1;
     public float Zoom

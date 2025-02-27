@@ -14,11 +14,8 @@ using System.Threading.Tasks;
 namespace HitBoxLib.Operations;
 public static class Collision
 {
-    const double multDown = 0.0000027;
-    const double sumDown = 0.0055;
-
-    const double multUp = 0.0000005;
-    const double sumUp = 0.00285;
+    const double multUp = 0.0035;
+    const double multDown = 0.055;
 
 
     public static bool IsRayTouchesObjectX(Box hitBox, double currentRayX)
@@ -44,16 +41,13 @@ public static class Collision
         double distance = Math.Sqrt(Math.Pow(hitBoxCenterPos.X - observerPos.X, 2) + Math.Pow(hitBoxCenterPos.Y - observerPos.Y, 2));
         distance /= Screen.Setting.Tile;
 
-        double Down = hitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0;
-        double Up = hitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0;
-        double DownO = hitBox[CoordinatePlane.Z, SideSize.Smaller]?.Offset ?? 0;
-        double UpO = hitBox[CoordinatePlane.Z, SideSize.Larger]?.Offset ?? 0;
+        double Up = (hitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
+        double Down = (hitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
 
+        double angleEntity = -observerInfo.vertivalAngle;
 
-        double angleEntity = -observerInfo.vertivalAngle * distance;
-
-        double rayHitUp = Up - GetMult(Up, multUp, sumUp) + angleEntity;
-        double rayHitDown = Down - GetMult(Down, multDown, sumDown) + angleEntity;
+        double rayHitUp = Up - Up * multUp / distance + angleEntity;
+        double rayHitDown = Down - Down * multDown / (distance * 10) + angleEntity;
 
         return rayHitDown >= Down && rayHitUp <= Up;
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -9,15 +10,44 @@ namespace ControlLib
 {
     public class Bottom
     {
-        public VirtualKey Key {  get; init; }
+        public VirtualKey Key { get; init; }
+
+        public long WaitingTimeMilliseconds { get; set; }
+        public bool IsWaiting {  get; private set; } = false;
+        private Stopwatch stopwatch = new Stopwatch();
 
 
         [DllImport("user32.dll")]
         public static extern short GetAsyncKeyState(int vKey);
 
-        public Bottom(VirtualKey key)
+        public bool IsKeyPressed()
         {
-            Key = key;
+            bool isPress = (GetAsyncKeyState((int)Key) & 0x8000) != 0;
+
+            if (!stopwatch.IsRunning && isPress && WaitingTimeMilliseconds > 0)
+            {
+                IsWaiting = true;
+                stopwatch.Start();
+            }
+
+            if (stopwatch.ElapsedMilliseconds >= WaitingTimeMilliseconds)
+            {
+                IsWaiting = false;
+
+                stopwatch.Stop();
+                stopwatch.Reset();
+            }
+
+            return !IsWaiting && isPress;
         }
+
+        public Bottom(VirtualKey key, long waitingTimeMilliseconds)
+        {
+            this.Key = key;
+            this.WaitingTimeMilliseconds = waitingTimeMilliseconds;
+        }
+        public Bottom(VirtualKey key)
+            :this(key, 0)
+        {}
     }
 }

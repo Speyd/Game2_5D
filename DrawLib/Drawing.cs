@@ -12,11 +12,11 @@ using Render.Object;
 
 
 namespace DrawLib;
-public class Drawing()
+public static class Drawing
 {
-    HitPoint hitPoint = new HitPoint();
+    static HitPoint hitPoint = new HitPoint();
 
-    public void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
+    public static void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
     {
         Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 
@@ -42,7 +42,7 @@ public class Drawing()
         }
     }
 
-    public void DrawingSprite(Map map, Entity entity, Sprite sprite)
+    public static void DrawingSprite(Map map, Entity entity, Sprite sprite)
     {
         Obstacle? obstacle = Raycast.RaycastFun(map, entity);
 

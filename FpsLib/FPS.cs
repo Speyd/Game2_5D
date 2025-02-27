@@ -47,5 +47,5 @@ public class FPS : RenderText
         Screen.OutputPriority.AddToPriority(RenderPriority.Interface, renderText);
     }
 
-    public float GetDeltaTime() => deltaTime;
+    public static float GetDeltaTime() => deltaTime;
 }

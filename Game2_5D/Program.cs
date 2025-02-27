@@ -41,6 +41,7 @@ using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.Operations;
 using MoveLib;
+using DrawLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
 Screen.Initialize(1000, 600);
@@ -272,12 +273,17 @@ MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner,
 mapMini.Setting.OutputRenderMethod = OutputRenderMethod.Color;
 
 Control control = new Control(map, mapMini.Zoom);
-MovePositions collision = new MovePositions(new MoveLib.Collision(map, new Setting()), new Setting());
 Bottom bottomW = new Bottom(VirtualKey.W);
 Bottom bottomS = new Bottom(VirtualKey.S);
 Bottom bottomA = new Bottom(VirtualKey.A);
 Bottom bottomD = new Bottom(VirtualKey.D);
 Bottom bottomQ = new Bottom(VirtualKey.Q);
+Bottom bottomZ = new Bottom(VirtualKey.Z);
+Bottom bottomC = new Bottom(VirtualKey.C);
+Bottom bottomCtrl = new Bottom(VirtualKey.LeftControl, 350);
+Bottom bottomLeftButton = new Bottom(VirtualKey.LeftButton);
+List<Bottom> controls = new List<Bottom>() { bottomCtrl , bottomC };
+
 
 
 //List<Bottom> bottoms = new List<Bottom>() { bottom, bottom1 };
@@ -290,11 +296,16 @@ Bottom bottomQ = new Bottom(VirtualKey.Q);
 //    MovePositions.Move(entity, 0, -1, deltaTime);
 //if (CheckPressed.CurrentDirection.Right)
 //    MovePositions.Move(entity, 0, 1, deltaTime);
-KeyBinding keyBindingForward = new KeyBinding(bottomW, collision.Move, new object[]{1, 0});
-KeyBinding keyBindingBackward = new KeyBinding(bottomS, collision.Move, new object[] { -1, 0 });
-KeyBinding keyBindingLeft = new KeyBinding(bottomA, collision.Move, new object[] { 0, -1 });
-KeyBinding keyBindingRight = new KeyBinding(bottomD, collision.Move, new object[] { 0, 1 });
+//Drawing.DrawingPoint(map, entity, 30, SFML.Graphics.Color.Black);
+KeyBinding keyBindingForward = new KeyBinding(bottomW, MovePositions.Move, new object[]{map, player, 1, 0});
+KeyBinding keyBindingBackward = new KeyBinding(bottomS, MovePositions.Move, new object[] { map, player, -1, 0 });
+KeyBinding keyBindingLeft = new KeyBinding(bottomA, MovePositions.Move, new object[] { map, player, 0, -1 });
+KeyBinding keyBindingRight = new KeyBinding(bottomD, MovePositions.Move, new object[] { map, player, 0, 1 });
 KeyBinding keyBindingClose = new KeyBinding(bottomQ, Screen.Window.Close);
+KeyBinding keyBindingZoom = new KeyBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { 0.01 });
+KeyBinding keyBindingUnZoom = new KeyBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { -0.01 });
+KeyBinding keyBindingDraw = new KeyBinding(bottomLeftButton, Drawing.DrawingPoint, new object[] { map, player, 30, SFML.Graphics.Color.Black });
+KeyBinding keyBindingHideMap = new KeyBinding(controls, mapMini.Hide);
 
 
 control.AddKeyBind(keyBindingForward);
@@ -302,6 +313,9 @@ control.AddKeyBind(keyBindingBackward);
 control.AddKeyBind(keyBindingLeft);
 control.AddKeyBind(keyBindingRight);
 control.AddKeyBind(keyBindingClose);
+control.AddKeyBind(keyBindingDraw);
+control.AddKeyBind(keyBindingHideMap);
+
 player.OnControlAction = control.MakePressed;
 
 Algorithm algorithm = new Algorithm(map, player);
@@ -369,7 +383,7 @@ try
 
         fpsChecker.StartRead();
 
-        player.OnControlAction(fpsChecker.GetDeltaTime(), player);
+        player.MakePressed();
 
         algorithm.CalculationAlgorithm();
         visualizerHitBox.Render(player);

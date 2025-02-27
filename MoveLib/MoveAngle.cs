@@ -1,4 +1,5 @@
 ﻿using EntityLib;
+using FpsLib;
 using ScreenLib;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 
 namespace MoveLib;
-public class MoveAngle(MoveLib.Setting setting)
+public class MoveAngle
 {
     public void TurnAngle(ref double entityAngle, int direction)
     {
-        double normalizedMoveSpeedAngel = setting.MoveSpeedAngel * Screen.ScreenRatio;
+        double normalizedMoveSpeedAngel = MoveLib.Setting.MoveSpeedAngel * Screen.ScreenRatio;
         entityAngle -= normalizedMoveSpeedAngel * direction;
 
         if (entityAngle > Math.PI)
@@ -21,12 +22,12 @@ public class MoveAngle(MoveLib.Setting setting)
             entityAngle += 2 * Math.PI;
     }
 
-    public void ResetAngle(Entity entity, double deltaTime)
+    public void ResetAngle(Entity entity)
     {
-        double normalizedMoveSpeedAngel = setting.MoveSpeedAngel * Screen.ScreenRatio;
-        setting.MoveSpeedAngel = 1 * deltaTime * normalizedMoveSpeedAngel;
+        double normalizedMoveSpeedAngel = MoveLib.Setting.MoveSpeedAngel * Screen.ScreenRatio;
+        MoveLib.Setting.MoveSpeedAngel = 1 * FPS.GetDeltaTime() * normalizedMoveSpeedAngel;
 
-        entity.Angle = setting.TempAngle % (2 * Math.PI);
-        entity.VerticalAngle = setting.TempVerticalAngle;
+        entity.Angle = MoveLib.Setting.TempAngle % (2 * Math.PI);
+        entity.VerticalAngle = MoveLib.Setting.TempVerticalAngle;
     }
 }

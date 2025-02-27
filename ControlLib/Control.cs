@@ -27,13 +27,13 @@ namespace ControlLib
         public List<KeyBinding> bindings = new();
         private ZoomMiniMap ZoomMiniMap { get; init; }
         private CheckPressed CheckPressed { get; init; } = new CheckPressed();
-        private Drawing Drawing { get; init; }
+       // private Drawing Drawing { get; init; }
 
 
         #region Move
-        private MoveLib.Setting SettingMove{ get; init; }
+       // private MoveLib.Setting SettingMove{ get; init; }
         private MoveMouse MoveMouse { get; init; }
-        private MovePositions MovePositions { get; init; }
+        //private MovePositions MovePositions { get; init; }
         private MoveAngle MoveAngle { get; init; }
         #endregion
 
@@ -44,12 +44,12 @@ namespace ControlLib
         {
             ZoomMiniMap = zoom;
             this.map = map;
-            SettingMove = new MoveLib.Setting();
-            Drawing = new Drawing();
+           // SettingMove = new MoveLib.Setting();
+           // Drawing = new Drawing();
 
-            MoveMouse = new MoveMouse(SettingMove);
-            MovePositions = new MovePositions(new Collision(map, SettingMove), SettingMove);
-            MoveAngle = new MoveAngle(SettingMove);
+            MoveMouse = new MoveMouse();
+           // MovePositions = new MovePositions(new Collision(map, SettingMove), SettingMove);
+            MoveAngle = new MoveAngle();
 
             InputField = new InputField(
                 @"Resources\FontText\ArialBold.ttf", 
@@ -64,11 +64,11 @@ namespace ControlLib
         {
             bindings.Add(keyBinding);
         }
-        public void MakePressed(double deltaTime, Entity entity)
+        public void MakePressed(Entity entity)
         {
             foreach (var binding in bindings) 
             {
-                binding.Listen(entity, deltaTime);
+                binding.Listen();
             }
             CheckPressed.Check();
 
@@ -92,18 +92,18 @@ namespace ControlLib
 
 
             ////---------------------Angle----------------------
-            MoveAngle.ResetAngle(entity, deltaTime);
-            if (CheckPressed.CurrentDirection.TurnLeft)
-                MoveAngle.TurnAngle(ref SettingMove.TempAngle, -1);
-            if (CheckPressed.CurrentDirection.TurnRight)
-                MoveAngle.TurnAngle(ref SettingMove.TempAngle, 1);
+            MoveAngle.ResetAngle(entity);
+            //if (CheckPressed.CurrentDirection.TurnLeft)
+            //    MoveAngle.TurnAngle(ref SettingMove.TempAngle, -1);
+            //if (CheckPressed.CurrentDirection.TurnRight)
+            //    MoveAngle.TurnAngle(ref SettingMove.TempAngle, 1);
 
 
             ////-----------------Mini Map--------------------
-            //if (CheckPressed.CurrentDirection.ZoomMiniMap)
-            //    ZoomMiniMap.Zoom += 0.01f;
-            //if (CheckPressed.CurrentDirection.ReduceMiniMap)
-            //    ZoomMiniMap.Zoom -= 0.01f;
+            if (CheckPressed.CurrentDirection.ZoomMiniMap)
+                ZoomMiniMap.Zoom += 0.01f;
+            if (CheckPressed.CurrentDirection.ReduceMiniMap)
+                ZoomMiniMap.Zoom -= 0.01f;
 
 
             ////-----------Collision Detection-------------

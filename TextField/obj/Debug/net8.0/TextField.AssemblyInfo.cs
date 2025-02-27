@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TextField")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b8660cafb48fe33804fb52b795552d1f42bffc44")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f9911297c989fa0862c78cdcb0629f4dde7117f0")]
 [assembly: System.Reflection.AssemblyProductAttribute("TextField")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TextField")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

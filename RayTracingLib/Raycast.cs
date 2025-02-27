@@ -75,10 +75,11 @@ public static class Raycast
                 float minX, float maxX,
                 float minY, float maxY)
     {
-        Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
-
         double xInter = entity.X.Axis + tValue * entity.Direction.X;
         double yInter = entity.Y.Axis + tValue * entity.Direction.Y;
+
+        Vector3f obstaclePos = new Vector3f((float)xInter, (float)yInter, (float)obstacle.Z.Axis);
+
 
         bool result = Collision.IsRayTouchesObject(obstaclePos, entity.GetObserverInfo(), obstacle.HitBox.MainHitBox, xInter, yInter);
 
