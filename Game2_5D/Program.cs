@@ -39,9 +39,11 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using ObstacleLib.BlankWallLib;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
+using HitBoxLib.Operations;
+using MoveLib;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
-Screen.Initialize(1000, 600, true);
+Screen.Initialize(1000, 600);
 
 Screen.Window.SetActive(true);
 Map map = new Map(24, 23);
@@ -270,6 +272,36 @@ MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner,
 mapMini.Setting.OutputRenderMethod = OutputRenderMethod.Color;
 
 Control control = new Control(map, mapMini.Zoom);
+MovePositions collision = new MovePositions(new MoveLib.Collision(map, new Setting()), new Setting());
+Bottom bottomW = new Bottom(VirtualKey.W);
+Bottom bottomS = new Bottom(VirtualKey.S);
+Bottom bottomA = new Bottom(VirtualKey.A);
+Bottom bottomD = new Bottom(VirtualKey.D);
+Bottom bottomQ = new Bottom(VirtualKey.Q);
+
+
+//List<Bottom> bottoms = new List<Bottom>() { bottom, bottom1 };
+
+//if (CheckPressed.CurrentDirection.Forward)
+//    MovePositions.Move(entity, 1, 0, deltaTime);
+//if (CheckPressed.CurrentDirection.Backward)
+//    MovePositions.Move(entity, -1, 0, deltaTime);
+//if (CheckPressed.CurrentDirection.Left)
+//    MovePositions.Move(entity, 0, -1, deltaTime);
+//if (CheckPressed.CurrentDirection.Right)
+//    MovePositions.Move(entity, 0, 1, deltaTime);
+KeyBinding keyBindingForward = new KeyBinding(bottomW, collision.Move, new object[]{1, 0});
+KeyBinding keyBindingBackward = new KeyBinding(bottomS, collision.Move, new object[] { -1, 0 });
+KeyBinding keyBindingLeft = new KeyBinding(bottomA, collision.Move, new object[] { 0, -1 });
+KeyBinding keyBindingRight = new KeyBinding(bottomD, collision.Move, new object[] { 0, 1 });
+KeyBinding keyBindingClose = new KeyBinding(bottomQ, Screen.Window.Close);
+
+
+control.AddKeyBind(keyBindingForward);
+control.AddKeyBind(keyBindingBackward);
+control.AddKeyBind(keyBindingLeft);
+control.AddKeyBind(keyBindingRight);
+control.AddKeyBind(keyBindingClose);
 player.OnControlAction = control.MakePressed;
 
 Algorithm algorithm = new Algorithm(map, player);

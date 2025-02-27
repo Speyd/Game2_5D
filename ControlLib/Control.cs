@@ -21,7 +21,10 @@ namespace ControlLib
 {
     public class Control
     {
+
+        
         private Map map;
+        public List<KeyBinding> bindings = new();
         private ZoomMiniMap ZoomMiniMap { get; init; }
         private CheckPressed CheckPressed { get; init; } = new CheckPressed();
         private Drawing Drawing { get; init; }
@@ -57,31 +60,38 @@ namespace ControlLib
             Screen.Window.SetMouseCursorVisible(false);
             Screen.Window.MouseMoved += MoveMouse.OnMouseMoved;
         }
-
+        public void AddKeyBind(KeyBinding keyBinding)
+        {
+            bindings.Add(keyBinding);
+        }
         public void MakePressed(double deltaTime, Entity entity)
         {
+            foreach (var binding in bindings) 
+            {
+                binding.Listen(entity, deltaTime);
+            }
             CheckPressed.Check();
 
-            //---------------Input Field--------------
-            if (InputField.IsOpen == true) 
-            {
-                InputField.Draw();
-                return;
-            }
+            ////---------------Input Field--------------
+            //if (InputField.IsOpen == true) 
+            //{
+            //    InputField.Draw();
+            //    return;
+            //}
 
 
-            //-----------------Move-------------------
-            if (CheckPressed.CurrentDirection.Forward)
-                MovePositions.Move(entity, 1, 0, deltaTime);
-            if (CheckPressed.CurrentDirection.Backward)
-                MovePositions.Move(entity, -1, 0, deltaTime);
-            if (CheckPressed.CurrentDirection.Left)
-                MovePositions.Move(entity, 0, -1, deltaTime);
-            if (CheckPressed.CurrentDirection.Right)
-                MovePositions.Move(entity, 0, 1, deltaTime);
+            ////-----------------Move-------------------
+            //if (CheckPressed.CurrentDirection.Forward)
+            //    MovePositions.Move(entity, 1, 0, deltaTime);
+            //if (CheckPressed.CurrentDirection.Backward)
+            //    MovePositions.Move(entity, -1, 0, deltaTime);
+            //if (CheckPressed.CurrentDirection.Left)
+            //    MovePositions.Move(entity, 0, -1, deltaTime);
+            //if (CheckPressed.CurrentDirection.Right)
+            //    MovePositions.Move(entity, 0, 1, deltaTime);
 
 
-            //---------------------Angle----------------------
+            ////---------------------Angle----------------------
             MoveAngle.ResetAngle(entity, deltaTime);
             if (CheckPressed.CurrentDirection.TurnLeft)
                 MoveAngle.TurnAngle(ref SettingMove.TempAngle, -1);
@@ -89,21 +99,21 @@ namespace ControlLib
                 MoveAngle.TurnAngle(ref SettingMove.TempAngle, 1);
 
 
-            //-----------------Mini Map--------------------
-            if (CheckPressed.CurrentDirection.ZoomMiniMap)
-                ZoomMiniMap.Zoom += 0.01f;
-            if (CheckPressed.CurrentDirection.ReduceMiniMap)
-                ZoomMiniMap.Zoom -= 0.01f;
+            ////-----------------Mini Map--------------------
+            //if (CheckPressed.CurrentDirection.ZoomMiniMap)
+            //    ZoomMiniMap.Zoom += 0.01f;
+            //if (CheckPressed.CurrentDirection.ReduceMiniMap)
+            //    ZoomMiniMap.Zoom -= 0.01f;
 
 
-            //-----------Collision Detection-------------
-            if (Mouse.IsButtonPressed(Mouse.Button.Left))
-                Drawing.DrawingPoint(map, entity, 30, SFML.Graphics.Color.Black);
+            ////-----------Collision Detection-------------
+            //if (Mouse.IsButtonPressed(Mouse.Button.Left))
+            //    Drawing.DrawingPoint(map, entity, 30, SFML.Graphics.Color.Black);
 
 
-            //----------------Exit-----------------
-            if (CheckPressed.CurrentDirection.Exit)
-                Screen.Window.Close();
+            ////----------------Exit-----------------
+            //if (CheckPressed.CurrentDirection.Exit)
+            //    Screen.Window.Close();
 
         }
     }

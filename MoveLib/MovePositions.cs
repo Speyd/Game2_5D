@@ -8,7 +8,7 @@ public class MovePositions(Collision collision, MoveLib.Setting setting)
     double cosAngle = 1;
     double sinAngle = 1;
 
-    public void Move(Entity entity, double directionX, double directionY, double deltaTime)
+    public void Move(Entity entity, double deltaTime, double directionX, double directionY)
     {
         double speed = setting.MoveSpeed * (1 / FPS.fps);
 
