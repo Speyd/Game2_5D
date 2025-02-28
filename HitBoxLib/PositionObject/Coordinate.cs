@@ -10,11 +10,13 @@ namespace HitBoxLib.PositionObject;
 public class Coordinate
 {
     private double _axis = 0;
+    /// <summary>Axis coordinate</summary>
     public double Axis
     {
         get => _axis;
         set => SetAxis(value, _hitBox);
     }
+    /// <summary>Determining which axis an object belongs to</summary>
     public CoordinatePlane CoordinatePlane { get; set; }
     private HitBox _hitBox;
 

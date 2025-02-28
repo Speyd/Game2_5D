@@ -8,13 +8,19 @@ using ScreenLib.SettingScreen;
 using HitBoxLib.PositionObject;
 using DataPipes.Dictionary;
 using HitBoxLib.Segment.SignsTypeSide;
+using System.Drawing;
 
 
 namespace HitBoxLib.HitBoxSegment;
 public class HitBox
 {
-    public static readonly SideType[] AllSides = (SideType[])Enum.GetValues(typeof(SideType));
+    /// <summary>All the SideSize</summary>
+    public static readonly SideSize[] sideSizes = (SideSize[])Enum.GetValues(typeof(SideSize));
+    /// <summary>All the CoordinatePlane</summary>
+    public static readonly CoordinatePlane[] coordinatePlanes = (CoordinatePlane[])Enum.GetValues(typeof(CoordinatePlane));
+    
     public Box MainHitBox { get; set; }
+    /// <summary>Segmented hitboxes that are part of the main hitbox</summary>
     public List<Box> SegmentedHitbox { get; set; } = new();
 
     public HitBox(string titleMainHitBox = "Body")
@@ -28,95 +34,111 @@ public class HitBox
 
 
 
-    public UniqueDictionary<SideType, HitBoxSide> AddAllSides()
+    public Dictionary<(CoordinatePlane, SideSize), HitBoxSide> AddAllSides()
     {
-        UniqueDictionary<SideType, HitBoxSide> addedHitBox = new();
+        Dictionary<(CoordinatePlane, SideSize), HitBoxSide> addedHitBox = new();
 
-        foreach (var side in AllSides)
-            addedHitBox.Insert(side, new HitBoxSide(GetCoordinatePlane(side), GetSizeSide(side)));
+        foreach (var coordinatePlane in coordinatePlanes)
+        {
+            foreach (var sideSize in sideSizes)
+            {
+                addedHitBox.Add((coordinatePlane, sideSize), new HitBoxSide(coordinatePlane, sideSize));
+            }
+        }
 
         return addedHitBox;
     }
-    public UniqueDictionary<SideType, HitBoxSide> AddAllSides(double offset)
+    public Dictionary<(CoordinatePlane, SideSize), HitBoxSide> AddAllSides(double offset)
     {
-        UniqueDictionary<SideType, HitBoxSide> addedHitBox = new();
+        Dictionary<(CoordinatePlane, SideSize), HitBoxSide> addedHitBox = new();
 
-        foreach (var side in AllSides)
-            addedHitBox.Insert(side, new HitBoxSide(GetCoordinatePlane(side), GetSizeSide(side), offset));
+        foreach (var coordinatePlane in coordinatePlanes)
+        {
+            foreach (var sideSize in sideSizes)
+            {
+                addedHitBox.Add((coordinatePlane, sideSize), new HitBoxSide(coordinatePlane, sideSize, offset));
+            }
+        }
 
         return addedHitBox;
     }
 
 
+    public bool IsAllSidesIncludedMainHitbox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox)
+    {
+        foreach (var coordinatePlane in coordinatePlanes)
+        {
+            foreach (var sideSize in sideSizes)
+            {
+                bool check = false;
+                foreach (var segment in segmentHitBox)
+                {
+                    if (segment.Value.SideSize == sideSize && segment.Value.CoordinatePlane == coordinatePlane)
+                        check = true;
+                }
+
+                if (check == false)
+                    return false;
+            }
+        }
+        return true;
+    }
     public bool IsAllSidesIncludedMainHitbox(Box segmentHitBox)
     {
-        var sideTypeSegmentHitBox = segmentHitBox.Body.GetAllKey();
-        foreach (var side in MainHitBox.Body.GetAllKey())
-        {
-            if (sideTypeSegmentHitBox.Contains(side) == false)
-                return false;
-        }
-
-        return true;
+        return IsAllSidesIncludedMainHitbox(segmentHitBox.Body);
     }
-    public bool IsAllSidesIncludedMainHitbox(UniqueDictionary<SideType, HitBoxSide> segmentHitBox)
+
+    public bool IsAllCoordinateIncludedMainHitbox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox)
     {
-        var sideTypeSegmentHitBox = segmentHitBox.GetAllKey();
-        foreach (var side in MainHitBox.Body.GetAllKey())
+        if (IsAllSidesIncludedMainHitbox(segmentHitBox) == false)
+            return false;
+
+        foreach (var coordinatePlane in coordinatePlanes)
         {
-            if (sideTypeSegmentHitBox.Contains(side) == false)
-                return false;
+            foreach (var segment in segmentHitBox)
+            {
+                if (segment.Value.CoordinatePlane != coordinatePlane)
+                    continue;
+
+                if (segment.Value.SideSize == SideSize.Smaller &&
+                       segment.Value.Side < MainHitBox[coordinatePlane, SideSize.Smaller]?.Side)
+                {
+                    return false;
+                }
+                else if (segment.Value.SideSize == SideSize.Larger &&
+                    segment.Value.Side > MainHitBox[coordinatePlane, SideSize.Larger]?.Side)
+                {
+                    return false;
+                }
+            }
         }
 
         return true;
     }
-
-
     public bool IsAllCoordinateIncludedMainHitbox(Box segmentHitBox)
     {
         if (IsAllSidesIncludedMainHitbox(segmentHitBox) == false)
             return false;
 
-        foreach (var side in MainHitBox.Body.GetAllKey())
+        foreach (var coordinatePlane in coordinatePlanes)
         {
-            if (segmentHitBox[side]?.SideSize == SideSize.Smaller &&
-                segmentHitBox[side]?.Side < MainHitBox[side]?.Side)
+            foreach (var sideSize in sideSizes)
             {
-                return false;
-            }
-            else if (segmentHitBox[side]?.SideSize == SideSize.Larger &&
-                segmentHitBox[side]?.Side > MainHitBox[side]?.Side)
-            {
-                return false;
+                if (sideSize == SideSize.Smaller &&
+                       segmentHitBox[coordinatePlane, sideSize]?.Side < MainHitBox[coordinatePlane, sideSize]?.Side)
+                {
+                    return false;
+                }
+                else if (sideSize == SideSize.Larger &&
+                    segmentHitBox[coordinatePlane, sideSize]?.Side > MainHitBox[coordinatePlane, sideSize]?.Side)
+                {
+                    return false;
+                }
             }
         }
 
         return true;
     }
-    public bool IsAllCoordinateIncludedMainHitbox(UniqueDictionary<SideType, HitBoxSide> segmentHitBox)
-    {
-        if (IsAllSidesIncludedMainHitbox(segmentHitBox) == false)
-            return false;
-
-        foreach (var side in MainHitBox.Body.GetAllKey())
-        {
-            if (segmentHitBox[side]?.Offset < 0)
-            {
-                if (MainHitBox[side]?.Offset < 0 && MainHitBox[side]?.Offset > segmentHitBox[side]?.Offset)
-                    return false;
-                else if (MainHitBox[side]?.Offset > 0)
-                    return false;
-            }
-            else if (segmentHitBox[side]?.Offset > 0)
-            {
-                if (MainHitBox[side]?.Offset > 0 && MainHitBox[side]?.Offset < segmentHitBox[side]?.Offset)
-                    return false;
-            }
-        }
-
-        return true;
-    }
-
 
     public void AddSegmentHitBox(Box segmentHitBox)
     {
@@ -125,7 +147,7 @@ public class HitBox
 
         SegmentedHitbox.Add(segmentHitBox);
     }
-    public void AddSegmentHitBox(UniqueDictionary<SideType, HitBoxSide> segmentHitBox, string title)
+    public void AddSegmentHitBox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox, string title)
     {
 
         if (IsAllCoordinateIncludedMainHitbox(segmentHitBox) == false)
@@ -136,9 +158,9 @@ public class HitBox
 
 
 
-    public void SetOffset(SideType side, double offset)
+    public void SetOffset(CoordinatePlane plane, SideSize sideSize, double offset)
     {
-        MainHitBox[side]?.SetOffset(offset);
+        MainHitBox[plane, sideSize]?.SetOffset(offset);
     }
     public void SetSide(Coordinate coordinate)
     {
@@ -152,31 +174,6 @@ public class HitBox
         }
     }
 
-    private CoordinatePlane GetCoordinatePlane(SideType side)
-    {
-        return side switch
-        {
-            SideType.Left or SideType.Right => CoordinatePlane.X,
-            SideType.Top or SideType.Bottom => CoordinatePlane.Y,
-            SideType.Up or SideType.Down => CoordinatePlane.Z,
-            _ => throw new ArgumentOutOfRangeException(nameof(side), $"Unknown side: {side}")
-        };
-    }
-    private SideSize GetSizeSide(SideType side)
-    {
-        return side switch
-        {
-            SideType.Left or SideType.Top or SideType.Down => SideSize.Smaller,
-            SideType.Right or SideType.Bottom or SideType.Up => SideSize.Larger,
-            _ => throw new ArgumentOutOfRangeException(nameof(side), $"Unknown side: {side}")
-        };
-    }
-
-
-    public HitBoxSide? this[SideType side]
-    {
-        get => MainHitBox[side];
-    }
     public Box? this[string title]
     {
         get
@@ -198,6 +195,13 @@ public class HitBox
                 return null;
 
             return SegmentedHitbox[index];
+        }
+    }
+    public HitBoxSide? this[CoordinatePlane plane, SideSize sideSize]
+    {
+        get
+        {
+            return MainHitBox[plane, sideSize];
         }
     }
 

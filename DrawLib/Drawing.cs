@@ -19,7 +19,6 @@ public static class Drawing
     public static void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
     {
         Obstacle? obstacle = Raycast.RaycastFun(map, entity);
-
         if (obstacle is not null && obstacle is IDrawable drawable)
         {
             hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
@@ -32,6 +31,7 @@ public static class Drawing
 
             float addHeight = height > heightObj ? 0f : heightObj;
             Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
+
             CircleShape point = new CircleShape(height)
             {
                 FillColor = colorFill,

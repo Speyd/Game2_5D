@@ -17,9 +17,9 @@ using HitBoxLib.Segment.SignsTypeSide;
 namespace RayTracingLib.Detection;
 static public class RayDetectionX
 {
-    static float distanceToPoint = 0;
-    static float distanceToWall = 0;
+    /// <summary>Defines the side faces of the object</summary>
     static private Vector2f CalculateTextureHitPoint(Obstacle obstacle, Entity entity,
+        ref float distanceToPoint,
         float cosAngle, float sinAngle,
         float minX, float maxX, float maxY, float minY)
     {
@@ -71,6 +71,8 @@ static public class RayDetectionX
 
         return new Vector2f(hitX, hitY);
     }
+
+    /// <summary>Defines the main sides of the object</summary>
     static private ObjectSide DetermineWallSide(Obstacle obstacle, Entity entity,
         float cosAngle, float sinAngle,
         float minX, float maxX, float maxY, float minY)   
@@ -119,7 +121,7 @@ static public class RayDetectionX
     }
 
 
-    static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, ObjectSide wallDetermine)
+    static private void CalculateDistanceToWall(Obstacle obstacle, Entity entity, ref float distanceToWall, ObjectSide wallDetermine)
     {
         double deltaX = obstacle.X.Axis - entity.X.Axis;
         double deltaY = obstacle.Y.Axis - entity.Y.Axis;
@@ -128,7 +130,7 @@ static public class RayDetectionX
         if (wallDetermine == ObjectSide.Top || wallDetermine == ObjectSide.Left)
             distanceToWall -= -(Screen.Setting.Tile * 3);
     }
-    static private HitPoint CalculateHitPoint(Vector2f cornerHit, ObjectSide wallDetermine)
+    static private HitPoint CalculateHitPoint(Vector2f cornerHit, float distanceToPoint, float distanceToWall, ObjectSide wallDetermine)
     {
         if (cornerHit.X > cornerHit.Y)
         {
@@ -162,21 +164,26 @@ static public class RayDetectionX
 
     static public HitPoint DetermineWallAllSides(Obstacle obstacle, Entity entity)
     {
+        float distanceToPoint = 0;
+        float distanceToWall = 0;
+
+
         float cosAngle = entity.Direction.X;
         float sinAngle = entity.Direction.Y;
 
-        float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
-        float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0f);
-        float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0f);
-        float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0f);
+        var mainHitBox = obstacle.HitBox.MainHitBox;
+        float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
+        float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0f);
+        float minY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0f);
+        float maxY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0f);
 
 
         ObjectSide wallDetermine = ObjectSide.Error;
         wallDetermine = DetermineWallSide(obstacle, entity, cosAngle, sinAngle, minX, maxX, maxY, minY);
 
-        CalculateDistanceToWall(obstacle, entity, wallDetermine);
+        CalculateDistanceToWall(obstacle, entity, ref distanceToWall, wallDetermine);
 
-        Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity, cosAngle, sinAngle, minX, maxX, maxY, minY);
-        return CalculateHitPoint(cornerHit, wallDetermine);
+        Vector2f cornerHit = CalculateTextureHitPoint(obstacle, entity, ref distanceToPoint, cosAngle, sinAngle, minX, maxX, maxY, minY);
+        return CalculateHitPoint(cornerHit, distanceToPoint, distanceToWall, wallDetermine);
     }
 }

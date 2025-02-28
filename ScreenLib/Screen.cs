@@ -7,6 +7,7 @@ using ScreenLib.SettingScreen;
 namespace ScreenLib;
 public static class Screen
 {
+    /// <summary>Checking for initialization of a static object</summary>
     private static bool IsInitialize = false;
 
     //--------------------Window Mode----------------------
@@ -100,6 +101,7 @@ public static class Screen
 
     //-------------------------------------
     static float _multWidth = 1;
+    /// <summary>Dependencies of the current screen width with the base</summary>
     public static float MultWidth 
     { 
         get => _multWidth; 
@@ -110,6 +112,7 @@ public static class Screen
         } 
     }
     static float _multHeight = 1;
+    /// <summary>Dependencies of the current screen height with the base</summary>
     public static float MultHeight
     {
         get => _multHeight;
@@ -119,9 +122,23 @@ public static class Screen
             ScreenRatio = value / _multWidth;
         }
     }
+    /// <summary>General dependence of current sizes on base screen sizes</summary>
     public static float ScreenRatio { get; private set; } = 1;
 
     public static uint FPS_Limit { get; set; } = 60;
+
+    public static bool _isUseFPS_Limit = false;
+    public static bool IsUseFPS_Limit 
+    {
+        get => _isUseFPS_Limit;
+        set
+        {
+            if(value)
+                Window.SetFramerateLimit(FPS_Limit);
+
+            _isUseFPS_Limit = value;
+        }
+    }
 
     //----------------------------Priority Draw--------------------------------
     public static OutputPriority _outputPriority;
@@ -136,7 +153,6 @@ public static class Screen
         }
         private set => _outputPriority = value;
     }
-    public static OutputPriority UnicOutputPriority;
 
 
 
@@ -177,7 +193,6 @@ public static class Screen
 
         Setting = new Setting(ScreenWidth, ScreenHeight, ScreenWidth);
         OutputPriority = new OutputPriority(Window);
-        UnicOutputPriority = new OutputPriority(Window);
     }
 
     private static void SetWindowSize()
@@ -187,10 +202,7 @@ public static class Screen
             throw new Exception("ScreenWidth and ScreenHeight must be positive values.");
         }
 
-        // Установка нового размера окна
         Window.Size = new SFML.System.Vector2u((uint)ScreenWidth, (uint)ScreenHeight);
-
-        // Обновляем Viewport (область просмотра)
         View view = new View(new FloatRect(0, 0, ScreenWidth, ScreenHeight));
         Window.SetView(view);
 
@@ -198,16 +210,13 @@ public static class Screen
     }
     public static void CenterWindow()
     {
-        // Получаем размер экрана (монитора)
         var desktopMode = VideoMode.DesktopMode;
         uint screenWidth = desktopMode.Width;
         uint screenHeight = desktopMode.Height;
 
-        // Рассчитываем позицию для центрирования окна
         int posX = (int)(screenWidth / 2 - ScreenWidth / 2);
         int posY = (int)(screenHeight / 2 - ScreenHeight / 2);
 
-        // Устанавливаем позицию окна
         Window.Position = new Vector2i(posX, posY);
     }
 
@@ -239,7 +248,6 @@ public static class Screen
         (int)(x / Setting.Tile) * Setting.Tile,
         (int)(y / Setting.Tile) * Setting.Tile);
     }
-
     public static Vector2i MappingVector(double x, double y)
     {
         return new Vector2i(
@@ -250,7 +258,6 @@ public static class Screen
     {
         return (int)(value / tile) * tile;
     }
-
     public static int Mapping(double value)
     {
         return (int)(value / Setting.Tile) * Setting.Tile;

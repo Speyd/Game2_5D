@@ -1,4 +1,5 @@
-﻿using HitBoxLib.Data.HitBoxObject;
+﻿using DataPipes;
+using HitBoxLib.Data.HitBoxObject;
 using HitBoxLib.Data.Observer;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.PositionObject;
@@ -29,31 +30,6 @@ public static class Render
             {0, 4}, {1, 5}, {2, 6}, {3, 7},
     };
     public const int maxCountPeaks = 8;
-
-    private static float GetDistance(Vector2f point, Vector2f target)
-    {
-        float dx = target.X - point.X;
-        float dy = target.Y - point.Y;
-        return MathF.Sqrt(dx * dx + dy * dy);
-    }
-    public static double GetAngularDistance(Vector2f sprite, Vector2f player)
-    {
-        double dx = sprite.X - player.X;
-        double dy = sprite.Y - player.Y;
-
-        return Math.Atan2(dy, dx);
-    }
-    public static double CalculationAngle(double playerAngle, double spriteAngle)
-    {
-        double angleDifference = spriteAngle - playerAngle;
-
-        if (angleDifference > Math.PI)
-            angleDifference -= 2 * Math.PI;
-        if (angleDifference < -Math.PI)
-            angleDifference += 2 * Math.PI;
-
-        return angleDifference;
-    }
 
 
     private static List<Vector3f> GetCoordinatesParallelepiped(HitboxObjectInfo objectHitBox, ObserverInfo observer, ref Vector2f center)
@@ -108,11 +84,11 @@ public static class Render
         foreach (var vertex in vertices)
         {
             Vector2f position = GetPositionForAngle(objectHitBox, vertex, center);
-            float dist = GetDistance(position, observer.position);
+            float dist = MathUtils.CalculateDistance(position, observer.position);
             float safeDistance = MathF.Max(dist, 0.1f);
 
-            double angleDistance = GetAngularDistance(new Vector2f(vertex.Z, vertex.X), observer.position);
-            double normalizedAngle = CalculationAngle(observer.angle, angleDistance);
+            double angleDistance = MathUtils.CalculateAngleToTarget(new Vector2f(vertex.Z, vertex.X), observer.position);
+            double normalizedAngle = MathUtils.NormalizeAngleDifference(observer.angle, angleDistance);
 
             float screenX = objectHitBox.worldToScreenX(normalizedAngle, observer.deltaAngle);
             float screenY = objectHitBox.worldToScreenY(vertex.Y, safeDistance, observer.vertivalAngle, normalizedAngle);

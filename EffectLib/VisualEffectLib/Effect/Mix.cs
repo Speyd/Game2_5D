@@ -12,31 +12,31 @@ public class Mix: VisualEffect
 {
     public delegate SFML.Graphics.Color Transformation(VisualEffect first, VisualEffect second, double depth, float blendFactor);
 
-
+    /// <summary> Method for mixing effects </summary>
     public Transformation transformation;
-    public VisualEffect first;
-    public VisualEffect second;
+    public VisualEffect firstEffect;
+    public VisualEffect secondEffect;
 
     public Mix(Transformation transformation, VisualEffect first, VisualEffect second, float strengthEffect = 0.5f, string? pathShader = null)
         :base(pathShader)
     {
         this.transformation = transformation;
-        this.first = first;
-        this.second = second;
+        this.firstEffect = first;
+        this.secondEffect = second;
         StrengthEffect = strengthEffect;
     }
     public Mix(Transformation transformation, VisualEffect first, VisualEffect second, string? pathShader = null, float strengthEffect = 0.5f)
         : base(pathShader)
     {
         this.transformation = transformation;
-        this.first = first;
-        this.second = second;
+        this.firstEffect = first;
+        this.secondEffect = second;
         StrengthEffect = strengthEffect;
     }
 
     public override SFML.Graphics.Color TransformationColor(double depth)
     {       
-        return transformation.Invoke(first, second, depth, StrengthEffect);
+        return transformation.Invoke(firstEffect, secondEffect, depth, StrengthEffect);
     }
     public override RenderStates TransformationColor(Texture texture, double verticalAngle, float multEffect = 1)
     {
@@ -53,7 +53,7 @@ public class Mix: VisualEffect
     }
     public override SFML.Graphics.Color TransformationColor(SFML.Graphics.Color original, double depth)
     {
-        SFML.Graphics.Color effectColor = transformation.Invoke(first, second, depth, StrengthEffect);
+        SFML.Graphics.Color effectColor = transformation.Invoke(firstEffect, secondEffect, depth, StrengthEffect);
         return LerpColor(original, effectColor, StrengthEffect);
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 
 namespace TextureLib;
+/// <summary>All sides of the object</summary>
 public enum ObjectSide
 {
     Error,

@@ -42,6 +42,7 @@ using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.Operations;
 using MoveLib;
 using DrawLib;
+using HitBoxLib.PositionObject;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
 Screen.Initialize(1000, 600);
@@ -126,20 +127,20 @@ SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
     ShiftCubedY = 50,
 };
 sprite1.Z.Axis = 0;
-sprite1.HitBox[SideType.Left]?.SetOffset(80);
-sprite1.HitBox[SideType.Right]?.SetOffset(80);
-sprite1.HitBox[SideType.Top]?.SetOffset(80);
-sprite1.HitBox[SideType.Bottom]?.SetOffset(80);
-sprite1.HitBox[SideType.Up]?.SetOffset(50);
-sprite1.HitBox[SideType.Down]?.SetOffset(50);
+sprite1.HitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(80);
+sprite1.HitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(80);
+sprite1.HitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(80);
+sprite1.HitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(80);
+sprite1.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(50);
+sprite1.HitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(50);
 sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
 HitBox box = new HitBox();
-box[SideType.Left]?.SetOffset(20);
-box[SideType.Right]?.SetOffset(20);
-box[SideType.Top]?.SetOffset(20);
-box[SideType.Bottom]?.SetOffset(20);
-box[SideType.Up]?.SetOffset(50);
-box[SideType.Down]?.SetOffset(0);
+box[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(20);
+box[CoordinatePlane.X, SideSize.Larger]?.SetOffset(20);
+box[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(20);
+box[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(20);
+box[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(0);
+box[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(50);
 sprite1.HitBox.AddSegmentHitBox(box.MainHitBox.Body, "Center");
 
 //SpriteObstacle sprite2 = new SpriteObstacle(textureObstacles)
@@ -257,12 +258,12 @@ Player player = new Player(100)
 player.X.Axis = 5 * Screen.Setting.Tile;
 player.Y.Axis = 3 * Screen.Setting.Tile;
 player.Z.Axis = 0;
-player.HitBox[SideType.Left]?.SetOffset(10);
-player.HitBox[SideType.Right]?.SetOffset(10);
-player.HitBox[SideType.Top]?.SetOffset(10);
-player.HitBox[SideType.Bottom]?.SetOffset(10);
-player.HitBox[SideType.Up]?.SetOffset(50);
-player.HitBox[SideType.Down]?.SetOffset(0);
+player.HitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(10);
+player.HitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(10);
+player.HitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(10);
+player.HitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(10);
+player.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(0);
+player.HitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(50);
 
 
 MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
@@ -297,15 +298,15 @@ List<Bottom> controls = new List<Bottom>() { bottomCtrl , bottomC };
 //if (CheckPressed.CurrentDirection.Right)
 //    MovePositions.Move(entity, 0, 1, deltaTime);
 //Drawing.DrawingPoint(map, entity, 30, SFML.Graphics.Color.Black);
-KeyBinding keyBindingForward = new KeyBinding(bottomW, MovePositions.Move, new object[]{map, player, 1, 0});
-KeyBinding keyBindingBackward = new KeyBinding(bottomS, MovePositions.Move, new object[] { map, player, -1, 0 });
-KeyBinding keyBindingLeft = new KeyBinding(bottomA, MovePositions.Move, new object[] { map, player, 0, -1 });
-KeyBinding keyBindingRight = new KeyBinding(bottomD, MovePositions.Move, new object[] { map, player, 0, 1 });
-KeyBinding keyBindingClose = new KeyBinding(bottomQ, Screen.Window.Close);
-KeyBinding keyBindingZoom = new KeyBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { 0.01 });
-KeyBinding keyBindingUnZoom = new KeyBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { -0.01 });
-KeyBinding keyBindingDraw = new KeyBinding(bottomLeftButton, Drawing.DrawingPoint, new object[] { map, player, 30, SFML.Graphics.Color.Black });
-KeyBinding keyBindingHideMap = new KeyBinding(controls, mapMini.Hide);
+ControlLib.BottomBinding keyBindingForward = new ControlLib.BottomBinding(bottomW, MovePositions.Move, new object[]{map, player, 1, 0});
+ControlLib.BottomBinding keyBindingBackward = new ControlLib.BottomBinding(bottomS, MovePositions.Move, new object[] { map, player, -1, 0 });
+ControlLib.BottomBinding keyBindingLeft = new ControlLib.BottomBinding(bottomA, MovePositions.Move, new object[] { map, player, 0, -1 });
+ControlLib.BottomBinding keyBindingRight = new ControlLib.BottomBinding(bottomD, MovePositions.Move, new object[] { map, player, 0, 1 });
+ControlLib.BottomBinding keyBindingClose = new ControlLib.BottomBinding(bottomQ, Screen.Window.Close);
+ControlLib.BottomBinding keyBindingZoom = new ControlLib.BottomBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { 0.01 });
+ControlLib.BottomBinding keyBindingUnZoom = new ControlLib.BottomBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { -0.01 });
+ControlLib.BottomBinding keyBindingDraw = new ControlLib.BottomBinding(bottomLeftButton, Drawing.DrawingPoint, new object[] { map, player, 30, SFML.Graphics.Color.Black });
+ControlLib.BottomBinding keyBindingHideMap = new ControlLib.BottomBinding(controls, mapMini.Hide);
 
 
 control.AddKeyBind(keyBindingForward);
@@ -370,10 +371,10 @@ map.AddObstacle(9, 5, sprite1);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
 //Console.WriteLine(map.Obstacles.Count);
 PartsWorldLib.RenderPartsWorld partsWorld = new();
-VisualizerHitBox visualizerHitBox = new VisualizerHitBox(map);
-visualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
-visualizerHitBox.IsDistanceLimited = false;
-
+//VisualizerHitBox visualizerHitBox = new VisualizerHitBox(map);
+//visualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
+//visualizerHitBox.IsDistanceLimited = false;
+//VisualizerHitBox.VisualizerType = VisualizerType.VisualizeRayRenderable;
 try
 {
     while (Screen.Window.IsOpen)
@@ -387,7 +388,7 @@ try
         player.MakePressed();
 
         algorithm.CalculationAlgorithm();
-        visualizerHitBox.Render(player);
+        VisualizerHitBox.Render(map, player);
         fpsChecker.EndRead();
 
         mapMini.Render();

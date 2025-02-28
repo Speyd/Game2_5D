@@ -42,6 +42,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     //----------------------Setting---------------------
 
     public override bool IsSingleAddable { get; init; } = true;
+    /// <summary>Current wall level in world wall level</summary>
     public int LvlWall { get; private set; } = IWall.minLvlWall;
 
 
@@ -255,46 +256,45 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
     public override void Render(Result result, Entity entity)
     {
-        TexturedPair? CurrentRenderTexture = RenderOperation.SelectCurrentRenderTexture(this, result, entity);
-        if (CurrentRenderTexture is null)
-            return;
-
-
-        IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);     
-        Vector2f position = GetPositionOnScreen(result, entity);
-        Vector2f scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
-
-        if (IsOffScreen(result, position, textureRect, scale))
-            return;
-
-        Sprite RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
-        RenderSprite.Color = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
-        RenderSprite.Position = position;
-        RenderSprite.Scale = scale;
-
-        result.Depth += (LvlWall + 1) * 0.01;
-        ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
+        RenderInternal(result, entity, RenderOperation.SelectCurrentRenderTexture(this, result, entity));
     }
     public void RenderMultiWall(Result result, Entity entity, ObjectSide objectSide)
     {
-        TexturedPair? CurrentRenderTexture = MultiTextured[objectSide];
-        if (CurrentRenderTexture is null)
+        RenderInternal(result, entity, MultiTextured[objectSide]);
+    }
+    private void RenderInternal(Result result, Entity entity, TexturedPair? currentRenderTexture)
+    {
+        if (currentRenderTexture is null)
             return;
 
-
-        IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, CurrentRenderTexture.Base);
+        IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, currentRenderTexture.Base);
         Vector2f position = GetPositionOnScreen(result, entity);
-        Vector2f scale = RenderOperation.CalculationTextureScale(result, CurrentRenderTexture);
+        Vector2f scale = RenderOperation.CalculationTextureScale(result, currentRenderTexture);
 
         if (IsOffScreen(result, position, textureRect, scale))
             return;
 
-        Sprite RenderSprite = new Sprite(CurrentRenderTexture.Mod.Texture, textureRect);
-        RenderSprite.Color = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
-        RenderSprite.Position = position;
-        RenderSprite.Scale = scale;
+        VertexArray vertexArray = new VertexArray(PrimitiveType.Quads, 4);
+        SFML.Graphics.Color blackoutColor = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
+
+        Vector2f topLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top);
+        Vector2f topRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top);
+        Vector2f bottomRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top + textureRect.Height);
+        Vector2f bottomLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top + textureRect.Height);
+
+        Vector2f topLeftPosition = position;
+        Vector2f topRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y);
+        Vector2f bottomRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y + scale.Y * textureRect.Height);
+        Vector2f bottomLeftPosition = new Vector2f(position.X, position.Y + scale.Y * textureRect.Height);
+
+        vertexArray[0] = new Vertex(topLeftPosition, blackoutColor, topLeftTexCoords);
+        vertexArray[1] = new Vertex(topRightPosition, blackoutColor, topRightTexCoords);
+        vertexArray[2] = new Vertex(bottomRightPosition, blackoutColor, bottomRightTexCoords);
+        vertexArray[3] = new Vertex(bottomLeftPosition, blackoutColor, bottomLeftTexCoords);
+
+        RenderStates renderStates = new RenderStates(currentRenderTexture.Mod.Texture);
 
         result.Depth += (LvlWall + 1) * 0.01;
-        ZBuffer.AddToZBuffer(RenderSprite, result.Depth);
+        ZBuffer.AddToZBuffer(vertexArray, result.Depth, renderStates);
     }
 }

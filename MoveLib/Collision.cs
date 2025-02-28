@@ -12,12 +12,14 @@ using EntityLib.Player;
 using static SFML.Window.Mouse;
 using SFML.Graphics;
 using HitBoxLib.Segment.SignsTypeSide;
+using HitBoxLib.PositionObject;
 
 
 namespace MoveLib;
 public static class Collision
 {
     private static int _radiusCheckTouch = Screen.Setting.Tile;
+    /// <summary>Collisions hitbox radius definition</summary>
     public static int RadiusCheckTouch 
     {
         get => _radiusCheckTouch;
@@ -26,14 +28,18 @@ public static class Collision
 
     public static bool CollisionZ(Obstacle obstacle, Entity entity)
     {
-        if(entity.HitBox[SideType.Down]?.Side >= obstacle.HitBox[SideType.Down]?.Side &&
-           entity.HitBox[SideType.Up]?.Side <= obstacle.HitBox[SideType.Up]?.Side) 
+        double entityDown = (entity.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
+        double entityUp = (entity.HitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
+        double obstacleDown = (obstacle.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
+        double obstacleUp = (obstacle.HitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
+
+
+
+        if (entityDown >= obstacleDown && entityUp <= obstacleUp) 
         {
             return true;
         }
-        else if (entity.HitBox[SideType.Down]?.Side >= obstacle.HitBox[SideType.Down]?.Side &&
-                 entity.HitBox[SideType.Down]?.Side <= obstacle.HitBox[SideType.Up]?.Side &&
-                 entity.HitBox[SideType.Up]?.Side >= obstacle.HitBox[SideType.Up]?.Side)
+        else if (entityDown >= obstacleDown && entityDown <= obstacleUp && entityUp >= obstacleUp)
         {
             return true;
         }
@@ -48,13 +54,24 @@ public static class Collision
         entity.X.Axis = nextX;
         entity.Y.Axis = nextY;
 
-        bool isCollidingX = entity.HitBox[SideType.Right]?.Side >= obstacle.HitBox[SideType.Left]?.Side &&
-                            entity.HitBox[SideType.Left]?.Side <= obstacle.HitBox[SideType.Right]?.Side;
+        var entityHitBox = entity.HitBox;
+        var obstacleHitBox = obstacle.HitBox;
 
-        bool isCollidingY = entity.HitBox[SideType.Bottom]?.Side >= obstacle.HitBox[SideType.Top]?.Side &&
-                            entity.HitBox[SideType.Top]?.Side <= obstacle.HitBox[SideType.Bottom]?.Side;
+        double entityMinX = (entityHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+        double entityMaxX = (entityHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
+        double obstacleMinX = (obstacleHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+        double obstacleMaxX = (obstacleHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
 
+        double entityMinY = (entityHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+        double entityMaxY = (entityHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
+        double obstacleMinY = (obstacleHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+        double obstacleMaxY = (obstacleHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
+
+
+        bool isCollidingX = entityMaxX >= obstacleMinX && entityMinX <= obstacleMaxX;
+        bool isCollidingY = entityMaxY >= obstacleMinY && entityMinY <= obstacleMaxY;
         bool isCollidingZ = CollisionZ(obstacle, entity);
+
 
         entity.X.Axis = originalEntityX;
         entity.Y.Axis = originalEntityY;

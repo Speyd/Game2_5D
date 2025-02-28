@@ -9,9 +9,10 @@ namespace ScreenLib.SettingScreen;
 public class Setting
 {
     public const int _tile = 100;
+    /// <summary>World unit</summary>
     public int Tile { get => _tile; }
     public int HalfTile { get; } = _tile / 2;
-
+    /// <summary>Settings for Parallel</summary>
     public ParallelOptions ParallelOptions { get; init; } = new ParallelOptions
     {
         MaxDegreeOfParallelism = Environment.ProcessorCount

@@ -11,7 +11,8 @@ using TextureLib;
 namespace RayTracingLib.Detection;
 public class HitPoint
 {
-    public Vector2f UV { get; set; } // UV-координаты на текстуре
+    /// <summary>UV texture coordinate system</summary>
+    public Vector2f UV { get; set; }
     public float DistanceToPoint { get; set; } = 0;
     public float DistanceToWall { get; set; } = 0;
     public float DistanceToWallWithoutTile { get; set; } = 0;

@@ -20,10 +20,12 @@ using static SFML.Window.Mouse;
 namespace HitBoxLib.HitBoxSegment;
 public class Box
 {
+    /// <summary>Edge color for hitbox rendering</summary>
     public Color RenderColor { get; set; } = Color.Red;
+    /// <summary>Method for determining the depth of a figure</summary>
     public RenderHeightMode HeightRenderMode { get; set; } = RenderHeightMode.EdgeBased;
-
-    public UniqueDictionary<SideType, HitBoxSide> Body { get; set; } = new();
+    /// <summary>List of all hitbox edges</summary>
+    public Dictionary<(CoordinatePlane, SideSize), HitBoxSide> Body { get; set; } = new();
     public string Title { get; set; } = string.Empty;
 
     public Box(Box box)
@@ -31,7 +33,7 @@ public class Box
         Body = box.Body;
         Title = box.Title;
     }
-    public Box(UniqueDictionary<SideType, HitBoxSide> body, string title)
+    public Box(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> body, string title)
     {
         Body = body;
         Title = title;
@@ -41,19 +43,13 @@ public class Box
         Title = title;
     }
 
-
-    public HitBoxSide? this[SideType side]
-    {
-        get => Body.GetValue(side);
-    }
-
     public List<HitBoxSide> this[CoordinatePlane side]
     {
         get
         {
-            return Body.GetUniqueDictionary()
-                .Where(pair => pair.Value.CoordinatePlane == side)
-                .Select(pair => pair.Value)
+            return Body.Where(pair => pair.Value.CoordinatePlane == side)
+                 .Where(pair => pair.Key.Item1 == side) 
+                .Select(pair => pair.Value)           
                 .ToList();
         }
     }
@@ -62,10 +58,10 @@ public class Box
     {
         get
         {
-            return Body.GetUniqueDictionary()
-                .Where(pair => pair.Value.CoordinatePlane == side && pair.Value.SideSize == sideSize)
-                .Select(pair => pair.Value)
-                .First();
+            if (Body.TryGetValue((side, sideSize), out var hitBoxSide))
+                return hitBoxSide;
+
+            return null;
         }
     }
 

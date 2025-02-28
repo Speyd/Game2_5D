@@ -30,6 +30,7 @@ public static class Raycast
     private const float epsilon = 0.000001f;
 
     public static int _scanRadius = 1;
+    /// <summary>Beam scanning radius at each step</summary>
     private static int ScanRadius 
     {
         get => _scanRadius;
@@ -92,11 +93,12 @@ public static class Raycast
         foreach (var obstacle in obstacles)
         {
             Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
+            var mainHitBox = obstacle.HitBox.MainHitBox;
 
-            float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-            float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-            float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-            float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
+            float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+            float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
+            float minY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+            float maxY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
 
             List<double> tValues = GetIntersectionParameter(entity, minX, maxX, minY, maxY);
 
@@ -120,11 +122,12 @@ public static class Raycast
         foreach (var obstacle in colisionObstacle)
         {
             Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
+            var mainHitBox = obstacle.HitBox.MainHitBox;
 
-            float minX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-            float maxX = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-            float minY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-            float maxY = (float)(obstacle.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
+            float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+            float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
+            float minY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+            float maxY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
 
             List<double> tValues = GetIntersectionParameter(entity, minX, maxX, minY, maxY);
 

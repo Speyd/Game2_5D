@@ -12,7 +12,10 @@ public class Setting
     public int MapWidth { get; init; }
     public int MapHeight { get; init; }
 
+    /// <summary>Map width taking into account Screen.Setting.Tile</summary>
     public int MapTileWidth { get; init; }
+
+    /// <summary>Map height taking into account Screen.Setting.Tile</summary>
     public int MapTileHeight { get; init; }
 
     public Setting(int mapWidth, int mapHeight)

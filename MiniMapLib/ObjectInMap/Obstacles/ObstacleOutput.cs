@@ -25,6 +25,7 @@ internal class ObstacleOutput
     private delegate void Render(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization);
     private delegate void ParallelRender(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization);
 
+    /// <summary>Minimum number of objects on the minimap after which to connect Parallel</summary>
     private const int minParallelRenderObject = 100;
 
     //---------------Render Mode----------------
@@ -53,7 +54,9 @@ internal class ObstacleOutput
 
 
     //----------Сoordinates------------
+    /// <summary>Player coordinates converted to minimap coordinates</summary>
     private Vector2f MapPlayer = new Vector2f(0, 0);
+    /// <summary>Obstacle coordinates converted to minimap coordinates</summary>
     private Vector2f MapObstacle = new Vector2f(0, 0);
 
 

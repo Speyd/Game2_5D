@@ -24,6 +24,7 @@ public class MultiWall : Obstacle, IDrawable, IWall
 {
     //-------------------------Wall-------------------------
     public List<TexturedWall> Walls { get; private set; } = new List<TexturedWall>();
+    /// <summary>Current wall levels being processed</summary>
     private int CurrentLevelWall { get; set; } = 0;
 
     //-----------------------Setting----------------------

@@ -17,12 +17,16 @@ using SFML.System;
 
 
 namespace BresenhamAlgorithm;
-public class VisualizerHitBox(Map map)
+/// <summary> Visualizes it boxes of objects </summary>
+public static class VisualizerHitBox
 {
-    public VisualizerType VisualizerType { get; set; } = VisualizerType.None;
-    public bool IsDistanceLimited { get; set; } = true;
+    /// <summary> The type of hitboxes that will be rendered </summary>
+    public static VisualizerType VisualizerType { get; set; } = VisualizerType.None;
+    /// <summary> Limits rendering to a maximum distance </summary>
+    public static bool IsDistanceLimited { get; set; } = true;
 
-    public void Render(Entity entity)
+
+    public static void Render(Map map, Entity entity)
     {
         float index = 0.0000001f;
         float step = 0.0000001f;
@@ -54,7 +58,7 @@ public class VisualizerHitBox(Map map)
         }
     }
 
-    public float CalculateDistance(Vector2f point1, Vector2f point2)
+    public static float CalculateDistance(Vector2f point1, Vector2f point2)
     {
         float deltaX = point2.X - point1.X;
         float deltaY = point2.Y - point1.Y;

@@ -10,10 +10,13 @@ namespace ControlLib
 {
     public class Bottom
     {
+        /// <summary> Virtual key </summary>
         public VirtualKey Key { get; init; }
-
+        /// <summary> Max delay between clicks </summary>
         public long WaitingTimeMilliseconds { get; set; }
+        /// <summary> Is the object pending? </summary>
         public bool IsWaiting {  get; private set; } = false;
+
         private Stopwatch stopwatch = new Stopwatch();
 
 

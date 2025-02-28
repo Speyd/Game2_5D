@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 
 namespace MiniMapLib.ObjectInMap.Positions;
+/// <summary>Mini map position on the screen</summary>
 public enum PositionsMiniMap
 {
     UpperLeftCorner,

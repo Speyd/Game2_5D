@@ -1,0 +1,84 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using static SFML.Window.Keyboard;
+using static System.Collections.Specialized.BitVector32;
+using static ControlLib.Bottom;
+using static SFML.Window.Mouse;
+
+namespace ControlLib;
+/// <summary> Bottom Binding </summary>
+public class BottomBinding
+{
+    /// <summary> Name of the action that will happen when clicked </summary>
+    public string NameAction {  get; set; } = String.Empty;
+    public List<Bottom> Bottoms { get; init; }
+    /// <summary> The function that is called when pressed </summary>
+    public Delegate ExecutableFunction {  get; init; }
+    /// <summary> Additional parameters for the button function </summary>
+    public object[] FixedParameters { get; init; }
+
+
+    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction, object[] fixedParameters)
+    {
+        Bottoms = bottoms;
+        ExecutableFunction = executableFunction;
+        FixedParameters = fixedParameters;
+    }
+    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction)
+         : this(bottoms, executableFunction, new object[0])
+    {}
+    public BottomBinding(Bottom bottom, Delegate executableFunction, object[] fixedParameters)
+        : this(new List<Bottom>() { bottom }, executableFunction, fixedParameters)
+    {}
+    public BottomBinding(Delegate  executableFunction, object[] fixedParameters)
+         : this(new List<Bottom>(), executableFunction, fixedParameters)
+    {}
+    public BottomBinding(Bottom bottom, Delegate executableFunction)
+       : this(new List<Bottom>() { bottom }, executableFunction, new object[0])
+    { }
+    public BottomBinding(Delegate executableFunction)
+         : this(new List<Bottom>(), executableFunction, new object[0])
+    { }
+
+
+    public void AddBottom(Bottom bottom)
+    {
+        foreach(var bottoms in Bottoms)
+        {
+            if (bottom.Key == bottom.Key)
+                return;
+        }
+
+        Bottoms.Add(bottom);    
+    }
+
+    /// <summary> Calling a button function </summary>
+    private void PracticingPressing(params object[] externalParams)
+    {
+        object[] allParams = new object[FixedParameters.Length + externalParams.Length];
+        externalParams.CopyTo(allParams, 0);
+
+        if(FixedParameters.Length > 0)
+            FixedParameters.CopyTo(allParams, externalParams.Length);
+
+        ExecutableFunction.DynamicInvoke(allParams);
+    }
+
+    /// <summary> Check if all existing buttons are pressed in ButtonBinding </summary>
+    public void Listen(params object[] externalParams)
+    {
+        int countTurnBottom = 0;
+        foreach (var bottom in Bottoms)
+        {
+            if (bottom.IsKeyPressed())
+                countTurnBottom++;
+        }
+
+        if (countTurnBottom == Bottoms.Count)
+            PracticingPressing(externalParams);
+
+    }
+}

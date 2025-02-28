@@ -18,7 +18,7 @@ using Render.RenderAlgorithm;
 namespace ObstacleLib.TexturedWallLib.Determine;
 static internal class DetermineSide
 {
-
+    /// <summary>Defines the side faces of the wall</summary>
     static private Vector2f DetermineCornerWallSide(TexturedWall wall, Entity entity,
         float cosAngle, float sinAngle,
         float minX, float maxX, float maxY, float minY)
@@ -71,6 +71,7 @@ static internal class DetermineSide
         return new Vector2f(hitX, hitY);
     }
 
+    /// <summary>Defines the main sides of the wall</summary>
     static private ObjectSide DetermineMineWallSide(TexturedWall wall, Entity entity,
         float cosAngle, float sinAngle,
         float left, float right, float bottom, float top)
@@ -96,10 +97,12 @@ static internal class DetermineSide
 
     static private ObjectSide Determine(TexturedWall wall, Entity entity, float cosAngle, float sinAngle)
     {
-        float minX = (float)(wall.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
-        float maxX = (float)(wall.HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0f);
-        float maxY = (float)(wall.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0f);
-        float minY = (float)(wall.HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0f);
+        var mainHitBox = wall.HitBox.MainHitBox;
+
+        float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
+        float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0f);
+        float maxY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0f);
+        float minY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0f);
 
 
         ObjectSide wallDetermine = ObjectSide.Error;

@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "FIMk0F82C9o=",
+  "dgSpecHash": "Hee9Uloz1vM=",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.0\\sfml.system.2.6.0.nupkg.sha512"
+  ],
   "logs": []
 }

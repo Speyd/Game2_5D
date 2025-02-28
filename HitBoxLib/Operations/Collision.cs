@@ -20,17 +20,17 @@ public static class Collision
 
     public static bool IsRayTouchesObjectX(Box hitBox, double currentRayX)
     {
-        return currentRayX > hitBox[SideType.Left]?.Side &&
-               currentRayX < hitBox[SideType.Right]?.Side;
+        return currentRayX > hitBox[CoordinatePlane.X, SideSize.Smaller]?.Side &&
+               currentRayX < hitBox[CoordinatePlane.X, SideSize.Larger]?.Side;
     }
     public static bool IsRayTouchesObjectY(Box hitBox, double currentRayY)
     {
-        return currentRayY > hitBox[SideType.Top]?.Side &&
-               currentRayY < hitBox[SideType.Bottom]?.Side;
+        return currentRayY > hitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side &&
+               currentRayY < hitBox[CoordinatePlane.Y, SideSize.Larger]?.Side;
     }
 
 
-    static double GetMult(double side, double mult, double distance)
+    private static double GetMult(double side, double mult, double distance)
     {
         return (side * mult * Screen.ScreenRatio) / distance;
     }
@@ -48,10 +48,6 @@ public static class Collision
 
         double rayHitUp = Up - GetMult(Up, multUp, distance) + angleEntity;
         double rayHitDown = Down - GetMult(Down, multDown, distance * 2) + angleEntity;
-        Console.WriteLine(rayHitDown >= Down && rayHitUp <= Up);
-        Console.WriteLine(rayHitDown);
-        Console.WriteLine(Down);
-
 
         return rayHitDown >= Down && rayHitUp <= Up;
     }

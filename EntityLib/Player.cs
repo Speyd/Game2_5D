@@ -14,6 +14,7 @@ namespace EntityLib.Player;
 public class Player : Entity
 {
     public delegate void ControlAction(Entity entity);
+    /// <summary>Delegate for calling the method that services the buttons</summary>
     public ControlAction OnControlAction;
 
     public Player(double maxDistance,

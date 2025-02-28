@@ -19,6 +19,7 @@ using HitBoxLib.Data.Observer;
 namespace EntityLib;
 public class Entity: IObserver
 {
+    /// <summary> Entity position with Screen.Setting.Tile multiplier </summary>
     public Vector2f Position
     {
         get
@@ -26,6 +27,8 @@ public class Entity: IObserver
             return new Vector2f((float)X.Axis, (float)Y.Axis) / Screen.Setting.Tile;
         }
     }
+
+    /// <summary> Entity position</summary>
     public Vector2f OriginPosition
     {
         get
@@ -49,10 +52,13 @@ public class Entity: IObserver
 
 
     //---------------------Ray Setting----------------------
+    /// <summary>Maximum rendering distance(depends on Screen.Setting.Tile)</summary>
     public double MaxRenderTile { get; set; }
 
     //---------------------Render Setting----------------------
+    /// <summary>This is the angle between adjacent rays in the rendering system</summary>
     public double DeltaAngle { get; private set; }
+    /// <summary>Projected height(depends on the distance between the Entity and the object)</summary>
     public double ProjCoeff { get; private set; }
 
 
@@ -64,11 +70,13 @@ public class Entity: IObserver
 
 
     //-----------------------Angle-----------------------
-
+    /// <summary>X - Cos(Angle); Y - Sin(Angle)</summary>
     public Vector2f Direction { get; private set; }
+    /// <summary>X - -Sin(Angle); Y - Cos(Angle)</summary>
     public Vector2f Plane { get; private set; }
 
     private double _angle;
+    /// <summary>Angle Entity(Horizontal axis)</summary>
     public double Angle
     {
         get => _angle;
@@ -84,6 +92,7 @@ public class Entity: IObserver
             }
         }
     }
+    /// <summary>Vertical Angle Entity(Vertical axis)</summary>
     public double VerticalAngle { get; set; }
 
 

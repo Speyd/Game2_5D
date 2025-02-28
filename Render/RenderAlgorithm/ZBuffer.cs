@@ -12,12 +12,12 @@ using SFML.Window;
 namespace Render.RenderAlgorithm;
 public class ZBuffer
 {
-    private static ConcurrentDictionary<double, (Drawable, RenderStates?)> zBuffer = new();
+    private static ConcurrentBag<(double, (Drawable, RenderStates?))> zBuffer = new();
     public static void Render()
     {
-        foreach (var kv in zBuffer.OrderByDescending(kv => kv.Key))
+        foreach (var kv in zBuffer.OrderByDescending(kv => kv.Item1))
         {
-            Screen.OutputPriority.AddToPriority(RenderPriority.ZBufferRender, kv.Value.Item1, kv.Value.Item2);
+            Screen.OutputPriority.AddToPriority(RenderPriority.ZBufferRender, kv.Item2.Item1, kv.Item2.Item2);
         }
 
         zBuffer.Clear();
@@ -25,6 +25,6 @@ public class ZBuffer
 
     public static void AddToZBuffer(Drawable drawable, double depth, RenderStates? renderStates = null)
     {
-        zBuffer[depth] = (drawable, renderStates);
+        zBuffer.Add((depth,(drawable, renderStates)));
     }
 }

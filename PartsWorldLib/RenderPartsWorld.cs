@@ -18,7 +18,7 @@ public class RenderPartsWorld
     public TexturedFloor TexturedFloor;
 
     public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
-    public DownPart RenderDownPart { get; set; } = DownPart.Floor;
+    public DownPart RenderDownPart { get; set; } = DownPart.None;
     public Sky Sky {get; set;}
     public TexturedCeiling TexturedCeiling { get; set; }
 

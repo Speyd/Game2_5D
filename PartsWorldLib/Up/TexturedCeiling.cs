@@ -9,63 +9,65 @@ using System.Text;
 using System.Threading.Tasks;
 using EntityLib;
 using System.Numerics;
+using EffectLib;
 
 
 namespace PartsWorldLib.Up;
 public class TexturedCeiling
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
-    private RenderTexture RenderTexture { get; set; }
+    private RenderTexture FirstStepRender { get; set; }
+    private RenderTexture SecondStepRender { get; set; }
+
     private Sprite Sprite { get; set; }
     private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
+
+    /// <summary> Floor Mapping Shader </summary>
     public Shader Shader { get; set; }
+    /// <summary> Texture Floor</summary>
     public Texture? Texture { get; set; }
 
 
+    /// <summary> Scale texture </summary>
     public float Scale { get; set; } = 0.2f;
-    public int Raising { get; set; } = 3;
+    /// <summary> Texture scrolling speed while walking </summary>
+    public int Raising { get; set; } = 2;
+    /// <summary> Serves to normalize the position of an object by height </summary>
     public float DivisionCoefficient { get; set; } = 2.1f;
+    /// <summary> Normalizes the distance coefficient when the vertical angle is greater than 0</summary>
     public float NormalAngleGreaterZero { get; set; } = 1.8f;
+    /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
-
-    bool IsDarkening { get; set; } = false;
-    public float TextureDarkening { get; set; } = 12f;
-
-    bool IsAlphaCanal { get; set; } = false;
-    public float TextureAlphaCanal { get; set; } = 7f;
-
-    bool IsFog { get; set; } = true;
-    public float TextureFog { get; set; } = 0.1f;
-
 
     public TexturedCeiling(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
         string shaderPath = @"Resources\Shader\CeilingSetting.glsl")
     {
         if (!File.Exists(texturePath))
-            throw new Exception("Error path textureFloor");
-
-        if (!File.Exists(shaderPath))
-            throw new Exception("Error path shaderFloor");
+            throw new Exception("Error path textureCeiling");
 
         Texture = new Texture(texturePath);
+
+
+        if (!File.Exists(shaderPath))
+            throw new Exception("Error path shaderCeiling");
+
         Shader = new Shader(null, null, shaderPath);
+        SetStaticUniformShader();
+
+
+        FirstStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
+        SecondStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
+
+
+        Sprite = new Sprite(SecondStepRender.Texture);
+    }
+
+    private void SetStaticUniformShader()
+    {
         if (Shader.IsAvailable)
             Console.WriteLine("Shaders are supported!");
         else
             Console.WriteLine("Shaders are NOT supported!");
-        RenderTexture = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-        Sprite = new Sprite(RenderTexture.Texture);
-    }
-
-
-    private void SetUniformShader(Player player)
-    {
-        Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
-
-        Shader.SetUniform("u_playerPos", player.Position);
-        Shader.SetUniform("u_playerDir", player.Direction);
-        Shader.SetUniform("u_playerPlane", player.Plane);
-        Shader.SetUniform("u_verticalAngle", (float)player.VerticalAngle);
 
         Shader.SetUniform("u_texture", Texture);
         Shader.SetUniform("u_Raising", Raising);
@@ -73,30 +75,35 @@ public class TexturedCeiling
         Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
         Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
         Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
-
-        Shader.SetUniform("u_textureDarkening", TextureDarkening);
-        Shader.SetUniform("u_IsDarkening", IsDarkening);
-
-        Shader.SetUniform("u_textureAlphaCanal", TextureAlphaCanal);
-        Shader.SetUniform("u_IsAlphaCanal", IsAlphaCanal);
-
-        Shader.SetUniform("u_textureFog", TextureFog);
-        Shader.SetUniform("u_IsFog", IsFog);
     }
+    private void SetDynamicUniformShader(Player player)
+    {
+        Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
+
+        Shader.SetUniform("u_playerPos", player.Position);
+        Shader.SetUniform("u_playerDir", player.Direction);
+        Shader.SetUniform("u_playerPlane", player.Plane);
+        Shader.SetUniform("u_verticalAngle", (float)player.VerticalAngle);     
+    }
+
     public void Render(Player player)
     {
-        RenderTexture.Clear(ClearColor);
+        FirstStepRender.Clear(ClearColor);
+        SecondStepRender.Clear(ClearColor);
 
-        SetUniformShader(player);
+
+        SetDynamicUniformShader(player);
 
         Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, 0), new Color(255, 255, 255));
         Vertices[3] = new Vertex(new Vector2f(0, 0), new Color(255, 255, 255));
 
-        RenderTexture.Draw(Vertices, new RenderStates(Shader));
-        RenderTexture.Display();
+        FirstStepRender.Draw(Vertices, new RenderStates(Shader));
+        FirstStepRender.Display();
 
+        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, player.VerticalAngle));
+        SecondStepRender.Display();
         Screen.OutputPriority.AddToPriority(RenderPriority.Background, Sprite);
     }
 }

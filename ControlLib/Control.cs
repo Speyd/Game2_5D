@@ -5,7 +5,7 @@ using SFML.Window;
 using System;
 using System.Reflection.Metadata;
 using EntityLib;
-using ControlLib.Pressed;
+using ControlLib;
 using MiniMapLib.SettingMap;
 using SFML.Graphics;
 using SixLabors.ImageSharp;
@@ -24,9 +24,8 @@ namespace ControlLib
 
         
         private Map map;
-        public List<KeyBinding> bindings = new();
+        public List<BottomBinding> bindings = new();
         private ZoomMiniMap ZoomMiniMap { get; init; }
-        private CheckPressed CheckPressed { get; init; } = new CheckPressed();
        // private Drawing Drawing { get; init; }
 
 
@@ -60,7 +59,7 @@ namespace ControlLib
             Screen.Window.SetMouseCursorVisible(false);
             Screen.Window.MouseMoved += MoveMouse.OnMouseMoved;
         }
-        public void AddKeyBind(KeyBinding keyBinding)
+        public void AddKeyBind(BottomBinding keyBinding)
         {
             bindings.Add(keyBinding);
         }
@@ -70,7 +69,6 @@ namespace ControlLib
             {
                 binding.Listen();
             }
-            CheckPressed.Check();
 
             ////---------------Input Field--------------
             //if (InputField.IsOpen == true) 
@@ -100,10 +98,10 @@ namespace ControlLib
 
 
             ////-----------------Mini Map--------------------
-            if (CheckPressed.CurrentDirection.ZoomMiniMap)
-                ZoomMiniMap.Zoom += 0.01f;
-            if (CheckPressed.CurrentDirection.ReduceMiniMap)
-                ZoomMiniMap.Zoom -= 0.01f;
+            //if (CheckPressed.CurrentDirection.ZoomMiniMap)
+            //    ZoomMiniMap.Zoom += 0.01f;
+            //if (CheckPressed.CurrentDirection.ReduceMiniMap)
+            //    ZoomMiniMap.Zoom -= 0.01f;
 
 
             ////-----------Collision Detection-------------

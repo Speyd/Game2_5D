@@ -30,11 +30,15 @@ public class Algorithm(Map map, Entity entity)
 
 
     //------------------------------Setting Render-------------------------------
+    /// <summary> List of unique types of objects that render themselves (not with rays) </summary>
     private ConcurrentDictionary<Type, bool> UniqueSelfDrawableTypes { get; init; } = new();
-    private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; set; } = new();
-
+    /// <summary> List with rendering methods of objects that render themselves (not rays) </summary>
+    private Dictionary<Type, Action<Result, Entity>> CachedDelegates { get; init; } = new();
+    /// <summary> Check if a new object type has been added that renders itself </summary>
     private bool HasNewTypes = false;
 
+
+    /// <summary> Writes a new type of object that renders itself </summary>
     public void PrepareRenderObjects()
     {
         foreach (var type in UniqueSelfDrawableTypes.Keys)
@@ -52,17 +56,16 @@ public class Algorithm(Map map, Entity entity)
         }
     }
 
+    /// <summary> Checks the type of objects in a map cell </summary>
     private bool ProcessingHeightObstacle(List<InfoObject> infoObject,
-        double x, double y, 
+        double x, double y,
+        int mappedX, int mappedY,
         double depth_h, double depth_v,
         double auxiliary, bool isVertical)
     {
         bool isAdded = false;
-        double mappedX = isVertical ? x + auxiliary : x;
-        double mappedY = isVertical ? y : y + auxiliary;
 
-
-        if (!map.Obstacles.TryGetValue(Screen.Mapping(mappedX, mappedY, Screen.Setting.Tile), out var obstacles))
+        if (!map.Obstacles.TryGetValue((mappedX, mappedY), out var obstacles))
             return false;
 
         double coordinate = 0;
@@ -98,13 +101,12 @@ public class Algorithm(Map map, Entity entity)
 
         return isAdded;
     }
-    List<InfoObject> FilterVisibleObstacles(List<InfoObject> info, bool rayPassability)
+
+    /// <summary> Filters horizontal and vertical rays by height and range </summary>
+    /// /// <returns> Returns a list of InfoObjects to render</returns>
+    private static List<InfoObject> FilterVisibleObstacles(List<InfoObject> info, bool rayPassability)
     {
         if (info.Count <= 1) return info;
-        if (info.Any(item => item.depth != info[0].depth))
-        {
-            info.Sort((a, b) => a.depth.CompareTo(b.depth));
-        }
         if (!rayPassability && info.Count == 2)
         {
             return new List<InfoObject> { info[0].depth < info[1].depth ? info[0] : info[1] };
@@ -113,6 +115,7 @@ public class Algorithm(Map map, Entity entity)
         InfoObject? current = null;
         var filtered = new List<InfoObject>();
 
+        info.Sort((a, b) => a.depth.CompareTo(b.depth));
         foreach (var item in info)
         {
             var zCoordinate = item.Obstacle?.GetZCoordinate();
@@ -128,7 +131,8 @@ public class Algorithm(Map map, Entity entity)
         return filtered;
     }
 
-    private void CheckVericals(ref double coordinate, ref double auxiliaryA, double mapCoordinate, double ratio)
+    /// <summary> Determines in which axis the ray should move </summary>
+    private static void CheckVericals(ref double coordinate, ref double auxiliaryA, double mapCoordinate, double ratio)
     {
 
         if (ratio >= 0)
@@ -144,7 +148,7 @@ public class Algorithm(Map map, Entity entity)
     }
 
 
-
+    /// <summary> Render ready sorted objects (which are rendered using rays) </summary>
     private void RenderRayObstacles(int ray, bool rayPassability, double carAngleRay, List<InfoObject> InfoObject, Result ParallelResult)
     {
         var visibleObstacles = FilterVisibleObstacles(InfoObject, rayPassability);
@@ -158,6 +162,8 @@ public class Algorithm(Map map, Entity entity)
             visibleObstacles[obst].Obstacle?.Render(ParallelResult, entity);
         }
     }
+
+    /// <summary> Bresenham's algorithm renders objects </summary>
     public void CalculationAlgorithm(bool rayPassability = true)
     {
         double carAngle = entity.Angle - entity.HalfFov;
@@ -184,9 +190,10 @@ public class Algorithm(Map map, Entity entity)
                 depth_v = (x - entity.X.Axis) / cosA;
                 vy = entity.Y.Axis + depth_v * sinA;
 
-                if (map.CheckTrueCoordinates(Screen.Mapping(x + auxiliaryX, vy)))
+                (int, int) mappX = Screen.Mapping(x + auxiliaryX, vy);
+                if (map.CheckTrueCoordinates(mappX))
                 {
-                    if(ProcessingHeightObstacle(ParallelInfoObj, x, vy, depth_h, depth_v, auxiliaryX, true) && !rayPassability)
+                    if(ProcessingHeightObstacle(ParallelInfoObj, x, vy, mappX.Item1, mappX.Item2, depth_h, depth_v, auxiliaryX, true) && !rayPassability)
                         break;
                 }
                 else
@@ -201,9 +208,10 @@ public class Algorithm(Map map, Entity entity)
                 depth_h = (y - entity.Y.Axis) / sinA;
                 hx = entity.X.Axis + depth_h * cosA;
 
+                (int, int) mappY = Screen.Mapping(hx, y + auxiliaryY);
                 if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
                 {
-                    if (ProcessingHeightObstacle(ParallelInfoObj, hx, y, depth_h, depth_v, auxiliaryY, false) && !rayPassability)
+                    if (ProcessingHeightObstacle(ParallelInfoObj, hx, y, mappY.Item1, mappY.Item2, depth_h, depth_v, auxiliaryY, false) && !rayPassability)
                         break;
                 }
                 else

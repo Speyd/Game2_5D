@@ -27,6 +27,7 @@ using HitBoxLib;
 using NGenerics.DataStructures.General;
 using System.Collections.Concurrent;
 using Render.RenderAlgorithm;
+using DataPipes;
 
 
 namespace ObstacleLib.SpriteLib;
@@ -56,6 +57,7 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     public override bool IsSingleAddable { get; init; } = false;
 
     private float scale = 1;
+    /// <summary>Texture scale</summary>
     public float Scale
     {
         get => scale * Screen.ScreenRatio;
@@ -63,6 +65,7 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     }
 
     //---------------------Render Parameters----------------------
+    /// <summary>Angle relative to this object and the observer</summary>
     public double Angle { get; set; }
     public double Distance { get; set; }
     public override bool IsOffsetMap { get; set; } = true;
@@ -186,11 +189,14 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
 
     public override void Render(Result result, Entity entity)
     {
-        double spriteAngle = RenderOperation.CalculationAngularDistance(this, entity);
+        Vector2f pos = new Vector2f((float)X.Axis, (float)Y.Axis);
+        double spriteAngle = MathUtils.CalculateAngleToTarget(pos, entity.OriginPosition);
+        Distance = MathUtils.CalculateDistance(pos, entity.OriginPosition);
+
         if (Distance > entity.MaxRenderTile)
             return;
 
-        Angle = RenderOperation.CalculationSpriteAngle(entity.Angle, spriteAngle);
+        Angle = MathUtils.NormalizeAngleDifference(entity.Angle, spriteAngle);
 
         if (Math.Abs(Angle) <= entity.Fov)
         {

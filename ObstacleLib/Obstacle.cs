@@ -21,14 +21,10 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
     public Coordinate Z { get; init; }
 
 
-    public double RatioZ 
-    {
-        get => Z.Axis * Screen.ScreenRatio;
-    }
-
     //--------------------Shift-------------------------
     #region Shift
     private double shiftCubedX = 0;
+    /// <summary>Offset of an object along the current map cell(On the X axis)</summary>
     public double ShiftCubedX
     {
         get => shiftCubedX;
@@ -39,7 +35,9 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
         }
     }
 
+
     private double shiftCubedY = 0;
+    /// <summary>Offset of an object along the current map cell(On the Y axis)</summary>
     public double ShiftCubedY
     {
         get => shiftCubedY;
@@ -65,12 +63,14 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
 
     //----------------------Map Setting-----------------
     public SFML.Graphics.Color ColorInMap { get; set; }
+    /// <summary>Positioning will be from the center of the object and not from the top corner</summary>
     public virtual bool IsOffsetMap { get; set; } = false;
-    //true - MapTile in MiniMap will be divided by 2 (positioning will be from the center of the object and not from the top corner)
 
 
     //-------------------Collision Setting--------------------
+    /// <summary>The passability of an object through the current object</summary>
     public bool IsPassability { get; set; }
+    /// <summary>Possibility to add an object to the same cell where the current object is located</summary>
     public virtual bool IsSingleAddable { get; init; } = true;
 
 

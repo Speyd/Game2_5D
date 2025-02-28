@@ -10,8 +10,11 @@ using SFML.Graphics;
 namespace EffectLib;
 public abstract class VisualEffect
 {
+    /// <summary> File extension that is allowed for the shader </summary>
     public const string extensionShader = ".glsl";
+    /// <summary> The strength of the effect used </summary>
     public float StrengthEffect { get; set; }
+    /// <summary> Shader for applying effects to Textures </summary>
     public Shader? ShaderEffect { get; init; }
 
     public VisualEffect(Shader? shader = null)
@@ -31,7 +34,7 @@ public abstract class VisualEffect
     public abstract RenderStates TransformationColor(Texture text, double vertAngle, float multEffect = 100);
 
 
-    public SFML.Graphics.Color LerpColor(SFML.Graphics.Color baseColor, SFML.Graphics.Color overlayColor, float t)
+    public static SFML.Graphics.Color LerpColor(SFML.Graphics.Color baseColor, SFML.Graphics.Color overlayColor, float t)
     {
         float alphaBase = baseColor.A / 255f;
         float alphaOverlay = overlayColor.A / 255f;
@@ -44,10 +47,6 @@ public abstract class VisualEffect
 
         return new SFML.Graphics.Color(r, g, b, a);
     }
-
-
-
-
     public static SFML.Graphics.Color MixEffect(VisualEffect first, VisualEffect second, double depth, float blendFactor)
     {
         SFML.Graphics.Color colorFirst = first.TransformationColor(depth);

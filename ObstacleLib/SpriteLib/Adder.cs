@@ -11,6 +11,7 @@ using TextureLib;
 namespace ObstacleLib.SpriteLib.Add;
 public static class Adder
 {
+    const string extensionMultiframeFile = ".gif";
     public static void AddGif(SpriteObstacle sprite, string gifPath)
     {
         string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -42,17 +43,14 @@ public static class Adder
         finally
         {       
             if (Directory.Exists(tempDir))
-            {
                 Directory.Delete(tempDir, true);
-                //Console.WriteLine($"Temporary directory {tempDir} deleted.");
-            }
         }
     }
     public static void AddTexture(SpriteObstacle sprite, string path)
     {
         TextureObstacle.IsTruePath(path);
 
-        if (Path.GetExtension(path)?.ToLower() == ".gif")
+        if (Path.GetExtension(path)?.ToLower() == extensionMultiframeFile)
             AddGif(sprite, path);
         else
             sprite.Textures.Add(new TextureObstacle(path));

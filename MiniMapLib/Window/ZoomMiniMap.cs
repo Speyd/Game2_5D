@@ -58,6 +58,7 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
         else
             _zoom = newZoom;
     }
+
     private float _zoom = 1;
     public float Zoom
     {

@@ -10,3 +10,4 @@ D:\C++ проекты\Game2_5D\DataPipes\obj\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\DataPipes\obj\Debug\net8.0\refint\DataPipes.dll
 D:\C++ проекты\Game2_5D\DataPipes\obj\Debug\net8.0\DataPipes.pdb
 D:\C++ проекты\Game2_5D\DataPipes\obj\Debug\net8.0\ref\DataPipes.dll
+D:\C++ проекты\Game2_5D\DataPipes\obj\Debug\net8.0\DataPipes.csproj.AssemblyReference.cache

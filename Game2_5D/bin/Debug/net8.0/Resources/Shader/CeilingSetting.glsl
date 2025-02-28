@@ -13,16 +13,6 @@ uniform float u_normalAngleGreaterZero;     //Normalization of the divider when 
 uniform float u_maxDivisionCoef;       //Maximum divisor   
 
 
-uniform bool u_IsDarkening;
-uniform float u_textureDarkening;       //Darkening texture
-
-uniform bool u_IsAlphaCanal;
-uniform float u_textureAlphaCanal;      //Change alpha channel texture
-
-uniform bool u_IsFog;
-uniform float u_textureFog;
-
-
 out vec4 FragColor;         //Changeable color
 
 void main()
@@ -60,32 +50,6 @@ void main()
         // Color from texture
         vec4 texColor = texture(u_texture, texCoords);
 
-
-    
-        //Filters
-        if(u_verticalAngle > 0)
-            rowDistance += u_verticalAngle * u_Raising;
-
-        if(u_IsDarkening)
-        {
-            float distanceFactor = 255 / (1 + pow(rowDistance, 1.5) * u_textureDarkening);
-            distanceFactor = clamp(distanceFactor, 0.0, 1.0);
-            texColor.rgb *= distanceFactor;    
-        }
-        if(u_IsAlphaCanal)
-        {
-             texColor.a =  255 / (1 + pow(rowDistance, 1.5) * u_textureAlphaCanal);
-        }
-        if(u_IsFog)
-        {
-            float fogFactor = 1.0 / (1.0 + pow(rowDistance * u_textureFog, 1.5)); // Smooth fade-out dependent on distance
-            fogFactor = clamp(fogFactor, 0.0, 1.0);
-
-            vec3 fogColor = vec3(1.0, 1.0, 1.0); // White color for nebula
-            texColor.rgb = mix(texColor.rgb, fogColor, 1.0 - fogFactor);
-        }
-
-        //Set Result
         FragColor = texColor;
    }
 }

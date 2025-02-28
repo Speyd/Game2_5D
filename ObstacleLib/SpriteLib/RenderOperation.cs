@@ -20,18 +20,6 @@ using Render.RenderAlgorithm;
 namespace ObstacleLib.SpriteLib.Render;
 internal static class RenderOperation
 {
-
-    public static double CalculationSpriteAngle(double playerAngle, double spriteAngle)
-    {
-        double angleDifference = spriteAngle - playerAngle;
-
-        if (angleDifference > Math.PI)
-            angleDifference -= 2 * Math.PI;
-        if (angleDifference < -Math.PI)
-            angleDifference += 2 * Math.PI;
-
-        return angleDifference;
-    }
     public static void TextureAnimation(SpriteObstacle sprite)
     {
         var animation = sprite.CurrentAnimation;
@@ -50,7 +38,6 @@ internal static class RenderOperation
 
         sprite.CurrentAnimation = animation;
     }
-
     public static void TextureNonAnimation(SpriteObstacle sprite, double spriteAngle)
     {
         double spriteDegreeAngle = spriteAngle * (180.0 / Math.PI);
@@ -73,23 +60,6 @@ internal static class RenderOperation
         else
             TextureNonAnimation(sprite, spriteAngle);
     }
-    public static double CalculationAngularDistance(SpriteObstacle sprite, Entity player)
-    {
-        double dx = sprite.X.Axis - player.X.Axis;
-        double dy = sprite.Y.Axis - player.Y.Axis;
-
-        sprite.Distance = Math.Sqrt(dx * dx + dy * dy);
-        return Math.Atan2(dy, dx);
-    }
-
-    public static double CalculationAA(List<HitBoxSide> side, Entity player)
-    {
-        double dx = side[0].Side - player.X.Axis;
-        double dy = side[1].Side - player.Y.Axis;
-
-        return Math.Atan2(dy, dx);
-    }
-
 
     public static Vector2f GetPositionOnScreen(SpriteObstacle sprite, Entity entity, float height)
     {
@@ -98,7 +68,6 @@ internal static class RenderOperation
 
         return new Vector2f(x, y);
     }
-
     public static void DrawSprite(SpriteObstacle sprite, Entity entity, float height)
     {
         if (sprite.CurrentRenderTexture is null)

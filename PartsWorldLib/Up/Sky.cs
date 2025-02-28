@@ -19,7 +19,7 @@ public class Sky
     private Sprite RenderSprite = new Sprite();
     public int StretchingTexture { get; set; } = -5;
 
-    private RectangleShape RenderRectangle = new RectangleShape();
+    private RectangleShape RenderRectangle { get; init; } = new RectangleShape();
 
     private const float normAngle = 180f / MathF.PI;
 

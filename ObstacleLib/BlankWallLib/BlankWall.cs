@@ -23,8 +23,7 @@ namespace ObstacleLib.BlankWallLib;
 public class BlankWall : Obstacle, IWall
 {
     //--------------------Color For Render------------------
-    public Color StandartColorFilling { get; set; } //Without BlackoutObstacle
-   // public Color ColorFilling { get; set; }
+    public Color StandartColorFilling { get; set; }
 
     //-------------------Setting--------------------
     public override bool IsSingleAddable { get; init; } = true;
@@ -98,16 +97,6 @@ public class BlankWall : Obstacle, IWall
         return new Vector2f(positionX, positionY);
     }
 
-    //public override SFML.Graphics.Color BlackoutObstacle(double depth)
-    //{
-    //    byte darkened = (byte)(255 / (1 + depth * depth * IRenderable.shadowMultiplier));
-
-    //    byte red = (byte)Math.Min(StandartColorFilling.R * darkened / 255, 255);
-    //    byte green = (byte)Math.Min(StandartColorFilling.G * darkened / 255, 255);
-    //    byte blue = (byte)Math.Min(StandartColorFilling.B * darkened / 255, 255);
-
-    //    return new Color(red, green, blue);
-    //}
     #endregion
 
     #region IWall_Implementation

@@ -11,6 +11,7 @@ namespace TextureLib;
 public class MultiTexturedObject
 {
     public UniqueDictionary<ObjectSide, TexturedPair> UniqueTexture { get; init; }
+    /// <summary>Number of sides</summary>
     private const int countSides = 4;
 
 

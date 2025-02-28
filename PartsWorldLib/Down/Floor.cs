@@ -13,12 +13,12 @@ namespace PartsWorldLib.Down;
 public static class Floor
 {
     private static RectangleShape RenderRectangle = new RectangleShape();
-    public static Color Color { get; set; } = new Color(20, 20, 20);
+    public static Color ColorFilling { get; set; } = new Color(20, 20, 20);
 
 
     public static void Render(Player player, int bottomRectHeight, int topRectHeight)
     {
-        RenderRectangle.FillColor = Color;
+        RenderRectangle.FillColor = ColorFilling;
         RenderRectangle.Size = new Vector2f(Screen.ScreenWidth, bottomRectHeight);
         RenderRectangle.Position = new Vector2f(0, topRectHeight);
 

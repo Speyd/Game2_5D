@@ -16,17 +16,36 @@ namespace PartsWorldLib.Down;
 public class TexturedFloor
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
-    private RenderTexture RenderTexture { get; set; }
+    private RenderTexture FirstStepRender { get; set; }
+    private RenderTexture SecondStepRender { get; set; }
     private Sprite Sprite { get; set; }
     private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
+    /// <summary> Floor Mapping Shader </summary>
     public Shader Shader { get; set; }
-    public Texture? Texture { get; set; }
+    /// <summary> Texture Floor</summary>
+    private Texture _texture;
+    public Texture Texture 
+    {
+        get => _texture;
+        set
+        {
+            _texture = value;
+            FirstStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
+            SecondStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
+
+        }
+    }
 
 
+    /// <summary> Scale texture </summary>
     public float Scale { get; set; } = 0.2f;
+    /// <summary> Texture scrolling speed while walking </summary>
     public int Raising { get; set; } = 2;
+    /// <summary> Serves to normalize the position of an object by height </summary>
     public float DivisionCoefficient { get; set; } = 2.1f;
+    /// <summary> Normalizes the distance coefficient when the vertical angle is greater than 0</summary>
     public float NormalAngleGreaterZero { get; set; } = 1.8f;
+    /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
 
     public TexturedFloor(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
@@ -35,25 +54,16 @@ public class TexturedFloor
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureFloor");
 
+        Texture = new Texture(texturePath);
+
+
         if (!File.Exists(shaderPath))
             throw new Exception("Error path shaderFloor");
 
-        Texture = new Texture(texturePath);
         Shader = new Shader(null, null, shaderPath);
-        if (Shader.IsAvailable)
-            Console.WriteLine("Shaders are supported!");
-        else
-            Console.WriteLine("Shaders are NOT supported!");
-        RenderTexture = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-        Sprite = new Sprite(RenderTexture.Texture);
+        SetStaticUniformShader();
 
-
-        Shader.SetUniform("u_texture", Texture);
-        Shader.SetUniform("u_Raising", Raising);
-        Shader.SetUniform("u_textureScale", Scale);
-        Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
-        Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
-        Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
+        Sprite = new Sprite(SecondStepRender?.Texture);
     }
 
     private uint SetNormalHalfHeight(Player player)
@@ -64,7 +74,21 @@ public class TexturedFloor
 
         return halfHeight;
     }
-    private void SetUniformShader(Player player)
+    private void SetStaticUniformShader()
+    {
+        if (Shader.IsAvailable)
+            Console.WriteLine("Shaders are supported!");
+        else
+            Console.WriteLine("Shaders are NOT supported!");
+
+        Shader.SetUniform("u_texture", Texture);
+        Shader.SetUniform("u_Raising", Raising);
+        Shader.SetUniform("u_textureScale", Scale);
+        Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
+        Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
+        Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
+    }
+    private void SetDynamicUniformShader(Player player)
     {
         Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
 
@@ -73,22 +97,24 @@ public class TexturedFloor
         Shader.SetUniform("u_playerPlane", player.Plane);
         Shader.SetUniform("u_verticalAngle", (float)player.VerticalAngle);
     }
+
     public void Render(Player player)
     {
         uint halfHeight = SetNormalHalfHeight(player);
-        RenderTexture.Clear(ClearColor);
+        FirstStepRender.Clear(ClearColor);
+        SecondStepRender.Clear(ClearColor);
 
-        SetUniformShader(player);
+        SetDynamicUniformShader(player);
         Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, halfHeight), new Color(255, 255, 255));
         Vertices[3] = new Vertex(new Vector2f(0, halfHeight), new Color(255, 255, 255));
 
-        RenderTexture.Draw(Vertices, new RenderStates(Shader));
-        RenderTexture.Display();
+        FirstStepRender.Draw(Vertices, new RenderStates(Shader));
+        FirstStepRender.Display();
 
-        RenderTexture.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(RenderTexture.Texture, player.VerticalAngle));
-        RenderTexture.Display();
+        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, player.VerticalAngle));
+        SecondStepRender.Display();
         Screen.OutputPriority.AddToPriority(RenderPriority.Background, Sprite);
     }
 }

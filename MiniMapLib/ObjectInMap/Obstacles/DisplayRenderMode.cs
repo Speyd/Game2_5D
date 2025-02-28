@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 
 namespace MiniMapLib.ObjectInMap.Obstacles;
+
+/// <summary>Method for identifying objects on the minimap</summary>
 public enum DisplayRenderMode
 {
     SpecificArea,
