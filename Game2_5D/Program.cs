@@ -373,6 +373,7 @@ PartsWorldLib.RenderPartsWorld partsWorld = new();
 VisualizerHitBox visualizerHitBox = new VisualizerHitBox(map);
 visualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
 visualizerHitBox.IsDistanceLimited = false;
+
 try
 {
     while (Screen.Window.IsOpen)

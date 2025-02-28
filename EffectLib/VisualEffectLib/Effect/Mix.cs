@@ -1,4 +1,6 @@
-﻿using SFML.Graphics;
+﻿using ScreenLib;
+using SFML.Graphics;
+using SFML.System;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,16 +17,39 @@ public class Mix: VisualEffect
     public VisualEffect first;
     public VisualEffect second;
 
-    public Mix(Transformation transformation, VisualEffect first, VisualEffect second, float strengthEffect = 0.5f)
+    public Mix(Transformation transformation, VisualEffect first, VisualEffect second, float strengthEffect = 0.5f, string? pathShader = null)
+        :base(pathShader)
     {
         this.transformation = transformation;
         this.first = first;
         this.second = second;
         StrengthEffect = strengthEffect;
     }
+    public Mix(Transformation transformation, VisualEffect first, VisualEffect second, string? pathShader = null, float strengthEffect = 0.5f)
+        : base(pathShader)
+    {
+        this.transformation = transformation;
+        this.first = first;
+        this.second = second;
+        StrengthEffect = strengthEffect;
+    }
+
     public override SFML.Graphics.Color TransformationColor(double depth)
     {       
         return transformation.Invoke(first, second, depth, StrengthEffect);
+    }
+    public override RenderStates TransformationColor(Texture texture, double verticalAngle, float multEffect = 1)
+    {
+        if (ShaderEffect is null)
+            return new RenderStates();
+
+
+        ShaderEffect.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
+        ShaderEffect.SetUniform("u_verticalAngle", (float)verticalAngle);
+        ShaderEffect.SetUniform("u_texture", texture);
+        ShaderEffect.SetUniform("u_multEffect", multEffect);
+        ShaderEffect.SetUniform("u_effectColor", TransformationColor(Screen.Setting.Tile));
+        return new RenderStates(ShaderEffect);
     }
     public override SFML.Graphics.Color TransformationColor(SFML.Graphics.Color original, double depth)
     {

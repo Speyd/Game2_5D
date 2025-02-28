@@ -14,8 +14,8 @@ using System.Threading.Tasks;
 namespace HitBoxLib.Operations;
 public static class Collision
 {
-    const double multUp = 0.0035;
-    const double multDown = 0.055;
+    const double multUp = 0.003;
+    const double multDown = 0.0085;
 
 
     public static bool IsRayTouchesObjectX(Box hitBox, double currentRayX)
@@ -30,9 +30,9 @@ public static class Collision
     }
 
 
-    static double GetMult(double side, double mult, double sum)
+    static double GetMult(double side, double mult, double distance)
     {
-        return side * (mult * side + sum) * Screen.ScreenRatio;
+        return (side * mult * Screen.ScreenRatio) / distance;
     }
     public static bool IsRayTouchesObjectZ(Vector3f hitBoxCenterPos, ObserverInfo observerInfo, Box hitBox)
     {
@@ -46,8 +46,12 @@ public static class Collision
 
         double angleEntity = -observerInfo.vertivalAngle;
 
-        double rayHitUp = Up - Up * multUp / distance + angleEntity;
-        double rayHitDown = Down - Down * multDown / (distance * 10) + angleEntity;
+        double rayHitUp = Up - GetMult(Up, multUp, distance) + angleEntity;
+        double rayHitDown = Down - GetMult(Down, multDown, distance * 2) + angleEntity;
+        Console.WriteLine(rayHitDown >= Down && rayHitUp <= Up);
+        Console.WriteLine(rayHitDown);
+        Console.WriteLine(Down);
+
 
         return rayHitDown >= Down && rayHitUp <= Up;
     }

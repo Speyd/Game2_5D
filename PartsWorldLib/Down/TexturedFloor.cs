@@ -29,16 +29,6 @@ public class TexturedFloor
     public float NormalAngleGreaterZero { get; set; } = 1.8f;
     public float MaxDivisionCoefficient { get; set; } = 3;
 
-    bool IsDarkening { get; set; } = false;
-    public float TextureDarkening { get; set; } = 12f;
-
-    bool IsAlphaCanal { get; set; } = false;
-    public float TextureAlphaCanal { get; set; } = 7f;
-
-    bool IsFog { get; set; } = false;
-    public float TextureFog { get; set; } = 0.1f;
-
-
     public TexturedFloor(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
         string shaderPath = @"Resources\Shader\FloorSetting.glsl")
     {
@@ -64,15 +54,6 @@ public class TexturedFloor
         Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
         Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
         Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
-
-        Shader.SetUniform("u_textureDarkening", TextureDarkening);
-        Shader.SetUniform("u_IsDarkening", IsDarkening);
-
-        Shader.SetUniform("u_textureAlphaCanal", TextureAlphaCanal);
-        Shader.SetUniform("u_IsAlphaCanal", IsAlphaCanal);
-
-        Shader.SetUniform("u_textureFog", TextureFog);
-        Shader.SetUniform("u_IsFog", IsFog);
     }
 
     private uint SetNormalHalfHeight(Player player)
@@ -91,7 +72,6 @@ public class TexturedFloor
         Shader.SetUniform("u_playerDir", player.Direction);
         Shader.SetUniform("u_playerPlane", player.Plane);
         Shader.SetUniform("u_verticalAngle", (float)player.VerticalAngle);
-
     }
     public void Render(Player player)
     {
@@ -105,6 +85,9 @@ public class TexturedFloor
         Vertices[3] = new Vertex(new Vector2f(0, halfHeight), new Color(255, 255, 255));
 
         RenderTexture.Draw(Vertices, new RenderStates(Shader));
+        RenderTexture.Display();
+
+        RenderTexture.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(RenderTexture.Texture, player.VerticalAngle));
         RenderTexture.Display();
         Screen.OutputPriority.AddToPriority(RenderPriority.Background, Sprite);
     }

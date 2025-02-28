@@ -10,16 +10,39 @@ using ScreenLib;
 namespace EffectLib.Effect;
 public class Darkness : VisualEffect 
 {
-    public Darkness(float strengthEffect = 0.00001f) 
+    public Darkness(float strengthEffect = 0.00001f, string? pathShader = null) 
+        :base(pathShader)
     {
         StrengthEffect = strengthEffect;
     }
+    public Darkness(string? pathShader = null, float strengthEffect = 0.00001f)
+        : base(pathShader)
+    {
+        StrengthEffect = strengthEffect;
+    }
+    public Darkness()
+       : base(@"Resources\Shader\Effect\DarknessEffect.glsl")
+    {
+        StrengthEffect = 0.00001f;
+    }
+
     public override SFML.Graphics.Color TransformationColor(double depth)
     {
-
         byte darknessFactor = (byte)(255 / (1 + depth * depth * StrengthEffect));
 
         return new SFML.Graphics.Color(darknessFactor, darknessFactor, darknessFactor);
+    }
+    public override RenderStates TransformationColor(Texture texture, double verticalAngle, float multEffect = 100)
+    {
+        if (ShaderEffect is null)
+            return new RenderStates();
+
+        ShaderEffect.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
+        ShaderEffect.SetUniform("u_verticalAngle", (float)verticalAngle);
+        ShaderEffect.SetUniform("u_texture", texture);
+        ShaderEffect.SetUniform("u_multEffect", multEffect);
+
+        return new RenderStates(ShaderEffect);
     }
     public override SFML.Graphics.Color TransformationColor(SFML.Graphics.Color original, double depth)
     {

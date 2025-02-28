@@ -12,7 +12,7 @@ public static class VisualEffectHelper
     public static VisualEffect VisualEffect { get; set; }
     static VisualEffectHelper()
     {
-        VisualEffect = new Mix(VisualEffect.MixEffect, new Transparency(), new Darkness());
+        VisualEffect = new Darkness();// new Mix(VisualEffect.MixEffect, new Transparency(), new Darkness());
     }
     public static void SetVisualEffect(VisualEffect effect)
     {

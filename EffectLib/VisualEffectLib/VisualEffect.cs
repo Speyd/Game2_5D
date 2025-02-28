@@ -10,9 +10,26 @@ using SFML.Graphics;
 namespace EffectLib;
 public abstract class VisualEffect
 {
+    public const string extensionShader = ".glsl";
     public float StrengthEffect { get; set; }
+    public Shader? ShaderEffect { get; init; }
+
+    public VisualEffect(Shader? shader = null)
+    {
+        ShaderEffect = shader;
+    }
+    public VisualEffect(string? pathShader = null)
+    {
+        if(pathShader is not null && File.Exists(pathShader) && Path.GetExtension(pathShader) == extensionShader)
+            ShaderEffect = new Shader(null, null, pathShader);
+        else
+            ShaderEffect = null;
+    }
+
     public abstract SFML.Graphics.Color TransformationColor(double depth);
     public abstract SFML.Graphics.Color TransformationColor(SFML.Graphics.Color original, double depth);
+    public abstract RenderStates TransformationColor(Texture text, double vertAngle, float multEffect = 100);
+
 
     public SFML.Graphics.Color LerpColor(SFML.Graphics.Color baseColor, SFML.Graphics.Color overlayColor, float t)
     {
