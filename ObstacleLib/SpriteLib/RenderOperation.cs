@@ -64,7 +64,7 @@ internal static class RenderOperation
     public static Vector2f GetPositionOnScreen(SpriteObstacle sprite, Entity entity, float height)
     {
         float x = sprite.WorldToScreenX(sprite.Angle, entity.DeltaAngle);
-        float y = sprite.WorldToScreenY(entity.VerticalAngle) - (float)(sprite.Z.Axis / sprite.Distance);
+        float y = sprite.WorldToScreenY(entity.VerticalAngle) - (float)(sprite.Z.Axis / (sprite.Distance / Screen.Setting.Tile));
 
         return new Vector2f(x, y);
     }
@@ -75,7 +75,6 @@ internal static class RenderOperation
 
         sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.CurrentRenderTexture.Texture);
         sprite.RenderSprite.Color = VisualEffectHelper.VisualEffect.TransformationColor(sprite.Distance);
-
         sprite.RenderSprite.Origin = new Vector2f(sprite.CurrentRenderTexture.Width / 2, sprite.CurrentRenderTexture.Height / 2);
         sprite.RenderSprite.Position = GetPositionOnScreen(sprite, entity, height);
         
