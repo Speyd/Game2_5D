@@ -7,6 +7,7 @@ using static SFML.Window.Keyboard;
 using static System.Collections.Specialized.BitVector32;
 using static ControlLib.Bottom;
 using static SFML.Window.Mouse;
+using System.Diagnostics;
 
 namespace ControlLib;
 /// <summary> Bottom Binding </summary>
@@ -21,26 +22,38 @@ public class BottomBinding
     public object[] FixedParameters { get; init; }
 
 
-    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction, object[] fixedParameters)
+    /// <summary> Max delay between clicks </summary>
+    public long WaitingTimeMilliseconds { get; set; }
+    /// <summary> Is the object pending? </summary>
+    public bool IsWaiting { get; private set; } = false;
+
+    private Stopwatch stopwatch = new Stopwatch();
+
+
+    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction, long waitingTimeMilliseconds, object[] fixedParameters)
     {
         Bottoms = bottoms;
         ExecutableFunction = executableFunction;
         FixedParameters = fixedParameters;
+        WaitingTimeMilliseconds = waitingTimeMilliseconds;
     }
-    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction)
-         : this(bottoms, executableFunction, new object[0])
+    public BottomBinding(List<Bottom> bottoms, Delegate executableFunction, long waitingTimeMilliseconds)
+         : this(bottoms, executableFunction, waitingTimeMilliseconds, new object[0])
     {}
     public BottomBinding(Bottom bottom, Delegate executableFunction, object[] fixedParameters)
-        : this(new List<Bottom>() { bottom }, executableFunction, fixedParameters)
+        : this(new List<Bottom>() { bottom }, executableFunction, 0, fixedParameters)
     {}
     public BottomBinding(Delegate  executableFunction, object[] fixedParameters)
-         : this(new List<Bottom>(), executableFunction, fixedParameters)
+         : this(new List<Bottom>(), executableFunction, 0, fixedParameters)
     {}
-    public BottomBinding(Bottom bottom, Delegate executableFunction)
-       : this(new List<Bottom>() { bottom }, executableFunction, new object[0])
+    public BottomBinding(Bottom bottom, Delegate executableFunction, long waitingTimeMilliseconds)
+       : this(new List<Bottom>() { bottom }, executableFunction, waitingTimeMilliseconds, new object[0])
     { }
-    public BottomBinding(Delegate executableFunction)
-         : this(new List<Bottom>(), executableFunction, new object[0])
+    public BottomBinding(Delegate executableFunction, long waitingTimeMilliseconds)
+         : this(new List<Bottom>(), executableFunction, waitingTimeMilliseconds, new object[0])
+    { }
+    public BottomBinding(Bottom bottom, Delegate executableFunction)
+        : this(new List<Bottom>() { bottom }, executableFunction, 0, new object[0])
     { }
 
 
@@ -53,6 +66,29 @@ public class BottomBinding
         }
 
         Bottoms.Add(bottom);    
+    }
+
+    private bool IsReadyToPress() 
+    {
+        if (WaitingTimeMilliseconds <= 0)
+            return true;
+
+        if(!IsWaiting && !stopwatch.IsRunning)
+        {
+            stopwatch.Start();
+            IsWaiting = true;
+
+            return true;
+        }
+        else if (stopwatch.IsRunning && stopwatch.ElapsedMilliseconds >= WaitingTimeMilliseconds)
+        {
+            IsWaiting = false;
+
+            stopwatch.Stop();
+            stopwatch.Reset();
+        }
+
+        return false;
     }
 
     /// <summary> Calling a button function </summary>
@@ -77,7 +113,7 @@ public class BottomBinding
                 countTurnBottom++;
         }
 
-        if (countTurnBottom == Bottoms.Count)
+        if (countTurnBottom == Bottoms.Count && IsReadyToPress())
             PracticingPressing(externalParams);
 
     }

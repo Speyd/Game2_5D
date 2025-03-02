@@ -10,6 +10,5 @@ using System.Threading.Tasks;
 namespace Render.Object;
 public interface IWall : IRayRenderable
 {
-    const float baseMultHeightOnScreen = 8.5f;
     const int minLvlWall = 1;
 }

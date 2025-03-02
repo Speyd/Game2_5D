@@ -268,14 +268,12 @@ player.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(0);
 player.HitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(50);
 
 
-MiniMap mapMini = new MiniMap(map, player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png")
-{
-    //IsRender = true
-};
+MiniMap mapMini = new MiniMap(player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
 
 mapMini.Setting.OutputRenderMethod = OutputRenderMethod.Color;
 
-Control control = new Control(map, mapMini.Zoom);
+Control control = new Control();
+Bottom bottomNone = new Bottom(VirtualKey.None);
 Bottom bottomW = new Bottom(VirtualKey.W);
 Bottom bottomS = new Bottom(VirtualKey.S);
 Bottom bottomA = new Bottom(VirtualKey.A);
@@ -283,7 +281,7 @@ Bottom bottomD = new Bottom(VirtualKey.D);
 Bottom bottomQ = new Bottom(VirtualKey.Q);
 Bottom bottomZ = new Bottom(VirtualKey.Z);
 Bottom bottomC = new Bottom(VirtualKey.C);
-Bottom bottomCtrl = new Bottom(VirtualKey.LeftControl, 350);
+Bottom bottomCtrl = new Bottom(VirtualKey.LeftControl);
 Bottom bottomLeftButton = new Bottom(VirtualKey.LeftButton);
 List<Bottom> controls = new List<Bottom>() { bottomCtrl , bottomC };
 
@@ -308,16 +306,18 @@ ControlLib.BottomBinding keyBindingClose = new ControlLib.BottomBinding(bottomQ,
 ControlLib.BottomBinding keyBindingZoom = new ControlLib.BottomBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { 0.01 });
 ControlLib.BottomBinding keyBindingUnZoom = new ControlLib.BottomBinding(bottomZ, mapMini.Zoom.UpdateZoomMult, new object[] { -0.01 });
 ControlLib.BottomBinding keyBindingDraw = new ControlLib.BottomBinding(bottomLeftButton, Drawing.DrawingPoint, new object[] { map, player, 30, SFML.Graphics.Color.Black });
-ControlLib.BottomBinding keyBindingHideMap = new ControlLib.BottomBinding(controls, mapMini.Hide);
+ControlLib.BottomBinding keyBindingMoveAngle = new ControlLib.BottomBinding(bottomNone, MoveAngle.ResetAngle, new object[] { player });
+ControlLib.BottomBinding keyBindingHideMap = new ControlLib.BottomBinding(controls, mapMini.Hide, 350);
 
 
-control.AddKeyBind(keyBindingForward);
-control.AddKeyBind(keyBindingBackward);
-control.AddKeyBind(keyBindingLeft);
-control.AddKeyBind(keyBindingRight);
-control.AddKeyBind(keyBindingClose);
-control.AddKeyBind(keyBindingDraw);
-control.AddKeyBind(keyBindingHideMap);
+control.AddBottomBind(keyBindingForward);
+control.AddBottomBind(keyBindingBackward);
+control.AddBottomBind(keyBindingLeft);
+control.AddBottomBind(keyBindingRight);
+control.AddBottomBind(keyBindingClose);
+control.AddBottomBind(keyBindingDraw);
+control.AddBottomBind(keyBindingHideMap);
+control.AddBottomBind(keyBindingMoveAngle);
 
 player.OnControlAction = control.MakePressed;
 
@@ -377,7 +377,7 @@ PartsWorldLib.RenderPartsWorld partsWorld = new();
 //visualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
 //visualizerHitBox.IsDistanceLimited = false;
 //VisualizerHitBox.VisualizerType = VisualizerType.VisualizeRayRenderable;
-VisualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
+VisualizerHitBox.VisualizerType = VisualizerType.VisualizeRayRenderable;
 try
 {
     while (Screen.Window.IsOpen)
@@ -394,7 +394,7 @@ try
         VisualizerHitBox.Render(map, player);
         fpsChecker.EndRead();
 
-        mapMini.Render();
+        mapMini.Render(map);
 
         partsWorld.Render(player);
 

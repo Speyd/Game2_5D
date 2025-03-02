@@ -98,10 +98,7 @@ public class Entity: IObserver
 
 
 
-    public Entity(Setting setting, double maxDistance,
-        double fov = Math.PI / 3,
-        double x = 0, double y = 0,
-        double angle = 0, double verticalAngle = 0)
+    public Entity( double x = 0, double y = 0, double fov = Math.PI / 3)
     {
         Fov = fov;
         HalfFov = (float)Fov / 2;
@@ -112,8 +109,8 @@ public class Entity: IObserver
         Z = new Coordinate(CoordinatePlane.Z, HitBox);
         Z.Axis = 50;
 
-        Angle = angle;
-        VerticalAngle = verticalAngle;
+        Angle = 0;
+        VerticalAngle = 0;
 
         EntitySettingChangesFun();
         Screen.WidthChangesFun += EntitySettingChangesFun;

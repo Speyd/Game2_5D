@@ -7,12 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DrawLib\DrawLib.csproj" />
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
-    <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
     <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
-    <ProjectReference Include="..\TextField\TextField.csproj" />
+    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 
 </Project>

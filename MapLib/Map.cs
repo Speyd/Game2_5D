@@ -92,7 +92,6 @@ public class Map
         addObstacle.UpdateAdditionalInformation(x, y);
         CheckTrueAddObstacle(addObstacle, x, y);
     }
-
     public void UpdateCoordinatesObstacle(Obstacle obstacle, double x, double y)
     {
         if (!CheckTrueCoordinates(x, y))

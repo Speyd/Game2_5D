@@ -11,6 +11,8 @@ namespace ControlLib
     /// </summary>
     public enum VirtualKey : int
     {
+        None = -1,
+
         #region MouseKeys
         /// <summary> Left mouse button </summary>
         LeftButton = 0x01,

@@ -56,14 +56,12 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
         get => scale * Screen.ScreenRatio;
         set => scale = value == 0 ? 1 : value;
     }
-
+    public override float SizeScale { get; set; } = 2;
+    public override float PositionScale { get; set; } = 4;
     //---------------------Render Parameters----------------------
     /// <summary>Angle relative to this object and the observer</summary>
     public double Angle { get; set; }
     public double Distance { get; set; }
-    public override bool IsOffsetMap { get; set; } = true;
-
-   
 
 
     #region Constructor
@@ -122,9 +120,6 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
         else
             rectangleShape.FillColor = ColorInMap;
     }
-
-
-    public override float CoordinatesOffsetMap(float baseOffset) => baseOffset / 2;
     public override Vector2f ConversionToMapCoordinates(float mapTile)
     {
         float x = (float)X.Axis / Screen.Setting.Tile * mapTile;

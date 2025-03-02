@@ -11,13 +11,13 @@ using SFML.Window;
 using SFML.System;
 using MiniMapLib.SettingMap;
 using System.Threading;
-using MapLib;
 using EntityLib;
 using MiniMapLib.ObjectInMap.Player;
 using MiniMapLib.ObjectInMap.Positions;
 using MiniMapLib.Window;
 using MiniMapLib.ObjectInMap.Obstacles;
-
+using System.Collections.Concurrent;
+using MapLib;
 
 namespace MiniMapLib;
 public class MiniMap
@@ -55,7 +55,7 @@ public class MiniMap
 
 
 
-    public MiniMap(Map map, Entity player, float mapScale, PositionsMiniMap positionMiniMap, string? pathBorder = null)
+    public MiniMap(Entity player, float mapScale, PositionsMiniMap positionMiniMap, string? pathBorder = null)
     {
         Player = player;
 
@@ -73,11 +73,11 @@ public class MiniMap
         PlayerLine = new PlayerLineOutput(Setting);
 
 
-        Obstacle = new ObstacleOutput(map, Player, Setting);
+        Obstacle = new ObstacleOutput( Player, Setting);
 
         Zoom = new ZoomMiniMap(Setting);
     }
-    public void Render()
+    public void Render(Map map)
     {
         if (!IsRender)
             return;
@@ -89,7 +89,7 @@ public class MiniMap
         PlayerCircle.RenderEntityShape(MiniMapWindow.Window);
 
         Zoom.ZoomToCoordinate(MiniMapWindow.Window);
-        Obstacle.RenderObstacle(MiniMapWindow.Window);
+        Obstacle.RenderObstacle(map, MiniMapWindow.Window);
 
 
         Border.DrawMiniMapBorder(BorderMapWindow.Window);

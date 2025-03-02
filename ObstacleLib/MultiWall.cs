@@ -113,11 +113,9 @@ public class MultiWall : Obstacle, IDrawable, IWall
     }
     private void UpdateHeight()
     {
-        float multiHeight = Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen;
+        UpdateHeightHitBox(Walls.Count * Screen.Setting.HalfVerticalTile);
 
-        UpdateHeightHitBox(Walls.Count * Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
-
-        Z.Axis = (Walls.Count - 1) * multiHeight;
+        Z.Axis = (Walls.Count - 1) * Screen.Setting.HalfVerticalTile;
     }
     public override void UpdateAdditionalInformation(double x, double y)
     {
@@ -155,8 +153,6 @@ public class MultiWall : Obstacle, IDrawable, IWall
 
         rectangleShape.FillColor = ColorInMap;
     }
-
-    public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
     public override Vector2f ConversionToMapCoordinates(float mapTile)
     {
         float x = (float)X.Axis / Screen.Setting.Tile * mapTile;

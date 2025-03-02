@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 
 namespace MoveLib;
-public class MoveAngle
+public static class MoveAngle
 {
-    public void TurnAngle(ref double entityAngle, int direction)
+    public static void TurnAngle(ref double entityAngle, int direction)
     {
         double normalizedMoveSpeedAngel = MoveLib.Setting.MoveSpeedAngel * Screen.ScreenRatio;
         entityAngle -= normalizedMoveSpeedAngel * direction;
@@ -22,7 +22,7 @@ public class MoveAngle
             entityAngle += 2 * Math.PI;
     }
 
-    public void ResetAngle(Entity entity)
+    public static void ResetAngle(Entity entity)
     {
         double normalizedMoveSpeedAngel = MoveLib.Setting.MoveSpeedAngel * Screen.ScreenRatio;
         MoveLib.Setting.MoveSpeedAngel = 1 * FPS.GetDeltaTime() * normalizedMoveSpeedAngel;

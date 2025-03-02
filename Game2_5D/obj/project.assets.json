@@ -1117,12 +1117,9 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
-          "DrawLib": "1.0.0",
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "MiniMapLib": "1.0.0",
           "MoveLib": "1.0.0",
-          "TextField": "1.0.0"
+          "ScreenLib": "1.0.0"
         },
         "compile": {
           "bin/placeholder/ControlLib.dll": {}
@@ -2071,6 +2068,7 @@
     "net8.0": [
       "BresenhamAlgorithm >= 1.0.0",
       "ControlLib >= 1.0.0",
+      "DrawLib >= 1.0.0",
       "FpsLib >= 1.0.0",
       "Goblinfactory.Konsole >= 6.2.2",
       "MapLib >= 1.0.0",
@@ -2121,6 +2119,9 @@
             },
             "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj"
+            },
+            "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
+              "projectPath": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj"
             },
             "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj": {
               "projectPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj"

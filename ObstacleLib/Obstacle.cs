@@ -64,9 +64,8 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
     //----------------------Map Setting-----------------
     public SFML.Graphics.Color ColorInMap { get; set; }
     /// <summary>Positioning will be from the center of the object and not from the top corner</summary>
-    public virtual bool IsOffsetMap { get; set; } = false;
-
-
+    public virtual float SizeScale { get; set; } = 1;
+    public virtual float PositionScale { get; set; } = 1;
     //-------------------Collision Setting--------------------
     /// <summary>The passability of an object through the current object</summary>
     public bool IsPassability { get; set; }
@@ -121,7 +120,9 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
     public abstract void FillingTextureShape(RectangleShape rectangleShape);
 
 
-    public abstract float CoordinatesOffsetMap(float baseOffset);
+    public virtual float CoordinatesOffsetMap(float baseOffset) => baseOffset / PositionScale;
+    public virtual float SizeOffsetMap(float baseOffset) => baseOffset / SizeScale;
+
     public abstract Vector2f ConversionToMapCoordinates(float mapTile);
 
 

@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\BresenhamAlgorithm\BresenhamAlgorithm.csproj" />
     <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
+    <ProjectReference Include="..\DrawLib\DrawLib.csproj" />
     <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />

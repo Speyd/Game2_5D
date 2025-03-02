@@ -13,21 +13,18 @@ using System.Reflection.Metadata;
 namespace EntityLib.Player;
 public class Player : Entity
 {
-    public delegate void ControlAction(Entity entity);
+    public delegate void ControlAction();
     /// <summary>Delegate for calling the method that services the buttons</summary>
     public ControlAction OnControlAction;
 
-    public Player(double maxDistance,
-        double entityFov = Math.PI / 3,
-        double entityX = 0, float entityY = 0,
-        double entityA = 0)
+    public Player( double X = 0, float Y = 0, double entityFov = Math.PI / 3)
 
-        :base(Screen.Setting, maxDistance, entityFov, entityX, entityY, entityA)
+        :base(X, Y, entityFov)
     {}
 
     public void MakePressed()
     {
-        OnControlAction?.Invoke(this);
+        OnControlAction?.Invoke();
     }
 
 

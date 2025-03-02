@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TextureLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9854218b0fbea077727b3e82c7dad3c079a4a83c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a7c1ae56b628f093de21d881cbe25b03609f4012")]
 [assembly: System.Reflection.AssemblyProductAttribute("TextureLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TextureLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

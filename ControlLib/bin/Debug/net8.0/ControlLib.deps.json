@@ -8,12 +8,9 @@
     ".NETCoreApp,Version=v8.0": {
       "ControlLib/1.0.0": {
         "dependencies": {
-          "DrawLib": "1.0.0",
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "MiniMapLib": "1.0.0",
           "MoveLib": "1.0.0",
-          "TextField": "1.0.0"
+          "ScreenLib": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {}
@@ -1152,20 +1149,6 @@
           }
         }
       },
-      "DrawLib/1.0.0": {
-        "dependencies": {
-          "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "ObstacleLib": "1.0.0",
-          "RayTracingLib": "1.0.0"
-        },
-        "runtime": {
-          "DrawLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "EffectLib/1.0.0": {
         "dependencies": {
           "SFML.Graphics": "2.6.0",
@@ -1229,20 +1212,6 @@
           }
         }
       },
-      "MiniMapLib/1.0.0": {
-        "dependencies": {
-          "MapLib": "1.0.0",
-          "Render": "1.0.0",
-          "SFML.Net": "2.6.0",
-          "ScreenLib": "1.0.0"
-        },
-        "runtime": {
-          "MiniMapLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "MoveLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
@@ -1274,21 +1243,6 @@
           }
         }
       },
-      "RayTracingLib/1.0.0": {
-        "dependencies": {
-          "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "MoveLib": "1.0.0",
-          "ScreenLib": "1.0.0",
-          "TextureLib": "1.0.0"
-        },
-        "runtime": {
-          "RayTracingLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "Render/1.0.0": {
         "dependencies": {
           "DataPipes": "1.0.0",
@@ -1311,19 +1265,6 @@
         },
         "runtime": {
           "ScreenLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "TextField/1.0.0": {
-        "dependencies": {
-          "MapLib": "1.0.0",
-          "SFML.Net": "2.6.0",
-          "ScreenLib": "1.0.0"
-        },
-        "runtime": {
-          "TextField.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1499,11 +1440,6 @@
       "serviceable": false,
       "sha512": ""
     },
-    "DrawLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "EffectLib/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1529,11 +1465,6 @@
       "serviceable": false,
       "sha512": ""
     },
-    "MiniMapLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "MoveLib/1.0.0": {
       "type": "project",
       "serviceable": false,
@@ -1544,22 +1475,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "RayTracingLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "Render/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "TextField/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

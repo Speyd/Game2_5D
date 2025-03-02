@@ -10,6 +10,7 @@
         "dependencies": {
           "BresenhamAlgorithm": "1.0.0",
           "ControlLib": "1.0.0",
+          "DrawLib": "1.0.0",
           "FpsLib": "1.0.0",
           "Goblinfactory.Konsole": "6.2.2",
           "MapLib": "1.0.0",
@@ -1198,12 +1199,9 @@
       },
       "ControlLib/1.0.0": {
         "dependencies": {
-          "DrawLib": "1.0.0",
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
-          "MiniMapLib": "1.0.0",
           "MoveLib": "1.0.0",
-          "TextField": "1.0.0"
+          "ScreenLib": "1.0.0"
         },
         "runtime": {
           "ControlLib.dll": {

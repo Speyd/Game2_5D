@@ -52,8 +52,8 @@ public class BlankWall : Obstacle, IWall
     #region MapAdder_Implementation
     private void UpdateBaseHeightHitBox()
     {
-        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
-        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfTile * IWall.baseMultHeightOnScreen);
+        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile);
+        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfVerticalTile);
     }
     public override void UpdateAdditionalInformation(double x, double y)
     {
@@ -78,7 +78,7 @@ public class BlankWall : Obstacle, IWall
         rectangleShape.OutlineThickness = 1;
         rectangleShape.FillColor = ColorInMap;
     }
-    public override float CoordinatesOffsetMap(float baseOffset) => baseOffset;
+
     public override Vector2f ConversionToMapCoordinates(float mapTile)
     {
         float x = (float)X.Axis / Screen.Setting.Tile * mapTile;

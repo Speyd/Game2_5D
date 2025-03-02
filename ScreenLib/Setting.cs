@@ -8,10 +8,15 @@ using System.Threading.Tasks;
 namespace ScreenLib.SettingScreen;
 public class Setting
 {
-    public const int _tile = 100;
-    /// <summary>World unit</summary>
+    private const int _tile = 100;
+    /// <summary>World unit of horizontal measurement(X and Y axis)</summary>
     public int Tile { get => _tile; }
     public int HalfTile { get; } = _tile / 2;
+
+    /// <summary>World unit of vertical measurement(Z axis)</summary>
+    private const int _verticalTile = 850;
+    public int VerticalTile { get => _tile; }
+    public int HalfVerticalTile { get; } = _verticalTile / 2;
     /// <summary>Settings for Parallel</summary>
     public ParallelOptions ParallelOptions { get; init; } = new ParallelOptions
     {

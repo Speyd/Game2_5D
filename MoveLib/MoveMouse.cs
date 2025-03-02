@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 
 
 namespace MoveLib;
-public class MoveMouse
+public static class MoveMouse
 {
-    private void SetAngleMouse(Vector2i currentMousePosition)
+    private static void SetAngleMouse(Vector2i currentMousePosition)
     {
         int actualMousePositionX = currentMousePosition.X - Screen.Setting.HalfWidth;
         float normalizedSensitivity = MoveLib.Setting.MouseSensitivity * Screen.ScreenRatio;
 
         MoveLib.Setting.TempAngle += actualMousePositionX * normalizedSensitivity;
     }
-    private void SetVerticalAngleMouse(Vector2i currentMousePosition)
+    private static void SetVerticalAngleMouse(Vector2i currentMousePosition)
     {
         int actualMousePositionY = currentMousePosition.Y - Screen.Setting.HalfHeight;
         float normalizedSensitivity = MoveLib.Setting.MouseSensitivity * Screen.ScreenRatio;
@@ -27,7 +27,7 @@ public class MoveMouse
         MoveLib.Setting.TempVerticalAngle = (float)Math.Clamp(MoveLib.Setting.TempVerticalAngle, MoveLib.Setting.MinVerticalAngle, MoveLib.Setting.MaxVerticalAngle);
     }
 
-    public void OnMouseMoved(object sender, MouseMoveEventArgs e)
+    public static void OnMouseMoved(object sender, MouseMoveEventArgs e)
     {
         if (!MoveLib.Setting.IsMouseCaptured)
             return;
