@@ -28,7 +28,7 @@ using NGenerics.DataStructures.General;
 using System.Collections.Concurrent;
 using Render.RenderAlgorithm;
 using DataPipes;
-
+using AnimationLib;
 
 namespace ObstacleLib.SpriteLib;
 public class SpriteObstacle : Obstacle, ISelfRenderable
@@ -40,17 +40,10 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
 
 
     //---------------------------Textures------------------------------
-    public List<TextureObstacle> Textures { get; init; } = new List<TextureObstacle> { };
     public TextureObstacle? TextureInMap { get; set; } = null;
+    public AnimationState Animation { get; init; } = new();
 
-
-    //---------------------------Animation------------------------------
-    public AnimationState CurrentAnimation { get; set; } = new AnimationState();
-   
-
-    //--------------------------Render Sprite-----------------------------
     public SFML.Graphics.Sprite RenderSprite { get; set; } = new SFML.Graphics.Sprite();
-    public TextureObstacle? CurrentRenderTexture { get; set; } = null;
 
 
     //--------------------------Setting-----------------------------
@@ -121,10 +114,10 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     {
         if (TextureInMap is not null)
             rectangleShape.Texture = TextureInMap.Texture;
-        else if (TextureInMap is null && Textures.Count > 0)
+        else if (TextureInMap is null && Animation.AmountFrame > 0)
         {
-            TextureInMap = Textures.First();
-            rectangleShape.Texture = TextureInMap.Texture;
+            TextureInMap = Animation.GetFrame(0);
+            rectangleShape.Texture = TextureInMap?.Texture;
         }
         else
             rectangleShape.FillColor = ColorInMap;
@@ -200,7 +193,7 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
 
         if (Math.Abs(Angle) <= entity.Fov)
         {
-            RenderOperation.DefiningDesiredSprite(this, spriteAngle);
+            AnimationManager.DefiningDesiredSprite(Animation, spriteAngle);
 
             Distance *= Math.Cos(Angle);
             Distance = Math.Max(Distance, 0.1);

@@ -6,13 +6,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
-
+using AnimationLib;
+using ObstacleLib.SpriteLib.Animation;
+using System.Xml;
 
 namespace ObstacleLib.SpriteLib.Add;
 public static class Adder
 {
     const string extensionMultiframeFile = ".gif";
-    public static void AddGif(SpriteObstacle sprite, string gifPath)
+    public static void AddGif(AnimationState state, string gifPath)
     {
         string tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
         Directory.CreateDirectory(tempDir);
@@ -31,7 +33,7 @@ public static class Adder
                         frame.SaveAsPng(filePath);
 
                         var texture = new SFML.Graphics.Texture(filePath);
-                        sprite.Textures.Add(new TextureObstacle(texture));
+                        state.AddFrame(new TextureObstacle(texture));
                     }
                 }
             }
@@ -51,12 +53,12 @@ public static class Adder
         TextureObstacle.IsTruePath(path);
 
         if (Path.GetExtension(path)?.ToLower() == extensionMultiframeFile)
-            AddGif(sprite, path);
+            AddGif(sprite.Animation, path);
         else
-            sprite.Textures.Add(new TextureObstacle(path));
+            sprite.Animation.AddFrame(new TextureObstacle(path));
 
-        if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
-            sprite.TextureInMap = sprite.Textures[0];
+        if (sprite.TextureInMap is null && sprite.Animation.AmountFrame > 0)
+            sprite.TextureInMap = sprite.Animation.GetFrame(0);
     }
     public static void AddTextureFromFolder(SpriteObstacle sprite, string path, bool folderAccounting)
     {
@@ -77,15 +79,15 @@ public static class Adder
         foreach (var file in files)
         { 
             TextureObstacle.IsTruePath(file);
-            sprite.Textures.Add(new TextureObstacle(file));
+            sprite.Animation.AddFrame(new TextureObstacle(file));
         }
     }
     public static void AddTexture(SpriteObstacle sprite, TextureObstacle texture)
     {
-        sprite.Textures.Add(texture);
+        sprite.Animation.AddFrame(texture);
 
-        if (sprite.TextureInMap is null && sprite.Textures.Count > 0)
-            sprite.TextureInMap = sprite.Textures[0];
+        if (sprite.TextureInMap is null && sprite.Animation.AmountFrame > 0)
+            sprite.TextureInMap = sprite.Animation.GetFrame(0);
     }
     public static void AddTextures(SpriteObstacle sprite, List<TextureObstacle> textures)
     {

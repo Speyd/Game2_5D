@@ -1035,6 +1035,19 @@
           "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
+      "AnimationLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "TextureLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/AnimationLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/AnimationLib.dll": {}
+        }
+      },
       "DataPipes/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -1125,6 +1138,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "AnimationLib": "1.0.0",
           "EffectLib": "1.0.0",
           "EntityLib": "1.0.0",
           "HitBoxLib": "1.0.0",
@@ -1690,6 +1704,11 @@
         "system.runtime.compilerservices.unsafe.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "AnimationLib/1.0.0": {
+      "type": "project",
+      "path": "../AnimationLib/AnimationLib.csproj",
+      "msbuildProject": "../AnimationLib/AnimationLib.csproj"
     },
     "DataPipes/1.0.0": {
       "type": "project",

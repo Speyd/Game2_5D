@@ -32,3 +32,5 @@ D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\HitBoxLib.pdb
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\EffectLib.dll
 D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\EffectLib.pdb
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\AnimationLib.dll
+D:\C++ проекты\Game2_5D\MoveLib\bin\Debug\net8.0\AnimationLib.pdb

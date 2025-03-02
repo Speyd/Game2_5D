@@ -126,6 +126,8 @@ SpriteObstacle sprite1 = new SpriteObstacle(textureObstacles)
     ShiftCubedX = 50,
     ShiftCubedY = 50,
 };
+
+
 sprite1.Z.Axis = 100;
 sprite1.HitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(80);
 sprite1.HitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(80);
