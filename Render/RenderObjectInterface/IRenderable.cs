@@ -20,8 +20,6 @@ public interface IRenderable
         throw new NotImplementedException("This method should be implemented in a derived interface");
     }
     void Render(Result result, Entity entity);
-    double GetZCoordinate();
-
 
     float WorldToScreenY(double angleVertical, float addVariable = 0);
     float WorldToScreenX(double Angle, double DeltaAngle);

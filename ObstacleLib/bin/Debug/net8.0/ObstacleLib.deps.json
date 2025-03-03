@@ -12,6 +12,7 @@
           "EffectLib": "1.0.0",
           "EntityLib": "1.0.0",
           "HitBoxLib": "1.0.0",
+          "RayTracingLib": "1.0.0",
           "Render": "1.0.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.6"
@@ -1177,6 +1178,17 @@
           }
         }
       },
+      "FpsLib/1.0.0": {
+        "dependencies": {
+          "Render": "1.0.0"
+        },
+        "runtime": {
+          "FpsLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "HitBoxLib/1.0.0": {
         "dependencies": {
           "DataPipes": "1.0.0",
@@ -1184,6 +1196,50 @@
         },
         "runtime": {
           "HitBoxLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MapLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "Render": "1.0.0",
+          "SFML.Graphics": "2.6.0",
+          "ScreenLib": "1.0.0",
+          "TextureLib": "1.0.0"
+        },
+        "runtime": {
+          "MapLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "MoveLib/1.0.0": {
+        "dependencies": {
+          "EntityLib": "1.0.0",
+          "FpsLib": "1.0.0",
+          "MapLib": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "MoveLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "RayTracingLib/1.0.0": {
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "EntityLib": "1.0.0",
+          "MoveLib": "1.0.0",
+          "ScreenLib": "1.0.0",
+          "TextureLib": "1.0.0"
+        },
+        "runtime": {
+          "RayTracingLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1396,7 +1452,27 @@
       "serviceable": false,
       "sha512": ""
     },
+    "FpsLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
     "HitBoxLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MapLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "MoveLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RayTracingLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

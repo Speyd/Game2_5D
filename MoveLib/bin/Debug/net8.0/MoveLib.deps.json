@@ -1119,44 +1119,13 @@
           }
         }
       },
-      "SixLabors.ImageSharp/3.1.6": {
-        "runtime": {
-          "lib/net6.0/SixLabors.ImageSharp.dll": {
-            "assemblyVersion": "3.0.0.0",
-            "fileVersion": "3.1.6.0"
-          }
-        }
-      },
       "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
-      "AnimationLib/1.0.0": {
-        "dependencies": {
-          "TextureLib": "1.0.0"
-        },
-        "runtime": {
-          "AnimationLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
       "DataPipes/1.0.0": {
         "dependencies": {
           "SFML.System": "2.6.0"
         },
         "runtime": {
           "DataPipes.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "EffectLib/1.0.0": {
-        "dependencies": {
-          "SFML.Graphics": "2.6.0",
-          "ScreenLib": "1.0.0"
-        },
-        "runtime": {
-          "EffectLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1200,7 +1169,6 @@
       "MapLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
-          "ObstacleLib": "1.0.0",
           "Render": "1.0.0",
           "SFML.Graphics": "2.6.0",
           "ScreenLib": "1.0.0",
@@ -1208,23 +1176,6 @@
         },
         "runtime": {
           "MapLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "ObstacleLib/1.0.0": {
-        "dependencies": {
-          "AnimationLib": "1.0.0",
-          "EffectLib": "1.0.0",
-          "EntityLib": "1.0.0",
-          "HitBoxLib": "1.0.0",
-          "Render": "1.0.0",
-          "ScreenLib": "1.0.0",
-          "SixLabors.ImageSharp": "3.1.6"
-        },
-        "runtime": {
-          "ObstacleLib.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1403,13 +1354,6 @@
       "path": "sfml.window/2.6.0",
       "hashPath": "sfml.window.2.6.0.nupkg.sha512"
     },
-    "SixLabors.ImageSharp/3.1.6": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-dHQ5jugF9v+5/LCVHCWVzaaIL6WOehqJy6eju/0VFYFPEj2WtqkGPoEV9EVQP83dHsdoqYaTuWpZdwAd37UwfA==",
-      "path": "sixlabors.imagesharp/3.1.6",
-      "hashPath": "sixlabors.imagesharp.3.1.6.nupkg.sha512"
-    },
     "System.Runtime.CompilerServices.Unsafe/6.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1417,17 +1361,7 @@
       "path": "system.runtime.compilerservices.unsafe/6.0.0",
       "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     },
-    "AnimationLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
     "DataPipes/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "EffectLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1448,11 +1382,6 @@
       "sha512": ""
     },
     "MapLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "ObstacleLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 
 namespace HitBoxLib.Data.HitBoxObject;
-public struct HitboxObjectInfo
+public struct RenderInfo
 {
     public delegate float WorldToScreenY(double side, double distance, double verticalAngle, double angleObject);
     public delegate float WorldToScreenX(double normalizedAngleToObject, double observerDeltaAngle);

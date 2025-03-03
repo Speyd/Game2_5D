@@ -8,17 +8,19 @@ using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Data.HitBoxObject;
 using Render.RenderAlgorithm;
 using Render.Map;
-
+using TextureLib;
+using Render.Object;
 
 namespace ObstacleLib;
-public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcessor
+public abstract class Obstacle : IObject
 {
-    public Action<Obstacle, double, double>? OnPositionChanged;
+    public virtual Action<IObject, double, double>? OnPositionChanged { get; set; }
     
-    public HitBox HitBox { get; set; } = new HitBox();
-    public Coordinate X { get; init; }
-    public Coordinate Y { get; init; }
-    public Coordinate Z { get; init; }
+    public virtual Coordinate X { get; init; }
+    public virtual Coordinate Y { get; init; }
+    public virtual Coordinate Z { get; init; }
+
+    public virtual HitBox HitBox { get; init; } = new HitBox();
 
 
     //--------------------Shift-------------------------
@@ -34,7 +36,6 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
             X.Axis = Screen.Mapping(X.Axis, Screen.Setting.Tile) + shiftCubedX;
         }
     }
-
 
     private double shiftCubedY = 0;
     /// <summary>Offset of an object along the current map cell(On the Y axis)</summary>
@@ -61,14 +62,16 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
     #endregion
 
 
-    //----------------------Map Setting-----------------
-    public SFML.Graphics.Color ColorInMap { get; set; }
-    /// <summary>Positioning will be from the center of the object and not from the top corner</summary>
+    //------------------Map Setting-----------------
+    public virtual SFML.Graphics.Color ColorInMap { get; set; }
+    public virtual TextureObstacle? TextureInMiniMap { get; set; }
     public virtual float SizeScale { get; set; } = 1;
     public virtual float PositionScale { get; set; } = 1;
+
+
     //-------------------Collision Setting--------------------
     /// <summary>The passability of an object through the current object</summary>
-    public bool IsPassability { get; set; }
+    public virtual bool IsPassability { get; set; }
     /// <summary>Possibility to add an object to the same cell where the current object is located</summary>
     public virtual bool IsSingleAddable { get; init; } = true;
 
@@ -87,9 +90,13 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
 
 
     public abstract void Render(Result result, Entity entity);
-    public abstract void UpdateAdditionalInformation(double x, double y);
+    public abstract IObject GetCopy();
 
-    public abstract  double GetZCoordinate();
+    #region IMapAdder
+    public abstract void HandleObjectAddition(double x, double y, bool resetHitBoxSide);
+    #endregion
+
+    #region IRenderable
     public virtual float WorldToScreenY(double angleVertical, float addVariable = 0)
     {
         if (angleVertical <= 0)
@@ -114,29 +121,27 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
         return (float)ray * Screen.Setting.Scale;
     }
     public abstract Vector2f GetPositionOnScreen(Result result, Entity entity);
+    #endregion
 
-
+    #region IMiniMapRenderable
     public abstract void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1);
     public abstract void FillingTextureShape(RectangleShape rectangleShape);
-
-
+    public abstract Vector2f ConversionToMapCoordinates(float mapTile);
     public virtual float CoordinatesOffsetMap(float baseOffset) => baseOffset / PositionScale;
     public virtual float SizeOffsetMap(float baseOffset) => baseOffset / SizeScale;
+    #endregion
 
-    public abstract Vector2f ConversionToMapCoordinates(float mapTile);
-
-
+    #region IHitBoxProcessor
     public virtual float WorldToScreenSideY(double side, double distance, double verticalAngle, double angleObject)
     {
         distance /= Screen.Setting.Tile;
         distance *= Math.Cos(angleObject);
-        distance  = Math.Max(distance, 0.4);
+        distance  = Math.Max(distance, IHitBoxProcessor.minDistance);
         return WorldToScreenY(verticalAngle) - (float)(side / distance);
     }
-
-    public virtual HitboxObjectInfo GetHitboxObjectInfo()
+    public virtual RenderInfo GetRenderHitBoxInfo()
     {
-        HitboxObjectInfo hitboxObjectInfo = new HitboxObjectInfo();
+        RenderInfo hitboxObjectInfo = new RenderInfo();
         hitboxObjectInfo.position = new Vector2f((float)X.Axis, (float)Y.Axis);
         hitboxObjectInfo.body = HitBox.MainHitBox;
         hitboxObjectInfo.worldToScreenY = WorldToScreenSideY;
@@ -144,4 +149,5 @@ public abstract class Obstacle : IRenderable, IMiniMapRenderable, IHitBoxProcess
 
         return hitboxObjectInfo;
     }
+    #endregion
 }

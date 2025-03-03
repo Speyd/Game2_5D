@@ -32,7 +32,7 @@ public static class Render
     public const int maxCountPeaks = 8;
 
 
-    private static List<Vector3f> GetCoordinatesParallelepiped(HitboxObjectInfo objectHitBox, ObserverInfo observer, ref Vector2f center)
+    private static List<Vector3f> GetCoordinatesParallelepiped(RenderInfo objectHitBox, ObserverInfo observer, ref Vector2f center)
     {
         Box Body = objectHitBox.body;
 
@@ -62,7 +62,7 @@ public static class Render
             new Vector3f(maxY, minZ, maxX),
         };
     }
-    private static Vector2f GetPositionForAngle(HitboxObjectInfo objectHitBox, Vector3f vertex, Vector2f center)
+    private static Vector2f GetPositionForAngle(RenderInfo objectHitBox, Vector3f vertex, Vector2f center)
     {
         switch (objectHitBox.body.HeightRenderMode)
         {
@@ -74,7 +74,7 @@ public static class Render
                 return new Vector2f();
         }
     }
-    private static List<Vector2f> GetHitboxCoordinatesOnScreen(ref int countNonRender, HitboxObjectInfo objectHitBox, ObserverInfo observer)
+    private static List<Vector2f> GetHitboxCoordinatesOnScreen(ref int countNonRender, RenderInfo objectHitBox, ObserverInfo observer)
     {
         Vector2f center = new Vector2f();
         List<Vector3f> vertices = GetCoordinatesParallelepiped(objectHitBox, observer, ref center);
@@ -108,7 +108,7 @@ public static class Render
     }
 
 
-    private static VertexArray VertexToArray(HitboxObjectInfo objectHitBox, List<Vector2f> vertices, int countNonRender)
+    private static VertexArray VertexToArray(RenderInfo objectHitBox, List<Vector2f> vertices, int countNonRender)
     {
         Vertex[] line = new Vertex[2];
         VertexArray vertexArray = new VertexArray(PrimitiveType.Lines);
@@ -130,7 +130,7 @@ public static class Render
 
         return vertexArray;
     }
-    public static VertexArray BuildHitBoxMesh(HitboxObjectInfo objectHitBox, ObserverInfo observer)
+    public static VertexArray BuildHitBoxMesh(RenderInfo objectHitBox, ObserverInfo observer)
     {
         int countNonRender = 0;
         List<Vector2f> coordinateScreen = GetHitboxCoordinatesOnScreen(ref countNonRender, objectHitBox, observer);

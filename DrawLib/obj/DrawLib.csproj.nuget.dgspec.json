@@ -541,9 +541,6 @@
               "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
               },
-              "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj"
-              },
               "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
               },
@@ -715,6 +712,9 @@
               "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj"
               },
+              "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj"
+              },
               "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
               },
@@ -793,11 +793,11 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj"
+              },
               "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\MapLib\\MapLib.csproj"
               },
               "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj"

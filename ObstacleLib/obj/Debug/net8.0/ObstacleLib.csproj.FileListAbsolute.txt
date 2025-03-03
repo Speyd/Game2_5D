@@ -28,3 +28,11 @@ D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\EffectLib.dll
 D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\EffectLib.pdb
 D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\AnimationLib.dll
 D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\AnimationLib.pdb
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\FpsLib.dll
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\MapLib.dll
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\MoveLib.dll
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\RayTracingLib.dll
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\RayTracingLib.pdb
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\FpsLib.pdb
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\MapLib.pdb
+D:\C++ проекты\Game2_5D\ObstacleLib\bin\Debug\net8.0\MoveLib.pdb

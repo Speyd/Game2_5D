@@ -19,6 +19,7 @@ using HitBoxLib.Data.Observer;
 namespace EntityLib;
 public class Entity: IObserver
 {
+  
     /// <summary> Entity position with Screen.Setting.Tile multiplier </summary>
     public Vector2f Position
     {

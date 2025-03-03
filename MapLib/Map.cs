@@ -3,11 +3,9 @@ using System.Text;
 using MapLib.SettingLib;
 using SFML.Graphics;
 using System.Collections.Generic;
-using ObstacleLib;
-using ObstacleLib.TexturedWallLib;
 using System.Linq;
 using System.Collections.Concurrent;
-
+using Render.Object;
 
 namespace MapLib;
 public class Map
@@ -18,19 +16,19 @@ public class Map
 
 
     //---------------------Obstacles-----------------------
-    public ConcurrentDictionary<ValueTuple<int, int>, List<Obstacle>> Obstacles{ get; init; }
-    public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
+    public ConcurrentDictionary<ValueTuple<int, int>, List<IObject>> Obstacles{ get; init; }
+    //public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
 
 
-    public Map(int height, int width)
+    public Map(IObject fillingObject, int height, int width)
     {
         Setting = new Setting(height, width);
-        Obstacles = new ConcurrentDictionary<(int X, int Y), List<Obstacle>>();
+        Obstacles = new ConcurrentDictionary<(int X, int Y), List<IObject>>();
 
-        RefillingObstacles();
+        RefillingObstacles(fillingObject);
     }
 
-    private void RefillingObstacles()
+    private void RefillingObstacles(IObject fillingObject)
     {
         Obstacles.Clear();
         for (int y = 0; y < Setting.MapHeight; y++)
@@ -38,18 +36,20 @@ public class Map
             for (int x = 0; x < Setting.MapWidth; x++)
             {
                 if (y == 0 || y == Setting.MapHeight - 1 || x == 0 || x == Setting.MapWidth - 1)
-                    AddObstacle(x, y, new TexturedWall(StandartBlock));
+                {
+                    AddObstacle(x, y, fillingObject.GetCopy());
+                }
             }
         }
     }
-    private void CheckTrueAddObstacle(Obstacle addObstacle, int x, int y)
+    private void CheckTrueAddObstacle(IObject addObstacle, int x, int y)
     {
         if (!Obstacles.ContainsKey((x, y)))
         {
             if (!CheckTrueCoordinates(x, y))
                 throw new Exception("The coordinates for adding the object are not correct(CheckTrueAddObstacle)");
 
-            Obstacles[(x, y)] = new List<Obstacle>() { addObstacle };
+            Obstacles[(x, y)] = new List<IObject>() { addObstacle };
         }
         else if (Obstacles[(x, y)].Count == 0)
         {
@@ -79,8 +79,8 @@ public class Map
         }
 
     }
-
-    public void AddObstacle(int x, int y, Obstacle addObstacle)
+    static int add = 0;
+    public void AddObstacle(int x, int y, IObject addObstacle, bool resetHitBoxSide = true)
     {
         if (y < 0 || y >= Setting.MapHeight ||
            x < 0 || x >= Setting.MapWidth)
@@ -89,10 +89,10 @@ public class Map
         x *= Screen.Setting.Tile;
         y *= Screen.Setting.Tile;
 
-        addObstacle.UpdateAdditionalInformation(x, y);
+        addObstacle.HandleObjectAddition(x, y, resetHitBoxSide);
         CheckTrueAddObstacle(addObstacle, x, y);
     }
-    public void UpdateCoordinatesObstacle(Obstacle obstacle, double x, double y)
+    public void UpdateCoordinatesObstacle(IObject obstacle, double x, double y)
     {
         if (!CheckTrueCoordinates(x, y))
             throw new Exception("Error update coordinates(UpdateCoordinatesObstacle)");
@@ -109,13 +109,13 @@ public class Map
 
 
 
-    private void RemoveObstacle(Obstacle obstacle)
+    private void RemoveObstacle(IObject obstacle)
     {
         Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Remove(obstacle);
 
         if (Obstacles[(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis))].Count == 0)
         {
-            List<Obstacle>? removedObstacles;
+            List<IObject>? removedObstacles;
             Obstacles.Remove((Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)), out removedObstacles);
         }
     }
@@ -127,7 +127,7 @@ public class Map
         else if(!Obstacles.ContainsKey((x, y)))
             throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
 
-        List<Obstacle>? removedObstacles;
+        List<IObject>? removedObstacles;
         Obstacles.Remove((x, y), out removedObstacles);
     }
     public void DeleteObstacle(double x, double y)
@@ -141,13 +141,13 @@ public class Map
         else if (!Obstacles.ContainsKey((mX, mY)))
             throw new Exception("There is nothing to delete in this cell(DeleteAllCellObstacle)");
 
-        Obstacle? tempObst = Obstacles[(mX, mY)].FirstOrDefault(o => o.X.Axis == x && o.Y.Axis == y);
+        IObject? tempObst = Obstacles[(mX, mY)].FirstOrDefault(o => o.X.Axis == x && o.Y.Axis == y);
         if (tempObst is null)
             throw new Exception("There is no such object in this cell(DeleteAllCellObstacle)");
 
         RemoveObstacle(tempObst);
     }
-    public void DeleteObstacle(Obstacle obstacle)
+    public void DeleteObstacle(IObject obstacle)
     {
         if (!CheckTrueCoordinates(Screen.Mapping(obstacle.X.Axis), Screen.Mapping(obstacle.Y.Axis)))
             throw new Exception("Deletion in this area is not allowed(DeleteAllCellObstacle)");

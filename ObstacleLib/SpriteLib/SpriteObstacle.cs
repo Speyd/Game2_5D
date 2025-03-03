@@ -29,6 +29,11 @@ using System.Collections.Concurrent;
 using Render.RenderAlgorithm;
 using DataPipes;
 using AnimationLib;
+using HitBoxLib.HitBoxSegment;
+using HitBoxLib.PositionObject;
+using ObstacleLib.BlankWallLib;
+using ObstacleLib.TexturedWallLib;
+using Render.Object;
 
 namespace ObstacleLib.SpriteLib;
 public class SpriteObstacle : Obstacle, ISelfRenderable
@@ -40,9 +45,7 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
 
 
     //---------------------------Textures------------------------------
-    public TextureObstacle? TextureInMap { get; set; } = null;
     public AnimationState Animation { get; init; } = new();
-
     public SFML.Graphics.Sprite RenderSprite { get; set; } = new SFML.Graphics.Sprite();
 
 
@@ -88,10 +91,35 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     {
         Adder.AddTextures(this, paths);
     }
+    public SpriteObstacle(SpriteObstacle spriteObstacle)
+    : base(0, 0, SFML.Graphics.Color.Black, false)
+    {
+        HitBox = new HitBox(spriteObstacle.HitBox);
+
+        X = new Coordinate(spriteObstacle.X, HitBox);
+        Y = new Coordinate(spriteObstacle.Y, HitBox);
+        Z = new Coordinate(spriteObstacle.Z, HitBox);
+
+        ColorInMap = spriteObstacle.ColorInMap;
+        TextureInMiniMap = spriteObstacle.TextureInMiniMap is not null ? new TextureObstacle(spriteObstacle.TextureInMiniMap) : null;
+
+        IsPassability = spriteObstacle.IsPassability;
+        IsSingleAddable = spriteObstacle.IsSingleAddable;
+
+        SizeScale = spriteObstacle.SizeScale;
+        PositionScale = spriteObstacle.PositionScale;
+
+        Scale = spriteObstacle.Scale;
+        Angle = spriteObstacle.Angle;
+        Distance = spriteObstacle.Distance;
+
+        Animation = spriteObstacle.Animation;
+        IsAdded = spriteObstacle.IsAdded;
+    }
     #endregion
 
     #region MapAdder_Implementation
-    public override void UpdateAdditionalInformation(double x, double y)
+    public override void HandleObjectAddition(double x, double y, bool resetHitBoxSide = false)
     {
         X.Axis = x;
         Y.Axis = y;
@@ -110,12 +138,12 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     }
     public override void FillingTextureShape(RectangleShape rectangleShape)
     {
-        if (TextureInMap is not null)
-            rectangleShape.Texture = TextureInMap.Texture;
-        else if (TextureInMap is null && Animation.AmountFrame > 0)
+        if (TextureInMiniMap is not null)
+            rectangleShape.Texture = TextureInMiniMap.Texture;
+        else if (TextureInMiniMap is null && Animation.AmountFrame > 0)
         {
-            TextureInMap = Animation.GetFrame(0);
-            rectangleShape.Texture = TextureInMap?.Texture;
+            TextureInMiniMap = Animation.GetFrame(0);
+            rectangleShape.Texture = TextureInMiniMap?.Texture;
         }
         else
             rectangleShape.FillColor = ColorInMap;
@@ -137,7 +165,6 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
         float height = (float)(Screen.ScreenHeight / Distance * Scale);
         return RenderOperation.GetPositionOnScreen(this, entity, height);
     }
-    public override double GetZCoordinate() => Z.Axis;
     #endregion
 
     #region ISelfDrawable_Implementation
@@ -175,6 +202,10 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     }
     #endregion
 
+    public override IObject GetCopy()
+    {
+        return new SpriteObstacle(this);
+    }
     public override void Render(Result result, Entity entity)
     {
         Vector2f pos = new Vector2f((float)X.Axis, (float)Y.Axis);

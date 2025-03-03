@@ -7,7 +7,6 @@ using System.Reflection.Metadata;
 using EntityLib;
 using ControlLib;
 using SFML.Graphics;
-using SixLabors.ImageSharp;
 using System.Collections.Generic;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics.Metrics;

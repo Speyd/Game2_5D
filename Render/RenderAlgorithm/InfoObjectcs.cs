@@ -1,4 +1,5 @@
 ﻿using DataPipes.Pool;
+using Render.Object;
 using Render.RenderInterface;
 using System;
 using System.Collections.Generic;
@@ -12,19 +13,19 @@ public class InfoObject : IResettable
 {
     public double depth;
     public double coordinate;
-    public IRenderable? Obstacle = null;
+    public IObject? Object = null;
 
-    public InfoObject(double depth, double coordinate, IRenderable Obstacle)
+    public InfoObject(double depth, double coordinate, IObject Object)
     {
         this.depth = depth;
         this.coordinate = coordinate;
-        this.Obstacle = Obstacle;
+        this.Object = Object;
     }
 
     public void Reset()
     {
         depth = 0;
         coordinate = 0;
-        Obstacle = null;
+        Object = null;
     }
 }

@@ -40,6 +40,16 @@ public class HitBoxSide
     /// </summary>
     public SideSize SideSize { get; init; }
 
+
+    public HitBoxSide(HitBoxSide hitBoxSide)
+    {
+        SideSize = hitBoxSide.SideSize;
+
+        CoordinatePlane = hitBoxSide.CoordinatePlane;
+        Side = hitBoxSide.Side;
+        OrginalSide = hitBoxSide.OrginalSide;
+        Offset = hitBoxSide.Offset;
+    }
     public HitBoxSide(Coordinate coordinate, SideSize sideSize, double offset)
     {
         SideSize = sideSize;

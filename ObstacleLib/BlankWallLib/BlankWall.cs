@@ -17,6 +17,8 @@ using HitBoxLib.Segment.SignsTypeSide;
 using EffectLib;
 using Render.RenderAlgorithm;
 using Render.Object;
+using ObstacleLib.SpriteLib;
+using TextureLib;
 
 
 namespace ObstacleLib.BlankWallLib;
@@ -37,7 +39,6 @@ public class BlankWall : Obstacle, IWall
         UpdateBaseHeightHitBox();
         Z.Axis = 0;
     }
-
     public BlankWall(byte r, byte g, byte b, bool isPassability = false)
         : base(0, 0, new Color(r, g, b), isPassability)
     {
@@ -45,6 +46,25 @@ public class BlankWall : Obstacle, IWall
 
         UpdateBaseHeightHitBox();
         Z.Axis = 0;
+    }
+    public BlankWall(BlankWall blankWall)
+       : base(0, 0, SFML.Graphics.Color.Black, false)
+    {
+        HitBox = new HitBox(blankWall.HitBox);
+
+        X = new Coordinate(blankWall.X, HitBox);
+        Y = new Coordinate(blankWall.Y, HitBox);
+        Z = new Coordinate(blankWall.Z, HitBox);
+
+        ColorInMap = blankWall.ColorInMap;
+        StandartColorFilling = blankWall.StandartColorFilling;
+        TextureInMiniMap = blankWall.TextureInMiniMap is not null ? new TextureObstacle(blankWall.TextureInMiniMap) : null;
+
+        IsPassability = blankWall.IsPassability;
+        IsSingleAddable = blankWall.IsSingleAddable;
+
+        SizeScale = blankWall.SizeScale;
+        PositionScale = blankWall.PositionScale;
     }
     #endregion
 
@@ -55,12 +75,15 @@ public class BlankWall : Obstacle, IWall
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile);
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfVerticalTile);
     }
-    public override void UpdateAdditionalInformation(double x, double y)
+    public override void HandleObjectAddition(double x, double y, bool resetHitBoxSide = true)
     {
-        HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(0);
-        HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
-        HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
-        HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+        if (resetHitBoxSide)
+        {
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.X, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
+            HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
+        }
 
         X.Axis = x;
         Y.Axis = y;
@@ -75,6 +98,12 @@ public class BlankWall : Obstacle, IWall
     }
     public override void FillingTextureShape(RectangleShape rectangleShape)
     {
+        if (TextureInMiniMap is not null)
+        {
+            rectangleShape.Texture = TextureInMiniMap.Texture;
+            return;
+        }
+
         rectangleShape.OutlineThickness = 1;
         rectangleShape.FillColor = ColorInMap;
     }
@@ -96,28 +125,42 @@ public class BlankWall : Obstacle, IWall
 
         return new Vector2f(positionX, positionY);
     }
-
-    #endregion
-
-    #region IWall_Implementation
-    public override double GetZCoordinate() => Z.Axis;
-    #endregion
     public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
     {
         if (depth < maxDepth)
             infoObject.Add(new InfoObject(depth, coordinate, this));
     }
+    #endregion
+
+    #region IWall_Implementation
+    public bool IsOffScreen(Result result, Vector2f position, int heightTexure, Vector2f scale)
+    {
+        if (result.PositionPreviousObject is not null && position.Y > result.PositionPreviousObject.Value.Y)
+            return true;
+        if (position.Y + scale.Y * heightTexure < 0)
+            return true;
+        if (position.Y > Screen.ScreenHeight)
+            return true;
+
+        return false;
+    }
+    #endregion
+
+    public override IObject GetCopy()
+    {
+        return new BlankWall(this);
+    }
     public override void Render(Result result, Entity entity)
     {
-        Color ColorFilling = VisualEffectHelper.VisualEffect.TransformationColor(StandartColorFilling, result.Depth);
+        Vector2f scale = RenderOperation.CalculationScale(result);
+        Vector2f position = GetPositionOnScreen(result, entity);
 
+        if (IsOffScreen(result, position, 1, scale))
+            return;
+
+        Color ColorFilling = VisualEffectHelper.VisualEffect.TransformationColor(StandartColorFilling, result.Depth);
         VertexArray renderWall = new VertexArray(PrimitiveType.Quads, 4);
-        RenderOperation.UpdateVertices(
-            this, renderWall,
-            RenderOperation.CalculationBlockScale(result),
-            GetPositionOnScreen(result, entity),
-            ColorFilling
-            );
+        RenderOperation.UpdateVertices(renderWall, scale, position, ColorFilling);
 
         ZBuffer.AddToZBuffer(renderWall, result.Depth);
     }

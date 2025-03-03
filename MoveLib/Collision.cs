@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
-using ObstacleLib;
 using EntityLib.Player;
 using static SFML.Window.Mouse;
 using SFML.Graphics;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.PositionObject;
+using Render.Object;
 
 
 namespace MoveLib;
@@ -26,7 +26,7 @@ public static class Collision
         set => _radiusCheckTouch = value * Screen.Setting.Tile;
     }
 
-    public static bool CollisionZ(Obstacle obstacle, Entity entity)
+    public static bool CollisionZ(IObject obstacle, Entity entity)
     {
         double entityDown = (entity.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
         double entityUp = (entity.HitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
@@ -46,7 +46,7 @@ public static class Collision
 
         return false;
     }
-    public static bool IsCollision(Obstacle obstacle, Entity entity, double nextX, double nextY)
+    public static bool IsCollision(IObject obstacle, Entity entity, double nextX, double nextY)
     {
         double originalEntityX = entity.X.Axis;
         double originalEntityY = entity.Y.Axis;

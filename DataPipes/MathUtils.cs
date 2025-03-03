@@ -17,6 +17,13 @@ namespace DataPipes
 
             return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
         }
+        public static double CalculateDistance(double targetX, double targetY, double observerX, double observerY)
+        {
+            double deltaX = targetX - observerX;
+            double deltaY = targetY - observerY;
+
+            return Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+        }
 
         /// <summary> Calculates the angle between the observer and the target </summary>
         public static float CalculateAngleToTarget(Vector2f target, Vector2f observer)

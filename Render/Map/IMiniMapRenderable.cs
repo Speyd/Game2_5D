@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TextureLib;
 
 
 namespace Render.Map;
@@ -13,6 +14,9 @@ public interface IMiniMapRenderable
 {
     public float SizeScale { get; set; }
     public float PositionScale { get; set; }
+
+    public SFML.Graphics.Color ColorInMap { get; set; }
+    public TextureObstacle? TextureInMiniMap { get; set; }
 
     void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1);
     void FillingTextureShape(RectangleShape rectangleShape);

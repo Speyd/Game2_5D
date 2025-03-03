@@ -8,7 +8,6 @@ using EntityLib;
 using HitBoxLib.Data.HitBoxObject;
 using HitBoxLib.Data.Observer;
 using MapLib;
-using ObstacleLib.SpriteLib;
 using Render;
 using Render.RenderAlgorithm;
 using Render.RenderInterface;
@@ -37,7 +36,7 @@ public static class VisualizerHitBox
         {
             foreach (var obstacle in obstList.Value)
             {
-                HitboxObjectInfo hitboxObjectInfo = obstacle.GetHitboxObjectInfo();
+                RenderInfo hitboxObjectInfo = obstacle.GetRenderHitBoxInfo();
                 if (IsDistanceLimited && CalculateDistance(hitboxObjectInfo.position, observerInfo.position) > entity.MaxRenderTile)
                     continue;
 

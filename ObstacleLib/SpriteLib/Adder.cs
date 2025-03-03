@@ -57,8 +57,8 @@ public static class Adder
         else
             sprite.Animation.AddFrame(new TextureObstacle(path));
 
-        if (sprite.TextureInMap is null && sprite.Animation.AmountFrame > 0)
-            sprite.TextureInMap = sprite.Animation.GetFrame(0);
+        if (sprite.TextureInMiniMap is null && sprite.Animation.AmountFrame > 0)
+            sprite.TextureInMiniMap = sprite.Animation.GetFrame(0);
     }
     public static void AddTextureFromFolder(SpriteObstacle sprite, string path, bool folderAccounting)
     {
@@ -86,8 +86,8 @@ public static class Adder
     {
         sprite.Animation.AddFrame(texture);
 
-        if (sprite.TextureInMap is null && sprite.Animation.AmountFrame > 0)
-            sprite.TextureInMap = sprite.Animation.GetFrame(0);
+        if (sprite.TextureInMiniMap is null && sprite.Animation.AmountFrame > 0)
+            sprite.TextureInMiniMap = sprite.Animation.GetFrame(0);
     }
     public static void AddTextures(SpriteObstacle sprite, List<TextureObstacle> textures)
     {

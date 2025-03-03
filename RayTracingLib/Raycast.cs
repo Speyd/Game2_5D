@@ -7,13 +7,11 @@ using EntityLib;
 using MapLib;
 using ScreenLib;
 using SFML.Graphics;
-using ObstacleLib;
 using static SFML.Window.Mouse;
 using Render.RenderInterface;
 using System.Reflection.Metadata;
 using EntityLib.Player;
 using SFML.Window;
-using ObstacleLib.SpriteLib;
 using static OpenTK.Graphics.OpenGL.GL;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using HitBoxLib.PositionObject;
@@ -21,7 +19,7 @@ using System.Numerics;
 using SFML.System;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.Operations;
-
+using Render.Object;
 
 
 namespace RayTracingLib;
@@ -71,7 +69,7 @@ public static class Raycast
 
         return tValues;
     }
-    public static bool IntersectionCalculation(Obstacle obstacle, 
+    public static bool IntersectionCalculation(IObject obj, 
                 Entity entity, double tValue,
                 float minX, float maxX,
                 float minY, float maxY)
@@ -79,21 +77,21 @@ public static class Raycast
         double xInter = entity.X.Axis + tValue * entity.Direction.X;
         double yInter = entity.Y.Axis + tValue * entity.Direction.Y;
 
-        Vector3f obstaclePos = new Vector3f((float)xInter, (float)yInter, (float)obstacle.Z.Axis);
+        Vector3f obstaclePos = new Vector3f((float)xInter, (float)yInter, (float)obj.Z.Axis);
 
 
-        bool result = Collision.IsRayTouchesObject(obstaclePos, entity.GetObserverInfo(), obstacle.HitBox.MainHitBox, xInter, yInter);
+        bool result = Collision.IsRayTouchesObject(obstaclePos, entity.GetObserverInfo(), obj.HitBox.MainHitBox, xInter, yInter);
 
         return result;
     }
 
-    private static void DetailedSearchInCell(List<Obstacle> colisionObstacle, List<Obstacle> obstacles, Entity entity)
+    private static void DetailedSearchInCell(List<IObject> colisionObject, List<IObject> objs, Entity entity)
     {
 
-        foreach (var obstacle in obstacles)
+        foreach (var obj in objs)
         {
-            Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
-            var mainHitBox = obstacle.HitBox.MainHitBox;
+            Vector3f obstaclePos = new Vector3f((float)obj.X.Axis, (float)obj.Y.Axis, (float)obj.Z.Axis);
+            var mainHitBox = obj.HitBox.MainHitBox;
 
             float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
             float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
@@ -106,20 +104,20 @@ public static class Raycast
             {
                 if (tValue < 0) continue;
 
-                if (IntersectionCalculation(obstacle, entity, tValue, minX, maxX, minY, maxY))
+                if (IntersectionCalculation(obj, entity, tValue, minX, maxX, minY, maxY))
                 {
-                    colisionObstacle.Add(obstacle);
+                    colisionObject.Add(obj);
                     break;
                 }
             }
         }
     }
-    public static Obstacle? GetFirstTouchedObject(List<Obstacle> colisionObstacle, Entity entity)
+    public static IObject? GetFirstTouchedObject(List<IObject> colisionObject, Entity entity)
     {
-        Obstacle? nearestObstacle = null;
+        IObject? nearestObstacle = null;
         double nearestDistance = double.MaxValue;
 
-        foreach (var obstacle in colisionObstacle)
+        foreach (var obstacle in colisionObject)
         {
             Vector3f obstaclePos = new Vector3f((float)obstacle.X.Axis, (float)obstacle.Y.Axis, (float)obstacle.Z.Axis);
             var mainHitBox = obstacle.HitBox.MainHitBox;
@@ -147,7 +145,7 @@ public static class Raycast
     }
 
 
-    public static Obstacle? RaycastFun(Map map, Entity entity)
+    public static IObject? RaycastFun(Map map, Entity entity)
     {
         double dx = entity.Direction.X;
         double dy = entity.Direction.Y;
@@ -174,7 +172,7 @@ public static class Raycast
 
         while (true)
         {
-            List<Obstacle> colisionObstacle = new();
+            List<IObject> colisionObject = new();
 
             for (int radius = 0; radius <= ScanRadius; radius++)
             {
@@ -186,12 +184,12 @@ public static class Raycast
                         var scanY = gridY + yOffset * tileSize;
 
                         if (map.Obstacles.ContainsKey((scanX, scanY)))
-                            DetailedSearchInCell(colisionObstacle, map.Obstacles[(scanX, scanY)], entity);
+                            DetailedSearchInCell(colisionObject, map.Obstacles[(scanX, scanY)], entity);
                     }
                 }
             }
 
-            Obstacle? findObstacle = GetFirstTouchedObject(colisionObstacle, entity);
+            IObject? findObstacle = GetFirstTouchedObject(colisionObject, entity);
             if (findObstacle != null)
                 return findObstacle;
 

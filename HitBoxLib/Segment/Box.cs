@@ -30,7 +30,13 @@ public class Box
 
     public Box(Box box)
     {
-        Body = box.Body;
+        foreach(var pair in box.Body)
+        {
+            Body.Add(pair.Key, new HitBoxSide(pair.Value));
+        }
+
+        RenderColor = box.RenderColor;
+        HeightRenderMode = box.HeightRenderMode;
         Title = box.Title;
     }
     public Box(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> body, string title)

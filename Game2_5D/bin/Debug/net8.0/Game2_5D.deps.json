@@ -1285,7 +1285,6 @@
       "MapLib/1.0.0": {
         "dependencies": {
           "EntityLib": "1.0.0",
-          "ObstacleLib": "1.0.0",
           "Render": "1.0.0",
           "SFML.Graphics": "2.6.0",
           "ScreenLib": "1.0.0",
@@ -1332,6 +1331,7 @@
           "EffectLib": "1.0.0",
           "EntityLib": "1.0.0",
           "HitBoxLib": "1.0.0",
+          "RayTracingLib": "1.0.0",
           "Render": "1.0.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.6"
@@ -1357,8 +1357,8 @@
       },
       "RayTracingLib/1.0.0": {
         "dependencies": {
+          "DataPipes": "1.0.0",
           "EntityLib": "1.0.0",
-          "MapLib": "1.0.0",
           "MoveLib": "1.0.0",
           "ScreenLib": "1.0.0",
           "TextureLib": "1.0.0"

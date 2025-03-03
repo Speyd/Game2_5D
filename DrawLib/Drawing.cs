@@ -18,10 +18,10 @@ public static class Drawing
 
     public static void DrawingPoint(Map map, Entity entity, int heightObj, SFML.Graphics.Color colorFill)
     {
-        Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+        IObject? obstacle = Raycast.RaycastFun(map, entity);
         if (obstacle is not null && obstacle is IDrawable drawable)
         {
-            hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+            hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, entity);
 
 
             float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
@@ -44,11 +44,11 @@ public static class Drawing
 
     public static void DrawingSprite(Map map, Entity entity, Sprite sprite)
     {
-        Obstacle? obstacle = Raycast.RaycastFun(map, entity);
+        IObject? obstacle = Raycast.RaycastFun(map, entity);
 
         if (obstacle is not null && obstacle is IDrawable drawable)
         {
-            hitPoint = RayDetectionX.DetermineWallAllSides(obstacle, entity);
+            hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, entity);
 
 
             float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);

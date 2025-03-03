@@ -7,7 +7,6 @@ using System.Reflection;
 using System.Collections.ObjectModel;
 using SFML.System;
 using SFML.Graphics;
-using ObstacleLib;
 using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
@@ -17,7 +16,6 @@ using static SFML.Graphics.Font;
 using static SFML.Window.Joystick;
 using System.Buffers;
 using EntityLib.Player;
-using ObstacleLib.SpriteLib;
 using Render.RenderAlgorithm;
 using Render.RenderInterface;
 
@@ -95,7 +93,7 @@ public class Algorithm(Map map, Entity entity)
                     break;
 
                 default:
-                    throw new Exception("Invalid object for rendering(CheckAndAddObstacle)");
+                    throw new Exception($"Invalid object for rendering(CheckAndAddObstacle)\nType: {obstacle.GetType()}");
             }
         }
 
@@ -118,10 +116,10 @@ public class Algorithm(Map map, Entity entity)
         info.Sort((a, b) => a.depth.CompareTo(b.depth));
         foreach (var item in info)
         {
-            var zCoordinate = item.Obstacle?.GetZCoordinate();
+            var zCoordinate = item.Object?.Z.Axis;
 
             if (current == null ||
-                (item.depth > current.depth && zCoordinate.HasValue && zCoordinate > current.Obstacle?.GetZCoordinate()))
+                (item.depth > current.depth && zCoordinate.HasValue && zCoordinate > current.Object?.Z.Axis))
             {
                 filtered.Add(item);
                 current = item;
@@ -156,10 +154,10 @@ public class Algorithm(Map map, Entity entity)
         for (int obst = 0; obst < sizeVisibleObst; obst++)
         {
             if (obst > 0 && sizeVisibleObst > 1)
-                ParallelResult.PositionPreviousObject = visibleObstacles[obst - 1].Obstacle?.GetPositionOnScreen(ParallelResult, entity);
+                ParallelResult.PositionPreviousObject = visibleObstacles[obst - 1].Object?.GetPositionOnScreen(ParallelResult, entity);
 
             ParallelResult.CalculationSettingRender(entity, ray, visibleObstacles[obst].depth, visibleObstacles[obst].coordinate, carAngleRay);
-            visibleObstacles[obst].Obstacle?.Render(ParallelResult, entity);
+            visibleObstacles[obst].Object?.Render(ParallelResult, entity);
         }
     }
 

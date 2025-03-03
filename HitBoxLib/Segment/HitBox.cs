@@ -27,6 +27,12 @@ public class HitBox
     {
         MainHitBox = new Box(AddAllSides(), titleMainHitBox);
     }
+    public HitBox(HitBox hitBox)
+    {
+        MainHitBox = new Box(hitBox.MainHitBox);
+        foreach(var segment in hitBox.SegmentedHitbox)
+            SegmentedHitbox.Add(new Box(segment));
+    }
     public HitBox(double offset, string titleMainHitBox = "Body")
     {
         MainHitBox = new Box(AddAllSides(offset), titleMainHitBox);

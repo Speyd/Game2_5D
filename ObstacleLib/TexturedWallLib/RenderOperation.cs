@@ -7,10 +7,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ObstacleLib.TexturedWallLib.Determine;
 using TextureLib;
 using Render.RenderAlgorithm;
-
+using RayTracingLib;
+using RayTracingLib.Detection;
 
 namespace ObstacleLib.TexturedWallLib.Render;
 internal static class RenderOperation
@@ -27,12 +27,12 @@ internal static class RenderOperation
     }
     internal static TexturedPair? SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
     {
-        ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result);
+        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, entity, result);
         return wallDetermine == ObjectSide.Error ? null : Wall.MultiTextured.UniqueTexture.GetValue(wallDetermine);
     }
     internal static ObjectSide SelectCurrentObjectSide(TexturedWall Wall, Result result, Entity entity)
     {
-        ObjectSide wallDetermine = DetermineSide.DetermineWallAllSides(Wall, entity, result);
+        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, entity, result);
         return wallDetermine;
     }
 }

@@ -48,7 +48,7 @@ using HitBoxLib.PositionObject;
 Screen.Initialize(1000, 600);
 
 Screen.Window.SetActive(true);
-Map map = new Map(24, 23);
+Map map = new Map(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"), 24, 23);
 //map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));
 //map.AddObstacle(2, 5, new TexturedWall(Map.StandartBlock));
 
@@ -249,9 +249,9 @@ map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png")
 //map.AddObstacle(7, 2,new TexturedWall(@"Resources\Image\WallTexture\Wall8.png"));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
-map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(9, 8, new TexturedWall(Map.StandartBlock));
 map.AddObstacle(3, 5, new BlankWall(122, 12, 200));
-map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
+//map.AddObstacle(9, 9, new TexturedWall(Map.StandartBlock));
 //map.AddObstacle(9, 10, new TexturedWall(Map.StandartBlock));
 Player player = new Player(100)
 {

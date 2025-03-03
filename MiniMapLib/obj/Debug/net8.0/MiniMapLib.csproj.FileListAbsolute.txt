@@ -24,11 +24,5 @@ D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\DataPipes.pdb
 D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\HitBoxLib.pdb
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\AnimationLib.dll
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\EffectLib.dll
 D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\MapLib.dll
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\ObstacleLib.dll
 D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\MapLib.pdb
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\AnimationLib.pdb
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\EffectLib.pdb
-D:\C++ проекты\Game2_5D\MiniMapLib\bin\Debug\net8.0\ObstacleLib.pdb
