@@ -10,17 +10,28 @@ using System.Threading.Tasks;
 
 
 namespace PartsWorldLib.Up;
-public static class Ceiling
+public class Ceiling
 {
+    public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
+    public Color ColorFilling { get; set; } = new Color(100, 149, 237);
 
-    private static RectangleShape RenderRectangle = new RectangleShape();
-    public static Color Color { get; set; } = new Color(100, 149, 237);
-
-    public static void Render(Player player, int floorDisplacement)
+    public Ceiling(SFML.Graphics.Color color)
     {
-        RenderRectangle.FillColor = Color;
-        RenderRectangle.Size = new Vector2f(Screen.ScreenWidth, floorDisplacement);
+        this.ColorFilling = color;
+    }
+    public Ceiling()
+        : this(new SFML.Graphics.Color(100, 149, 237))
+    { }
 
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, RenderRectangle);
+    public void Render(Player player)
+    {
+        float normalizeHeight =  RenderPartsWorld.NormalizeHeigthUpPart(player);
+
+        Vertices[0] = new Vertex(new Vector2f(0, 0), ColorFilling);
+        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, 0), ColorFilling);
+        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, normalizeHeight), ColorFilling);
+        Vertices[3] = new Vertex(new Vector2f(0, normalizeHeight), ColorFilling);
+
+        Screen.OutputPriority.AddToPriority(RenderPriority.Background, Vertices);
     }
 }

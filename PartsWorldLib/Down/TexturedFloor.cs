@@ -48,6 +48,7 @@ public class TexturedFloor
     /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
 
+
     public TexturedFloor(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
         string shaderPath = @"Resources\Shader\FloorSetting.glsl")
     {
@@ -55,7 +56,6 @@ public class TexturedFloor
             throw new Exception("Error path textureFloor");
 
         Texture = new Texture(texturePath);
-
 
         if (!File.Exists(shaderPath))
             throw new Exception("Error path shaderFloor");
@@ -66,14 +66,6 @@ public class TexturedFloor
         Sprite = new Sprite(SecondStepRender?.Texture);
     }
 
-    private uint SetNormalHalfHeight(Player player)
-    {
-        uint halfHeight = (uint)(Screen.ScreenHeight / DivisionCoefficient);
-        if (player.VerticalAngle > 0)
-            halfHeight = (uint)(Screen.ScreenHeight / (3f + player.VerticalAngle));
-
-        return halfHeight;
-    }
     private void SetStaticUniformShader()
     {
         if (Shader.IsAvailable)
@@ -100,7 +92,7 @@ public class TexturedFloor
 
     public void Render(Player player)
     {
-        uint halfHeight = SetNormalHalfHeight(player);
+        uint halfHeight = (uint)RenderPartsWorld.NormalizeHeigthDownPart(player);
         FirstStepRender.Clear(ClearColor);
         SecondStepRender.Clear(ClearColor);
 

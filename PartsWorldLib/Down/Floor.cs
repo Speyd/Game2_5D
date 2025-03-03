@@ -10,20 +10,31 @@ using System.Threading.Tasks;
 
 
 namespace PartsWorldLib.Down;
-public static class Floor
+public class Floor
 {
-    private static RectangleShape RenderRectangle = new RectangleShape();
-    public static Color ColorFilling { get; set; } = new Color(20, 20, 20);
+    public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
+    public SFML.Graphics.Color ColorFilling { get; set; } = new Color(20, 20, 20);
 
-
-    public static void Render(Player player, int bottomRectHeight, int topRectHeight)
+    public Floor(SFML.Graphics.Color color)
     {
-        RenderRectangle.FillColor = ColorFilling;
-        RenderRectangle.Size = new Vector2f(Screen.ScreenWidth, bottomRectHeight);
-        RenderRectangle.Position = new Vector2f(0, topRectHeight);
-
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, RenderRectangle);
-
+        this.ColorFilling = color;
     }
+    public Floor() 
+        :this(new SFML.Graphics.Color(20, 20, 20))
+    {}
+
+    public void Render(Player player)
+    {
+        float normalizeHeight = RenderPartsWorld.NormalizeHeigthDownPart(player);
+
+        Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), ColorFilling);
+        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), ColorFilling);
+        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, normalizeHeight), ColorFilling);
+        Vertices[3] = new Vertex(new Vector2f(0, normalizeHeight), ColorFilling);
+
+        Screen.OutputPriority.AddToPriority(RenderPriority.Background, Vertices);
+    }
+
+
 
 }

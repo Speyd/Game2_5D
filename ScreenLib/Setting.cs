@@ -29,7 +29,7 @@ public class Setting
     public int Scale { get; private set; }
     public int CenterRay { get; private set; }
 
-    public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1, int maxDepth = 800)
+    public Setting(int ScreenWidth, int ScreenHeight, int amountRays = -1)
     {
         if (ScreenWidth <= 0 || ScreenHeight <= 0)
             throw new Exception("Error builder 'Setting'");

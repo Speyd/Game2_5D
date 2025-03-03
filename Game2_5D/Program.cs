@@ -386,8 +386,6 @@ try
         Screen.Window.DispatchEvents();
         Screen.Window.Clear();
 
-        fpsChecker.StartRead();
-
         player.MakePressed();
 
         algorithm.CalculationAlgorithm();

@@ -15,97 +15,61 @@ using System.Threading.Tasks;
 namespace PartsWorldLib;
 public class RenderPartsWorld
 {
-    public TexturedFloor TexturedFloor;
-
     public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
     public DownPart RenderDownPart { get; set; } = DownPart.None;
-    public Sky Sky {get; set;}
-    public TexturedCeiling TexturedCeiling { get; set; }
+
+    public TexturedFloor TexturedFloor { get; init; }
+    public Floor Floor { get; init; }
+
+    public Sky Sky { get; init; }
+    public Ceiling Ceiling { get; init; }
+    public TexturedCeiling TexturedCeiling { get; init; }
 
 
-    public int TopRectHeight { get; private set;}
-    public int BottomRectHeight { get; private set; }
-
-    const float angleFactor = 0.5f;
-
+    public RenderPartsWorld(TexturedFloor? texturedFloor = null, Floor? floor = null,
+        Ceiling? ceiling = null,TexturedCeiling ? textureCeiling = null, Sky? sky = null)
+    {
+        TexturedFloor = texturedFloor ?? new TexturedFloor();
+        Floor = floor ?? new Floor();
+        TexturedCeiling = textureCeiling ?? new TexturedCeiling();
+        Sky = sky ?? new Sky();
+        Ceiling = ceiling ?? new Ceiling();
+    }
+    public RenderPartsWorld(TexturedFloor? texturedFloor = null, TexturedCeiling? textureCeiling = null, Sky? sky = null)
+        :this(texturedFloor, null, null, textureCeiling, sky)
+    {}
+    public RenderPartsWorld(Floor? floor = null, Ceiling? ceiling = null)
+         : this(null, floor, ceiling, null, null)
+    {}
     public RenderPartsWorld()
+         : this(null, null, null, null, null)
+    { }
+    public static float NormalizeHeigthDownPart(Player player)
     {
-        TexturedFloor = new TexturedFloor();
-
-        Sky = new Sky();
-        TexturedCeiling = new TexturedCeiling();
-    }
-    public RenderPartsWorld(TexturedFloor floor, Sky sky)
-    {
-        TexturedFloor = floor;
-        Sky = sky;
-
-        TexturedCeiling = new TexturedCeiling();
-    }
-    public RenderPartsWorld(TexturedFloor floor, TexturedCeiling ceiling)
-    {
-        TexturedFloor = floor;
-        TexturedCeiling = ceiling;
-
-        Sky = new Sky();
-    }
-    public RenderPartsWorld(TexturedFloor floor)
-    {
-        TexturedFloor = floor;
-        Sky = new Sky();
-        TexturedCeiling = new TexturedCeiling();
-    }
-    public RenderPartsWorld(TexturedCeiling ceiling)
-    {
-        TexturedCeiling = ceiling;
-
-        TexturedFloor = new TexturedFloor();
-        Sky = new Sky();
-    }
-    public RenderPartsWorld(Sky sky)
-    {
-        Sky = sky;
-
-        TexturedFloor = new TexturedFloor();
-        TexturedCeiling = new TexturedCeiling();
-    }
-
-
-    public void SetCoordinate(Player player)
-    {
-        float adjustedAngle = MathF.Abs((float)player.VerticalAngle) * angleFactor;
-
-        if (player.VerticalAngle > 0)
-        {
-            TopRectHeight = (int)(Screen.Setting.HalfHeight - adjustedAngle * Screen.Setting.HalfHeight);
-            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-        }
-        else if (player.VerticalAngle < 0)
-        {
-            TopRectHeight = (int)(Screen.Setting.HalfHeight + adjustedAngle * Screen.Setting.HalfHeight);
-            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-        }
+        if (player.VerticalAngle >= 0)
+            return Screen.Setting.HalfHeight / (float)(player.VerticalAngle + 1);
         else
-        {
-            TopRectHeight = Screen.Setting.HalfHeight;
-            BottomRectHeight = Screen.ScreenHeight - TopRectHeight;
-        }
+            return Screen.Setting.HalfHeight * (float)(Math.Abs(player.VerticalAngle) + 1);
     }
-
+    public static float NormalizeHeigthUpPart(Player player)
+    {
+        if (player.VerticalAngle >= 0)
+            return Screen.Setting.HalfHeight / (float)(player.VerticalAngle + 1);
+        else
+            return Screen.Setting.HalfHeight * (float)(Math.Abs(player.VerticalAngle) + 1);
+    }
     public void Render(Player player)
     {
-        SetCoordinate(player);
-
         switch (RenderUpperPart)
         {
             case UpperPart.Sky: 
-                Sky.Render(player, TopRectHeight); 
+                Sky.Render(player); 
                 break;
             case UpperPart.Ceiling:
                 TexturedCeiling.Render(player);
                 break;
             default:
-                Ceiling.Render(player, TopRectHeight);
+                Ceiling.Render(player);
                 break;
         }
 
@@ -115,7 +79,7 @@ public class RenderPartsWorld
                 TexturedFloor.Render(player);
                 break;
             default:
-                Floor.Render(player, BottomRectHeight, TopRectHeight);
+                Floor.Render(player);
                 break;
         }
     }

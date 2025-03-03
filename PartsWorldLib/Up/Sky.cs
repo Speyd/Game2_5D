@@ -35,13 +35,10 @@ public class Sky
         RenderSprite = new Sprite(Texture);
     }
 
-    public void Render(Player player, int floorDisplacement)
+    public void Render(Player player)
     {
         if (Texture is null)
-        {
-            Ceiling.Render(player, floorDisplacement);
             return;
-        }
 
         float angleInDegrees = (float)(player.Angle * normAngle) % 360;
         if (angleInDegrees < 0) angleInDegrees += 360;

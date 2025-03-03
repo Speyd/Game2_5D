@@ -22,14 +22,6 @@ public class FPS : RenderText
     {
         fromNow = from;
     }
-
-    public void StartRead()
-    {
-        //DateTime dateTime = DateTime.Now;
-        //double elapsed = (dateTime - fromNow).TotalSeconds;
-        //fromNow = DateTime.Now;
-    }
-
     public void EndRead()
     {
         deltaTime = clock.Restart().AsSeconds();
