@@ -16,36 +16,40 @@ public class MultiTexturedObject
 
 
     #region Constructor
-    public MultiTexturedObject(string path)
+    public MultiTexturedObject(params string[] paths)
     {
         UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(path);
-    }
-    public MultiTexturedObject(string pathLR, string pathBT)
-    {
-        UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(pathLR, pathBT);
-    }
-    public MultiTexturedObject(string pathL, string pathR, string pathB, string pathT)
-    {
-        UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(pathL, pathR, pathB, pathT);
-    }
+
+        switch (paths.Length)
+        {
+            case 1:
+                SetUniqueTexture(paths[0]);
+                break;
+            case 2:
+                SetUniqueTexture(paths[0], paths[1]);
+                break;
+            case 4:
+                SetUniqueTexture(paths[0], paths[1], paths[2], paths[3]);
+                break;
+            default:
+                throw new ArgumentException($"Invalid number of paths ({paths.Length}). Expected 1, 2, or 4.");
+        }
+    } 
     public MultiTexturedObject(TextureObstacle texture)
     {
         UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(texture);
+        SetUniqueTexture(texture.PathTexture);
     }
     public MultiTexturedObject(TextureObstacle textureLR, TextureObstacle textureBT)
     {
         UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(textureLR, textureBT);
+        SetUniqueTexture(textureLR.PathTexture, textureBT.PathTexture);
     }
     public MultiTexturedObject(TextureObstacle Left, TextureObstacle Right,
         TextureObstacle Bottom, TextureObstacle Top)
     {
         UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        SetUniqueTexture(Left, Right, Bottom, Top);
+        SetUniqueTexture(Left.PathTexture, Right.PathTexture, Bottom.PathTexture, Top.PathTexture);
     }
     public MultiTexturedObject(List<(ObjectSide, TextureObstacle)> textures)
     {
@@ -62,72 +66,39 @@ public class MultiTexturedObject
         CheckTrueSet(multiTextured.UniqueTexture);
 
         UniqueTexture = new UniqueDictionary<ObjectSide, TexturedPair>();
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(multiTextured[ObjectSide.Left].Base));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(multiTextured[ObjectSide.Right].Base));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(multiTextured[ObjectSide.Bottom].Base));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(multiTextured[ObjectSide.Top].Base));
+        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(multiTextured[ObjectSide.Left]?.Base));
+        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(multiTextured[ObjectSide.Right]?.Base));
+        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(multiTextured[ObjectSide.Bottom]?.Base));
+        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(multiTextured[ObjectSide.Top]?.Base));
     }
-    #endregion 
+    #endregion
 
     #region Set
-    public void SetUniqueTexture(string path)
+    public void SetUniqueTexture(params string[] paths)
     {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(path));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(path));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(path));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(path));
-
-
-        CheckTrueSet(UniqueTexture);
-    }
-    public void SetUniqueTexture(string pathLR, string pathBT)
-    {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(pathLR));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(pathLR));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(pathBT));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(pathBT));
-
-
-        CheckTrueSet(UniqueTexture);
-    }
-    public void SetUniqueTexture(string pathL, string pathR, string pathB, string pathT)
-    {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(pathL));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(pathR));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(pathB));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(pathT));
-
-
-        CheckTrueSet(UniqueTexture);
-    }
-    public void SetUniqueTexture(TextureObstacle texture)
-    {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(texture));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(texture));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(texture));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(texture));
-
-
-        CheckTrueSet(UniqueTexture);
-    }
-    public void SetUniqueTexture(TextureObstacle textureLR, TextureObstacle textureBT)
-    {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(textureLR));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(textureLR));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(textureBT));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(textureBT));
-
-
-        CheckTrueSet(UniqueTexture);
-    }
-    public void SetUniqueTexture(TextureObstacle Left, TextureObstacle Right,
-        TextureObstacle Bottom, TextureObstacle Top)
-    {
-        UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(Left));
-        UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(Right));
-        UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(Bottom));
-        UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(Top));
-
+        if (paths.Length == 1)
+        {
+            foreach (ObjectSide side in Enum.GetValues(typeof(ObjectSide)))
+            {
+                UniqueTexture.Insert(side, new TexturedPair(paths[0]));
+            }
+        }
+        else if (paths.Length == 2)
+        {
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(paths[0]));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(paths[0]));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(paths[1]));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(paths[1]));
+        }
+        else if (paths.Length == 4)
+        {
+            UniqueTexture.Insert(ObjectSide.Left, new TexturedPair(paths[0]));
+            UniqueTexture.Insert(ObjectSide.Right, new TexturedPair(paths[1]));
+            UniqueTexture.Insert(ObjectSide.Bottom, new TexturedPair(paths[2]));
+            UniqueTexture.Insert(ObjectSide.Top, new TexturedPair(paths[3]));
+        }
+        else
+            throw new ArgumentException($"Invalid number of paths ({paths.Length}). Expected 1, 2, or 4.");
 
         CheckTrueSet(UniqueTexture);
     }
@@ -140,7 +111,7 @@ public class MultiTexturedObject
 
         foreach (var value in textures)
         {
-            UniqueTexture.Insert(value.Item1, new TexturedPair(value.Item2));
+            UniqueTexture.Insert(value.Item1, new TexturedPair(value.Item2.PathTexture));
         }
 
         CheckTrueSet(UniqueTexture);
@@ -159,20 +130,20 @@ public class MultiTexturedObject
 
         CheckTrueSet(UniqueTexture);
     }
-    #endregion
-
     public void CheckTrueSet(UniqueDictionary<ObjectSide, TexturedPair> uniqueTexture)
     {
-        if (uniqueTexture.PresenceKey(ObjectSide.Left) == true &&
-            uniqueTexture.PresenceKey(ObjectSide.Right) == true &&
-            uniqueTexture.PresenceKey(ObjectSide.Bottom) == true &&
-            uniqueTexture.PresenceKey(ObjectSide.Top) == true)
+        if (uniqueTexture.ContainsKey(ObjectSide.Left) == true &&
+            uniqueTexture.ContainsKey(ObjectSide.Right) == true &&
+            uniqueTexture.ContainsKey(ObjectSide.Bottom) == true &&
+            uniqueTexture.ContainsKey(ObjectSide.Top) == true)
         {
             return;
         }
 
         throw new Exception("Not all sides of the wall are created!(MultiTexturedObject)");
     }
+
+    #endregion
 
     public TexturedPair? this[ObjectSide side]
     {

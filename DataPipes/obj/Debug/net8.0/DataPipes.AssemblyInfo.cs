@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("DataPipes")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd13752ce97a461ce9242484f822cb6376f8c3e4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+18e3a4f85e0756e8abe6d2a0251d6ce3151c4290")]
 [assembly: System.Reflection.AssemblyProductAttribute("DataPipes")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataPipes")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

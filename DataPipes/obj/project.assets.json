@@ -722,6 +722,24 @@
           }
         }
       },
+      "SFML.Graphics/2.6.0": {
+        "type": "package",
+        "dependencies": {
+          "CSFML": "[2.6.1, 2.7.0)",
+          "SFML.System": "2.6.0",
+          "SFML.Window": "2.6.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/SFML.Graphics.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SFML.Graphics.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "SFML.System/2.6.0": {
         "type": "package",
         "dependencies": {
@@ -734,6 +752,23 @@
         },
         "runtime": {
           "lib/netstandard2.0/SFML.System.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SFML.Window/2.6.0": {
+        "type": "package",
+        "dependencies": {
+          "CSFML": "[2.6.1, 2.7.0)",
+          "SFML.System": "2.6.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/SFML.Window.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/SFML.Window.dll": {
             "related": ".xml"
           }
         }
@@ -934,6 +969,21 @@
         "sfml-icon.png"
       ]
     },
+    "SFML.Graphics/2.6.0": {
+      "sha512": "bwYJT4siVta87d3ZaRN37FViOMAgiiYS9BYJOhHL70G9+KDtqbAl1LYg9hdEG8IHFSj55I7P8qkPL33KQ16RBg==",
+      "type": "package",
+      "path": "sfml.graphics/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/SFML.Graphics.dll",
+        "lib/netstandard2.0/SFML.Graphics.xml",
+        "sfml-icon.png",
+        "sfml.graphics.2.6.0.nupkg.sha512",
+        "sfml.graphics.nuspec"
+      ]
+    },
     "SFML.System/2.6.0": {
       "sha512": "XDNdNah0PKZElyYMAqWd8Kbe/XsJExkTxPY0txIrsTXEFIiRWhlkcYBBZmGkA6wvB5Ib7XH8QqE8s3BY8ZAzaQ==",
       "type": "package",
@@ -948,10 +998,26 @@
         "sfml.system.2.6.0.nupkg.sha512",
         "sfml.system.nuspec"
       ]
+    },
+    "SFML.Window/2.6.0": {
+      "sha512": "C4FAnMI6adoNyc7gv33tIK9iYWuPxPUqQojLkhy2DTi4+3ZrlSNRDNZYc7V8Gaps3dOheGAP41/MJKSdTF8SZg==",
+      "type": "package",
+      "path": "sfml.window/2.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/netstandard2.0/SFML.Window.dll",
+        "lib/netstandard2.0/SFML.Window.xml",
+        "sfml-icon.png",
+        "sfml.window.2.6.0.nupkg.sha512",
+        "sfml.window.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "SFML.Graphics >= 2.6.0",
       "SFML.System >= 2.6.0"
     ]
   },
@@ -1005,6 +1071,10 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "SFML.Graphics": {
+            "target": "Package",
+            "version": "[2.6.0, )"
+          },
           "SFML.System": {
             "target": "Package",
             "version": "[2.6.0, )"

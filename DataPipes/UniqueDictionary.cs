@@ -63,7 +63,7 @@ public class UniqueDictionary<KEY, VALUE>
 
         return myMap.First().Value;
     }
-    public bool PresenceKey(KEY key)
+    public bool ContainsKey(KEY key)
     {
         return myMap.ContainsKey(key);
     }

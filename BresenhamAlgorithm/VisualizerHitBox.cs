@@ -23,12 +23,12 @@ public static class VisualizerHitBox
     public static VisualizerType VisualizerType { get; set; } = VisualizerType.None;
     /// <summary> Limits rendering to a maximum distance </summary>
     public static bool IsDistanceLimited { get; set; } = true;
-
+    private const float indexStepDepth = 0.0000001f;
 
     public static void Render(Map map, Entity entity)
     {
-        float index = 0.0000001f;
-        float step = 0.0000001f;
+        float index = indexStepDepth;
+        float step = indexStepDepth;
 
         ObserverInfo observerInfo = entity.GetObserverInfo();
 

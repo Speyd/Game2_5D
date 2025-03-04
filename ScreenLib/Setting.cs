@@ -10,13 +10,16 @@ public class Setting
 {
     private const int _tile = 100;
     /// <summary>World unit of horizontal measurement(X and Y axis)</summary>
-    public int Tile { get => _tile; }
+    public int Tile { get; } = _tile;
     public int HalfTile { get; } = _tile / 2;
 
+
+    private const float _verticalTile = 850;
     /// <summary>World unit of vertical measurement(Z axis)</summary>
-    private const int _verticalTile = 850;
-    public int VerticalTile { get => _tile; }
-    public int HalfVerticalTile { get; } = _verticalTile / 2;
+    public float VerticalTile { get; } = _verticalTile;
+    /// <summary>World unit of vertical measurement(Z axis)</summary>
+    public float HalfVerticalTile { get; } = _verticalTile / 2;
+
     /// <summary>Settings for Parallel</summary>
     public ParallelOptions ParallelOptions { get; init; } = new ParallelOptions
     {
@@ -43,7 +46,6 @@ public class Setting
             amountRays;
 
         Scale = ScreenWidth / AmountRays;
-
         CenterRay = AmountRays / 2 - 1;
     }
 

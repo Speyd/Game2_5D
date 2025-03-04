@@ -18,6 +18,7 @@ using System.Buffers;
 using EntityLib.Player;
 using Render.RenderAlgorithm;
 using Render.RenderInterface;
+using System.Runtime.InteropServices;
 
 namespace BresenhamAlgorithm;
 public class Algorithm(Map map, Entity entity)
@@ -104,22 +105,26 @@ public class Algorithm(Map map, Entity entity)
     /// /// <returns> Returns a list of InfoObjects to render</returns>
     private static List<InfoObject> FilterVisibleObstacles(List<InfoObject> info, bool rayPassability)
     {
-        if (info.Count <= 1) return info;
-        if (!rayPassability && info.Count == 2)
+        int count = info.Count;
+
+        if (count <= 1) return info;
+        if (!rayPassability && count == 2)
         {
-            return new List<InfoObject> { info[0].depth < info[1].depth ? info[0] : info[1] };
+            var first = info[0];
+            var second = info[1];
+
+            return new List<InfoObject> { first.depth < second.depth ? first : second };
         }
 
+
+        var span = CollectionsMarshal.AsSpan(info);
+        span.Sort((a, b) => a.depth.CompareTo(b.depth));
+
+        var filtered = new List<InfoObject>(count);
         InfoObject? current = null;
-        var filtered = new List<InfoObject>();
-
-        info.Sort((a, b) => a.depth.CompareTo(b.depth));
-        foreach (var item in info)
+        foreach (var item in span)
         {
-            var zCoordinate = item.Object?.Z.Axis;
-
-            if (current == null ||
-                (item.depth > current.depth && zCoordinate.HasValue && zCoordinate > current.Object?.Z.Axis))
+            if (current == null || (item.depth > current.depth && item.Object?.Z.Axis > current.Object?.Z.Axis))
             {
                 filtered.Add(item);
                 current = item;
@@ -168,6 +173,12 @@ public class Algorithm(Map map, Entity entity)
 
         Vector2i coordinates = Screen.MappingVector(entity.X.Axis, entity.Y.Axis);
 
+        double entityX = entity.X.Axis;
+        double entityY = entity.Y.Axis;
+        double entityDeltaAngle = entity.DeltaAngle;
+        double entityMaxRenderTile = entity.MaxRenderTile;
+        int tile = Screen.Setting.Tile;
+
         Parallel.For(0, Screen.Setting.AmountRays, Screen.Setting.ParallelOptions, ray =>
         {
             var ParallelResult = resultobjectPool.Get();
@@ -176,17 +187,17 @@ public class Algorithm(Map map, Entity entity)
             double hx = 0, x = 0, auxiliaryX = 0, depth_h = 0;
             double vy = 0, y = 0, auxiliaryY = 0, depth_v = 0;
 
-            double carAngleRay = carAngle + ray * entity.DeltaAngle;
+            double carAngleRay = carAngle + ray * entityDeltaAngle;
             double sinA = Math.Sin(carAngleRay);
             double cosA = Math.Cos(carAngleRay);
             ParallelResult.SinCarAngle = sinA;
             ParallelResult.CosCarAngle = cosA;
 
             CheckVericals(ref x, ref auxiliaryX, coordinates.X, cosA);
-            for (int j = 0; j < entity.MaxRenderTile; j += Screen.Setting.Tile) 
+            for (int j = 0; j < entityMaxRenderTile; j += tile) 
             {
-                depth_v = (x - entity.X.Axis) / cosA;
-                vy = entity.Y.Axis + depth_v * sinA;
+                depth_v = (x - entityX) / cosA;
+                vy = entityY + depth_v * sinA;
 
                 (int, int) mappX = Screen.Mapping(x + auxiliaryX, vy);
                 if (map.CheckTrueCoordinates(mappX))
@@ -197,14 +208,14 @@ public class Algorithm(Map map, Entity entity)
                 else
                     break;
 
-                x += auxiliaryX * Screen.Setting.Tile;
+                x += auxiliaryX * tile;
             };
 
             CheckVericals(ref y, ref auxiliaryY, coordinates.Y, sinA);
-            for (int j = 0; j < entity.MaxRenderTile; j += Screen.Setting.Tile)
+            for (int j = 0; j < entityMaxRenderTile; j += tile)
             {
-                depth_h = (y - entity.Y.Axis) / sinA;
-                hx = entity.X.Axis + depth_h * cosA;
+                depth_h = (y - entityY) / sinA;
+                hx = entityX + depth_h * cosA;
 
                 (int, int) mappY = Screen.Mapping(hx, y + auxiliaryY);
                 if (map.CheckTrueCoordinates(Screen.Mapping(hx, y + auxiliaryY)))
@@ -215,7 +226,7 @@ public class Algorithm(Map map, Entity entity)
                 else
                     break;
 
-                y += auxiliaryY * Screen.Setting.Tile;
+                y += auxiliaryY * tile;
             };
 
 

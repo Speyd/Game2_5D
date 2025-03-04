@@ -46,7 +46,6 @@ using HitBoxLib.PositionObject;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
 Screen.Initialize(1000, 600);
-
 Screen.Window.SetActive(true);
 Map map = new Map(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"), 24, 23);
 //map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));

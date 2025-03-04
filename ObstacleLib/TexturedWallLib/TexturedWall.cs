@@ -31,6 +31,7 @@ using Render.RenderAlgorithm;
 using Render.Object;
 using ObstacleLib.SpriteLib;
 using static System.Formats.Asn1.AsnWriter;
+using DataPipes;
 
 
 namespace ObstacleLib.TexturedWallLib;
@@ -49,56 +50,63 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
 
     #region Constructor
-    public TexturedWall(string path, bool isPassability = false)
-
-        : base(0, 0, SFML.Graphics.Color.Red, isPassability)
+    private static SFML.Graphics.Color GetDefaultWallColor() => SFML.Graphics.Color.Red;
+    private string GetFirstTextureOrThrow()
     {
-        TextureInMiniMap = new TextureObstacle(path);
-        MultiTextured = new MultiTexturedObject(path);
-
+        return MultiTextured.UniqueTexture.GetFirstValue()?.Base.PathTexture
+               ?? throw new Exception("Error loading Texture (TexturedWall)");
+    }
+    private void InitializeWall()
+    {
         UpdateBaseHeightHitBox();
         Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
     }
-    public TexturedWall(string pathLR, string pathBT, bool isPassability = false)
 
-        : base(0, 0, SFML.Graphics.Color.Red, isPassability)
+    public TexturedWall(params string[] texturePaths)
+       : base(0, 0, GetDefaultWallColor(), false)
     {
-        TextureInMiniMap = new TextureObstacle(pathLR);
-        MultiTextured = new MultiTexturedObject(pathLR, pathBT);
+        if (texturePaths.Length == 0)
+            throw new ArgumentException("At least one texture path must be provided.");
 
-        UpdateBaseHeightHitBox();
-        Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
+        MultiTextured = new MultiTexturedObject(texturePaths);
+        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+
+        InitializeWall();
     }
-    public TexturedWall(string pathL, string pathR, string pathB, string pathT, bool isPassability = false)
-
-        : base(0, 0, SFML.Graphics.Color.Red, isPassability)
+    public TexturedWall(bool isPassability = false, params string[] texturePaths)
+       : base(0, 0, GetDefaultWallColor(), isPassability)
     {
-        TextureInMiniMap = new TextureObstacle(pathL);
-        MultiTextured = new MultiTexturedObject(pathL, pathR, pathB, pathT);
+        if (texturePaths.Length == 0)
+            throw new ArgumentException("At least one texture path must be provided.");
 
-        UpdateBaseHeightHitBox();
-        Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
+        MultiTextured = new MultiTexturedObject(texturePaths);
+        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+
+        InitializeWall();
     }
     public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
-        : base(0, 0, SFML.Graphics.Color.Red, isPassability)
+        : base(0, 0, GetDefaultWallColor(), isPassability)
     {
-        MultiTextured = new MultiTexturedObject(textures);
-        TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
-                                               throw new Exception("Error load Texture(TexturedWall)"));
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
 
-        UpdateBaseHeightHitBox();
-        Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
+        MultiTextured = new MultiTexturedObject(textures);
+        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+
+        InitializeWall();
     }
     public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
-        : base(0, 0, SFML.Graphics.Color.Red, isPassability)
+        : base(0, 0, GetDefaultWallColor(), isPassability)
     {
-        MultiTextured = new MultiTexturedObject(textures);
-        TextureInMiniMap = new TextureObstacle(MultiTextured.UniqueTexture.GetFirstValue()?.Base ??
-                                               throw new Exception("Error load Texture(TexturedWall)"));
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
 
-        UpdateBaseHeightHitBox();
-        Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
+        MultiTextured = new MultiTexturedObject(textures);
+        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+
+        InitializeWall();
     }
+
     public TexturedWall(TexturedWall texturedWall)
         : base(0, 0, SFML.Graphics.Color.Black, false)
     {
@@ -269,6 +277,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     {
         return new TexturedWall(this);
     }
+
     public override void Render(Result result, Entity entity)
     {
         RenderInternal(result, entity, RenderOperation.SelectCurrentRenderTexture(this, result, entity));
@@ -289,7 +298,8 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         if (IsOffScreen(result, position, textureRect.Height, scale))
             return;
 
-        VertexArray vertexArray = new VertexArray(PrimitiveType.Quads, 4);
+        VertexArray vertexArray  = new VertexArray(PrimitiveType.Quads, 4);
+
         SFML.Graphics.Color blackoutColor = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
 
         Vector2f topLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top);

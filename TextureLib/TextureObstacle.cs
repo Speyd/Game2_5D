@@ -6,19 +6,40 @@ using System.Text;
 using System.Threading.Tasks;
 using ScreenLib;
 using System.Diagnostics;
+using System.IO;
 
 
 namespace TextureLib;
 public class TextureObstacle
 {
-    public SFML.Graphics.Texture Texture { get; set; }
+    private SFML.Graphics.Texture _texture;
+    public SFML.Graphics.Texture Texture 
+    { 
+        get => _texture;
+        set
+        {
+            SetTexture(value);
+            _pathTexture = string.Empty;
+        }
+    }
+
+    private string _pathTexture = string.Empty;
+    public string PathTexture
+    {
+        get => _pathTexture;
+        set
+        {
+            SetTexture(value);
+            _pathTexture = value;
+        }
+    }
 
     //--------------------Size Texture-----------------------
     private uint _width = 0;
     public uint Width
     {
         get => _width;
-        set
+        private set
         {
             _width = value;
             HulfWidth = value / 2;
@@ -29,26 +50,28 @@ public class TextureObstacle
     public uint Height
     {
         get => _height;
-        set
+        private set
         {
             _height = value;
             HulfWidth = value / 2;
         }
     }
 
-    public uint HulfWidth { get; set; }
-    public uint HulfHeight { get; set; }
+    public uint HulfWidth { get; private set; }
+    public uint HulfHeight { get; private set; }
     public static uint BaseHeight { get; } = 1308;
     public static uint BaseWidth { get; } = 1920;
 
 
     //-----------------------Setting---------------------
-    public int Scale { get; set; }
-    public uint PixelCount { get; set; }
+    public int Scale { get; private set; }
+    public uint PixelCount { get; private set; }
+
     public static bool IsSmooth = false;
 
     //-------------------------Available formats------------------------
     private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
+
 
 
     private static bool IsImageFile(string path)
@@ -65,36 +88,23 @@ public class TextureObstacle
             throw new Exception("Error path TextureObstacle");
     }
 
+
     public TextureObstacle(string path)
     {
-        IsTruePath(path);
-
-        Texture = new SFML.Graphics.Texture(path);
-        Texture.Smooth = IsSmooth;
-        Texture.GenerateMipmap();
-
-        Width = Texture.Size.X;
-        Height = Texture.Size.Y;
-        SetTile();
-
-        PixelCount = Width * Height;
+        _texture = new Texture(1, 1);
+        _pathTexture = path;
+        SetTexture(path);
     }
     public TextureObstacle(SFML.Graphics.Texture texture)
     {
-        Texture = texture;
-        Texture.Smooth = IsSmooth;
-        Texture.GenerateMipmap();
-
-        Width = texture.Size.X;
-        Height = texture.Size.Y;
-        SetTile();
-
-        PixelCount = Width * Height;
+        _texture = new Texture(1, 1);
+        SetTexture(texture);
     }
-
     public TextureObstacle(TextureObstacle textureObstacle)
     {
-        Texture = textureObstacle.Texture;
+        _texture = textureObstacle.Texture;
+        _pathTexture = textureObstacle.PathTexture;
+
         Texture.Smooth = IsSmooth;
         Texture.GenerateMipmap();
 
@@ -105,18 +115,21 @@ public class TextureObstacle
         PixelCount = Width * Height;
     }
 
+
     public void SetTexture(string path)
     {
         try
         {
             IsTruePath(path);
 
-            Texture = new SFML.Graphics.Texture(path);
+            _texture = new SFML.Graphics.Texture(path);
             Texture.Smooth = IsSmooth;
             Texture.GenerateMipmap();
 
             Width = Texture.Size.X;
             Height = Texture.Size.Y;
+            PixelCount = Width * Height;
+
             SetTile();
         }
         catch (Exception ex)
@@ -124,7 +137,25 @@ public class TextureObstacle
             throw new Exception($"Error loading texture from path: {path}", ex);
         }
     }
+    public void SetTexture(SFML.Graphics.Texture texture)
+    {
+        try
+        {
+            _texture = new SFML.Graphics.Texture(texture);
+            Texture.Smooth = IsSmooth;
+            Texture.GenerateMipmap();
 
+            Width = Texture.Size.X;
+            Height = Texture.Size.Y;
+            PixelCount = Width * Height;
+
+            SetTile();
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error loading texture from path: {_pathTexture}", ex);
+        }
+    }
     public void SetTile()
     {
         if (Screen.Setting.Tile != 0)

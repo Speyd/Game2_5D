@@ -32,6 +32,24 @@ public static class Render
     public const int maxCountPeaks = 8;
 
 
+    public const float baseScreenHeightForHitBox = 600f;
+    public const float baseScreenWidthForHitBox = 1000f;
+    public static float MultHeight { get; private set; }
+    private static void SetNewMult()
+    {
+        MultHeight = (Screen.ScreenHeight / baseScreenHeightForHitBox);
+        MultHeight /= (Screen.ScreenWidth / baseScreenWidthForHitBox);
+
+        MultHeight = Screen.ScreenHeight / (baseScreenHeightForHitBox * MultHeight);
+    }
+    static Render()
+    {
+        SetNewMult();
+        Screen.HeightChangesFun += SetNewMult;
+        Screen.WidthChangesFun += SetNewMult;
+    }
+
+
     private static List<Vector3f> GetCoordinatesParallelepiped(RenderInfo objectHitBox, ObserverInfo observer, ref Vector2f center)
     {
         Box Body = objectHitBox.body;
@@ -40,8 +58,10 @@ public static class Render
         float maxX = (float)(Body[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
         float minY = (float)(Body[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
         float maxY = (float)(Body[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
-        float minZ = (float)(Body[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
-        float maxZ = (float)(Body[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
+        float g = (Screen.ScreenHeight / 600f) / (Screen.ScreenWidth / 1000f);
+        float m = Screen.ScreenHeight / (600f * g);
+        float minZ = (float)(Body[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0) * MultHeight;
+        float maxZ = (float)(Body[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0) * MultHeight;
 
         center.X = (maxX + minX) / 2;
         center.Y = (maxY + minY) / 2;

@@ -22,8 +22,11 @@ public class TexturedPair
 
     public RenderTexture Mod { get; private set; }
 
-    public TexturedPair(TextureObstacle baseTexture)
+    public TexturedPair(TextureObstacle? baseTexture)
     {
+        if(baseTexture is null)
+            throw new ArgumentNullException(nameof(baseTexture));
+
         Base = new TextureObstacle(baseTexture);
     }
 

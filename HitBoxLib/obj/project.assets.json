@@ -816,6 +816,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
         },
         "compile": {

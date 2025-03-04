@@ -1145,6 +1145,7 @@
       },
       "DataPipes/1.0.0": {
         "dependencies": {
+          "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
         },
         "runtime": {
