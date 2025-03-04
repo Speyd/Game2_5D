@@ -224,7 +224,6 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
         return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
     }      
-
     public float BringingToStandard(float heightObj)
     {
         if (CurrentRenderTexture is null)
@@ -233,7 +232,6 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         heightObj *= TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
         return heightObj;
     }
-
     public float GetAveragedMult(float baseMult)
     {
         if (CurrentRenderTexture is null)
@@ -245,7 +243,6 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
         return newMult;
     }
-
     public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
     {
         if (CurrentRenderTexture is null)
@@ -261,6 +258,19 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
         float textureY = ProjHeight * verticalAngle * mult;
         return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
+    }
+    public bool IsInsideTexture(float textureX, float textureY)
+    {
+        if(CurrentRenderTexture is null)
+            return true;
+
+        var baseTexure = CurrentRenderTexture.Base;
+        if (textureX < 0 || textureX > baseTexure.Width)
+            return true;
+        else if(textureY < 0 || textureY > baseTexure.Height)
+            return true;
+
+        return false;
     }
 
     public void DrawObject(Drawable drawObject)

@@ -114,6 +114,21 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
 
         return Walls.First().GetAveragedMult(baseMult);
     }
+    public bool IsInsideTexture(float textureX, float textureY)
+    {
+        var wall = Walls[CurrentLevelWall].CurrentRenderTexture;
+        if (wall is null)
+            return true;
+
+        var baseTexure = wall.Base;
+        if (textureX < 0 || textureX > baseTexure.Width)
+            return true;
+        else if (textureY < 0 || textureY > baseTexure.Height)
+            return true;
+
+        return false;
+    }
+
     public void DrawObject(Drawable drawObject)
     {
         if (CurrentLevelWall < 0 || CurrentLevelWall >= Walls.Count)

@@ -12,7 +12,7 @@ public static class Setting
     //Speed
     /// <summary>Entity movement speed</summary>
     public static float MoveSpeed { get; set; } = 150f;
-    /// <summary>Mouse sensitivity</summary>
+    /// <summary>Normalizes mouse sensitivity depending on fps</summary>
     public static double MoveSpeedAngel { get; set; } = 1;
 
     //TempsValue
@@ -21,7 +21,7 @@ public static class Setting
 
     //Settig Control
     /// <summary>Minimum collision distance to an object</summary>
-    public static float MinDistanceFromWall { get; set; } = 50;
+    public static float MinDistanceFromWall { get; set; } = 100;
     /// <summary>Mouse sensitivity</summary>
     public static float MouseSensitivity { get; set; } = 0.001f;
     public static bool IsMouseCaptured { get; set; } = true;

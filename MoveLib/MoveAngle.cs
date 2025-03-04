@@ -24,7 +24,7 @@ public static class MoveAngle
 
     public static void ResetAngle(Entity entity)
     {
-        double normalizedMoveSpeedAngel = MoveLib.Setting.MoveSpeedAngel * Screen.ScreenRatio;
+        double normalizedMoveSpeedAngel = MoveLib.Setting.MouseSensitivity * Screen.ScreenRatio;
         MoveLib.Setting.MoveSpeedAngel = 1 * FPS.GetDeltaTime() * normalizedMoveSpeedAngel;
 
         entity.Angle = MoveLib.Setting.TempAngle % (2 * Math.PI);

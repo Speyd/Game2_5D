@@ -22,4 +22,6 @@ public interface IDrawable
 
     public void DrawObject(Drawable drawObject);
 
+    public bool IsInsideTexture(float textureX, float textureY);
+
 }
