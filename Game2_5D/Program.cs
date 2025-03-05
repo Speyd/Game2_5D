@@ -26,7 +26,6 @@ using ControlLib;
 using BresenhamAlgorithm;
 using ObstacleLib.SpriteLib;
 using ObstacleLib.TexturedWallLib;
-using TextField;
 using System.Runtime;
 using MiniMapLib.ObjectInMap.Positions;
 using TextureLib;
@@ -43,64 +42,64 @@ using HitBoxLib.Operations;
 using MoveLib;
 using DrawLib;
 using HitBoxLib.PositionObject;
+using PartsWorldLib.Down;
+using PartsWorldLib.Up;
 //Screen screen = new Screen(1500, 1000);
 //Screen.Initialize(800, 1100); ПООДКЛЮЧИ ЮНИКОД ЧТО-БЫ ШЕЙЕРЫ РАБОТАЛИ
 Screen.Initialize(1000, 600);
-Screen.Window.SetActive(true);
-Map map = new Map(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"), 24, 23);
+Map map = new Map(new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png")), 24, 23);
 //map.AddObstacle(2, 2, new TexturedWall(Map.StandartBlock));
 //map.AddObstacle(2, 5, new TexturedWall(Map.StandartBlock));
 
 int t = Screen.Setting.Tile;
 
-
 //TODO: сделать загрузку по папкам
 List<TextureObstacle> textureObstacles = new List<TextureObstacle>()
 {
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\1.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\2.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\3.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\4.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\5.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\6.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Devil\7.png"),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\1.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\2.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\3.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\4.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\5.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\6.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Devil\7.png")),
 
 };
 List<TextureObstacle> textureBarel = new List<TextureObstacle>()
 {
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\0.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\1.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\2.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\3.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\4.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\5.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\6.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\7.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\8.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\9.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\10.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\11.png"),
-    new TextureObstacle( @"Resources\Image\Sprite\Barel\12.png"),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\0.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\1.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\2.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\3.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\4.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\5.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\6.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\7.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\8.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\9.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\10.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\11.png")),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Barel\12.png")),
 };
 
 List<TextureObstacle> textureObstacles1 = new List<TextureObstacle>()
 {
-        new TextureObstacle( @"Resources\Image\Sprite\Flame\0.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\1.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\2.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\3.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\4.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\5.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\6.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\7.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\8.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\9.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\10.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\11.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\12.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\13.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\14.png" ),
-    new TextureObstacle( @"Resources\Image\Sprite\Flame\15.png" ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\0.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\1.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\2.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\3.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\4.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\5.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\6.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\7.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\8.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\9.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\10.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\11.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\12.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\13.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\14.png") ),
+    new TextureObstacle( ResourceManager.GetPath(@"Resources\Image\Sprite\Flame\15.png") ),
 
 
 };
@@ -224,9 +223,9 @@ sprite1.HitBox.AddSegmentHitBox(box.MainHitBox.Body, "Center");
 //map.AddObstacleToMap(4, 4, map.Obstacles, sprite);
 //map.AddObstacle(4, 4, sprite);
 
-TexturedWall wall2 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
-TexturedWall wall3 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
-TexturedWall wall4 = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
+TexturedWall wall2 = new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png"));
+TexturedWall wall3 = new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png"));
+TexturedWall wall4 = new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png"));
 
 //wall2.LvlWall = 3;
 //map.AddObstacle(10, 5, wall2);
@@ -237,14 +236,14 @@ sprite1.SetShifts(50);
 
 //map.AddObstacle(3, 5, barel);
 //map.AddObstacle(3, 5, barel2);
-TexturedWall wall = new TexturedWall( @"Resources\Image\WallTexture\Wall1.png", @"Resources\Image\WallTexture\Wall4.png", @"Resources\Image\WallTexture\add.png", @"Resources\Image\WallTexture\Wall4.png");
+TexturedWall wall = new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png"), ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall4.png"), ResourceManager.GetPath(@"Resources\Image\WallTexture\add.png"), ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall4.png"));
 map.AddObstacle(7, 7,  wall);
 
 
 //map.AddObstacle(3, 5, sprite2);
 //map.addObstacleToMap(7, 9, map.Obstacles, new BlankWall(0, 0,'b', Color.Yellow, Color.Green));
-map.AddObstacle(7, 11, new TexturedWall(@"Resources\Image\WallTexture\Wall4.png"));
-map.AddObstacle(7, 13,new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
+map.AddObstacle(7, 11, new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall4.png")));
+map.AddObstacle(7, 13,new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall5.png")));
 //map.AddObstacle(7, 2,new TexturedWall(@"Resources\Image\WallTexture\Wall8.png"));
 
 //map.addObstacleToMap(9, 7, map.Obstacles, new TexturedWall(Map.block));
@@ -267,7 +266,7 @@ player.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(0);
 player.HitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(50);
 
 
-MiniMap mapMini = new MiniMap(player, 5, PositionsMiniMap.UpperRightCorner, @"Resources\Image\BorderMiniMap\Border.png");
+MiniMap mapMini = new MiniMap(player, 5, PositionsMiniMap.UpperRightCorner, ResourceManager.GetPath(@"Resources\Image\BorderMiniMap\Border.png"));
 
 mapMini.Setting.OutputRenderMethod = OutputRenderMethod.Color;
 
@@ -323,20 +322,19 @@ player.OnControlAction = control.MakePressed;
 Algorithm algorithm = new Algorithm(map, player);
 
 DateTime from = DateTime.Now;
-FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), @"Resources\FontText\ArialBold.ttf", Color.White);
+FPS fpsChecker = new FPS(from, "FPS: ", 24, new Vector2f(10, 10), ResourceManager.GetPath(@"Resources\FontText\ArialBold.ttf"), Color.White);
 //InputField inputField = new InputField(screen, @"Resources\FontText\ArialBold.ttf", 400, 50);
 //Event ev = ;
 //GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
 //GCLatencyMode.
 //Screen.ScreenWidth = 1500;
-AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
-AppContext.SetSwitch("System.Runtime.TieredPGO", true);
+
 
 MultiWall multiWall = new MultiWall();
 map.AddObstacle(10, 5, multiWall);
-multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
-multiWall.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
+multiWall.AddLevelWall(new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png")));
+multiWall.AddLevelWall(new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png")));
+multiWall.AddLevelWall(new TexturedWall(ResourceManager.GetPath(@"Resources\Image\WallTexture\Wall1.png")));
 //MultiWall multiWall1 = new MultiWall();
 //map.AddObstacle(10, 4, multiWall1);
 //multiWall1.AddLevelWall(new TexturedWall(@"Resources\Image\WallTexture\Wall1.png"));
@@ -370,8 +368,12 @@ map.AddObstacle(9, 5, sprite1);
 //sprite1.HitBox.MainHitBox.RenderColor = Color.Green;
 //map.AddObstacle(9, 5, barel2);
 //map.AddObstacle(8, 5, new TexturedWall(@"Resources\Image\WallTexture\Wall5.png"));
-//Console.WriteLine(map.Obstacles.Count);
-PartsWorldLib.RenderPartsWorld partsWorld = new();
+//Console.WriteLine(map.Obstacles.Count);D:\C++ проекты\Game2_5D\Resources\Image\PartsWorldTexture
+TexturedFloor texturedFloor = new TexturedFloor(ResourceManager.GetPath(@"Resources\Image\PartsWorldTexture\Grass.jpg"), ResourceManager.GetPath(@"Resources\Shader\FloorSetting.glsl"));
+Sky sky = new Sky(ResourceManager.GetPath(@"Resources\Image\PartsWorldTexture\SeamlessSky.jpg"));
+Floor floor = new Floor();
+
+PartsWorldLib.RenderPartsWorld partsWorld = new(sky, floor);
 //VisualizerHitBox visualizerHitBox = new VisualizerHitBox(map);
 //visualizerHitBox.VisualizerType = VisualizerType.VisualizeSelfRenderable;
 //visualizerHitBox.IsDistanceLimited = false;

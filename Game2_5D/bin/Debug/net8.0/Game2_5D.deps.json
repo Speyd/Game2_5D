@@ -20,8 +20,7 @@
           "SFML.Net": "2.6.0",
           "ScreenLib": "1.0.0",
           "SixLabors.ImageSharp": "3.1.6",
-          "System.Drawing.Common": "8.0.10",
-          "TextField": "1.0.0"
+          "System.Drawing.Common": "8.0.10"
         },
         "runtime": {
           "Game2_5D.dll": {}
@@ -1347,7 +1346,8 @@
       "PartsWorldLib/1.0.0": {
         "dependencies": {
           "EffectLib": "1.0.0",
-          "EntityLib": "1.0.0"
+          "EntityLib": "1.0.0",
+          "TextureLib": "1.0.0"
         },
         "runtime": {
           "PartsWorldLib.dll": {
@@ -1393,19 +1393,6 @@
         },
         "runtime": {
           "ScreenLib.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "TextField/1.0.0": {
-        "dependencies": {
-          "MapLib": "1.0.0",
-          "SFML.Net": "2.6.0",
-          "ScreenLib": "1.0.0"
-        },
-        "runtime": {
-          "TextField.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1673,11 +1660,6 @@
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "TextField/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

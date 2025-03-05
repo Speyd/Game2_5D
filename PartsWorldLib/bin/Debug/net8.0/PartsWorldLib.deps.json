@@ -9,7 +9,8 @@
       "PartsWorldLib/1.0.0": {
         "dependencies": {
           "EffectLib": "1.0.0",
-          "EntityLib": "1.0.0"
+          "EntityLib": "1.0.0",
+          "TextureLib": "1.0.0"
         },
         "runtime": {
           "PartsWorldLib.dll": {}
@@ -1032,6 +1033,18 @@
             "fileVersion": "1.0.0.0"
           }
         }
+      },
+      "TextureLib/1.0.0": {
+        "dependencies": {
+          "DataPipes": "1.0.0",
+          "ScreenLib": "1.0.0"
+        },
+        "runtime": {
+          "TextureLib.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -1111,6 +1124,11 @@
       "sha512": ""
     },
     "ScreenLib/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TextureLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

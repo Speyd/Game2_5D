@@ -1,6 +1,5 @@
 ﻿using EntityLib.Player;
 using PartsWorldLib.Down;
-using PartsWorldLib.RenderParts;
 using PartsWorldLib.Up;
 using ScreenLib;
 using System;
@@ -10,40 +9,30 @@ using System.Reflection;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
-
+using TextureLib;
 
 namespace PartsWorldLib;
 public class RenderPartsWorld
 {
-    public UpperPart RenderUpperPart { get; set; } = UpperPart.Sky;
-    public DownPart RenderDownPart { get; set; } = DownPart.None;
+    public IUpPart? UpPart { get; set; } = null;
+    public IDownPart? DownPart { get; set; } = null;
 
-    public TexturedFloor TexturedFloor { get; init; }
-    public Floor Floor { get; init; }
-
-    public Sky Sky { get; init; }
-    public Ceiling Ceiling { get; init; }
-    public TexturedCeiling TexturedCeiling { get; init; }
-
-
-    public RenderPartsWorld(TexturedFloor? texturedFloor = null, Floor? floor = null,
-        Ceiling? ceiling = null,TexturedCeiling ? textureCeiling = null, Sky? sky = null)
+    public RenderPartsWorld(IUpPart? upPart, IDownPart? downPart)
     {
-        TexturedFloor = texturedFloor ?? new TexturedFloor();
-        Floor = floor ?? new Floor();
-        TexturedCeiling = textureCeiling ?? new TexturedCeiling();
-        Sky = sky ?? new Sky();
-        Ceiling = ceiling ?? new Ceiling();
+        this.UpPart = upPart;
+        this.DownPart = downPart;
     }
-    public RenderPartsWorld(TexturedFloor? texturedFloor = null, TexturedCeiling? textureCeiling = null, Sky? sky = null)
-        :this(texturedFloor, null, null, textureCeiling, sky)
+    public RenderPartsWorld(IUpPart upPart)
+        :this(upPart, null)
     {}
-    public RenderPartsWorld(Floor? floor = null, Ceiling? ceiling = null)
-         : this(null, floor, ceiling, null, null)
-    {}
-    public RenderPartsWorld()
-         : this(null, null, null, null, null)
+    public RenderPartsWorld(IDownPart downPart)
+       : this(null, downPart)
     { }
+    public RenderPartsWorld()
+      : this(null, null)
+    { }
+
+
     public static float NormalizeHeigthDownPart(Player player)
     {
         if (player.VerticalAngle >= 0)
@@ -60,27 +49,7 @@ public class RenderPartsWorld
     }
     public void Render(Player player)
     {
-        switch (RenderUpperPart)
-        {
-            case UpperPart.Sky: 
-                Sky.Render(player); 
-                break;
-            case UpperPart.Ceiling:
-                TexturedCeiling.Render(player);
-                break;
-            default:
-                Ceiling.Render(player);
-                break;
-        }
-
-        switch (RenderDownPart)
-        {
-            case DownPart.Floor:
-                TexturedFloor.Render(player);
-                break;
-            default:
-                Floor.Render(player);
-                break;
-        }
+        UpPart?.Render(player);
+        DownPart?.Render(player);
     }
 }

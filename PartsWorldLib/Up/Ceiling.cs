@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 
 namespace PartsWorldLib.Up;
-public class Ceiling
+public class Ceiling : IUpPart
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
     public Color ColorFilling { get; set; } = new Color(100, 149, 237);

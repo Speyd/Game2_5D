@@ -13,7 +13,7 @@ using static System.Formats.Asn1.AsnWriter;
 
 
 namespace PartsWorldLib.Up;
-public class Sky
+public class Sky : IUpPart
 {
     public Texture Texture { get; set; }
     private Sprite RenderSprite = new Sprite();
@@ -24,7 +24,7 @@ public class Sky
     private const float normAngle = 180f / MathF.PI;
 
 
-    public Sky(string texturePath = @"Resources\Image\PartsWorldTexture\SeamlessSky.jpg")
+    public Sky(string texturePath)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureFloor");

@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\EffectLib\EffectLib.csproj" />
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
   </ItemGroup>
 
 </Project>

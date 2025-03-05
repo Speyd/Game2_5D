@@ -176,6 +176,8 @@ public static class Screen
     {
 
         IsInitialize = true;
+        AppContext.SetSwitch("System.Runtime.TieredCompilation", true);
+        AppContext.SetSwitch("System.Runtime.TieredPGO", true);
 
         SetWindowMode(fullScreen, nameWindow, width, height);
         Window.SetActive(true);

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 
 namespace PartsWorldLib.Down;
-public class Floor
+public class Floor : IDownPart
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
     public SFML.Graphics.Color ColorFilling { get; set; } = new Color(20, 20, 20);

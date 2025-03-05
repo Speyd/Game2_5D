@@ -13,11 +13,12 @@ using EffectLib;
 
 
 namespace PartsWorldLib.Down;
-public class TexturedFloor
+public class TexturedFloor : IDownPart
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
     private RenderTexture FirstStepRender { get; set; }
     private RenderTexture SecondStepRender { get; set; }
+
     private Sprite Sprite { get; set; }
     private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
     /// <summary> Floor Mapping Shader </summary>
@@ -32,7 +33,6 @@ public class TexturedFloor
             _texture = value;
             FirstStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
             SecondStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-
         }
     }
 
@@ -49,11 +49,10 @@ public class TexturedFloor
     public float MaxDivisionCoefficient { get; set; } = 3;
 
 
-    public TexturedFloor(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
-        string shaderPath = @"Resources\Shader\FloorSetting.glsl")
+    public TexturedFloor(string texturePath, string shaderPath)
     {
         if (!File.Exists(texturePath))
-            throw new Exception("Error path textureFloor");
+            throw new Exception("Error path textureFloor"); 
 
         Texture = new Texture(texturePath);
 

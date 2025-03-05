@@ -17,8 +17,6 @@ public class Map
 
     //---------------------Obstacles-----------------------
     public ConcurrentDictionary<ValueTuple<int, int>, List<IObject>> Obstacles{ get; init; }
-    //public static TexturedWall StandartBlock { get; set; } = new TexturedWall(@"Resources\Image\WallTexture\Wall1.png");
-
 
     public Map(IObject fillingObject, int height, int width)
     {

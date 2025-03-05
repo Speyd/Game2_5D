@@ -13,7 +13,7 @@ using EffectLib;
 
 
 namespace PartsWorldLib.Up;
-public class TexturedCeiling
+public class TexturedCeiling : IUpPart
 {
     public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
     private RenderTexture FirstStepRender { get; set; }
@@ -39,8 +39,7 @@ public class TexturedCeiling
     /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
 
-    public TexturedCeiling(string texturePath = @"Resources\Image\PartsWorldTexture\Grass.jpg",
-        string shaderPath = @"Resources\Shader\CeilingSetting.glsl")
+    public TexturedCeiling(string texturePath, string shaderPath)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureCeiling");
