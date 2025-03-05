@@ -57,7 +57,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
         SizeScale = multiWall.SizeScale;
         PositionScale = multiWall.PositionScale;
 
-        foreach (var wall in Walls)
+        foreach (var wall in multiWall.Walls)
             Walls.Add(new TexturedWall(wall));
 
         CurrentLevelWall = multiWall.CurrentLevelWall;
@@ -153,6 +153,11 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
 
         Z.Axis = (Walls.Count - 1) * Screen.Setting.HalfVerticalTile;
     }
+    private void HandleObjectAdditionWalls(double x, double y, bool resetHitBoxSide)
+    {
+        foreach(var wall in Walls)
+            wall.HandleObjectAddition(x, y, resetHitBoxSide);
+    }
     public override void HandleObjectAddition(double x, double y, bool resetHitBoxSide = true)
     {
         if (resetHitBoxSide)
@@ -162,6 +167,8 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
             HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.SetOffset(0);
             HitBox.MainHitBox[CoordinatePlane.Y, SideSize.Larger]?.SetOffset(Screen.Setting.Tile);
         }
+        HandleObjectAdditionWalls(x, y, resetHitBoxSide);
+
 
         X.Axis = x;
         Y.Axis = y;

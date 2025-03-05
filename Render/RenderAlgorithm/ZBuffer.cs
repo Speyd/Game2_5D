@@ -15,7 +15,8 @@ public class ZBuffer
     private static ConcurrentBag<(double, (Drawable, RenderStates?))> zBuffer = new();
     public static void Render()
     {
-        foreach (var kv in zBuffer.OrderByDescending(kv => kv.Item1))
+        var sortedBuffer = zBuffer.AsParallel().OrderByDescending(kv => kv.Item1);
+        foreach (var kv in sortedBuffer)
         {
             Screen.OutputPriority.AddToPriority(RenderPriority.ZBufferRender, kv.Item2.Item1, kv.Item2.Item2);
         }

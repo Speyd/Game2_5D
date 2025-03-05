@@ -114,8 +114,6 @@ public class TextureObstacle
 
         PixelCount = Width * Height;
     }
-
-
     public void SetTexture(string path)
     {
         try

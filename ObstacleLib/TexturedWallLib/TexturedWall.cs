@@ -296,6 +296,8 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     {
         RenderInternal(result, entity, MultiTextured[objectSide]);
     }
+
+
     private void RenderInternal(Result result, Entity entity, TexturedPair? currentRenderTexture)
     {
         if (currentRenderTexture is null)
@@ -308,7 +310,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         if (IsOffScreen(result, position, textureRect.Height, scale))
             return;
 
-        VertexArray vertexArray  = new VertexArray(PrimitiveType.Quads, 4);
+        VertexArray vertexArray = new VertexArray(PrimitiveType.Quads, 4);
 
         SFML.Graphics.Color blackoutColor = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
 

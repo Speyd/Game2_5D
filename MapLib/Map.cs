@@ -77,7 +77,6 @@ public class Map
         }
 
     }
-    static int add = 0;
     public void AddObstacle(int x, int y, IObject addObstacle, bool resetHitBoxSide = true)
     {
         if (y < 0 || y >= Setting.MapHeight ||
