@@ -15,8 +15,8 @@ using HitBoxLib.PositionObject;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using EffectLib;
-using Render.RenderAlgorithm;
-using Render.Object;
+using ProtoRender.RenderAlgorithm;
+using ProtoRender.Object;
 using ObstacleLib.SpriteLib;
 using TextureLib;
 

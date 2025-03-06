@@ -2,7 +2,7 @@
 using FpsLib;
 using MapLib;
 
-namespace MoveLib;
+namespace MoveLib.Move;
 public static class MovePositions
 {
     public static void Move(Map map, Entity entity, double directionX, double directionY)

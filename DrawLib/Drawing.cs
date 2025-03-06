@@ -8,7 +8,7 @@ using ScreenLib;
 using ObstacleLib;
 using ObstacleLib.TexturedWallLib;
 using TextureLib;
-using Render.Object;
+using ProtoRender.Object;
 
 
 namespace DrawLib;

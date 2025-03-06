@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MiniMapLib;
 using MapLib;
-using Render.Map;
+using ProtoRender.Map;
 
 namespace MiniMapLib.ObjectInMap.Obstacles;
 internal class ObstacleOutput

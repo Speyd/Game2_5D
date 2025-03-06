@@ -1,5 +1,5 @@
 ﻿using EntityLib;
-using Render.RenderAlgorithm;
+using ProtoRender.RenderAlgorithm;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;

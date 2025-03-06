@@ -2,14 +2,14 @@
 using EntityLib;
 using ScreenLib;
 using SFML.System;
-using Render.RenderInterface;
+using ProtoRender.RenderInterface;
 using HitBoxLib.PositionObject;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Data.HitBoxObject;
-using Render.RenderAlgorithm;
-using Render.Map;
+using ProtoRender.RenderAlgorithm;
+using ProtoRender.Map;
 using TextureLib;
-using Render.Object;
+using ProtoRender.Object;
 
 namespace ObstacleLib;
 public abstract class Obstacle : IObject

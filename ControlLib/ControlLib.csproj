@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>

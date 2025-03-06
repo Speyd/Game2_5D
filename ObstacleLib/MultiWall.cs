@@ -15,9 +15,9 @@ using HitBoxLib.PositionObject;
 using static System.Formats.Asn1.AsnWriter;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
-using Render.RenderAlgorithm;
-using Render.Object;
-using Render.RenderInterface;
+using ProtoRender.RenderAlgorithm;
+using ProtoRender.Object;
+using ProtoRender.RenderInterface;
 
 
 namespace ObstacleLib;
@@ -89,7 +89,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
                 continue;
 
             float normalizedCoordinate = Walls[i].CalculateTextureY(entity, ProjHeight / (i + 1), mult * (i + 1), addCoordinates);
-            if (i != 0)
+            if (i != 0 && Walls[i].CurrentRenderTexture is not null)
                 normalizedCoordinate = Walls[i].CurrentRenderTexture.Base.Height * i + normalizedCoordinate;
 
 

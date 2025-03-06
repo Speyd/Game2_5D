@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AnimationLib\AnimationLib.csproj" />
+    <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
+    <ProjectReference Include="..\DataPipes\DataPipes.csproj" />
+    <ProjectReference Include="..\DrawLib\DrawLib.csproj" />
+    <ProjectReference Include="..\EffectLib\EffectLib.csproj" />
+    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
+    <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
+    <ProjectReference Include="..\HitBoxLib\HitBoxLib.csproj" />
+    <ProjectReference Include="..\MapLib\MapLib.csproj" />
+    <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
+    <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
+    <ProjectReference Include="..\ObstacleLib\ObstacleLib.csproj" />
+    <ProjectReference Include="..\PartsWorldLib\PartsWorldLib.csproj" />
+    <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
+    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
+  </ItemGroup>
+
+</Project>

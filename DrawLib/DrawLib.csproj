@@ -10,6 +10,7 @@
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
     <ProjectReference Include="..\ObstacleLib\ObstacleLib.csproj" />
+    <ProjectReference Include="..\ProtoRender\ProtoRender.csproj" />
     <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
   </ItemGroup>
 

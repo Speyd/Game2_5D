@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("EffectLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a749023ad6d37e71b499dfe65beb290a16bd56f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+038c5fdfe063fdb6200ff3723ccd5038fded0557")]
 [assembly: System.Reflection.AssemblyProductAttribute("EffectLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EffectLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

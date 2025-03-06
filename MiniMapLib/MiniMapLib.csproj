@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 

@@ -7,11 +7,11 @@ using SFML.Graphics;
 using NGenerics.DataStructures.Trees;
 
 
-namespace ScreenLib;
+namespace ScreenLib.Output;
 public class OutputPriority(RenderWindow window)
 {
-    public SortedDictionary<RenderPriority, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
-    public void AddToPriority(RenderPriority priority, Drawable sprite, RenderStates? state = null)
+    public SortedDictionary<OutputPriorityType, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
+    public void AddToPriority(OutputPriorityType priority, Drawable sprite, RenderStates? state = null)
     {
         if (!TreePriority.TryGetValue(priority, out var list))
         {

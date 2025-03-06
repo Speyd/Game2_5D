@@ -16,7 +16,6 @@
     <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
     <ProjectReference Include="..\HitBoxLib\HitBoxLib.csproj" />
     <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
-    <ProjectReference Include="..\Render\Render.csproj" />
     <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
   </ItemGroup>
 

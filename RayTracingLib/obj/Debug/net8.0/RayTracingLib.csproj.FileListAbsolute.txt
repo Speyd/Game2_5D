@@ -11,7 +11,6 @@ D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\EntityLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\FpsLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\MapLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\MoveLib.dll
-D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\Render.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\EntityLib.pdb
@@ -20,7 +19,6 @@ D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\MoveLib.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ScreenLib.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\TextureLib.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\FpsLib.pdb
-D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\Render.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\obj\Debug\net8.0\RayTraci.63AB0999.Up2Date
 D:\C++ проекты\Game2_5D\RayTracingLib\obj\Debug\net8.0\RayTracingLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\obj\Debug\net8.0\refint\RayTracingLib.dll
@@ -30,3 +28,5 @@ D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\DataPipes.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\DataPipes.pdb
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\HitBoxLib.pdb
+D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ProtoRender.dll
+D:\C++ проекты\Game2_5D\RayTracingLib\bin\Debug\net8.0\ProtoRender.pdb

@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.Window;
 using TextureLib;
-using Render.Object;
+using ProtoRender.Object;
 
 
 namespace RayTracingLib.Detection;

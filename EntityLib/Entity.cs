@@ -11,7 +11,6 @@ using ScreenLib.SettingScreen;
 using SFML.System;
 using SFML.Window;
 using HitBoxLib.PositionObject;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Data.Observer;
 

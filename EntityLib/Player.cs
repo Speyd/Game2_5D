@@ -17,7 +17,7 @@ public class Player : Entity
     /// <summary>Delegate for calling the method that services the buttons</summary>
     public ControlAction OnControlAction;
 
-    public Player( double X = 0, float Y = 0, double entityFov = Math.PI / 3)
+    public Player(double X = 0, float Y = 0, double entityFov = Math.PI / 3)
 
         :base(X, Y, entityFov)
     {}

@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace MoveLib;
+namespace MoveLib.Angle;
 public static class MoveMouse
 {
     private static void SetAngleMouse(Vector2i currentMousePosition)

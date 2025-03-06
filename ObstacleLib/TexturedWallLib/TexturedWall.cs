@@ -14,7 +14,6 @@ using System.Reflection.Metadata;
 using System.IO;
 using SFML.Window;
 using TextureLib;
-using static System.Net.Mime.MediaTypeNames;
 using ObstacleLib.TexturedWallLib.Render;
 using ObstacleLib;
 using System.Net.Sockets;
@@ -27,10 +26,9 @@ using static HitBoxLib.Data.HitBoxObject.RenderInfo;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using EffectLib;
-using Render.RenderAlgorithm;
-using Render.Object;
+using ProtoRender.RenderAlgorithm;
+using ProtoRender.Object;
 using ObstacleLib.SpriteLib;
-using static System.Formats.Asn1.AsnWriter;
 using DataPipes;
 
 

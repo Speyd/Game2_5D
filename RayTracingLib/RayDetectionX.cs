@@ -11,9 +11,9 @@ using TextureLib;
 using HitBoxLib;
 using HitBoxLib.PositionObject;
 using HitBoxLib.Segment.SignsTypeSide;
-using Render.RenderAlgorithm;
+using ProtoRender.RenderAlgorithm;
 using DataPipes;
-using Render.Object;
+using ProtoRender.Object;
 
 namespace RayTracingLib.Detection;
 static public class RayDetectionX

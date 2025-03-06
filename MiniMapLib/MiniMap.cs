@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using ScreenLib;
+using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.Window;
 using SFML.System;
@@ -98,8 +99,8 @@ public class MiniMap
         MiniMapWindow.SetRenderSprite(PositionDef.CooPositions);
         BorderMapWindow.SetRenderSprite(PositionDef.CooPositions);
 
-        Screen.OutputPriority.AddToPriority(RenderPriority.Interface, MiniMapWindow.RenderSprite);
-        Screen.OutputPriority.AddToPriority(RenderPriority.Interface, BorderMapWindow.RenderSprite);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, MiniMapWindow.RenderSprite);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, BorderMapWindow.RenderSprite);
     }
     public void Hide()
     {

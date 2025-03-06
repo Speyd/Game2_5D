@@ -1,5 +1,6 @@
 ﻿using EntityLib.Player;
 using ScreenLib;
+using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -103,6 +104,6 @@ public class TexturedCeiling : IUpPart
 
         SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, player.VerticalAngle));
         SecondStepRender.Display();
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, Sprite);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, Sprite);
     }
 }

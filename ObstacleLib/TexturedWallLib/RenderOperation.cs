@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
-using Render.RenderAlgorithm;
+using ProtoRender.RenderAlgorithm;
 using RayTracingLib;
 using RayTracingLib.Detection;
 

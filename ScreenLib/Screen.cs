@@ -2,7 +2,7 @@
 using SFML.Window;
 using SFML.System;
 using ScreenLib.SettingScreen;
-
+using ScreenLib.Output;
 
 namespace ScreenLib;
 public static class Screen
@@ -44,8 +44,8 @@ public static class Screen
 
     //----------Dimensions Screen----------
 
-    public static Action WidthChangesFun;
-    public static Action HeightChangesFun;
+    public static Action? WidthChangesFun;
+    public static Action? HeightChangesFun;
 
     private static void SetMultWidth() => MultWidth = (float)BaseScreenWidth / _screenWidth; 
     private static int _screenWidth;
@@ -141,8 +141,8 @@ public static class Screen
     }
 
     //----------------------------Priority Draw--------------------------------
-    public static OutputPriority _outputPriority;
-    public static OutputPriority OutputPriority 
+    public static OutputPriority? _outputPriority;
+    public static OutputPriority? OutputPriority 
     {
         get
         {

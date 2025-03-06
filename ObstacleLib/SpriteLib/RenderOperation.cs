@@ -12,9 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using EffectLib;
-using static SFML.Window.Mouse;
-using static System.Formats.Asn1.AsnWriter;
-using Render.RenderAlgorithm;
+using ProtoRender.RenderAlgorithm;
 
 
 namespace ObstacleLib.SpriteLib.Render;

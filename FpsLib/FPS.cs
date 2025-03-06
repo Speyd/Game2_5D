@@ -2,8 +2,9 @@
 using SFML.Window;
 using SFML.System;
 using ScreenLib;
+using ScreenLib.Output;
 using System.Drawing;
-using Render.WindowInterface;
+using ProtoRender.WindowInterface;
 
 
 namespace FpsLib;
@@ -36,7 +37,7 @@ public class FPS : RenderText
             fpsTimer = 0;
         }
 
-        Screen.OutputPriority.AddToPriority(RenderPriority.Interface, renderText);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, renderText);
     }
 
     public static float GetDeltaTime() => deltaTime;

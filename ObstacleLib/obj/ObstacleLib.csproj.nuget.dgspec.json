@@ -323,8 +323,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
+              "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj"
               }
             }
           }
@@ -467,8 +467,8 @@
               "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
               },
-              "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
+              "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj"
               },
               "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
@@ -641,9 +641,6 @@
               "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj"
               },
-              "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj"
-              },
               "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
                 "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
               }
@@ -669,6 +666,90 @@
             "SixLabors.ImageSharp": {
               "target": "Package",
               "version": "[3.1.6, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj",
+        "projectName": "ProtoRender",
+        "projectPath": "D:\\C++ проекты\\Game2_5D\\ProtoRender\\ProtoRender.csproj",
+        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "outputPath": "D:\\C++ проекты\\Game2_5D\\ProtoRender\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
+              },
+              "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj": {
+                "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "SFML.Net": {
+              "target": "Package",
+              "version": "[2.6.0, )"
             }
           },
           "imports": [
@@ -752,90 +833,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj",
-        "projectName": "Render",
-        "projectPath": "D:\\C++ проекты\\Game2_5D\\Render\\Render.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
-        "outputPath": "D:\\C++ проекты\\Game2_5D\\Render\\obj\\",
-        "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
-        "configFilePaths": [
-          "C:\\Users\\Admin\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj"
-              },
-              "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj": {
-                "projectPath": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
-          "dependencies": {
-            "OpenTK": {
-              "target": "Package",
-              "version": "[4.9.3, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",

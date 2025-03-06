@@ -13,7 +13,6 @@ D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\MapLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\MoveLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ObstacleLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\RayTracingLib.dll
-D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\Render.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ScreenLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\TextureLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\EntityLib.pdb
@@ -22,7 +21,6 @@ D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ObstacleLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\RayTracingLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\FpsLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\MoveLib.pdb
-D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\Render.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ScreenLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\TextureLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\DrawLib.csproj.Up2Date
@@ -38,3 +36,5 @@ D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\EffectLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\EffectLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\AnimationLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\AnimationLib.pdb
+D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ProtoRender.dll
+D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\ProtoRender.pdb

@@ -4,13 +4,11 @@ using SFML.System;
 using SFML.Window;
 using System;
 using System.Reflection.Metadata;
-using EntityLib;
 using ControlLib;
 using SFML.Graphics;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Diagnostics.Metrics;
-using MoveLib;
+using MoveLib.Angle;
 
 namespace ControlLib
 {

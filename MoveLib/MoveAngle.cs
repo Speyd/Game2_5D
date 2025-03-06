@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace MoveLib;
+namespace MoveLib.Angle;
 public static class MoveAngle
 {
     public static void TurnAngle(ref double entityAngle, int direction)

@@ -1,6 +1,7 @@
 ﻿using EntityLib.Player;
 using NGenerics.Sorting;
 using ScreenLib;
+using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -51,13 +52,13 @@ public class Sky : IUpPart
         RenderSprite.Scale = new Vector2f(scaleX, scaleY);
 
         RenderSprite.Position = new Vector2f(skyOffset, 0);
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, new Sprite(RenderSprite));
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, new Sprite(RenderSprite));
 
         RenderSprite.Position = new Vector2f(skyOffset - Screen.ScreenWidth, 0);
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, new Sprite(RenderSprite));
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, new Sprite(RenderSprite));
 
         RenderSprite.Position = new Vector2f(skyOffset + Screen.ScreenWidth, 0);
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, new Sprite(RenderSprite));
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, new Sprite(RenderSprite));
 
     }
 }

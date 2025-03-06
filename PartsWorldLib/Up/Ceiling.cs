@@ -1,5 +1,6 @@
 ﻿using EntityLib.Player;
 using ScreenLib;
+using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -32,6 +33,6 @@ public class Ceiling : IUpPart
         Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, normalizeHeight), ColorFilling);
         Vertices[3] = new Vertex(new Vector2f(0, normalizeHeight), ColorFilling);
 
-        Screen.OutputPriority.AddToPriority(RenderPriority.Background, Vertices);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, Vertices);
     }
 }

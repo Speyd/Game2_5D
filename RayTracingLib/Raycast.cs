@@ -7,19 +7,16 @@ using EntityLib;
 using MapLib;
 using ScreenLib;
 using SFML.Graphics;
-using static SFML.Window.Mouse;
-using Render.RenderInterface;
+using ProtoRender.RenderInterface;
 using System.Reflection.Metadata;
 using EntityLib.Player;
 using SFML.Window;
-using static OpenTK.Graphics.OpenGL.GL;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 using HitBoxLib.PositionObject;
 using System.Numerics;
 using SFML.System;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.Operations;
-using Render.Object;
+using ProtoRender.Object;
 
 
 namespace RayTracingLib;

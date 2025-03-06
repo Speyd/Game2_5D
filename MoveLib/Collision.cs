@@ -8,14 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
 using EntityLib.Player;
-using static SFML.Window.Mouse;
 using SFML.Graphics;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.PositionObject;
-using Render.Object;
+using ProtoRender.Object;
 
 
-namespace MoveLib;
+namespace MoveLib.Move;
 public static class Collision
 {
     private static int _radiusCheckTouch = Screen.Setting.Tile;
