@@ -9,11 +9,17 @@ namespace TextureLib
     public static class ResourceManager
     {
         public static string RootDirectory { get; private set; } = FindProjectRoot();
+        public static string MainDirectory { get; } = FindProjectRoot();
+
         private const string solutionFilePath = "*.sln";
 
         public static string GetPath(string pathResource)
         {
             return Path.Combine(RootDirectory, pathResource);
+        }
+        public static string GetMainPath(string pathResource)
+        {
+            return Path.Combine(MainDirectory, pathResource);
         }
         public static void CheckTrueRootDirectoryPath(string pathRootDirectory)
         {

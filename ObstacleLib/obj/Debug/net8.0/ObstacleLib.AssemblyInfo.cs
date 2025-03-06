@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ObstacleLib")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+038c5fdfe063fdb6200ff3723ccd5038fded0557")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed76fd69afce175a859903e19cd0d7ddda504583")]
 [assembly: System.Reflection.AssemblyProductAttribute("ObstacleLib")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ObstacleLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

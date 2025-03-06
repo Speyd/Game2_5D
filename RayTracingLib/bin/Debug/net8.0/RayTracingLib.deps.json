@@ -1001,6 +1001,9 @@
         }
       },
       "FpsLib/1.0.0": {
+        "dependencies": {
+          "ProtoRender": "1.0.0"
+        },
         "runtime": {
           "FpsLib.dll": {
             "assemblyVersion": "1.0.0",

@@ -2,9 +2,28 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
+	  <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.Core</PackageId>
+    <Title>EnginePseudo3D</Title>
+    <Product>EnginePseudo3D.Core</Product>
+    <Version>1.0.0</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Description>This is an engine that uses raycasting method and SFML framework to render the scene. This project implements most of the mechanics for writing the game. Designed for quick setup and easy integration into your code!</Description>
+    <PackageProjectUrl></PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0</RepositoryUrl>
+    <PackageIcon>iconNuGet.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\AnimationLib\AnimationLib.csproj" />

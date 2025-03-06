@@ -11,7 +11,7 @@ using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
 using EffectLib;
-
+using TextureLib;
 
 namespace PartsWorldLib.Down;
 public class TexturedFloor : IDownPart
@@ -50,14 +50,14 @@ public class TexturedFloor : IDownPart
     public float MaxDivisionCoefficient { get; set; } = 3;
 
 
-    public TexturedFloor(string texturePath, string shaderPath)
+    public TexturedFloor(string texturePath, string? shaderPath = null)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureFloor"); 
 
         Texture = new Texture(texturePath);
 
-        if (!File.Exists(shaderPath))
+        if (!File.Exists(shaderPath ?? ResourceManager.GetMainPath(@"Resources\Shader\FloorSetting.glsl")))
             throw new Exception("Error path shaderFloor");
 
         Shader = new Shader(null, null, shaderPath);

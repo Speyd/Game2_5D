@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using EntityLib;
 using System.Numerics;
 using EffectLib;
-
+using TextureLib;
 
 namespace PartsWorldLib.Up;
 public class TexturedCeiling : IUpPart
@@ -40,7 +40,7 @@ public class TexturedCeiling : IUpPart
     /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
 
-    public TexturedCeiling(string texturePath, string shaderPath)
+    public TexturedCeiling(string texturePath, string? shaderPath = null)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureCeiling");
@@ -48,7 +48,7 @@ public class TexturedCeiling : IUpPart
         Texture = new Texture(texturePath);
 
 
-        if (!File.Exists(shaderPath))
+        if (!File.Exists(shaderPath ?? ResourceManager.GetMainPath(@"Resources\Shader\CeilingSetting.glsl")))
             throw new Exception("Error path shaderCeiling");
 
         Shader = new Shader(null, null, shaderPath);
