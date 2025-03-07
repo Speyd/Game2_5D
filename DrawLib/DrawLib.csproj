@@ -1,17 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.DrawLib</PackageId>
+    <Title>EnginePseudo3D.DrawLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Version>1.0.0</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Copyright>Speyd</Copyright>
+    <Description>This is a library for drawing objects on a texture.</Description>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_DrawLib.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/DrawLib</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
-    <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\ObstacleLib\ObstacleLib.csproj" />
-    <ProjectReference Include="..\ProtoRender\ProtoRender.csproj" />
-    <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_DrawLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

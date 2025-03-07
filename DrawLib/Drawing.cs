@@ -5,8 +5,6 @@ using SFML.System;
 using RayTracingLib.Detection;
 using SFML.Graphics;
 using ScreenLib;
-using ObstacleLib;
-using ObstacleLib.TexturedWallLib;
 using TextureLib;
 using ProtoRender.Object;
 

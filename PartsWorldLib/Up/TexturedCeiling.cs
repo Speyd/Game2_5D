@@ -25,6 +25,7 @@ public class TexturedCeiling : IUpPart
 
     /// <summary> Floor Mapping Shader </summary>
     public Shader Shader { get; set; }
+    const string shaderSetting = "CeilingSetting.glsl";
     /// <summary> Texture Floor</summary>
     public Texture? Texture { get; set; }
 
@@ -40,7 +41,7 @@ public class TexturedCeiling : IUpPart
     /// <summary> Limiter for DivisionCoefficient</summary>
     public float MaxDivisionCoefficient { get; set; } = 3;
 
-    public TexturedCeiling(string texturePath, string? shaderPath = null)
+    public TexturedCeiling(string texturePath)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureCeiling");
@@ -48,10 +49,10 @@ public class TexturedCeiling : IUpPart
         Texture = new Texture(texturePath);
 
 
-        if (!File.Exists(shaderPath ?? ResourceManager.GetMainPath(@"Resources\Shader\CeilingSetting.glsl")))
+        if (!File.Exists(shaderSetting))
             throw new Exception("Error path shaderCeiling");
 
-        Shader = new Shader(null, null, shaderPath);
+        Shader = new Shader(null, null, shaderSetting);
         SetStaticUniformShader();
 
 

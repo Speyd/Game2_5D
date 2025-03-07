@@ -11,13 +11,16 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("ObstacleLib")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for creating custom objects.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ed76fd69afce175a859903e19cd0d7ddda504583")]
-[assembly: System.Reflection.AssemblyProductAttribute("ObstacleLib")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57cc5e304cef3c30043b9f9a8eea4d6dfd541c8a")]
+[assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ObstacleLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/ObstacleLib")]
 
 // Создано классом WriteCodeFragment MSBuild.
 

@@ -1,17 +1,41 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>EnginePseudo3D.EffectLib</PackageId>
+    <Title>EnginePseudo3D.EffectLib</Title>
+    <Version>1.0.1</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Product>EnginePseudo3D</Product>
+    <Description>This is a library for adding effects to objects in the world.</Description>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_EffectLib.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/EffectLib</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Admin\Desktop\README_EffectLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SFML.Graphics" Version="2.6.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

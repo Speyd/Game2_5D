@@ -1,22 +1,46 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.ObstacleLib</PackageId>
+    <Title>EnginePseudo3D.ObstacleLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Version>1.0.0</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Copyright>Speyd</Copyright>
+    <Description>This is a library for creating custom objects.</Description>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/ObstacleLib</RepositoryUrl>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_ObstacleLib.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="C:\Users\Admin\Desktop\README_ObstacleLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AnimationLib\AnimationLib.csproj" />
-    <ProjectReference Include="..\EffectLib\EffectLib.csproj" />
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
-    <ProjectReference Include="..\HitBoxLib\HitBoxLib.csproj" />
-    <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.1" />
+	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

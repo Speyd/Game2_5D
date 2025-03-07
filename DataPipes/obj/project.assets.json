@@ -1029,7 +1029,7 @@
     "version": "1.0.0",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj",
-      "projectName": "DataPipes",
+      "projectName": "EnginePseudo3D.DataPipes",
       "projectPath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj",
       "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
       "outputPath": "D:\\C++ проекты\\Game2_5D\\DataPipes\\obj\\",

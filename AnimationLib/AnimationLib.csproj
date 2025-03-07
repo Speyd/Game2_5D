@@ -1,13 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.AnimationLib</PackageId>
+    <Title>EnginePseudo3D.AnimationLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Company>Speyd</Company>
+    <Authors>Speyd</Authors>
+    <Description>This is a library for playing frame list animations.</Description>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_AnimationLib.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/AnimationLib</RepositoryUrl>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_AnimationLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

@@ -18,7 +18,7 @@ This repository contains the **Raycasting Engine** that allows developers to ren
 
 ## Requirements
 
-- .NET Core 3.1 or later
+- .NET 8.0 or later
 - Visual Studio or any other .NET-compatible IDE
 - Basic understanding of raycasting and 2.5D rendering techniques
 
@@ -28,5 +28,5 @@ This repository contains the **Raycasting Engine** that allows developers to ren
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/Speyd/Game2_5D.git
+   git clone git@github.com:Speyd/Game2_5D.git
    cd Game2_5D

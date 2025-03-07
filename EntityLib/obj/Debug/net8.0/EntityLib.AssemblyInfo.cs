@@ -11,13 +11,16 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("EntityLib")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
+[assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for creating and using creatures(players)")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+038c5fdfe063fdb6200ff3723ccd5038fded0557")]
-[assembly: System.Reflection.AssemblyProductAttribute("EntityLib")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57cc5e304cef3c30043b9f9a8eea4d6dfd541c8a")]
+[assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EntityLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/EntityLib")]
 
 // Создано классом WriteCodeFragment MSBuild.
 

@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "vZXlMUTmR+4=",
+  "dgSpecHash": "5OjqkGUev60=",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.datapipes\\1.0.0\\enginepseudo3d.datapipes.1.0.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.screenlib\\1.0.0\\enginepseudo3d.screenlib.1.0.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",

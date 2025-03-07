@@ -1,14 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.ControlLib</PackageId>
+    <Title>EnginePseudo3D.ControlLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Version>1.0.0</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <Description>This is a library for handling keystrokes.</Description>
+    <PackageReadmeFile>README_ControlLib.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/ControlLib</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_ControlLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EnginePseudo3D.MoveLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

@@ -1,24 +1,30 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
 	  <PackageLicenseExpression>MIT OR Apache-2.0</PackageLicenseExpression>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>EnginePseudo3D.Core</PackageId>
     <Title>EnginePseudo3D</Title>
-    <Product>EnginePseudo3D.Core</Product>
-    <Version>1.0.0</Version>
+    <Product>EnginePseudo3D</Product>
+    <Version>1.0.1</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Description>This is an engine that uses raycasting method and SFML framework to render the scene. This project implements most of the mechanics for writing the game. Designed for quick setup and easy integration into your code!</Description>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0</RepositoryUrl>
     <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_Engine.md</PackageReadmeFile>
+    <Copyright>Speyd</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="C:\Users\Admin\Desktop\README_Engine.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
@@ -26,22 +32,22 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AnimationLib\AnimationLib.csproj" />
-    <ProjectReference Include="..\ControlLib\ControlLib.csproj" />
-    <ProjectReference Include="..\DataPipes\DataPipes.csproj" />
-    <ProjectReference Include="..\DrawLib\DrawLib.csproj" />
-    <ProjectReference Include="..\EffectLib\EffectLib.csproj" />
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
-    <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
-    <ProjectReference Include="..\HitBoxLib\HitBoxLib.csproj" />
-    <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\MiniMapLib\MiniMapLib.csproj" />
-    <ProjectReference Include="..\MoveLib\MoveLib.csproj" />
-    <ProjectReference Include="..\ObstacleLib\ObstacleLib.csproj" />
-    <ProjectReference Include="..\PartsWorldLib\PartsWorldLib.csproj" />
-    <ProjectReference Include="..\RayTracingLib\RayTracingLib.csproj" />
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
-    <ProjectReference Include="..\TextureLib\TextureLib.csproj" />
+	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ControlLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.DrawLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.1" />
+	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.FpsLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.MiniMapLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.MoveLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ObstacleLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.PartsWorldLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.0" />  
   </ItemGroup>
 
 </Project>

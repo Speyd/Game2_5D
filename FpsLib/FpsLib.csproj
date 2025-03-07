@@ -1,13 +1,37 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.FpsLib</PackageId>
+    <Title>EnginePseudo3D.FpsLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Version>1.0.0</Version>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <Description>This is a library for calculating and displaying the number of fps.</Description>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/FpsLib</RepositoryUrl>
+    <PackageReadmeFile>README_FpsLib.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ProtoRender\ProtoRender.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_FpsLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

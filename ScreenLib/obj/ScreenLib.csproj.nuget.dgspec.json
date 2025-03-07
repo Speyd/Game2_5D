@@ -8,7 +8,7 @@
       "version": "1.0.0",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
-        "projectName": "ScreenLib",
+        "projectName": "EnginePseudo3D.ScreenLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
         "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\obj\\",

@@ -1,14 +1,38 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>EnginePseudo3D.HitBoxLib</PackageId>
+    <Title>EnginePseudo3D.HitBoxLib</Title>
+    <Version>1.0.0</Version>
+    <Product>EnginePseudo3D</Product>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Description>This is a library for creating, using, rendering and colliding hitboxes.</Description>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <PackageReadmeFile>README_HitBoxLib.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/HitBoxLib</RepositoryUrl>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataPipes\DataPipes.csproj" />
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_HitBoxLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>

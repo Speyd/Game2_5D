@@ -1,16 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>EnginePseudo3D.MoveLib</PackageId>
+    <Title>EnginePseudo3D.MoveLib</Title>
+    <Product>EnginePseudo3D</Product>
+    <Authors>Speyd</Authors>
+    <Company>Speyd</Company>
+    <Copyright>Speyd</Copyright>
+    <PackageIcon>iconNuGet.png</PackageIcon>
+    <Version>1.0.0</Version>
+    <Description>This is a library for calculating collision and camera rotation.</Description>
+    <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/MoveLib</RepositoryUrl>
+    <PackageReadmeFile>README_MoveLib.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\EntityLib\EntityLib.csproj" />
-    <ProjectReference Include="..\FpsLib\FpsLib.csproj" />
-    <ProjectReference Include="..\MapLib\MapLib.csproj" />
-    <ProjectReference Include="..\ScreenLib\ScreenLib.csproj" />
+    <None Include="C:\Users\Admin\Desktop\README_MoveLib.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="C:\Users\Admin\Downloads\iconNuGet.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
+	<PackageReference Include="EnginePseudo3D.FpsLib" Version="1.0.0" />
+	<PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.0" />
+	<PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
