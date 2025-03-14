@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <PackageId>EnginePseudo3D.HitBoxLib</PackageId>
     <Title>EnginePseudo3D.HitBoxLib</Title>
-    <Version>1.0.0</Version>
+    <Version>1.0.3</Version>
     <Product>EnginePseudo3D</Product>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
@@ -17,6 +17,7 @@
     <PackageReadmeFile>README_HitBoxLib.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/HitBoxLib</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.2" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

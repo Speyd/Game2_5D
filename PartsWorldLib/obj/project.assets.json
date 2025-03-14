@@ -722,82 +722,107 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.0.0": {
+      "EnginePseudo3D.DataPipes/1.0.2": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.EffectLib/1.0.1": {
+      "EnginePseudo3D.EffectLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.ScreenLib": "1.0.0",
+          "EnginePseudo3D.ScreenLib": "1.0.2",
           "SFML.Graphics": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/EffectLib.dll": {}
+          "lib/net8.0/EffectLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/EffectLib.dll": {}
+          "lib/net8.0/EffectLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.EntityLib/1.0.0": {
+      "EnginePseudo3D.EntityLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.HitBoxLib": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.HitBoxLib": "1.0.3",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/EntityLib.dll": {}
+          "lib/net8.0/EntityLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/EntityLib.dll": {}
+          "lib/net8.0/EntityLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.HitBoxLib/1.0.0": {
+      "EnginePseudo3D.HitBoxLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.0": {
+      "EnginePseudo3D.ScreenLib/1.0.2": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
           "SFML.Net": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.TextureLib/1.0.0": {
+      "EnginePseudo3D.TextureLib/1.0.9": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.ScreenLib": "1.0.2",
+          "SixLabors.ImageSharp": "3.1.7"
         },
         "compile": {
-          "lib/net8.0/TextureLib.dll": {}
+          "lib/net8.0/TextureLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/TextureLib.dll": {}
+          "lib/net8.0/TextureLib.dll": {
+            "related": ".xml"
+          }
         }
       },
       "NGenerics/1.5.3": {
@@ -888,6 +913,22 @@
           "lib/netstandard2.0/SFML.Window.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "SixLabors.ImageSharp/3.1.7": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/_._": {}
         }
       }
     }
@@ -1086,88 +1127,94 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.0.0": {
-      "sha512": "L1nS52GlIixkumMA8wjE+kiSCLQGxm3s6tVCVMnMULxYND3OdodvHkvNbrLqpgIU+eqnEYa6ldFCeSGqtLT6bg==",
+    "EnginePseudo3D.DataPipes/1.0.2": {
+      "sha512": "m54Bh3EU28s1mtx1V25OtYXZczFlLCXMB4LYl9hSjtbdBYLZx7XY5Yr9UhoVafivqUHD3LlWtVWTXJxEY0gQLw==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.0.0",
+      "path": "enginepseudo3d.datapipes/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.0.0.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.0.2.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/DataPipes.dll"
+        "lib/net8.0/DataPipes.dll",
+        "lib/net8.0/DataPipes.xml"
       ]
     },
-    "EnginePseudo3D.EffectLib/1.0.1": {
-      "sha512": "qW5Vbw/nKGZmMmGbZc1O8LMbMtg9Wv24MBPHxqlFZOrQkru3NfREtkbFV50YBfLshLWQOEuXYas5QH72C4WBeQ==",
+    "EnginePseudo3D.EffectLib/1.0.3": {
+      "sha512": "SOFAhpHRKpbeb2PMrunaImEKWSMDvbpNy9IH/sW2Jp8x/VObhQkV1oUQht5zyk4M87pShQxK8Z0XfgQ/J5ifjA==",
       "type": "package",
-      "path": "enginepseudo3d.effectlib/1.0.1",
+      "path": "enginepseudo3d.effectlib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_EffectLib.md",
-        "enginepseudo3d.effectlib.1.0.1.nupkg.sha512",
+        "enginepseudo3d.effectlib.1.0.3.nupkg.sha512",
         "enginepseudo3d.effectlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/EffectLib.dll"
+        "lib/net8.0/EffectLib.dll",
+        "lib/net8.0/EffectLib.xml"
       ]
     },
-    "EnginePseudo3D.EntityLib/1.0.0": {
-      "sha512": "NZojPwBdiArr4OWdYvfzUi0mvlYH/wFnv53vLEaMi+LD1Wiwr0kd0MHSOfttEH/9xR8TTtvuzeMs82luEFfJqA==",
+    "EnginePseudo3D.EntityLib/1.0.3": {
+      "sha512": "qmA628abl+nluGNwyM8A24sLjosqfD7QQwIq4dgmILmsN74/q9On/xmNyCdZnjOJeMtWKk/155+raR07K9Ea7Q==",
       "type": "package",
-      "path": "enginepseudo3d.entitylib/1.0.0",
+      "path": "enginepseudo3d.entitylib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_Entity.md",
-        "enginepseudo3d.entitylib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.entitylib.1.0.3.nupkg.sha512",
         "enginepseudo3d.entitylib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/EntityLib.dll"
+        "lib/net8.0/EntityLib.dll",
+        "lib/net8.0/EntityLib.xml"
       ]
     },
-    "EnginePseudo3D.HitBoxLib/1.0.0": {
-      "sha512": "1GbYa6RIYWOLb1rVM0+Z6uBN1dyc/IN3YdRiKZme+Ed5U5G6jZReOdS9gcQKBpcz+DwVEdZXUabkSo1+ofeVdA==",
+    "EnginePseudo3D.HitBoxLib/1.0.3": {
+      "sha512": "6ZDcT2q3ili/q8V28eBnhzZ+MSbXQvAEkDRVms5KQVDeOickP+zKjsvE/yg2jRbSoJe+JCcITtzP7969531pIA==",
       "type": "package",
-      "path": "enginepseudo3d.hitboxlib/1.0.0",
+      "path": "enginepseudo3d.hitboxlib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_HitBoxLib.md",
-        "enginepseudo3d.hitboxlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.hitboxlib.1.0.3.nupkg.sha512",
         "enginepseudo3d.hitboxlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/HitBoxLib.dll"
+        "lib/net8.0/HitBoxLib.dll",
+        "lib/net8.0/HitBoxLib.xml"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.0": {
-      "sha512": "fuAsA1TSMQ1wlgsjpqFnI29Wy/pVWdgXy46qdqmJSLWUejj04W3SIm8PAwaLuPJDObxCCJena8ev7mv07bpfwA==",
+    "EnginePseudo3D.ScreenLib/1.0.2": {
+      "sha512": "DkuiZ6wG3nmoRS7E3Z0gjHjXs2jkn1cVNGizB9tWauzvjZ7lrzDe/s/AiQXs2Ifty5wPVqa0crj9oakNfZOWeQ==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.0",
+      "path": "enginepseudo3d.screenlib/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.2.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/ScreenLib.dll"
+        "lib/net8.0/ScreenLib.dll",
+        "lib/net8.0/ScreenLib.xml"
       ]
     },
-    "EnginePseudo3D.TextureLib/1.0.0": {
-      "sha512": "pBdr4S6y3D99yfCoIuHWz1TIzcSXMCDsDtHkgLK79ak2J0HJwRMoCSonvqYGTjtcxQn5VZj0wmj+hZndm10pRw==",
+    "EnginePseudo3D.TextureLib/1.0.9": {
+      "sha512": "If7Ok1d6vqyCzl/+Zt6NHJEeimnk4BN43SI7ORr0EkfJdTfmy1uJAkupm5aeoVrpKalhQD89AfC06+IpHEGtpQ==",
       "type": "package",
-      "path": "enginepseudo3d.texturelib/1.0.0",
+      "path": "enginepseudo3d.texturelib/1.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_TextureLib.md",
-        "enginepseudo3d.texturelib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.texturelib.1.0.9.nupkg.sha512",
         "enginepseudo3d.texturelib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/TextureLib.dll"
+        "lib/net8.0/TextureLib.dll",
+        "lib/net8.0/TextureLib.xml"
       ]
     },
     "NGenerics/1.5.3": {
@@ -1255,13 +1302,29 @@
         "sfml.window.2.6.0.nupkg.sha512",
         "sfml.window.nuspec"
       ]
+    },
+    "SixLabors.ImageSharp/3.1.7": {
+      "sha512": "9fIOOAsyLFid6qKypM2Iy0Z3Q9yoanV8VoYAHtI2sYGMNKzhvRTjgFDHonIiVe+ANtxIxM6SuqUzj0r91nItpA==",
+      "type": "package",
+      "path": "sixlabors.imagesharp/3.1.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/SixLabors.ImageSharp.props",
+        "lib/net6.0/SixLabors.ImageSharp.dll",
+        "lib/net6.0/SixLabors.ImageSharp.xml",
+        "sixlabors.imagesharp.128.png",
+        "sixlabors.imagesharp.3.1.7.nupkg.sha512",
+        "sixlabors.imagesharp.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.EffectLib >= 1.0.1",
-      "EnginePseudo3D.EntityLib >= 1.0.0",
-      "EnginePseudo3D.TextureLib >= 1.0.0"
+      "EnginePseudo3D.EffectLib >= 1.0.3",
+      "EnginePseudo3D.EntityLib >= 1.0.3",
+      "EnginePseudo3D.TextureLib >= 1.0.9"
     ]
   },
   "packageFolders": {
@@ -1269,7 +1332,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.8",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj",
       "projectName": "EnginePseudo3D.PartsWorldLib",
@@ -1316,15 +1379,15 @@
         "dependencies": {
           "EnginePseudo3D.EffectLib": {
             "target": "Package",
-            "version": "[1.0.1, )"
+            "version": "[1.0.3, )"
           },
           "EnginePseudo3D.EntityLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.3, )"
           },
           "EnginePseudo3D.TextureLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.9, )"
           }
         },
         "imports": [

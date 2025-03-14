@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.PartsWorldLib</PackageId>
     <Title>EnginePseudo3D.PartsWorldLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.0.0</Version>
+    <Version>1.0.8</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -17,6 +17,7 @@
     <PackageIcon>iconNuGet.png</PackageIcon>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/PartsWorldLib</RepositoryUrl>
     <PackageReadmeFile>README_PartsWorldLib.md</PackageReadmeFile>
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>	  
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.1" />
-	<PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
-	<PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.0" />
+	<PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.3" />
+	<PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
+	<PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.9" />
   </ItemGroup>
 
 </Project>

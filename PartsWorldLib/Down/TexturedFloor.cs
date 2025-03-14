@@ -24,7 +24,6 @@ public class TexturedFloor : IDownPart
     private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
     /// <summary> Floor Mapping Shader </summary>
     public Shader Shader { get; set; }
-    const string shaderSetting = "FloorSetting.glsl";
     /// <summary> Texture Floor</summary>
     private Texture _texture;
     public Texture Texture 
@@ -51,17 +50,17 @@ public class TexturedFloor : IDownPart
     public float MaxDivisionCoefficient { get; set; } = 3;
 
 
-    public TexturedFloor(string texturePath)
+    public TexturedFloor(string texturePath, string shaderSettingPath)
     {
         if (!File.Exists(texturePath))
             throw new Exception("Error path textureFloor"); 
 
         Texture = new Texture(texturePath);
 
-        if (!File.Exists(shaderSetting))
+        if (!File.Exists(shaderSettingPath))
             throw new Exception("Error path shaderFloor");
 
-        Shader = new Shader(null, null, shaderSetting);
+        Shader = new Shader(null, null, shaderSettingPath);
         SetStaticUniformShader();
 
         Sprite = new Sprite(SecondStepRender?.Texture);

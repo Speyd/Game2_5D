@@ -8,7 +8,6 @@ using EntityLib;
 using ScreenLib;
 using EntityLib.Player;
 using SFML.System;
-using ObstacleLib.SpriteLib.Animation;
 using ObstacleLib.SpriteLib.Render;
 using TextureLib;
 using ObstacleLib.SpriteLib.Add;
@@ -70,11 +69,11 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     {
         Adder.AddTexture(this, texture);
     }
-    public SpriteObstacle(string path, bool isDirectory, bool isPassability = false, bool folderAccounting = false)
+    public SpriteObstacle(string path, bool isDirectory, bool folderAccounting = false, bool isPassability = false)
        : base(0, 0, SFML.Graphics.Color.White, isPassability)
     {
         if(isDirectory)
-            Adder.AddTextureFromFolder(this, path, folderAccounting);
+           ImageLoader.TexturesLoadFromFolder(path, folderAccounting);
         else
             Adder.AddTexture(this, path);
     }

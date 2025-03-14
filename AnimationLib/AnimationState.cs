@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextureLib;
+﻿using TextureLib;
 
-namespace ObstacleLib.SpriteLib.Animation;
+namespace AnimationLib;
+/// <summary>
+/// Class for managing animation consisting of several frames (textures).
+/// Allows you to add, remove and get frames, as well as control the playback speed.
+/// </summary>
 public class AnimationState
 {
     /// <summary>Index current frame</summary>
-    internal int Index { get; set; } = 0;
+    public int Index { get; internal set; } = 0;
     /// <summary>Frame counter</summary>
     internal int FrameCounter { get; set; } = 0;
 
@@ -18,33 +17,66 @@ public class AnimationState
     /// <summary>Animation playback speed(The higher the value, the slower)</summary>
     public int Speed { get; set; } = 0;
     internal List<TextureObstacle> Frames { get; init; } = new();
+    /// <summary>Current frame</summary>
     public TextureObstacle? CurrentFrame { get; internal set; }
+    /// <summary>true - animation is used, false - animation is not used</summary>
     public bool IsAnimation { get; set; } = false;
 
 
+    /// <summary>Constructor class AnimationState</summary>
+    /// <param name="paths">File paths</param>
+    public AnimationState(params string[] paths)
+    {
+        foreach(var path in paths)
+            AddFrame(new TextureObstacle(path));
+    }
+
+    /// <summary>Constructor class AnimationState</summary>
+    /// <param name="path">File path</param>
+    public AnimationState(string path)
+    {
+        AddFrame(new TextureObstacle(path));
+    }
+
+    /// <summary>Constructor class AnimationState</summary>
+    /// <param name="frame">instance TextureObstacle</param>
     public AnimationState(TextureObstacle frame) 
     {
         AddFrame(frame);
     }
+
+    /// <summary>Constructor class AnimationState</summary>
+    /// <param name="frames">list of instance TextureObstacle</param>
     public AnimationState(List<TextureObstacle> frames)
     {
         foreach (var frame in frames)
             AddFrame(frame);
     }
+
+    /// <summary>Constructor class AnimationState</summary>
     public AnimationState()
     {}
 
+    /// <summary>Adding a frame to list of frames </summary>
     public void AddFrame(TextureObstacle frame)
     {
         Frames.Add(frame);
         AmountFrame++;
     }
+    /// <summary>Adding a frames to list of frames </summary>
+    public void AddFrames(List<TextureObstacle> frames)
+    {
+        Frames.AddRange(frames);
+        AmountFrame += frames.Count;
+    }
+    /// <summary>Remove a frame in list of frames </summary>
     public bool RemoveFrame(TextureObstacle frame)
     {
         bool removed = Frames.Remove(frame);
         if (removed) AmountFrame--;
         return removed;
     }
+    /// <summary>Get a frame from list of frames </summary>
     public TextureObstacle? GetFrame(int index)
     {
         if (index < 0 || index >= AmountFrame)

@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.dll
 D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\refint\EffectLib.dll
 D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.pdb
 D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\ref\EffectLib.dll
+D:\C++ проекты\Game2_5D\EffectLib\bin\Debug\net8.0\EffectLib.xml
+D:\C++ проекты\Game2_5D\EffectLib\obj\Debug\net8.0\EffectLib.xml

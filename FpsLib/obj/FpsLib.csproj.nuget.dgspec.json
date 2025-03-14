@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
         "projectName": "EnginePseudo3D.FpsLib",
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             }
           },
           "imports": [

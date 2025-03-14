@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.EntityLib</PackageId>
     <Title>EnginePseudo3D.EntityLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.0.0</Version>
+    <Version>1.0.3</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -17,6 +17,7 @@
     <PackageIcon>iconNuGet.png</PackageIcon>
     <PackageReadmeFile>README_Entity.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/EntityLib</RepositoryUrl>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
+	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

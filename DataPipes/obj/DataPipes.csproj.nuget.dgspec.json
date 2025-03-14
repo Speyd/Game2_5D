@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.2",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\DataPipes\\DataPipes.csproj",
         "projectName": "EnginePseudo3D.DataPipes",
@@ -52,11 +52,11 @@
           "dependencies": {
             "SFML.Graphics": {
               "target": "Package",
-              "version": "[2.6.0, )"
+              "version": "[2.6.1, )"
             },
             "SFML.System": {
               "target": "Package",
-              "version": "[2.6.0, )"
+              "version": "[2.6.1, )"
             }
           },
           "imports": [

@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.ObstacleLib</PackageId>
     <Title>EnginePseudo3D.ObstacleLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.0.0</Version>
+    <Version>1.0.9</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -17,6 +17,7 @@
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/ObstacleLib</RepositoryUrl>
     <PackageIcon>iconNuGet.png</PackageIcon>
     <PackageReadmeFile>README_ObstacleLib.md</PackageReadmeFile>
+	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,16 +32,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.1" />
-	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.0" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
+    <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.6" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
+	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.1.1" />
+	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

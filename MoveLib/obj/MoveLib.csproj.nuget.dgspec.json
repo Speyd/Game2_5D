@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj",
         "projectName": "EnginePseudo3D.MoveLib",
@@ -52,19 +52,19 @@
           "dependencies": {
             "EnginePseudo3D.EntityLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.3, )"
             },
             "EnginePseudo3D.FpsLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.MapLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.ScreenLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.2, )"
             }
           },
           "imports": [

@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\DrawLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\refint\DrawLib.dll
 D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\DrawLib.pdb
 D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\ref\DrawLib.dll
+D:\C++ проекты\Game2_5D\DrawLib\bin\Debug\net8.0\DrawLib.xml
+D:\C++ проекты\Game2_5D\DrawLib\obj\Debug\net8.0\DrawLib.xml

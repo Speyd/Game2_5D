@@ -1,18 +1,19 @@
 {
   "version": 2,
-  "dgSpecHash": "5OjqkGUev60=",
+  "dgSpecHash": "nXrsXQ2aYAI=",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.datapipes\\1.0.0\\enginepseudo3d.datapipes.1.0.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.screenlib\\1.0.0\\enginepseudo3d.screenlib.1.0.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.datapipes\\1.0.2\\enginepseudo3d.datapipes.1.0.2.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.screenlib\\1.0.2\\enginepseudo3d.screenlib.1.0.2.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.0\\sfml.audio.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.0\\sfml.graphics.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.0\\sfml.net.2.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.0\\sfml.system.2.6.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512"
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.0\\sfml.window.2.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\sixlabors.imagesharp\\3.1.7\\sixlabors.imagesharp.3.1.7.nupkg.sha512"
   ],
   "logs": []
 }

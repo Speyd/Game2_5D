@@ -98,15 +98,15 @@ public class Entity: IObserver
 
 
 
-    public Entity( double x = 0, double y = 0, double fov = Math.PI / 3)
+    public Entity( double x = 0, double y = 0, double z = 0, double fov = Math.PI / 3)
     {
         Fov = fov;
         HalfFov = (float)Fov / 2;
 
         HitBox = new HitBox();
-        X = new Coordinate(CoordinatePlane.X, HitBox);
-        Y = new Coordinate(CoordinatePlane.Y, HitBox);
-        Z = new Coordinate(CoordinatePlane.Z, HitBox);
+        X = new Coordinate(CoordinatePlane.X, x, HitBox);
+        Y = new Coordinate(CoordinatePlane.Y, y, HitBox);
+        Z = new Coordinate(CoordinatePlane.Z, z, HitBox);
         Z.Axis = 50;
 
         Angle = 0;

@@ -10,9 +10,11 @@ using System.IO;
 
 
 namespace TextureLib;
+/// <summary>Custom texture</summary>
 public class TextureObstacle
 {
     private SFML.Graphics.Texture _texture;
+    /// <summary>Basic texture</summary>
     public SFML.Graphics.Texture Texture 
     { 
         get => _texture;
@@ -24,6 +26,7 @@ public class TextureObstacle
     }
 
     private string _pathTexture = string.Empty;
+    /// <summary>Path to texture</summary>
     public string PathTexture
     {
         get => _pathTexture;
@@ -36,6 +39,7 @@ public class TextureObstacle
 
     //--------------------Size Texture-----------------------
     private uint _width = 0;
+    /// <summary>Width texture</summary>
     public uint Width
     {
         get => _width;
@@ -47,6 +51,7 @@ public class TextureObstacle
     }
 
     private uint _height = 0;
+    /// <summary>Height texture</summary>
     public uint Height
     {
         get => _height;
@@ -57,84 +62,60 @@ public class TextureObstacle
         }
     }
 
+    /// <summary>HulfWidth texture</summary>
     public uint HulfWidth { get; private set; }
+    /// <summary>HulfHeight texture</summary>
     public uint HulfHeight { get; private set; }
+    /// <summary>BaseHeight texture</summary>
     public static uint BaseHeight { get; } = 1308;
+    /// <summary>BaseWidth texture</summary>
     public static uint BaseWidth { get; } = 1920;
 
 
     //-----------------------Setting---------------------
+    /// <summary>Scale texture</summary>
     public int Scale { get; private set; }
+    /// <summary>Number of pixels involved in the texture</summary>
     public uint PixelCount { get; private set; }
+    /// <summary>Texture smoothing</summary>
 
     public static bool IsSmooth = false;
 
-    //-------------------------Available formats------------------------
-    private static string[] imageExtensions = { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".webp" };
-
-
-
-    private static bool IsImageFile(string path)
-    {
-        string extension = Path.GetExtension(path)?.ToLower() ?? "";
-
-        return imageExtensions.Contains(extension);
-    }
-    public static void IsTruePath(string path)
-    {
-        if (!IsImageFile(path))
-            throw new Exception("Error file extensions(non photo or texture)");
-        else if (!File.Exists(path))
-            throw new Exception("Error path TextureObstacle");
-    }
-
-
+    /// <summary>Constructor using file path</summary>
     public TextureObstacle(string path)
     {
         _texture = new Texture(1, 1);
         _pathTexture = path;
         SetTexture(path);
     }
+    /// <summary>Constructor using SFML.Graphics.Texture</summary>
     public TextureObstacle(SFML.Graphics.Texture texture)
     {
         _texture = new Texture(1, 1);
         SetTexture(texture);
     }
+    /// <summary>Constructor using class TextureObstacle</summary>
     public TextureObstacle(TextureObstacle textureObstacle)
     {
-        _texture = textureObstacle.Texture;
-        _pathTexture = textureObstacle.PathTexture;
-
-        Texture.Smooth = IsSmooth;
-        Texture.GenerateMipmap();
-
-        Width = textureObstacle.Width;
-        Height = textureObstacle.Height;
-        Scale = textureObstacle.Scale;
-
-        PixelCount = Width * Height;
+        _texture = new Texture(1, 1);
+        CopyFrom(textureObstacle);
     }
+
+    private void CopyFrom(TextureObstacle source)
+    {
+        this._texture = source.Texture;
+        this._pathTexture = source.PathTexture;
+        this.Width = source.Width;
+        this.Height = source.Height;
+        this.Scale = source.Scale;
+        this.PixelCount = source.PixelCount;
+    }
+    /// <summary>Change texture using file path</summary>
     public void SetTexture(string path)
     {
-        try
-        {
-            IsTruePath(path);
-
-            _texture = new SFML.Graphics.Texture(path);
-            Texture.Smooth = IsSmooth;
-            Texture.GenerateMipmap();
-
-            Width = Texture.Size.X;
-            Height = Texture.Size.Y;
-            PixelCount = Width * Height;
-
-            SetTile();
-        }
-        catch (Exception ex)
-        {
-            throw new Exception($"Error loading texture from path: {path}", ex);
-        }
+        SetTexture(new Texture(path));
     }
+    /// <summary>Change texture using SFML.Graphics.Texture</summary>
     public void SetTexture(SFML.Graphics.Texture texture)
     {
         try
@@ -147,24 +128,44 @@ public class TextureObstacle
             Height = Texture.Size.Y;
             PixelCount = Width * Height;
 
-            SetTile();
+            SetScale();
         }
         catch (Exception ex)
         {
             throw new Exception($"Error loading texture from path: {_pathTexture}", ex);
         }
     }
-    public void SetTile()
+
+    /// <summary>
+    /// Calculates the ratio of the given height to the base height of the screen.
+    /// Used to scale objects depending on the screen.
+    /// </summary>
+    /// <param name="height">The original height of the object.</param>
+    /// <returns>Height change ratio.</returns>
+    public static float DifferenceHeight(float height) => height / BaseHeight;
+    /// <summary>
+    /// Calculates the ratio of the given width to the base width of the screen.
+    /// Used to scale objects depending on the screen.
+    /// </summary>
+    /// <param name="width">The original width of the object.</param>
+    /// <returns>Width change ratio.</returns>
+    public static float DifferenceWidth(float width) => width / BaseWidth;
+    /// <summary>Changes the scale of the texture</summary>
+    public void SetScale()
     {
         if (Screen.Setting.Tile != 0)
             Scale = (int)(Width / Screen.Setting.Tile);
         else
             Scale = 1;
     }
-
-    public static float DifferenceHeight(float height) => height / BaseHeight;
-    public static float DifferenceWidth(float width) => width / BaseWidth;
-    public static SFML.Graphics.IntRect SetOffset(int offset, int screenTile, TextureObstacle texture)
+    /// <summary>
+    /// Calculates texture Integer Rectangle
+    /// </summary>
+    /// <param name="offset">Texture offset.</param>
+    /// <param name="screenTile">Screen Tile.</param>
+    /// <param name="texture">Texture.</param>
+    /// <returns>SFML.Graphics.IntRect</returns>
+    public static SFML.Graphics.IntRect SetIntegerRectangle(int offset, int screenTile, TextureObstacle texture)
     {
         int left = offset * texture.Scale;
         int top = 0;
@@ -173,4 +174,5 @@ public class TextureObstacle
 
         return new SFML.Graphics.IntRect(left, top, width, height);
     }
+
 }

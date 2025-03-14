@@ -301,7 +301,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         if (currentRenderTexture is null)
             return;
 
-        IntRect textureRect = TextureObstacle.SetOffset((int)result.Offset, Screen.Setting.Tile, currentRenderTexture.Base);
+        IntRect textureRect = TextureObstacle.SetIntegerRectangle((int)result.Offset, Screen.Setting.Tile, currentRenderTexture.Base);
         Vector2f position = GetPositionOnScreen(result, entity);
         Vector2f scale = RenderOperation.CalculationTextureScale(result, currentRenderTexture);
 

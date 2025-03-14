@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.1.1",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
         "projectName": "EnginePseudo3D.AnimationLib",
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.TextureLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.9, )"
             }
           },
           "imports": [

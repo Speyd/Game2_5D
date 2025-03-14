@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.7",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj",
         "projectName": "EnginePseudo3D.DrawLib",
@@ -52,23 +52,23 @@
           "dependencies": {
             "EnginePseudo3D.EntityLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.3, )"
             },
             "EnginePseudo3D.MapLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.RayTracingLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.ScreenLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.2, )"
             }
           },
           "imports": [

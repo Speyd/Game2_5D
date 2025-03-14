@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.6",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj",
         "projectName": "EnginePseudo3D.MiniMapLib",
@@ -52,15 +52,15 @@
           "dependencies": {
             "EnginePseudo3D.MapLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.6, )"
             },
             "EnginePseudo3D.ScreenLib": {
               "target": "Package",
-              "version": "[1.0.0, )"
+              "version": "[1.0.2, )"
             },
             "SFML.Net": {
               "target": "Package",
-              "version": "[2.6.0, )"
+              "version": "[2.6.1, )"
             }
           },
           "imports": [

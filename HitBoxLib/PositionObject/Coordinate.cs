@@ -25,6 +25,13 @@ public class Coordinate
         CoordinatePlane = coordinatePlane;
         _hitBox = hitBox;
     }
+    public Coordinate(CoordinatePlane coordinatePlane, double axis, HitBox hitBox)
+    {
+        CoordinatePlane = coordinatePlane;
+        _hitBox = hitBox;
+
+        Axis = axis;
+    }
     public Coordinate(Coordinate coordinate)
     {
         CoordinatePlane = coordinate.CoordinatePlane;

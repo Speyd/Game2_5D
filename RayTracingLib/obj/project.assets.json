@@ -722,128 +722,165 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.0.0": {
+      "EnginePseudo3D.DataPipes/1.0.2": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.EntityLib/1.0.0": {
+      "EnginePseudo3D.EntityLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.HitBoxLib": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.HitBoxLib": "1.0.3",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/EntityLib.dll": {}
+          "lib/net8.0/EntityLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/EntityLib.dll": {}
+          "lib/net8.0/EntityLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.FpsLib/1.0.0": {
+      "EnginePseudo3D.FpsLib/1.0.6": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.ProtoRender": "1.0.0"
+          "EnginePseudo3D.ProtoRender": "1.0.6"
         },
         "compile": {
-          "lib/net8.0/FpsLib.dll": {}
+          "lib/net8.0/FpsLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/FpsLib.dll": {}
+          "lib/net8.0/FpsLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.HitBoxLib/1.0.0": {
+      "EnginePseudo3D.HitBoxLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.MapLib/1.0.0": {
+      "EnginePseudo3D.MapLib/1.0.6": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.EntityLib": "1.0.0",
-          "EnginePseudo3D.ProtoRender": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0",
-          "EnginePseudo3D.TextureLib": "1.0.0",
-          "SFML.Graphics": "2.6.0"
+          "EnginePseudo3D.EntityLib": "1.0.3",
+          "EnginePseudo3D.ProtoRender": "1.0.6",
+          "EnginePseudo3D.ScreenLib": "1.0.2",
+          "EnginePseudo3D.TextureLib": "1.0.9",
+          "SFML.Graphics": "2.6.1"
         },
         "compile": {
-          "lib/net8.0/MapLib.dll": {}
+          "lib/net8.0/MapLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/MapLib.dll": {}
+          "lib/net8.0/MapLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.MoveLib/1.0.0": {
+      "EnginePseudo3D.MoveLib/1.0.6": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.EntityLib": "1.0.0",
-          "EnginePseudo3D.FpsLib": "1.0.0",
-          "EnginePseudo3D.MapLib": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.EntityLib": "1.0.3",
+          "EnginePseudo3D.FpsLib": "1.0.6",
+          "EnginePseudo3D.MapLib": "1.0.6",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/MoveLib.dll": {}
+          "lib/net8.0/MoveLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/MoveLib.dll": {}
+          "lib/net8.0/MoveLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.ProtoRender/1.0.0": {
+      "EnginePseudo3D.ProtoRender/1.0.6": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.EntityLib": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0",
-          "EnginePseudo3D.TextureLib": "1.0.0",
-          "SFML.Net": "2.6.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.EntityLib": "1.0.3",
+          "EnginePseudo3D.ScreenLib": "1.0.2",
+          "EnginePseudo3D.TextureLib": "1.0.9",
+          "SFML.Net": "2.6.1"
         },
         "compile": {
-          "lib/net8.0/ProtoRender.dll": {}
+          "lib/net8.0/ProtoRender.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/ProtoRender.dll": {}
+          "lib/net8.0/ProtoRender.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.0": {
+      "EnginePseudo3D.ScreenLib/1.0.2": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
           "SFML.Net": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.TextureLib/1.0.0": {
+      "EnginePseudo3D.TextureLib/1.0.9": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.ScreenLib": "1.0.2",
+          "SixLabors.ImageSharp": "3.1.7"
         },
         "compile": {
-          "lib/net8.0/TextureLib.dll": {}
+          "lib/net8.0/TextureLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/TextureLib.dll": {}
+          "lib/net8.0/TextureLib.dll": {
+            "related": ".xml"
+          }
         }
       },
       "NGenerics/1.5.3": {
@@ -859,11 +896,11 @@
           }
         }
       },
-      "SFML.Audio/2.6.0": {
+      "SFML.Audio/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Audio.dll": {
@@ -876,12 +913,12 @@
           }
         }
       },
-      "SFML.Graphics/2.6.0": {
+      "SFML.Graphics/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Graphics.dll": {
@@ -894,16 +931,16 @@
           }
         }
       },
-      "SFML.Net/2.6.0": {
+      "SFML.Net/2.6.1": {
         "type": "package",
         "dependencies": {
-          "SFML.Audio": "2.6.0",
-          "SFML.Graphics": "2.6.0",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.Audio": "2.6.1",
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         }
       },
-      "SFML.System/2.6.0": {
+      "SFML.System/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)"
@@ -919,11 +956,11 @@
           }
         }
       },
-      "SFML.Window/2.6.0": {
+      "SFML.Window/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Window.dll": {
@@ -934,6 +971,22 @@
           "lib/netstandard2.0/SFML.Window.dll": {
             "related": ".xml"
           }
+        }
+      },
+      "SixLabors.ImageSharp/3.1.7": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/SixLabors.ImageSharp.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/_._": {}
         }
       }
     }
@@ -1132,130 +1185,139 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.0.0": {
-      "sha512": "L1nS52GlIixkumMA8wjE+kiSCLQGxm3s6tVCVMnMULxYND3OdodvHkvNbrLqpgIU+eqnEYa6ldFCeSGqtLT6bg==",
+    "EnginePseudo3D.DataPipes/1.0.2": {
+      "sha512": "m54Bh3EU28s1mtx1V25OtYXZczFlLCXMB4LYl9hSjtbdBYLZx7XY5Yr9UhoVafivqUHD3LlWtVWTXJxEY0gQLw==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.0.0",
+      "path": "enginepseudo3d.datapipes/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.0.0.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.0.2.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/DataPipes.dll"
+        "lib/net8.0/DataPipes.dll",
+        "lib/net8.0/DataPipes.xml"
       ]
     },
-    "EnginePseudo3D.EntityLib/1.0.0": {
-      "sha512": "NZojPwBdiArr4OWdYvfzUi0mvlYH/wFnv53vLEaMi+LD1Wiwr0kd0MHSOfttEH/9xR8TTtvuzeMs82luEFfJqA==",
+    "EnginePseudo3D.EntityLib/1.0.3": {
+      "sha512": "qmA628abl+nluGNwyM8A24sLjosqfD7QQwIq4dgmILmsN74/q9On/xmNyCdZnjOJeMtWKk/155+raR07K9Ea7Q==",
       "type": "package",
-      "path": "enginepseudo3d.entitylib/1.0.0",
+      "path": "enginepseudo3d.entitylib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_Entity.md",
-        "enginepseudo3d.entitylib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.entitylib.1.0.3.nupkg.sha512",
         "enginepseudo3d.entitylib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/EntityLib.dll"
+        "lib/net8.0/EntityLib.dll",
+        "lib/net8.0/EntityLib.xml"
       ]
     },
-    "EnginePseudo3D.FpsLib/1.0.0": {
-      "sha512": "zJawV5oCEP6FKHCouHhvJm95+zbGvS4/5JWOyF9VDzJxelViy57luf+oJP1qtETuK85O/FNOLyH4GgfjhFB1gg==",
+    "EnginePseudo3D.FpsLib/1.0.6": {
+      "sha512": "oZnUGy+p4+f6X6pF9Hpr+AYvusneN96ic2VZz2vLIyaR7BTCV5zq1EV8y04VMV6HeNYCpgLEkpWqIefIjOp7Sg==",
       "type": "package",
-      "path": "enginepseudo3d.fpslib/1.0.0",
+      "path": "enginepseudo3d.fpslib/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_FpsLib.md",
-        "enginepseudo3d.fpslib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.fpslib.1.0.6.nupkg.sha512",
         "enginepseudo3d.fpslib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/FpsLib.dll"
+        "lib/net8.0/FpsLib.dll",
+        "lib/net8.0/FpsLib.xml"
       ]
     },
-    "EnginePseudo3D.HitBoxLib/1.0.0": {
-      "sha512": "1GbYa6RIYWOLb1rVM0+Z6uBN1dyc/IN3YdRiKZme+Ed5U5G6jZReOdS9gcQKBpcz+DwVEdZXUabkSo1+ofeVdA==",
+    "EnginePseudo3D.HitBoxLib/1.0.3": {
+      "sha512": "6ZDcT2q3ili/q8V28eBnhzZ+MSbXQvAEkDRVms5KQVDeOickP+zKjsvE/yg2jRbSoJe+JCcITtzP7969531pIA==",
       "type": "package",
-      "path": "enginepseudo3d.hitboxlib/1.0.0",
+      "path": "enginepseudo3d.hitboxlib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_HitBoxLib.md",
-        "enginepseudo3d.hitboxlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.hitboxlib.1.0.3.nupkg.sha512",
         "enginepseudo3d.hitboxlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/HitBoxLib.dll"
+        "lib/net8.0/HitBoxLib.dll",
+        "lib/net8.0/HitBoxLib.xml"
       ]
     },
-    "EnginePseudo3D.MapLib/1.0.0": {
-      "sha512": "wRgtvK8C/eCUhn8O3T9bfrHd8wxHdDddowk1+fYcJRSK20jhd13sway969o9BAACMMWOmioou0gNK0d9nLEF3A==",
+    "EnginePseudo3D.MapLib/1.0.6": {
+      "sha512": "eFDIm4gvlIbXv8N8Mw45HOOsljtmLwIwtbhVIv7O28tzZ7gzl2HnAoHeqyX+rETO3eq5TG26ynsGxXS6UNbDKA==",
       "type": "package",
-      "path": "enginepseudo3d.maplib/1.0.0",
+      "path": "enginepseudo3d.maplib/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_MapLib.md",
-        "enginepseudo3d.maplib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.maplib.1.0.6.nupkg.sha512",
         "enginepseudo3d.maplib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/MapLib.dll"
+        "lib/net8.0/MapLib.dll",
+        "lib/net8.0/MapLib.xml"
       ]
     },
-    "EnginePseudo3D.MoveLib/1.0.0": {
-      "sha512": "/tRc8B+SZt8nn9+VGh5BKY1i7F/o01YjqboiqqTL9gW6zAl5HUVjAB6RxkLGyxryY9kS2QQ36lQ8iWXSYxjpGw==",
+    "EnginePseudo3D.MoveLib/1.0.6": {
+      "sha512": "fbS+wR6HoreFNdLHU3gYd65a12GV/3qNbFHcmlAmwlqU6x1DUVVcvU9OLiv9WGIczbrsRsq23Qh8qGVgRwUZwg==",
       "type": "package",
-      "path": "enginepseudo3d.movelib/1.0.0",
+      "path": "enginepseudo3d.movelib/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_MoveLib.md",
-        "enginepseudo3d.movelib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.movelib.1.0.6.nupkg.sha512",
         "enginepseudo3d.movelib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/MoveLib.dll"
+        "lib/net8.0/MoveLib.dll",
+        "lib/net8.0/MoveLib.xml"
       ]
     },
-    "EnginePseudo3D.ProtoRender/1.0.0": {
-      "sha512": "gd35S1lLAcuPcdh79k6ansLe37KPkuS4ut8fJFQPqSnokyhY0hv1mvj4fbz/X+RUH6wzYKwqW5TIUVRs/Q3zFQ==",
+    "EnginePseudo3D.ProtoRender/1.0.6": {
+      "sha512": "RCNGYr+7twz3W+4HTgT55egcBAf0HSInnEcMpGO6Nuq8Du+SPqFncjpeWpg+V8owcbs1Epo+z5fseJ8flOomhw==",
       "type": "package",
-      "path": "enginepseudo3d.protorender/1.0.0",
+      "path": "enginepseudo3d.protorender/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ProtoRender.md",
-        "enginepseudo3d.protorender.1.0.0.nupkg.sha512",
+        "enginepseudo3d.protorender.1.0.6.nupkg.sha512",
         "enginepseudo3d.protorender.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/ProtoRender.dll"
+        "lib/net8.0/ProtoRender.dll",
+        "lib/net8.0/ProtoRender.xml"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.0": {
-      "sha512": "fuAsA1TSMQ1wlgsjpqFnI29Wy/pVWdgXy46qdqmJSLWUejj04W3SIm8PAwaLuPJDObxCCJena8ev7mv07bpfwA==",
+    "EnginePseudo3D.ScreenLib/1.0.2": {
+      "sha512": "DkuiZ6wG3nmoRS7E3Z0gjHjXs2jkn1cVNGizB9tWauzvjZ7lrzDe/s/AiQXs2Ifty5wPVqa0crj9oakNfZOWeQ==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.0",
+      "path": "enginepseudo3d.screenlib/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.2.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/ScreenLib.dll"
+        "lib/net8.0/ScreenLib.dll",
+        "lib/net8.0/ScreenLib.xml"
       ]
     },
-    "EnginePseudo3D.TextureLib/1.0.0": {
-      "sha512": "pBdr4S6y3D99yfCoIuHWz1TIzcSXMCDsDtHkgLK79ak2J0HJwRMoCSonvqYGTjtcxQn5VZj0wmj+hZndm10pRw==",
+    "EnginePseudo3D.TextureLib/1.0.9": {
+      "sha512": "If7Ok1d6vqyCzl/+Zt6NHJEeimnk4BN43SI7ORr0EkfJdTfmy1uJAkupm5aeoVrpKalhQD89AfC06+IpHEGtpQ==",
       "type": "package",
-      "path": "enginepseudo3d.texturelib/1.0.0",
+      "path": "enginepseudo3d.texturelib/1.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_TextureLib.md",
-        "enginepseudo3d.texturelib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.texturelib.1.0.9.nupkg.sha512",
         "enginepseudo3d.texturelib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/TextureLib.dll"
+        "lib/net8.0/TextureLib.dll",
+        "lib/net8.0/TextureLib.xml"
       ]
     },
     "NGenerics/1.5.3": {
@@ -1271,10 +1333,10 @@
         "ngenerics.nuspec"
       ]
     },
-    "SFML.Audio/2.6.0": {
-      "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
+    "SFML.Audio/2.6.1": {
+      "sha512": "MsIlMTEeG623UYw3/Sb2qVw94xEHOxamUENuxbjSz4QiTsfCNQNEADpfTbXKI/FS5u7y/FsNmk+4II2iEf8MMw==",
       "type": "package",
-      "path": "sfml.audio/2.6.0",
+      "path": "sfml.audio/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1282,14 +1344,14 @@
         "lib/netstandard2.0/SFML.Audio.dll",
         "lib/netstandard2.0/SFML.Audio.xml",
         "sfml-icon.png",
-        "sfml.audio.2.6.0.nupkg.sha512",
+        "sfml.audio.2.6.1.nupkg.sha512",
         "sfml.audio.nuspec"
       ]
     },
-    "SFML.Graphics/2.6.0": {
-      "sha512": "bwYJT4siVta87d3ZaRN37FViOMAgiiYS9BYJOhHL70G9+KDtqbAl1LYg9hdEG8IHFSj55I7P8qkPL33KQ16RBg==",
+    "SFML.Graphics/2.6.1": {
+      "sha512": "pOtL7ss6r3m7P3MbZ4Oytjzug2mWJ5OHblZHlISIhb6IezmsFmBxqLsIq0YoyWGcAL4cgSXqDmflJivKpXgdtg==",
       "type": "package",
-      "path": "sfml.graphics/2.6.0",
+      "path": "sfml.graphics/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1297,27 +1359,27 @@
         "lib/netstandard2.0/SFML.Graphics.dll",
         "lib/netstandard2.0/SFML.Graphics.xml",
         "sfml-icon.png",
-        "sfml.graphics.2.6.0.nupkg.sha512",
+        "sfml.graphics.2.6.1.nupkg.sha512",
         "sfml.graphics.nuspec"
       ]
     },
-    "SFML.Net/2.6.0": {
-      "sha512": "jnHJp7PPvZ0FdIZQZo63DW3ROrgVJktTzycjGzoX1HsZZTzj7ioMOXtsbR2AAggdTyk6vIhd61IqEpLO4DSd+Q==",
+    "SFML.Net/2.6.1": {
+      "sha512": "OWjTdbVi86gTYHjlSB3Y77ZWDy01iIVMXfb5ApX3L5yp455VDmF828wBIc2+bfPxJDFSHgJ82LpZM5jFNUS/QA==",
       "type": "package",
-      "path": "sfml.net/2.6.0",
+      "path": "sfml.net/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "sfml-icon.png",
-        "sfml.net.2.6.0.nupkg.sha512",
+        "sfml.net.2.6.1.nupkg.sha512",
         "sfml.net.nuspec"
       ]
     },
-    "SFML.System/2.6.0": {
-      "sha512": "XDNdNah0PKZElyYMAqWd8Kbe/XsJExkTxPY0txIrsTXEFIiRWhlkcYBBZmGkA6wvB5Ib7XH8QqE8s3BY8ZAzaQ==",
+    "SFML.System/2.6.1": {
+      "sha512": "/3EV59uiMWxADWWSiqAOS+8FK4Da2r6RoZEujG14kLGYtQzNj4rV4pjjycyH30WWDONSedxmLT9chf8XN70+BQ==",
       "type": "package",
-      "path": "sfml.system/2.6.0",
+      "path": "sfml.system/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1325,14 +1387,14 @@
         "lib/netstandard2.0/SFML.System.dll",
         "lib/netstandard2.0/SFML.System.xml",
         "sfml-icon.png",
-        "sfml.system.2.6.0.nupkg.sha512",
+        "sfml.system.2.6.1.nupkg.sha512",
         "sfml.system.nuspec"
       ]
     },
-    "SFML.Window/2.6.0": {
-      "sha512": "C4FAnMI6adoNyc7gv33tIK9iYWuPxPUqQojLkhy2DTi4+3ZrlSNRDNZYc7V8Gaps3dOheGAP41/MJKSdTF8SZg==",
+    "SFML.Window/2.6.1": {
+      "sha512": "lzt42WWZiYvoMrDwvc4lpl6t/GH6AhvHI+inw/Aoh1v6xAO8GDnzzLVsaKi+RfPqdL2mHsih1qUZucuvAmoGdg==",
       "type": "package",
-      "path": "sfml.window/2.6.0",
+      "path": "sfml.window/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1340,18 +1402,34 @@
         "lib/netstandard2.0/SFML.Window.dll",
         "lib/netstandard2.0/SFML.Window.xml",
         "sfml-icon.png",
-        "sfml.window.2.6.0.nupkg.sha512",
+        "sfml.window.2.6.1.nupkg.sha512",
         "sfml.window.nuspec"
+      ]
+    },
+    "SixLabors.ImageSharp/3.1.7": {
+      "sha512": "9fIOOAsyLFid6qKypM2Iy0Z3Q9yoanV8VoYAHtI2sYGMNKzhvRTjgFDHonIiVe+ANtxIxM6SuqUzj0r91nItpA==",
+      "type": "package",
+      "path": "sixlabors.imagesharp/3.1.7",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "build/SixLabors.ImageSharp.props",
+        "lib/net6.0/SixLabors.ImageSharp.dll",
+        "lib/net6.0/SixLabors.ImageSharp.xml",
+        "sixlabors.imagesharp.128.png",
+        "sixlabors.imagesharp.3.1.7.nupkg.sha512",
+        "sixlabors.imagesharp.nuspec"
       ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.DataPipes >= 1.0.0",
-      "EnginePseudo3D.EntityLib >= 1.0.0",
-      "EnginePseudo3D.MoveLib >= 1.0.0",
-      "EnginePseudo3D.ScreenLib >= 1.0.0",
-      "EnginePseudo3D.TextureLib >= 1.0.0"
+      "EnginePseudo3D.DataPipes >= 1.0.2",
+      "EnginePseudo3D.EntityLib >= 1.0.3",
+      "EnginePseudo3D.MoveLib >= 1.0.6",
+      "EnginePseudo3D.ScreenLib >= 1.0.2",
+      "EnginePseudo3D.TextureLib >= 1.0.9"
     ]
   },
   "packageFolders": {
@@ -1359,7 +1437,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.6",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
       "projectName": "EnginePseudo3D.RayTracingLib",
@@ -1406,23 +1484,23 @@
         "dependencies": {
           "EnginePseudo3D.DataPipes": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.2, )"
           },
           "EnginePseudo3D.EntityLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.3, )"
           },
           "EnginePseudo3D.MoveLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.6, )"
           },
           "EnginePseudo3D.ScreenLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.2, )"
           },
           "EnginePseudo3D.TextureLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.9, )"
           }
         },
         "imports": [

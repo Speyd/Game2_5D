@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\HitBoxLib\obj\Debug\net8.0\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\HitBoxLib\obj\Debug\net8.0\refint\HitBoxLib.dll
 D:\C++ проекты\Game2_5D\HitBoxLib\obj\Debug\net8.0\HitBoxLib.pdb
 D:\C++ проекты\Game2_5D\HitBoxLib\obj\Debug\net8.0\ref\HitBoxLib.dll
+D:\C++ проекты\Game2_5D\HitBoxLib\bin\Debug\net8.0\HitBoxLib.xml
+D:\C++ проекты\Game2_5D\HitBoxLib\obj\Debug\net8.0\HitBoxLib.xml

@@ -26,6 +26,8 @@ public class BottomBinding
     public long WaitingTimeMilliseconds { get; set; }
     /// <summary> Is the object pending? </summary>
     public bool IsWaiting { get; private set; } = false;
+    /// <summary> Stores the state of a button press </summary>
+    public bool IsPress { get; private set; } = false;
 
     private Stopwatch stopwatch = new Stopwatch();
 
@@ -106,6 +108,8 @@ public class BottomBinding
     /// <summary> Check if all existing buttons are pressed in ButtonBinding </summary>
     public void Listen(params object[] externalParams)
     {
+        IsPress = false;
+
         int countTurnBottom = 0;
         foreach (var bottom in Bottoms)
         {
@@ -114,7 +118,10 @@ public class BottomBinding
         }
 
         if (countTurnBottom == Bottoms.Count && IsReadyToPress())
+        {
             PracticingPressing(externalParams);
+            IsPress = true;
+        }
 
     }
 }

@@ -722,43 +722,55 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.0.0": {
+      "EnginePseudo3D.DataPipes/1.0.2": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/DataPipes.dll": {}
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.HitBoxLib/1.0.0": {
+      "EnginePseudo3D.HitBoxLib/1.0.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.0",
-          "EnginePseudo3D.ScreenLib": "1.0.0"
+          "EnginePseudo3D.DataPipes": "1.0.2",
+          "EnginePseudo3D.ScreenLib": "1.0.2"
         },
         "compile": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/HitBoxLib.dll": {}
+          "lib/net8.0/HitBoxLib.dll": {
+            "related": ".xml"
+          }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.0": {
+      "EnginePseudo3D.ScreenLib/1.0.2": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
           "SFML.Net": "2.6.0"
         },
         "compile": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         },
         "runtime": {
-          "lib/net8.0/ScreenLib.dll": {}
+          "lib/net8.0/ScreenLib.dll": {
+            "related": ".xml"
+          }
         }
       },
       "NGenerics/1.5.3": {
@@ -1047,46 +1059,49 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.0.0": {
-      "sha512": "L1nS52GlIixkumMA8wjE+kiSCLQGxm3s6tVCVMnMULxYND3OdodvHkvNbrLqpgIU+eqnEYa6ldFCeSGqtLT6bg==",
+    "EnginePseudo3D.DataPipes/1.0.2": {
+      "sha512": "m54Bh3EU28s1mtx1V25OtYXZczFlLCXMB4LYl9hSjtbdBYLZx7XY5Yr9UhoVafivqUHD3LlWtVWTXJxEY0gQLw==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.0.0",
+      "path": "enginepseudo3d.datapipes/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.0.0.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.0.2.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/DataPipes.dll"
+        "lib/net8.0/DataPipes.dll",
+        "lib/net8.0/DataPipes.xml"
       ]
     },
-    "EnginePseudo3D.HitBoxLib/1.0.0": {
-      "sha512": "1GbYa6RIYWOLb1rVM0+Z6uBN1dyc/IN3YdRiKZme+Ed5U5G6jZReOdS9gcQKBpcz+DwVEdZXUabkSo1+ofeVdA==",
+    "EnginePseudo3D.HitBoxLib/1.0.3": {
+      "sha512": "6ZDcT2q3ili/q8V28eBnhzZ+MSbXQvAEkDRVms5KQVDeOickP+zKjsvE/yg2jRbSoJe+JCcITtzP7969531pIA==",
       "type": "package",
-      "path": "enginepseudo3d.hitboxlib/1.0.0",
+      "path": "enginepseudo3d.hitboxlib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_HitBoxLib.md",
-        "enginepseudo3d.hitboxlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.hitboxlib.1.0.3.nupkg.sha512",
         "enginepseudo3d.hitboxlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/HitBoxLib.dll"
+        "lib/net8.0/HitBoxLib.dll",
+        "lib/net8.0/HitBoxLib.xml"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.0": {
-      "sha512": "fuAsA1TSMQ1wlgsjpqFnI29Wy/pVWdgXy46qdqmJSLWUejj04W3SIm8PAwaLuPJDObxCCJena8ev7mv07bpfwA==",
+    "EnginePseudo3D.ScreenLib/1.0.2": {
+      "sha512": "DkuiZ6wG3nmoRS7E3Z0gjHjXs2jkn1cVNGizB9tWauzvjZ7lrzDe/s/AiQXs2Ifty5wPVqa0crj9oakNfZOWeQ==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.0",
+      "path": "enginepseudo3d.screenlib/1.0.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.0.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.2.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
-        "lib/net8.0/ScreenLib.dll"
+        "lib/net8.0/ScreenLib.dll",
+        "lib/net8.0/ScreenLib.xml"
       ]
     },
     "NGenerics/1.5.3": {
@@ -1178,8 +1193,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.HitBoxLib >= 1.0.0",
-      "EnginePseudo3D.ScreenLib >= 1.0.0"
+      "EnginePseudo3D.HitBoxLib >= 1.0.3",
+      "EnginePseudo3D.ScreenLib >= 1.0.2"
     ]
   },
   "packageFolders": {
@@ -1187,7 +1202,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.3",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\EntityLib\\EntityLib.csproj",
       "projectName": "EnginePseudo3D.EntityLib",
@@ -1234,11 +1249,11 @@
         "dependencies": {
           "EnginePseudo3D.HitBoxLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.3, )"
           },
           "EnginePseudo3D.ScreenLib": {
             "target": "Package",
-            "version": "[1.0.0, )"
+            "version": "[1.0.2, )"
           }
         },
         "imports": [

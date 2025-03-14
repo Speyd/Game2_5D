@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <PackageId>EnginePseudo3D.EffectLib</PackageId>
     <Title>EnginePseudo3D.EffectLib</Title>
-    <Version>1.0.1</Version>
+    <Version>1.0.3</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Product>EnginePseudo3D</Product>
@@ -17,6 +17,7 @@
     <PackageReadmeFile>README_EffectLib.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/EffectLib</RepositoryUrl>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+	 <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,11 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SFML.Graphics" Version="2.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.0" />
+    <PackageReference Include="SFML.Graphics" Version="2.6.1" />
+    <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

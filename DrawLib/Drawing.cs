@@ -31,7 +31,7 @@ public static class Drawing
                 return;
 
 
-            float addHeight = height > heightObj ? 0f : heightObj;
+            float addHeight = height >= heightObj ? 0f : heightObj;
             Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
  
             CircleShape point = new CircleShape(height)
@@ -61,7 +61,11 @@ public static class Drawing
             if (drawable.IsInsideTexture(textureX, textureY))
                 return;
 
-            Vector2f dotPosition = new Vector2f(textureX - sprite.Texture.Size.X / 2, textureY + sprite.Texture.Size.X / 2);
+            float addHeight = height >= sprite.Texture.Size.Y ? 0f : sprite.Texture.Size.Y;
+
+            float x = textureX - sprite.Texture.Size.X / 2 + addHeight;
+            float y = textureY + sprite.Texture.Size.X / 2;
+            Vector2f dotPosition = new Vector2f(x, y);
             sprite.Position = dotPosition;
 
             drawable.DrawObject(sprite);

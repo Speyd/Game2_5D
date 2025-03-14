@@ -735,11 +735,11 @@
           }
         }
       },
-      "SFML.Audio/2.6.0": {
+      "SFML.Audio/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Audio.dll": {
@@ -752,12 +752,12 @@
           }
         }
       },
-      "SFML.Graphics/2.6.0": {
+      "SFML.Graphics/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Graphics.dll": {
@@ -770,16 +770,16 @@
           }
         }
       },
-      "SFML.Net/2.6.0": {
+      "SFML.Net/2.6.1": {
         "type": "package",
         "dependencies": {
-          "SFML.Audio": "2.6.0",
-          "SFML.Graphics": "2.6.0",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.Audio": "2.6.1",
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         }
       },
-      "SFML.System/2.6.0": {
+      "SFML.System/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)"
@@ -795,11 +795,11 @@
           }
         }
       },
-      "SFML.Window/2.6.0": {
+      "SFML.Window/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Window.dll": {
@@ -1021,10 +1021,10 @@
         "ngenerics.nuspec"
       ]
     },
-    "SFML.Audio/2.6.0": {
-      "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
+    "SFML.Audio/2.6.1": {
+      "sha512": "MsIlMTEeG623UYw3/Sb2qVw94xEHOxamUENuxbjSz4QiTsfCNQNEADpfTbXKI/FS5u7y/FsNmk+4II2iEf8MMw==",
       "type": "package",
-      "path": "sfml.audio/2.6.0",
+      "path": "sfml.audio/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1032,14 +1032,14 @@
         "lib/netstandard2.0/SFML.Audio.dll",
         "lib/netstandard2.0/SFML.Audio.xml",
         "sfml-icon.png",
-        "sfml.audio.2.6.0.nupkg.sha512",
+        "sfml.audio.2.6.1.nupkg.sha512",
         "sfml.audio.nuspec"
       ]
     },
-    "SFML.Graphics/2.6.0": {
-      "sha512": "bwYJT4siVta87d3ZaRN37FViOMAgiiYS9BYJOhHL70G9+KDtqbAl1LYg9hdEG8IHFSj55I7P8qkPL33KQ16RBg==",
+    "SFML.Graphics/2.6.1": {
+      "sha512": "pOtL7ss6r3m7P3MbZ4Oytjzug2mWJ5OHblZHlISIhb6IezmsFmBxqLsIq0YoyWGcAL4cgSXqDmflJivKpXgdtg==",
       "type": "package",
-      "path": "sfml.graphics/2.6.0",
+      "path": "sfml.graphics/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1047,27 +1047,27 @@
         "lib/netstandard2.0/SFML.Graphics.dll",
         "lib/netstandard2.0/SFML.Graphics.xml",
         "sfml-icon.png",
-        "sfml.graphics.2.6.0.nupkg.sha512",
+        "sfml.graphics.2.6.1.nupkg.sha512",
         "sfml.graphics.nuspec"
       ]
     },
-    "SFML.Net/2.6.0": {
-      "sha512": "jnHJp7PPvZ0FdIZQZo63DW3ROrgVJktTzycjGzoX1HsZZTzj7ioMOXtsbR2AAggdTyk6vIhd61IqEpLO4DSd+Q==",
+    "SFML.Net/2.6.1": {
+      "sha512": "OWjTdbVi86gTYHjlSB3Y77ZWDy01iIVMXfb5ApX3L5yp455VDmF828wBIc2+bfPxJDFSHgJ82LpZM5jFNUS/QA==",
       "type": "package",
-      "path": "sfml.net/2.6.0",
+      "path": "sfml.net/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "sfml-icon.png",
-        "sfml.net.2.6.0.nupkg.sha512",
+        "sfml.net.2.6.1.nupkg.sha512",
         "sfml.net.nuspec"
       ]
     },
-    "SFML.System/2.6.0": {
-      "sha512": "XDNdNah0PKZElyYMAqWd8Kbe/XsJExkTxPY0txIrsTXEFIiRWhlkcYBBZmGkA6wvB5Ib7XH8QqE8s3BY8ZAzaQ==",
+    "SFML.System/2.6.1": {
+      "sha512": "/3EV59uiMWxADWWSiqAOS+8FK4Da2r6RoZEujG14kLGYtQzNj4rV4pjjycyH30WWDONSedxmLT9chf8XN70+BQ==",
       "type": "package",
-      "path": "sfml.system/2.6.0",
+      "path": "sfml.system/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1075,14 +1075,14 @@
         "lib/netstandard2.0/SFML.System.dll",
         "lib/netstandard2.0/SFML.System.xml",
         "sfml-icon.png",
-        "sfml.system.2.6.0.nupkg.sha512",
+        "sfml.system.2.6.1.nupkg.sha512",
         "sfml.system.nuspec"
       ]
     },
-    "SFML.Window/2.6.0": {
-      "sha512": "C4FAnMI6adoNyc7gv33tIK9iYWuPxPUqQojLkhy2DTi4+3ZrlSNRDNZYc7V8Gaps3dOheGAP41/MJKSdTF8SZg==",
+    "SFML.Window/2.6.1": {
+      "sha512": "lzt42WWZiYvoMrDwvc4lpl6t/GH6AhvHI+inw/Aoh1v6xAO8GDnzzLVsaKi+RfPqdL2mHsih1qUZucuvAmoGdg==",
       "type": "package",
-      "path": "sfml.window/2.6.0",
+      "path": "sfml.window/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1090,7 +1090,7 @@
         "lib/netstandard2.0/SFML.Window.dll",
         "lib/netstandard2.0/SFML.Window.xml",
         "sfml-icon.png",
-        "sfml.window.2.6.0.nupkg.sha512",
+        "sfml.window.2.6.1.nupkg.sha512",
         "sfml.window.nuspec"
       ]
     }
@@ -1098,7 +1098,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "NGenerics >= 1.5.3",
-      "SFML.Net >= 2.6.0"
+      "SFML.Net >= 2.6.1"
     ]
   },
   "packageFolders": {
@@ -1106,7 +1106,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
       "projectName": "EnginePseudo3D.ScreenLib",
@@ -1157,7 +1157,7 @@
           },
           "SFML.Net": {
             "target": "Package",
-            "version": "[2.6.0, )"
+            "version": "[2.6.1, )"
           }
         },
         "imports": [

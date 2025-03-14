@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "DataPipes/1.0.0": {
+      "DataPipes/1.0.2": {
         "dependencies": {
           "SFML.Graphics": "2.6.0",
           "SFML.System": "2.6.0"
@@ -948,7 +948,7 @@
     }
   },
   "libraries": {
-    "DataPipes/1.0.0": {
+    "DataPipes/1.0.2": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

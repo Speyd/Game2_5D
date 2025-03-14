@@ -17,15 +17,12 @@ internal class Border
 
     public Border(string? path)
     {
-        if (File.Exists(path))
+        if(path is null)
+            BorderTexture = null;
+        else if (File.Exists(path))
         {
-            if (path is not null)
-            {
-                BorderTexture = new Texture(path);
-                BorderTexture.Smooth = true;
-            }
-            else
-                BorderTexture = null;
+            BorderTexture = new Texture(path);
+            BorderTexture.Smooth = true;
         }
         else
             throw new Exception("Error load Border MiniMap");

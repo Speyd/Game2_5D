@@ -15,11 +15,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for calculating collision and camera rotation.")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57cc5e304cef3c30043b9f9a8eea4d6dfd541c8a")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.6.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.6+a055913cf6595914aece311131dd9ba06e0bcf8b")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MoveLib")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.0.6.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/MoveLib")]
 
 // Создано классом WriteCodeFragment MSBuild.

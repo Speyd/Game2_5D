@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\EntityLib.dll
 D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\refint\EntityLib.dll
 D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\EntityLib.pdb
 D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\ref\EntityLib.dll
+D:\C++ проекты\Game2_5D\EntityLib\bin\Debug\net8.0\EntityLib.xml
+D:\C++ проекты\Game2_5D\EntityLib\obj\Debug\net8.0\EntityLib.xml

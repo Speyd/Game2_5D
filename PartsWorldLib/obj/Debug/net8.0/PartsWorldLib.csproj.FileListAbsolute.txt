@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\PartsWorldLib\obj\Debug\net8.0\PartsWorldLib.dll
 D:\C++ проекты\Game2_5D\PartsWorldLib\obj\Debug\net8.0\refint\PartsWorldLib.dll
 D:\C++ проекты\Game2_5D\PartsWorldLib\obj\Debug\net8.0\PartsWorldLib.pdb
 D:\C++ проекты\Game2_5D\PartsWorldLib\obj\Debug\net8.0\ref\PartsWorldLib.dll
+D:\C++ проекты\Game2_5D\PartsWorldLib\bin\Debug\net8.0\PartsWorldLib.xml
+D:\C++ проекты\Game2_5D\PartsWorldLib\obj\Debug\net8.0\PartsWorldLib.xml

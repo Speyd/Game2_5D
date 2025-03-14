@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj": {
-      "version": "1.0.0",
+      "version": "1.0.2",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
         "projectName": "EnginePseudo3D.ScreenLib",
@@ -56,7 +56,7 @@
             },
             "SFML.Net": {
               "target": "Package",
-              "version": "[2.6.0, )"
+              "version": "[2.6.1, )"
             }
           },
           "imports": [

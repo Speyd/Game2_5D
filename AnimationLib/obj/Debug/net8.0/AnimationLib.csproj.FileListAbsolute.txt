@@ -11,3 +11,5 @@ D:\C++ проекты\Game2_5D\AnimationLib\obj\Debug\net8.0\AnimationLib.dll
 D:\C++ проекты\Game2_5D\AnimationLib\obj\Debug\net8.0\refint\AnimationLib.dll
 D:\C++ проекты\Game2_5D\AnimationLib\obj\Debug\net8.0\AnimationLib.pdb
 D:\C++ проекты\Game2_5D\AnimationLib\obj\Debug\net8.0\ref\AnimationLib.dll
+D:\C++ проекты\Game2_5D\AnimationLib\bin\Debug\net8.0\AnimationLib.xml
+D:\C++ проекты\Game2_5D\AnimationLib\obj\Debug\net8.0\AnimationLib.xml
