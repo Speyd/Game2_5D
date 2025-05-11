@@ -1,5 +1,4 @@
-﻿using EntityLib;
-using ScreenLib;
+﻿using ScreenLib;
 using SFML.Graphics;
 using System;
 using System.Collections.Generic;
@@ -19,6 +18,7 @@ using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
 using ObstacleLib.SpriteLib;
 using TextureLib;
+using ProtoRender.RenderInterface;
 
 
 namespace ObstacleLib.BlankWallLib;
@@ -26,9 +26,6 @@ public class BlankWall : Obstacle, IWall
 {
     //--------------------Color For Render------------------
     public Color StandartColorFilling { get; set; }
-
-    //-------------------Setting--------------------
-    public override bool IsSingleAddable { get; init; } = true;
 
     #region Constructor
     public BlankWall(Color color, bool isPassability = false)
@@ -52,9 +49,9 @@ public class BlankWall : Obstacle, IWall
     {
         HitBox = new HitBox(blankWall.HitBox);
 
-        X = new Coordinate(blankWall.X, HitBox);
-        Y = new Coordinate(blankWall.Y, HitBox);
-        Z = new Coordinate(blankWall.Z, HitBox);
+        X.UpdateInfo(blankWall.X, HitBox);
+        Y.UpdateInfo(blankWall.Y, HitBox);
+        Z.UpdateInfo(blankWall.Z, HitBox);
 
         ColorInMap = blankWall.ColorInMap;
         StandartColorFilling = blankWall.StandartColorFilling;
@@ -118,12 +115,16 @@ public class BlankWall : Obstacle, IWall
     #endregion
 
     #region IRenderable_Implementation
-    public override Vector2f GetPositionOnScreen(Result result, Entity entity)
+    public override CoordinateOnScreen GetPositionOnScreen(Result result, IUnit unit)
     {
         float positionX = WorldToScreenX(result.Ray);
-        float positionY = WorldToScreenY(entity.VerticalAngle, (float)result.ProjHeight / 2);
+        float screenCenterY = (float)WorldToScreenY(unit.VerticalAngle);
+        float verticalShift = (float)((Z.Axis * HitBoxLib.Operations.Render.MultHeight - unit.Z.Axis) / (result.Depth / Screen.Setting.Tile));
 
-        return new Vector2f(positionX, positionY);
+        float top = screenCenterY - (float)(result.ProjHeight / 2) - verticalShift;
+        float bottom = screenCenterY + (float)(result.ProjHeight / 2) - verticalShift;
+
+        return new CoordinateOnScreen(positionX, bottom, top);
     }
     public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
     {
@@ -133,13 +134,13 @@ public class BlankWall : Obstacle, IWall
     #endregion
 
     #region IWall_Implementation
-    public bool IsOffScreen(Result result, Vector2f position, int heightTexure, Vector2f scale)
+    public bool IsOffScreen(Result result, CoordinateOnScreen position, int heightTexture, Vector2f scale)
     {
-        if (result.PositionPreviousObject is not null && position.Y > result.PositionPreviousObject.Value.Y)
+        if (result.PositionPreviousObject is not null && position.Top > result.PositionPreviousObject.Value.Top && position.Bottom < result.PositionPreviousObject.Value.Bottom)
             return true;
-        if (position.Y + scale.Y * heightTexure < 0)
+        if (position.Top + scale.Y * heightTexture < 0)
             return true;
-        if (position.Y > Screen.ScreenHeight)
+        if (position.Top > Screen.ScreenHeight)
             return true;
 
         return false;
@@ -150,10 +151,10 @@ public class BlankWall : Obstacle, IWall
     {
         return new BlankWall(this);
     }
-    public override void Render(Result result, Entity entity)
+    public override void Render(Result result, IUnit unit)
     {
         Vector2f scale = RenderOperation.CalculationScale(result);
-        Vector2f position = GetPositionOnScreen(result, entity);
+        CoordinateOnScreen position = GetPositionOnScreen(result, unit);
 
         if (IsOffScreen(result, position, 1, scale))
             return;

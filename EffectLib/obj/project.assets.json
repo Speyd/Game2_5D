@@ -722,11 +722,11 @@
           }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.2": {
+      "EnginePseudo3D.ScreenLib/1.0.3": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
-          "SFML.Net": "2.6.0"
+          "SFML.Net": "2.6.1"
         },
         "compile": {
           "lib/net8.0/ScreenLib.dll": {
@@ -752,11 +752,11 @@
           }
         }
       },
-      "SFML.Audio/2.6.0": {
+      "SFML.Audio/2.6.1": {
         "type": "package",
         "dependencies": {
           "CSFML": "[2.6.1, 2.7.0)",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "compile": {
           "lib/netstandard2.0/SFML.Audio.dll": {
@@ -787,13 +787,13 @@
           }
         }
       },
-      "SFML.Net/2.6.0": {
+      "SFML.Net/2.6.1": {
         "type": "package",
         "dependencies": {
-          "SFML.Audio": "2.6.0",
-          "SFML.Graphics": "2.6.0",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.Audio": "2.6.1",
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         }
       },
       "SFML.System/2.6.1": {
@@ -1025,15 +1025,15 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.2": {
-      "sha512": "DkuiZ6wG3nmoRS7E3Z0gjHjXs2jkn1cVNGizB9tWauzvjZ7lrzDe/s/AiQXs2Ifty5wPVqa0crj9oakNfZOWeQ==",
+    "EnginePseudo3D.ScreenLib/1.0.3": {
+      "sha512": "Q8X5LBdpLw/stPcrEW+H4r5Fbdcbe83xboVqhI2zH72B8TerzSL5vx9iKe51wf7C8pKFenWVoPq/12JJ+bb1eA==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.2",
+      "path": "enginepseudo3d.screenlib/1.0.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.2.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.3.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
         "lib/net8.0/ScreenLib.dll",
@@ -1053,10 +1053,10 @@
         "ngenerics.nuspec"
       ]
     },
-    "SFML.Audio/2.6.0": {
-      "sha512": "DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
+    "SFML.Audio/2.6.1": {
+      "sha512": "MsIlMTEeG623UYw3/Sb2qVw94xEHOxamUENuxbjSz4QiTsfCNQNEADpfTbXKI/FS5u7y/FsNmk+4II2iEf8MMw==",
       "type": "package",
-      "path": "sfml.audio/2.6.0",
+      "path": "sfml.audio/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1064,7 +1064,7 @@
         "lib/netstandard2.0/SFML.Audio.dll",
         "lib/netstandard2.0/SFML.Audio.xml",
         "sfml-icon.png",
-        "sfml.audio.2.6.0.nupkg.sha512",
+        "sfml.audio.2.6.1.nupkg.sha512",
         "sfml.audio.nuspec"
       ]
     },
@@ -1083,16 +1083,16 @@
         "sfml.graphics.nuspec"
       ]
     },
-    "SFML.Net/2.6.0": {
-      "sha512": "jnHJp7PPvZ0FdIZQZo63DW3ROrgVJktTzycjGzoX1HsZZTzj7ioMOXtsbR2AAggdTyk6vIhd61IqEpLO4DSd+Q==",
+    "SFML.Net/2.6.1": {
+      "sha512": "OWjTdbVi86gTYHjlSB3Y77ZWDy01iIVMXfb5ApX3L5yp455VDmF828wBIc2+bfPxJDFSHgJ82LpZM5jFNUS/QA==",
       "type": "package",
-      "path": "sfml.net/2.6.0",
+      "path": "sfml.net/2.6.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "sfml-icon.png",
-        "sfml.net.2.6.0.nupkg.sha512",
+        "sfml.net.2.6.1.nupkg.sha512",
         "sfml.net.nuspec"
       ]
     },
@@ -1129,7 +1129,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.ScreenLib >= 1.0.2",
+      "EnginePseudo3D.ScreenLib >= 1.0.3",
       "SFML.Graphics >= 2.6.1"
     ]
   },
@@ -1138,7 +1138,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.3",
+    "version": "1.0.4",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\EffectLib\\EffectLib.csproj",
       "projectName": "EnginePseudo3D.EffectLib",
@@ -1185,7 +1185,7 @@
         "dependencies": {
           "EnginePseudo3D.ScreenLib": {
             "target": "Package",
-            "version": "[1.0.2, )"
+            "version": "[1.0.3, )"
           },
           "SFML.Graphics": {
             "target": "Package",

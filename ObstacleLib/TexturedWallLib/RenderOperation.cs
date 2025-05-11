@@ -1,5 +1,4 @@
-﻿using EntityLib;
-using ScreenLib;
+﻿using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
 using System;
@@ -25,14 +24,14 @@ internal static class RenderOperation
     {
         return Math.Abs(Wall.LvlWall - 1 + Wall.LvlWall);
     }
-    internal static TexturedPair? SelectCurrentRenderTexture(TexturedWall Wall, Result result, Entity entity)
+    internal static TexturedPair? SelectCurrentRenderTexture(TexturedWall Wall, Result result, ProtoRender.Object.IUnit unit)
     {
-        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, entity, result);
+        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, unit, result);
         return wallDetermine == ObjectSide.Error ? null : Wall.MultiTextured.UniqueTexture.GetValue(wallDetermine);
     }
-    internal static ObjectSide SelectCurrentObjectSide(TexturedWall Wall, Result result, Entity entity)
+    internal static ObjectSide SelectCurrentObjectSide(TexturedWall Wall, Result result, ProtoRender.Object.IUnit unit)
     {
-        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, entity, result);
+        ObjectSide wallDetermine = RayDetectionX.DetermineObjectSides(Wall, unit, result);
         return wallDetermine;
     }
 }

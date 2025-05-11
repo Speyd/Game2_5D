@@ -1106,7 +1106,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.2",
+    "version": "1.0.3",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
       "projectName": "EnginePseudo3D.ScreenLib",

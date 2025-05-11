@@ -3,6 +3,7 @@ using SFML.Window;
 using SFML.System;
 using ScreenLib.SettingScreen;
 using ScreenLib.Output;
+using System.Net.NetworkInformation;
 
 namespace ScreenLib;
 public static class Screen
@@ -12,11 +13,13 @@ public static class Screen
 
     //--------------------Window Mode----------------------
     private static VideoMode VideoMode { get; set; } = VideoMode.DesktopMode;
+    /// <summary>Style of the window being rendered</summary>
     public static Styles Styles { get; set; } = Styles.Default;
 
 
     //----------------------Window------------------------
     private static RenderWindow _window;
+    /// <summary>Main Window</summary>
     public static RenderWindow Window 
     {
         get
@@ -31,6 +34,7 @@ public static class Screen
 
     //-----------------Setting----------------
     private static Setting _setting;
+    /// <summary>Setting Window</summary>
     public static Setting Setting 
     {
         get
@@ -43,12 +47,14 @@ public static class Screen
     }
 
     //----------Dimensions Screen----------
-
+    /// <summary>Function storage for updating values ​​depending on screen width</summary>
     public static Action? WidthChangesFun;
+    /// <summary>Function storage for updating values ​​depending on screen height</summary>
     public static Action? HeightChangesFun;
 
     private static void SetMultWidth() => MultWidth = (float)BaseScreenWidth / _screenWidth; 
     private static int _screenWidth;
+    /// <summary>Width main window</summary>
     public static int ScreenWidth 
     {
         get
@@ -72,6 +78,7 @@ public static class Screen
 
     private static void SetMultHeight() => MultHeight = (float)BaseScreenHeight / _screenHeight;
     private static int _screenHeight;
+    /// <summary>Height main window</summary>
     public static int ScreenHeight
     {
         get
@@ -95,7 +102,9 @@ public static class Screen
 
 
     //-------------Base Dimensions Screen-------------
+    /// <summary>Base screen height</summary>
     public const int BaseScreenHeight = 1000;
+    /// <summary>Base screen width</summary>
     public const int BaseScreenWidth = 1500;
 
 
@@ -108,7 +117,7 @@ public static class Screen
         private set
         {
             _multWidth = value;
-            ScreenRatio = _multHeight / value;
+            ScreenRatio = value == _multHeight? _multHeight: _multHeight / value;
         } 
     }
     static float _multHeight = 1;
@@ -119,29 +128,42 @@ public static class Screen
         private set
         {
             _multHeight = value;
-            ScreenRatio = value / _multWidth;
+            ScreenRatio = value == _multWidth? _multWidth: value / _multWidth;
         }
     }
     /// <summary>General dependence of current sizes on base screen sizes</summary>
     public static float ScreenRatio { get; private set; } = 1;
 
-    public static uint FPS_Limit { get; set; } = 60;
-
-    public static bool _isUseFPS_Limit = false;
-    public static bool IsUseFPS_Limit 
+    private static uint _fPSLimit { get; set; } = 60;
+    /// <summary>Limit window FPS</summary>
+    public static uint FPSLimit 
     {
-        get => _isUseFPS_Limit;
+        get => _fPSLimit;
+        set
+        {
+            _fPSLimit = value;
+            if(_isUseFPSLimit)
+                Window.SetFramerateLimit(FPSLimit);
+        }
+    }
+    /// <summary>Sets the fps limit</summary>
+    private static bool _isUseFPSLimit = false;
+    /// <summary>Limit window FPS</summary>
+    public static bool IsUseFPSLimit 
+    {
+        get => _isUseFPSLimit;
         set
         {
             if(value)
-                Window.SetFramerateLimit(FPS_Limit);
+                Window.SetFramerateLimit(FPSLimit);
 
-            _isUseFPS_Limit = value;
+            _isUseFPSLimit = value;
         }
     }
 
     //----------------------------Priority Draw--------------------------------
-    public static OutputPriority? _outputPriority;
+    private static OutputPriority? _outputPriority;
+    /// <summary>Priority display of objects on the main screen</summary>
     public static OutputPriority? OutputPriority 
     {
         get
@@ -171,7 +193,7 @@ public static class Screen
         }
     }
 
-
+    /// <summary>Initializing a window</summary>
     public static void Initialize(uint width, uint height, bool fullScreen = false, string nameWindow = "Game")
     {
 
@@ -210,6 +232,7 @@ public static class Screen
 
         CenterWindow();
     }
+    /// <summary>Set window to center of screen</summary>
     public static void CenterWindow()
     {
         var desktopMode = VideoMode.DesktopMode;
@@ -221,15 +244,25 @@ public static class Screen
 
         Window.Position = new Vector2i(posX, posY);
     }
-
-    public static  uint GetPercentWidth(int percent)
+    /// <summary>
+    /// Calculates the window width minus the specified percentage of the total window width.
+    /// </summary>
+    /// <param name="percent">The percentage of the screen width to subtract.</param>
+    /// <returns>The remaining width in pixels.</returns>
+    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0.</exception>
+    public static uint GetPercentWidth(int percent)
     {
         if (percent <= 0)
             throw new Exception("Error percent value 'GetPercentWidth'");
 
         return (uint)(ScreenWidth - ((ScreenWidth / 100) * percent));
     }
-
+    /// <summary>
+    /// Calculates the height of the window minus the specified percentage of the total window height.
+    /// </summary>
+    /// <param name="percent">The percentage of the screen height to subtract.</param>
+    /// <returns>The remaining height in pixels.</returns>
+    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0.</exception>
     public static uint GetPercentHeight(int percent)
     {
         if (percent <= 0)
@@ -238,31 +271,68 @@ public static class Screen
         return (uint)(ScreenHeight - ((ScreenHeight / 100) * percent));
     }
 
+    /// <summary>
+    /// Преобразует координаты (x, y) в целочисленные координаты, кратные размеру тайла.
+    /// </summary>
+    /// <param name="x">Координата X.</param>
+    /// <param name="y">Координата Y.</param>
+    /// <param name="tile">Размер тайла.</param>
+    /// <returns>Кортеж (X, Y), где обе координаты округлены до ближайшего значения, кратного tile.</returns>
     public static ValueTuple<int, int> Mapping(double x, double y, int tile)
     {
         return new ValueTuple<int, int>(
-        (int)(x / tile) * tile,
-        (int)(y / tile) * tile);
+            (int)(x / tile) * tile,
+            (int)(y / tile) * tile);
     }
+
+    /// <summary>
+    /// Converts (x, y) coordinates to integer coordinates that are multiples of the tile size,
+    /// using the tile value from the settings.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <returns>A tuple of (X, Y), where both coordinates are rounded to the nearest multiple of Setting.Tile.</returns>
     public static ValueTuple<int, int> Mapping(double x, double y)
     {
         return new ValueTuple<int, int>(
-        (int)(x / Setting.Tile) * Setting.Tile,
-        (int)(y / Setting.Tile) * Setting.Tile);
+            (int)(x / Setting.Tile) * Setting.Tile,
+            (int)(y / Setting.Tile) * Setting.Tile);
     }
+
+    /// <summary>
+    /// Converts (x, y) coordinates to a vector that is a multiple of the tile size,
+    /// using the tile value from the settings.
+    /// </summary>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <returns>A Vector2i object with rounded coordinates.</returns>
     public static Vector2i MappingVector(double x, double y)
     {
         return new Vector2i(
-        (int)(x / Setting.Tile) * Setting.Tile,
-        (int)(y / Setting.Tile) * Setting.Tile);
+            (int)(x / Setting.Tile) * Setting.Tile,
+            (int)(y / Setting.Tile) * Setting.Tile);
     }
+
+    /// <summary>
+    /// Converts the value to the nearest multiple of the given tile size.
+    /// </summary>
+    /// <param name="value">The original value.</param>
+    /// <param name="tile">The tile size.</param>
+    /// <returns>The number rounded down to the nearest multiple of tile.</returns>
     public static int Mapping(double value, int tile)
     {
         return (int)(value / tile) * tile;
     }
+
+    /// <summary>
+    /// Converts the value to the nearest multiple of the tile size specified in the settings.
+    /// </summary>
+    /// <param name="value">The original value.</param>
+    /// <returns>The number rounded down to the nearest multiple of Setting.Tile.</returns>
     public static int Mapping(double value)
     {
         return (int)(value / Setting.Tile) * Setting.Tile;
     }
+
 
 }

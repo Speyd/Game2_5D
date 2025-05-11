@@ -7,10 +7,25 @@ using System.Threading.Tasks;
 
 namespace MiniMapLib.ObjectInMap.Obstacles;
 
-/// <summary>Method for identifying objects on the minimap</summary>
+/// <summary>
+/// Defines the rendering modes for displaying objects on the minimap,
+/// controlling which portions of the map and entities are shown.
+/// </summary>
 public enum DisplayRenderMode
 {
+    /// <summary>
+    /// Renders only a predefined, limited section of the map.
+    /// </summary>
     SpecificArea,
+
+    /// <summary>
+    /// Renders the entire available map area, regardless of unit position.
+    /// </summary>
     EntireArea,
-    PlayersVisibilityArea
+
+    /// <summary>
+    /// Renders only the area visible to the unit, based on its vision or detection radius.
+    /// </summary>
+    UnitVisibilityArea
 }
+

@@ -1,5 +1,5 @@
-﻿using EntityLib;
-using ProtoRender.RenderAlgorithm;
+﻿using ProtoRender.RenderAlgorithm;
+using ProtoRender.RenderInterface;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
@@ -21,12 +21,14 @@ internal static class RenderOperation
         return new Vector2f(scaleX, scaleY);
     }
 
-    public static void UpdateVertices(VertexArray renderWall, Vector2f scale, Vector2f position, Color ColorFilling)
+    public static void UpdateVertices(VertexArray renderWall, Vector2f scale, CoordinateOnScreen position, Color ColorFilling)
     {
-        renderWall[0] = new Vertex(position, ColorFilling);
-        renderWall[1] = new Vertex(position + new Vector2f(scale.X, 0), ColorFilling);
-        renderWall[2] = new Vertex(position + new Vector2f(scale.X, scale.Y), ColorFilling);
-        renderWall[3] = new Vertex(position + new Vector2f(0, scale.Y), ColorFilling);
+        Vector2f pos = new Vector2f(position.X, position.Top);
+
+        renderWall[0] = new Vertex(pos, ColorFilling);
+        renderWall[1] = new Vertex(pos + new Vector2f(scale.X, 0), ColorFilling);
+        renderWall[2] = new Vertex(pos + new Vector2f(scale.X, scale.Y), ColorFilling);
+        renderWall[3] = new Vertex(pos + new Vector2f(0, scale.Y), ColorFilling);
     }
 
 }

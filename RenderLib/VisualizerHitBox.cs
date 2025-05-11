@@ -1,67 +1,82 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using EntityLib;
-using HitBoxLib.Data.HitBoxObject;
+﻿using HitBoxLib.Data.HitBoxObject;
 using HitBoxLib.Data.Observer;
-using MapLib;
-using ProtoRender;
+using ProtoRender.Map;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.RenderInterface;
-using SFML.Graphics;
-using SFML.System;
-
+using ScreenLib;
+using DataPipes;
 
 namespace RenderLib.HitBox;
-/// <summary> Visualizes it boxes of objects </summary>
+/// <summary>
+/// Provides functionality for visualizing hitboxes of map objects, useful for debugging rendering logic or spatial behavior.
+/// </summary>
+/// <remarks>
+/// Allows filtering hitbox visualization by object type and distance to the observing unit.
+/// </remarks>
 public static class VisualizerHitBox
 {
-    /// <summary> The type of hitboxes that will be rendered </summary>
+    /// <summary>
+    /// The type of hitboxes that will be rendered.
+    /// </summary>
+    /// <remarks>
+    /// Determines the category of objects whose hitboxes should be visualized. Options include all objects, only ray-renderable, or self-renderable types.
+    /// </remarks>
     public static VisualizerHitBoxType VisualizerType { get; set; } = VisualizerHitBoxType.None;
-    /// <summary> Limits rendering to a maximum distance </summary>
-    public static bool IsDistanceLimited { get; set; } = true;
-    private const float indexStepDepth = 0.0000001f;
 
-    public static void Render(Map map, Entity entity)
+    /// <summary>
+    /// Limits rendering to a maximum distance from the observer to reduce clutter and improve performance.
+    /// </summary>
+    /// <remarks>
+    /// If set to true, hitboxes beyond the rendering unit's <c>MaxRenderTile</c> distance will not be rendered.
+    /// </remarks>
+    public static bool IsDistanceLimited { get; set; } = true;
+
+    private const float indexStepDepth = 0.0000001f;
+    /// <summary>
+    /// Renders the hitboxes of obstacles on the map based on the configured <see cref="VisualizerType"/> and distance limit.
+    /// </summary>
+    /// <param name="map">The game map containing obstacles to check for rendering.</param>
+    /// <param name="unit">The unit performing the rendering, typically the player or observer.</param>
+    public static void Render(IMap map, ProtoRender.Object.IUnit unit)
     {
         float index = indexStepDepth;
         float step = indexStepDepth;
 
-        ObserverInfo observerInfo = entity.GetObserverInfo();
-
-        foreach (var obstList in map.Obstacles)
+        ObserverInfo observerInfo = unit.GetObserverInfo();
+        var obstacleValues = map.Obstacles.Values
+        .Select(obstaclesList =>
         {
-            foreach (var obstacle in obstList.Value)
+            lock (obstaclesList)
+            {
+                return obstaclesList.ToList();
+            }
+        })
+        .ToList();
+
+        Parallel.ForEach(obstacleValues, Screen.Setting.ParallelOptions, obstList =>
+        {
+            Parallel.ForEach(obstList, Screen.Setting.ParallelOptions, obstacle =>
             {
                 RenderInfo hitboxObjectInfo = obstacle.GetRenderHitBoxInfo();
-                if (IsDistanceLimited && CalculateDistance(hitboxObjectInfo.position, observerInfo.position) > entity.MaxRenderTile)
-                    continue;
-
-                switch (VisualizerType)
+                if (IsDistanceLimited && MathUtils.CalculateDistance(hitboxObjectInfo.position, observerInfo.position) > unit.MaxRenderTile)
+                    return;
+                foreach(var box in HitBoxLib.Operations.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo))
                 {
-                    case VisualizerHitBoxType.VisualizeRayRenderable when obstacle is IRayRenderable:
-                        ZBuffer.AddToZBuffer(HitBoxLib.Operations.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo), index);
-                        break;
-                    case VisualizerHitBoxType.VisualizeSelfRenderable when obstacle is ISelfRenderable:
-                        ZBuffer.AddToZBuffer(HitBoxLib.Operations.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo), index);
-                        break;
-                    case VisualizerHitBoxType.VisualizeAll:
-                        ZBuffer.AddToZBuffer(HitBoxLib.Operations.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo), index);
-                        break;
+                    switch (VisualizerType)
+                    {
+                        case VisualizerHitBoxType.VisualizeRayRenderable when obstacle is IRayRenderable:
+                            ZBuffer.AddToZBuffer(box, index);
+                            break;
+                        case VisualizerHitBoxType.VisualizeSelfRenderable when obstacle is ISelfRenderable:
+                            ZBuffer.AddToZBuffer(box, index);
+                            break;
+                        case VisualizerHitBoxType.VisualizeAll:
+                            ZBuffer.AddToZBuffer(box, index);
+                            break;
+                    }
+                    index += step;
                 }
-                index += step;
-            }
-        }
-    }
-
-    public static float CalculateDistance(Vector2f point1, Vector2f point2)
-    {
-        float deltaX = point2.X - point1.X;
-        float deltaY = point2.Y - point1.Y;
-
-        return (float)Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+            });
+        });
     }
 }

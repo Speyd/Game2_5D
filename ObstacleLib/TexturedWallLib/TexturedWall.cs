@@ -5,24 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.Graphics;
-using SixLabors.ImageSharp.PixelFormats;
-using EntityLib;
 using ScreenLib;
 using SFML.System;
-using EntityLib.Player;
-using System.Reflection.Metadata;
-using System.IO;
-using SFML.Window;
 using TextureLib;
 using ObstacleLib.TexturedWallLib.Render;
-using ObstacleLib;
-using System.Net.Sockets;
-using DataPipes.Pool;
-using ScreenLib.SettingScreen;
 using HitBoxLib.PositionObject;
-using System.Runtime.CompilerServices;
-using NGenerics.DataStructures.General;
-using static HitBoxLib.Data.HitBoxObject.RenderInfo;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using EffectLib;
@@ -30,6 +17,8 @@ using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
 using ObstacleLib.SpriteLib;
 using DataPipes;
+using ProtoRender.RenderInterface;
+using ObstacleLib.BlankWallLib;
 
 
 namespace ObstacleLib.TexturedWallLib;
@@ -40,8 +29,6 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     public TexturedPair? CurrentRenderTexture { get; set; } = null;
 
     //----------------------Setting---------------------
-
-    public override bool IsSingleAddable { get; init; } = true;
     /// <summary>Current wall level in world wall level</summary>
     public int LvlWall { get; private set; } = IWall.minLvlWall;
 
@@ -110,9 +97,9 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     {
         HitBox = new HitBox(texturedWall.HitBox);
 
-        X = new Coordinate(texturedWall.X, HitBox);
-        Y = new Coordinate(texturedWall.Y, HitBox);
-        Z = new Coordinate(texturedWall.Z, HitBox);
+        X.UpdateInfo(texturedWall.X, HitBox);
+        Y.UpdateInfo(texturedWall.Y, HitBox);
+        Z.UpdateInfo(texturedWall.Z, HitBox);
 
         ColorInMap = texturedWall.ColorInMap;
         TextureInMiniMap = texturedWall.TextureInMiniMap is not null ? new TextureObstacle(texturedWall.TextureInMiniMap) : null;
@@ -133,7 +120,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     #region MapAdder_Implementation
     private void UpdateBaseHeightHitBox()
     {
-        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile );
+        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile);
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(Screen.Setting.HalfVerticalTile);
     }
     public override void HandleObjectAddition(double x, double y, bool resetHitBoxSide = true)
@@ -174,14 +161,17 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     #endregion
 
     #region IRenderable_Implementation
-    public override Vector2f GetPositionOnScreen(Result result, Entity entity)
+    public override CoordinateOnScreen GetPositionOnScreen(Result result, IUnit unit)
     {
         float positionX = WorldToScreenX(result.Ray);
 
-        int lvlWall = RenderOperation.NormalizeLvlWall(this);
-        float positionY = (float)(WorldToScreenY(entity.VerticalAngle) - result.ProjHeight / 2 * lvlWall);
+        float screenCenterY = (float)WorldToScreenY(unit.VerticalAngle);
+        float verticalShift = (float)((Z.Axis * HitBoxLib.Operations.Render.MultHeight - unit.Z.Axis) / (result.Depth / Screen.Setting.Tile));
 
-        return new Vector2f(positionX, positionY);
+        float top = screenCenterY - (float)(result.ProjHeight / 2) - verticalShift;
+        float bottom = screenCenterY + (float)(result.ProjHeight / 2) - verticalShift;
+
+        return new CoordinateOnScreen(positionX, bottom, top);
     }
     public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
     {
@@ -192,21 +182,24 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     #endregion
 
     #region IWall_Implementation
-    public bool IsOffScreen(Result result, Vector2f position, int heightTexture, Vector2f scale)
+    public bool IsOffScreen(Result result, CoordinateOnScreen position, int heightTexture, Vector2f scale)
     {
-        if (result.PositionPreviousObject is not null && position.Y > result.PositionPreviousObject.Value.Y)
+        if (result.PositionPreviousObject is not null && position.Top > result.PositionPreviousObject.Value.Top && position.Bottom < result.PositionPreviousObject.Value.Bottom)
             return true;
-        if (position.Y + scale.Y * heightTexture < 0)
+        if (position.Top + scale.Y * heightTexture < 0)
             return true;
-        if (position.Y > Screen.ScreenHeight)
+        if (position.Top > Screen.ScreenHeight)
             return true;
 
         return false;
     }
-    public void SetLevelWall(int lvl)
+    public void SetLevelWall(double currentZ, double baseOffset, int lvl)
     {
         LvlWall = lvl;
-        Z.Axis = (lvl - 1) * Screen.Setting.HalfTile;
+        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(baseOffset);
+        HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Larger]?.SetOffset(baseOffset);
+
+        Z.Axis = currentZ + (lvl - 1) * baseOffset;
     }
     #endregion
 
@@ -241,13 +234,16 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
         return newMult;
     }
-    public float CalculateTextureY(Entity entity, float ProjHeight, float mult, float addCoordinates)
+    public float CalculateTextureY(IUnit unit, float ProjHeight, float mult, float addCoordinates)
     {
         if (CurrentRenderTexture is null)
             throw new Exception("CurrentRenderTexture is null(GetAveragedMult)");
 
-        float textureY = ProjHeight * (float)entity.VerticalAngle * mult;
-        return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates;
+        float textureY = ProjHeight * (float)unit.VerticalAngle * mult;
+
+        float heightDifference = (float)(Z.Axis - unit.Z.Axis);
+        float textureMult = Screen.Setting.VerticalTile / (CurrentRenderTexture?.Base.Height ?? 1);
+        return CurrentRenderTexture.Base.Height / 2 + textureY - addCoordinates + (heightDifference / textureMult);
     }
     public float CalculateTextureY(float verticalAngle, float ProjHeight, float mult, float addCoordinates)
     {
@@ -279,6 +275,10 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         CurrentRenderTexture.Mod.Draw(drawObject);
         CurrentRenderTexture.Mod.Display();
     }
+    public void DrawObjectAsync(Drawable drawObject)
+    {
+        ProtoRender.RenderAlgorithm.DrawingQueue.EnqueueDraw((DrawObject, drawObject));
+    }
     #endregion
 
     public override IObject GetCopy()
@@ -286,23 +286,23 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         return new TexturedWall(this);
     }
 
-    public override void Render(Result result, Entity entity)
+    public override void Render(Result result, IUnit unit)
     {
-        RenderInternal(result, entity, RenderOperation.SelectCurrentRenderTexture(this, result, entity));
+        RenderInternal(result, unit, RenderOperation.SelectCurrentRenderTexture(this, result, unit));
     }
-    public void RenderMultiWall(Result result, Entity entity, ObjectSide objectSide)
+    public void RenderMultiWall(Result result, IUnit unit, ObjectSide objectSide)
     {
-        RenderInternal(result, entity, MultiTextured[objectSide]);
+        RenderInternal(result, unit, MultiTextured[objectSide]);
     }
 
 
-    private void RenderInternal(Result result, Entity entity, TexturedPair? currentRenderTexture)
+    private void RenderInternal(Result result, IUnit unit, TexturedPair? currentRenderTexture)
     {
         if (currentRenderTexture is null)
             return;
 
         IntRect textureRect = TextureObstacle.SetIntegerRectangle((int)result.Offset, Screen.Setting.Tile, currentRenderTexture.Base);
-        Vector2f position = GetPositionOnScreen(result, entity);
+        CoordinateOnScreen position = GetPositionOnScreen(result, unit);
         Vector2f scale = RenderOperation.CalculationTextureScale(result, currentRenderTexture);
 
         if (IsOffScreen(result, position, textureRect.Height, scale))
@@ -317,10 +317,10 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         Vector2f bottomRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top + textureRect.Height);
         Vector2f bottomLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top + textureRect.Height);
 
-        Vector2f topLeftPosition = position;
-        Vector2f topRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y);
-        Vector2f bottomRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Y + scale.Y * textureRect.Height);
-        Vector2f bottomLeftPosition = new Vector2f(position.X, position.Y + scale.Y * textureRect.Height);
+        Vector2f topLeftPosition = new Vector2f(position.X, position.Top);
+        Vector2f topRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Top);
+        Vector2f bottomRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Top + scale.Y * textureRect.Height);
+        Vector2f bottomLeftPosition = new Vector2f(position.X, position.Top + scale.Y * textureRect.Height);
 
         vertexArray[0] = new Vertex(topLeftPosition, blackoutColor, topLeftTexCoords);
         vertexArray[1] = new Vertex(topRightPosition, blackoutColor, topRightTexCoords);

@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.RenderLib</PackageId>
     <Title>EnginePseudo3D.RenderLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.0.6</Version>
+    <Version>1.5.2</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -32,16 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.6.0" />
     <PackageReference Include="NGenerics" Version="1.5.3" />
     <PackageReference Include="SFML.Net" Version="2.6.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.2" />
-	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
   </ItemGroup>
 
 </Project>

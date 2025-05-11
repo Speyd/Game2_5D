@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj": {
-      "version": "1.0.8",
+      "version": "1.4.4",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj",
         "projectName": "EnginePseudo3D.PartsWorldLib",
@@ -52,15 +52,15 @@
           "dependencies": {
             "EnginePseudo3D.EffectLib": {
               "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[1.0.4, )"
             },
-            "EnginePseudo3D.EntityLib": {
+            "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[1.6.0, )"
             },
             "EnginePseudo3D.TextureLib": {
               "target": "Package",
-              "version": "[1.0.9, )"
+              "version": "[1.1.2, )"
             }
           },
           "imports": [

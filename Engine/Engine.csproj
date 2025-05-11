@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.Core</PackageId>
     <Title>EnginePseudo3D</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.1.3</Version>
+    <Version>1.8.2</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Description>This is an engine that uses raycasting method and SFML framework to render the scene. This project implements most of the mechanics for writing the game. Designed for quick setup and easy integration into your code!</Description>
@@ -33,25 +33,23 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.1.1" />
-	  <PackageReference Include="EnginePseudo3D.ControlLib" Version="1.0.7" />
-	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.2" />
-	  <PackageReference Include="EnginePseudo3D.DrawLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.FpsLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.MiniMapLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.MoveLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.ObstacleLib" Version="1.0.9" />
-	  <PackageReference Include="EnginePseudo3D.PartsWorldLib" Version="1.0.8" />
-	  <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.RenderLib" Version="1.0.6" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
-	  <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.9" />
-	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />  
+	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.1.9" />
+	  <PackageReference Include="EnginePseudo3D.ControlLib" Version="1.6.4" />
+	  <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.DrawLib" Version="1.6.1" />
+	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.4" />
+	  <PackageReference Include="EnginePseudo3D.FpsLib" Version="1.4.1" />
+	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.3.1" />
+	  <PackageReference Include="EnginePseudo3D.MiniMapLib" Version="1.5.2" />
+	  <PackageReference Include="EnginePseudo3D.MoveLib" Version="1.6.4" />
+	  <PackageReference Include="EnginePseudo3D.ObstacleLib" Version="1.7.4" />
+	  <PackageReference Include="EnginePseudo3D.PartsWorldLib" Version="1.4.4" />
+	  <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.6.0" />
+	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.6.8" />
+	  <PackageReference Include="EnginePseudo3D.RenderLib" Version="1.5.2" />
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.3" />
+	  <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.1.2" />
+	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />  
   </ItemGroup>
 
 </Project>

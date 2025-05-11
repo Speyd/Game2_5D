@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
-      "version": "1.0.6",
+      "version": "1.6.8",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
         "projectName": "EnginePseudo3D.RayTracingLib",
@@ -50,25 +50,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "EnginePseudo3D.DataPipes": {
+            "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[1.0.2, )"
-            },
-            "EnginePseudo3D.EntityLib": {
-              "target": "Package",
-              "version": "[1.0.3, )"
-            },
-            "EnginePseudo3D.MoveLib": {
-              "target": "Package",
-              "version": "[1.0.6, )"
-            },
-            "EnginePseudo3D.ScreenLib": {
-              "target": "Package",
-              "version": "[1.0.2, )"
-            },
-            "EnginePseudo3D.TextureLib": {
-              "target": "Package",
-              "version": "[1.0.9, )"
+              "version": "[1.6.0, )"
             }
           },
           "imports": [

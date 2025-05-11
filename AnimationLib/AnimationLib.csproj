@@ -16,7 +16,7 @@
     <PackageIcon>iconNuGet.png</PackageIcon>
     <PackageReadmeFile>README_AnimationLib.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/AnimationLib</RepositoryUrl>
-    <Version>1.1.1</Version>
+    <Version>1.1.9</Version>
 	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.9" />
+    <PackageReference Include="EnginePseudo3D.TextureLib" Version="1.1.2" />
   </ItemGroup>
 
 </Project>

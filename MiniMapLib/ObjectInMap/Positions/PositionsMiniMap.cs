@@ -6,11 +6,20 @@ using System.Threading.Tasks;
 
 
 namespace MiniMapLib.ObjectInMap.Positions;
-/// <summary>Mini map position on the screen</summary>
+/// <summary>
+/// Specifies the position of the minimap on the game screen.
+/// </summary>
 public enum PositionsMiniMap
 {
+    /// <summary>Minimap is displayed in the upper-left corner of the screen.</summary>
     UpperLeftCorner,
+
+    /// <summary>Minimap is displayed in the lower-left corner of the screen.</summary>
     LowerLeftCorner,
+
+    /// <summary>Minimap is displayed in the upper-right corner of the screen.</summary>
     UpperRightCorner,
+
+    /// <summary>Minimap is displayed in the lower-right corner of the screen.</summary>
     LowerRightCorner,
 }

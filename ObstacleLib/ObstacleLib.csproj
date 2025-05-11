@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.ObstacleLib</PackageId>
     <Title>EnginePseudo3D.ObstacleLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.0.9</Version>
+    <Version>1.7.4</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -32,13 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.0.6" />
-    <PackageReference Include="SixLabors.ImageSharp" Version="3.1.7" />
-	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.1.1" />
-	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.HitBoxLib" Version="1.0.3" />
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
+      <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="1.6.8" />
+	  <PackageReference Include="EnginePseudo3D.AnimationLib" Version="1.1.9" />
+	  <PackageReference Include="EnginePseudo3D.EffectLib" Version="1.0.4" />
   </ItemGroup>
 
 </Project>

@@ -8,10 +8,19 @@ using NGenerics.DataStructures.Trees;
 
 
 namespace ScreenLib.Output;
+/// <summary>A class that collects or sorts all objects on the screen.</summary>
 public class OutputPriority(RenderWindow window)
 {
+    /// <summary>Object tree</summary>
     public SortedDictionary<OutputPriorityType, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
-    public void AddToPriority(OutputPriorityType priority, Drawable sprite, RenderStates? state = null)
+
+    /// <summary>
+    /// Adds an object to the rendering order
+    /// </summary>
+    /// <param name="priority">Object priority in the object tree</param>
+    /// <param name="drawObject">The object that will be drawn</param>
+    /// <param name="state">State of the object being rendered</param>
+    public void AddToPriority(OutputPriorityType priority, Drawable drawObject, RenderStates? state = null)
     {
         if (!TreePriority.TryGetValue(priority, out var list))
         {
@@ -19,9 +28,9 @@ public class OutputPriority(RenderWindow window)
             TreePriority[priority] = list;
         }
 
-        list.Add((sprite, state));
+        list.Add((drawObject, state));
     }
-
+    /// <summary> Drawing the render tree </summary>
     public void DrawingByPriority()
     {
         foreach (var pair in TreePriority)

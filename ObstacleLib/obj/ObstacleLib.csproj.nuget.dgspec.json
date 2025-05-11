@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj": {
-      "version": "1.0.9",
+      "version": "1.7.4",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj",
         "projectName": "EnginePseudo3D.ObstacleLib",
@@ -52,31 +52,15 @@
           "dependencies": {
             "EnginePseudo3D.AnimationLib": {
               "target": "Package",
-              "version": "[1.1.1, )"
+              "version": "[1.1.9, )"
             },
             "EnginePseudo3D.EffectLib": {
               "target": "Package",
-              "version": "[1.0.3, )"
-            },
-            "EnginePseudo3D.EntityLib": {
-              "target": "Package",
-              "version": "[1.0.3, )"
-            },
-            "EnginePseudo3D.HitBoxLib": {
-              "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[1.0.4, )"
             },
             "EnginePseudo3D.RayTracingLib": {
               "target": "Package",
-              "version": "[1.0.6, )"
-            },
-            "EnginePseudo3D.ScreenLib": {
-              "target": "Package",
-              "version": "[1.0.2, )"
-            },
-            "SixLabors.ImageSharp": {
-              "target": "Package",
-              "version": "[3.1.7, )"
+              "version": "[1.6.8, )"
             }
           },
           "imports": [

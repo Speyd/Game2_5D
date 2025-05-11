@@ -19,8 +19,10 @@ using static SFML.Window.Mouse;
 
 
 namespace HitBoxLib.Operations;
+/// <summary>Rendering HitBox</summary>
 public static class Render
-{
+{    
+    /// <summary>Hitbox Edges Array</summary>
     public static int[,] Edges { get; } = new int[,]
     {
             {0, 1}, {1, 3}, {3, 2}, {2, 0},
@@ -29,11 +31,13 @@ public static class Render
 
             {0, 4}, {1, 5}, {2, 6}, {3, 7},
     };
+    /// <summary>Amount peaks in hitbox</summary>
     public const int maxCountPeaks = 8;
 
 
-    public const float baseScreenHeightForHitBox = 600f;
-    public const float baseScreenWidthForHitBox = 1000f;
+    private const float baseScreenHeightForHitBox = 600f;
+    private const float baseScreenWidthForHitBox = 1000f;
+    /// <summary>Multiplier to normalize hitbox height on different screens</summary>
     public static float MultHeight { get; private set; }
     private static void SetNewMult()
     {
@@ -50,18 +54,22 @@ public static class Render
     }
 
 
-    private static List<Vector3f> GetCoordinatesParallelepiped(RenderInfo objectHitBox, ObserverInfo observer, ref Vector2f center)
+    private static List<Vector3f> GetCoordinatesParallelepiped(RenderInfo objectHitBox, Box currentBox, ObserverInfo observer, ref Vector2f center)
     {
-        Box Body = objectHitBox.body;
+        float minX = (float)(currentBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+        float maxX = (float)(currentBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
+        float minY = (float)(currentBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+        float maxY = (float)(currentBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
 
-        float minX = (float)(Body[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-        float maxX = (float)(Body[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-        float minY = (float)(Body[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-        float maxY = (float)(Body[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
-        float g = (Screen.ScreenHeight / 600f) / (Screen.ScreenWidth / 1000f);
-        float m = Screen.ScreenHeight / (600f * g);
-        float minZ = (float)(Body[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0) * MultHeight;
-        float maxZ = (float)(Body[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0) * MultHeight;
+        float minZ = (float)(currentBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
+        float maxZ = (float)(currentBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
+
+        float mult = objectHitBox.position.X == observer.position.X &&
+                    objectHitBox.position.Y == observer.position.Y &&
+                    (minZ + maxZ) / 2 == observer.position.Z ?
+                    MultHeight : 1;
+        minZ = (float)(minZ * MultHeight - observer.position.Z * mult);
+        maxZ = (float)(maxZ * MultHeight - observer.position.Z * mult);
 
         center.X = (maxX + minX) / 2;
         center.Y = (maxY + minY) / 2;
@@ -82,9 +90,9 @@ public static class Render
             new Vector3f(maxY, minZ, maxX),
         };
     }
-    private static Vector2f GetPositionForAngle(RenderInfo objectHitBox, Vector3f vertex, Vector2f center)
+    private static Vector2f GetPositionForAngle(RenderInfo objectHitBox, Box currentBox, Vector3f vertex, Vector2f center)
     {
-        switch (objectHitBox.body.HeightRenderMode)
+        switch (currentBox.HeightRenderMode)
         {
             case RenderHeightMode.EdgeBased:
                 return new Vector2f(vertex.Z, vertex.X);
@@ -94,16 +102,16 @@ public static class Render
                 return new Vector2f();
         }
     }
-    private static List<Vector2f> GetHitboxCoordinatesOnScreen(ref int countNonRender, RenderInfo objectHitBox, ObserverInfo observer)
+    private static List<Vector2f> GetHitboxCoordinatesOnScreen(ref int countNonRender, RenderInfo objectHitBox, Box currentBox, ObserverInfo observer)
     {
         Vector2f center = new Vector2f();
-        List<Vector3f> vertices = GetCoordinatesParallelepiped(objectHitBox, observer, ref center);
+        List<Vector3f> vertices = GetCoordinatesParallelepiped(objectHitBox, currentBox, observer, ref center);
 
 
         List<Vector2f> screenVertices = new List<Vector2f>();
         foreach (var vertex in vertices)
         {
-            Vector2f position = GetPositionForAngle(objectHitBox, vertex, center);
+            Vector2f position = GetPositionForAngle(objectHitBox, currentBox, vertex, center);
             float dist = MathUtils.CalculateDistance(position, observer.position);
             float safeDistance = MathF.Max(dist, 0.1f);
 
@@ -111,7 +119,7 @@ public static class Render
             double normalizedAngle = MathUtils.NormalizeAngleDifference(observer.angle, angleDistance);
 
             float screenX = objectHitBox.worldToScreenX(normalizedAngle, observer.deltaAngle);
-            float screenY = objectHitBox.worldToScreenY(vertex.Y, safeDistance, observer.vertivalAngle, normalizedAngle);
+            float screenY = objectHitBox.worldToScreenY(vertex.Y, safeDistance, observer.verticalAngle, normalizedAngle);
 
 
             if (Math.Abs(normalizedAngle) > observer.fov ||
@@ -128,7 +136,7 @@ public static class Render
     }
 
 
-    private static VertexArray VertexToArray(RenderInfo objectHitBox, List<Vector2f> vertices, int countNonRender)
+    private static VertexArray VertexToArray(RenderInfo objectHitBox, Box currentBox, List<Vector2f> vertices, int countNonRender)
     {
         Vertex[] line = new Vertex[2];
         VertexArray vertexArray = new VertexArray(PrimitiveType.Lines);
@@ -141,8 +149,8 @@ public static class Render
             int startIndex = Edges[i, 0];
             int endIndex = Edges[i, 1];
 
-            line[0] = new Vertex(vertices[startIndex], objectHitBox.body.RenderColor);
-            line[1] = new Vertex(vertices[endIndex], objectHitBox.body.RenderColor);
+            line[0] = new Vertex(vertices[startIndex], currentBox.RenderColor);
+            line[1] = new Vertex(vertices[endIndex], currentBox.RenderColor);
 
             vertexArray.Append(line[0]);
             vertexArray.Append(line[1]);
@@ -150,11 +158,25 @@ public static class Render
 
         return vertexArray;
     }
-    public static VertexArray BuildHitBoxMesh(RenderInfo objectHitBox, ObserverInfo observer)
+    private static VertexArray BuildBoxMesh(RenderInfo objectHitBox, Box currentBox, ObserverInfo observer)
     {
-        int countNonRender = 0;
-        List<Vector2f> coordinateScreen = GetHitboxCoordinatesOnScreen(ref countNonRender, objectHitBox, observer);
 
-        return VertexToArray(objectHitBox, coordinateScreen, countNonRender);
+        int countNonRender = 0;
+        List<Vector2f> coordinateScreen = GetHitboxCoordinatesOnScreen(ref countNonRender, objectHitBox, currentBox, observer);
+
+        return VertexToArray(objectHitBox, currentBox, coordinateScreen, countNonRender);
+    }
+    /// <summary>Building the edges of a hitbox</summary>
+    /// <param name="objectHitBox">Info about render hitBox</param>
+    /// <param name="observer">Info about observer</param>
+    public static List<VertexArray> BuildHitBoxMesh(RenderInfo objectHitBox, ObserverInfo observer)
+    {
+        List<VertexArray> vertexArrays = new List<VertexArray>();
+        HitBox hitBox = objectHitBox.hitBox;
+
+        vertexArrays.Add(BuildBoxMesh(objectHitBox, hitBox.MainHitBox, observer));
+        hitBox.SegmentedHitbox.ForEach(b => vertexArrays.Add(BuildBoxMesh(objectHitBox, b, observer)));
+
+        return vertexArrays;
     }
 }

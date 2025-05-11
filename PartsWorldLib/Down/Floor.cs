@@ -1,4 +1,4 @@
-﻿using EntityLib.Player;
+﻿using ProtoRender.Object;
 using ScreenLib;
 using ScreenLib.Output;
 using SFML.Graphics;
@@ -24,9 +24,9 @@ public class Floor : IDownPart
         :this(new SFML.Graphics.Color(20, 20, 20))
     {}
 
-    public void Render(Player player)
+    public void Render(IUnit unit)
     {
-        float normalizeHeight = RenderPartsWorld.NormalizeHeigthDownPart(player);
+        float normalizeHeight = RenderPartsWorld.NormalizeHeigthDownPart(unit);
 
         Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), ColorFilling);
         Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), ColorFilling);

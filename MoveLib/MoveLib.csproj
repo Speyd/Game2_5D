@@ -13,7 +13,7 @@
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
     <PackageIcon>iconNuGet.png</PackageIcon>
-    <Version>1.0.6</Version>
+    <Version>1.6.4</Version>
     <Description>This is a library for calculating collision and camera rotation.</Description>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/MoveLib</RepositoryUrl>
     <PackageReadmeFile>README_MoveLib.md</PackageReadmeFile>
@@ -32,10 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
-	<PackageReference Include="EnginePseudo3D.FpsLib" Version="1.0.6" />
-	<PackageReference Include="EnginePseudo3D.MapLib" Version="1.0.6" />
-	<PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
+	<PackageReference Include="EnginePseudo3D.FpsLib" Version="1.4.1" />
   </ItemGroup>
 
 </Project>

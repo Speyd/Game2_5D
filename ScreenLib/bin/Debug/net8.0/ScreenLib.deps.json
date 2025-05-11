@@ -6,10 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "ScreenLib/1.0.2": {
+      "ScreenLib/1.0.3": {
         "dependencies": {
           "NGenerics": "1.5.3",
-          "SFML.Net": "2.6.0"
+          "SFML.Net": "2.6.1"
         },
         "runtime": {
           "ScreenLib.dll": {}
@@ -917,66 +917,66 @@
           }
         }
       },
-      "SFML.Audio/2.6.0": {
+      "SFML.Audio/2.6.1": {
         "dependencies": {
           "CSFML": "2.6.1",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "runtime": {
           "lib/netstandard2.0/SFML.Audio.dll": {
-            "assemblyVersion": "2.6.0.0",
-            "fileVersion": "2.6.0.0"
+            "assemblyVersion": "2.6.1.0",
+            "fileVersion": "2.6.1.0"
           }
         }
       },
-      "SFML.Graphics/2.6.0": {
+      "SFML.Graphics/2.6.1": {
         "dependencies": {
           "CSFML": "2.6.1",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         },
         "runtime": {
           "lib/netstandard2.0/SFML.Graphics.dll": {
-            "assemblyVersion": "2.6.0.0",
-            "fileVersion": "2.6.0.0"
+            "assemblyVersion": "2.6.1.0",
+            "fileVersion": "2.6.1.0"
           }
         }
       },
-      "SFML.Net/2.6.0": {
+      "SFML.Net/2.6.1": {
         "dependencies": {
-          "SFML.Audio": "2.6.0",
-          "SFML.Graphics": "2.6.0",
-          "SFML.System": "2.6.0",
-          "SFML.Window": "2.6.0"
+          "SFML.Audio": "2.6.1",
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1",
+          "SFML.Window": "2.6.1"
         }
       },
-      "SFML.System/2.6.0": {
+      "SFML.System/2.6.1": {
         "dependencies": {
           "CSFML": "2.6.1"
         },
         "runtime": {
           "lib/netstandard2.0/SFML.System.dll": {
-            "assemblyVersion": "2.6.0.0",
-            "fileVersion": "2.6.0.0"
+            "assemblyVersion": "2.6.1.0",
+            "fileVersion": "2.6.1.0"
           }
         }
       },
-      "SFML.Window/2.6.0": {
+      "SFML.Window/2.6.1": {
         "dependencies": {
           "CSFML": "2.6.1",
-          "SFML.System": "2.6.0"
+          "SFML.System": "2.6.1"
         },
         "runtime": {
           "lib/netstandard2.0/SFML.Window.dll": {
-            "assemblyVersion": "2.6.0.0",
-            "fileVersion": "2.6.0.0"
+            "assemblyVersion": "2.6.1.0",
+            "fileVersion": "2.6.1.0"
           }
         }
       }
     }
   },
   "libraries": {
-    "ScreenLib/1.0.2": {
+    "ScreenLib/1.0.3": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -995,40 +995,40 @@
       "path": "ngenerics/1.5.3",
       "hashPath": "ngenerics.1.5.3.nupkg.sha512"
     },
-    "SFML.Audio/2.6.0": {
+    "SFML.Audio/2.6.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-DvribzbjacRFSFU/A7xLkxlYEwMGKM9bwcpFo3TjStpKTDNSrSDw3EWuE0HwrQpzfiNxCAutnlRFvfwufUHuNw==",
-      "path": "sfml.audio/2.6.0",
-      "hashPath": "sfml.audio.2.6.0.nupkg.sha512"
+      "sha512": "sha512-MsIlMTEeG623UYw3/Sb2qVw94xEHOxamUENuxbjSz4QiTsfCNQNEADpfTbXKI/FS5u7y/FsNmk+4II2iEf8MMw==",
+      "path": "sfml.audio/2.6.1",
+      "hashPath": "sfml.audio.2.6.1.nupkg.sha512"
     },
-    "SFML.Graphics/2.6.0": {
+    "SFML.Graphics/2.6.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-bwYJT4siVta87d3ZaRN37FViOMAgiiYS9BYJOhHL70G9+KDtqbAl1LYg9hdEG8IHFSj55I7P8qkPL33KQ16RBg==",
-      "path": "sfml.graphics/2.6.0",
-      "hashPath": "sfml.graphics.2.6.0.nupkg.sha512"
+      "sha512": "sha512-pOtL7ss6r3m7P3MbZ4Oytjzug2mWJ5OHblZHlISIhb6IezmsFmBxqLsIq0YoyWGcAL4cgSXqDmflJivKpXgdtg==",
+      "path": "sfml.graphics/2.6.1",
+      "hashPath": "sfml.graphics.2.6.1.nupkg.sha512"
     },
-    "SFML.Net/2.6.0": {
+    "SFML.Net/2.6.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-jnHJp7PPvZ0FdIZQZo63DW3ROrgVJktTzycjGzoX1HsZZTzj7ioMOXtsbR2AAggdTyk6vIhd61IqEpLO4DSd+Q==",
-      "path": "sfml.net/2.6.0",
-      "hashPath": "sfml.net.2.6.0.nupkg.sha512"
+      "sha512": "sha512-OWjTdbVi86gTYHjlSB3Y77ZWDy01iIVMXfb5ApX3L5yp455VDmF828wBIc2+bfPxJDFSHgJ82LpZM5jFNUS/QA==",
+      "path": "sfml.net/2.6.1",
+      "hashPath": "sfml.net.2.6.1.nupkg.sha512"
     },
-    "SFML.System/2.6.0": {
+    "SFML.System/2.6.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-XDNdNah0PKZElyYMAqWd8Kbe/XsJExkTxPY0txIrsTXEFIiRWhlkcYBBZmGkA6wvB5Ib7XH8QqE8s3BY8ZAzaQ==",
-      "path": "sfml.system/2.6.0",
-      "hashPath": "sfml.system.2.6.0.nupkg.sha512"
+      "sha512": "sha512-/3EV59uiMWxADWWSiqAOS+8FK4Da2r6RoZEujG14kLGYtQzNj4rV4pjjycyH30WWDONSedxmLT9chf8XN70+BQ==",
+      "path": "sfml.system/2.6.1",
+      "hashPath": "sfml.system.2.6.1.nupkg.sha512"
     },
-    "SFML.Window/2.6.0": {
+    "SFML.Window/2.6.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-C4FAnMI6adoNyc7gv33tIK9iYWuPxPUqQojLkhy2DTi4+3ZrlSNRDNZYc7V8Gaps3dOheGAP41/MJKSdTF8SZg==",
-      "path": "sfml.window/2.6.0",
-      "hashPath": "sfml.window.2.6.0.nupkg.sha512"
+      "sha512": "sha512-lzt42WWZiYvoMrDwvc4lpl6t/GH6AhvHI+inw/Aoh1v6xAO8GDnzzLVsaKi+RfPqdL2mHsih1qUZucuvAmoGdg==",
+      "path": "sfml.window/2.6.1",
+      "hashPath": "sfml.window.2.6.1.nupkg.sha512"
     }
   }
 }

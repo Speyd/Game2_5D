@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 
 
 namespace DataPipes.Dictionary;
+/// <summary> Unique Dictionary</summary>
 public class UniqueDictionary<KEY, VALUE>
     where KEY : notnull
     where VALUE : notnull
 {
     private Dictionary<KEY, VALUE> myMap = new Dictionary<KEY, VALUE>();
     private Dictionary<VALUE, bool> valuePresence = new Dictionary<VALUE, bool>();
+    /// <summary>Count item in dictionary</summary>
     public int Count { get { return myMap.Count; } }
-
+    /// <summary>UniqueDictionary class constructor</summary> 
     public UniqueDictionary()
     { }
+    /// <summary>ObjectPool class constructor</summary>
+    /// <param name="values">UniqueDictionary class object</param>
     public UniqueDictionary(List<(KEY, VALUE)> values)
     {
         foreach ((KEY, VALUE) value in values)
@@ -24,6 +28,9 @@ public class UniqueDictionary<KEY, VALUE>
         }
     }
 
+    /// <summary>ObjectPool class constructor</summary>
+    /// <param name="key">Key in cortege</param>
+    /// <param name="value">Value in cortege</param>
     public bool Insert(KEY key, VALUE value)
     {
         if (valuePresence.ContainsKey(value))
@@ -35,7 +42,8 @@ public class UniqueDictionary<KEY, VALUE>
         valuePresence[value] = true;
         return true;
     }
-
+    /// <summary>Get value from dictionary</summary>
+    /// <param name="key">Key in cortege</param>
     public VALUE? GetValue(KEY key)
     {
         if (myMap.TryGetValue(key, out VALUE? value))
@@ -44,6 +52,7 @@ public class UniqueDictionary<KEY, VALUE>
         }
         return default;
     }
+    /// <summary>Get all values from dictionary</summary>
     public List<VALUE> GetValues()
     {
         List <VALUE> values = new();
@@ -52,10 +61,12 @@ public class UniqueDictionary<KEY, VALUE>
 
         return values;
     }
+    /// <summary>Get keys from dictionary</summary>
     public List<KEY> GetAllKey()
     {      
         return myMap.Keys.ToList();
     }
+    /// <summary>Get first value from dictionary</summary>
     public VALUE? GetFirstValue()
     {
         if (Count == 0)
@@ -63,13 +74,18 @@ public class UniqueDictionary<KEY, VALUE>
 
         return myMap.First().Value;
     }
+    /// <summary>Get value from dictionary</summary>
+    /// <param name="key">Key in cortege</param>
+    /// <returns>
+    /// <c>true</c> if the dictionary contains an element with the specified key; otherwise, <c>false</c>.
+    /// </returns>
     public bool ContainsKey(KEY key)
     {
         return myMap.ContainsKey(key);
     }
-
+    /// <summary>Get dictionary</summary>
     public Dictionary<KEY, VALUE> GetUniqueDictionary() => myMap;
-
+    /// <summary>Print dictionary</summary>
     public void Print()
     {
         foreach (var pair in myMap)
@@ -77,7 +93,13 @@ public class UniqueDictionary<KEY, VALUE>
             Console.WriteLine($"{pair.Key}: {pair.Value}");
         }
     }
-
+    /// <summary>
+    /// Gets the value associated with the specified key.
+    /// </summary>
+    /// <param name="key">The key whose value to get.</param>
+    /// <returns>
+    /// The value associated with the specified key, or the default value of <typeparamref name="VALUE"/> if the key is not found.
+    /// </returns>
     public VALUE? this[KEY key]
     {
         get

@@ -7,11 +7,17 @@ using System.Threading.Tasks;
 
 
 namespace HitBoxLib.Data.Observer;
+/// <summary>Information about observer</summary>
 public struct ObserverInfo
 {
+    /// <summary>Angle observer</summary>
     public double angle;
-    public double vertivalAngle;
+    /// <summary>Vertical angle observer</summary>
+    public double verticalAngle;
+    /// <summary>Fov observer</summary>
     public double fov;
+    /// <summary>Delta angle observer</summary>
     public double deltaAngle;
-    public Vector2f position;
+    /// <summary>Position observer</summary>
+    public Vector3f position;
 }

@@ -8,17 +8,26 @@ namespace AnimationLib;
 public class AnimationState
 {
     /// <summary>Index current frame</summary>
-    public int Index { get; internal set; } = 0;
+    public int Index { get; set; } = 0;
     /// <summary>Frame counter</summary>
     internal int FrameCounter { get; set; } = 0;
 
     /// <summary>Number of frames</summary>
     public int AmountFrame { get; set; } = 0;
+    private int _speed = 0;
     /// <summary>Animation playback speed(The higher the value, the slower)</summary>
-    public int Speed { get; set; } = 0;
+    public int Speed 
+    {
+        get => _speed;
+        set
+        {
+            _speed = value;
+            FrameCounter = value;
+        }
+    } 
     internal List<TextureObstacle> Frames { get; init; } = new();
     /// <summary>Current frame</summary>
-    public TextureObstacle? CurrentFrame { get; internal set; }
+    public TextureObstacle? CurrentFrame { get; set; }
     /// <summary>true - animation is used, false - animation is not used</summary>
     public bool IsAnimation { get; set; } = false;
 
@@ -27,15 +36,15 @@ public class AnimationState
     /// <param name="paths">File paths</param>
     public AnimationState(params string[] paths)
     {
-        foreach(var path in paths)
-            AddFrame(new TextureObstacle(path));
+        AddFrames(ImageLoader.TexturesLoad(paths));
+
     }
 
     /// <summary>Constructor class AnimationState</summary>
     /// <param name="path">File path</param>
     public AnimationState(string path)
     {
-        AddFrame(new TextureObstacle(path));
+        AddFrames(ImageLoader.TexturesLoad(path));
     }
 
     /// <summary>Constructor class AnimationState</summary>
@@ -53,6 +62,14 @@ public class AnimationState
             AddFrame(frame);
     }
 
+    /// <summary>Constructor class AnimationState</summary>
+    /// <param name="animationState">Object of AnimationState</param>
+    public AnimationState(AnimationState animationState)
+        :this(animationState.GetFrames())
+    {
+        IsAnimation = animationState.IsAnimation;
+        Speed = animationState.Speed;
+    }
     /// <summary>Constructor class AnimationState</summary>
     public AnimationState()
     {}
@@ -83,5 +100,15 @@ public class AnimationState
             return null;
 
         return Frames[index];
+    }
+    /// <summary>Get all the frames</summary>
+    public List<TextureObstacle> GetFrames() => Frames;
+    /// <summary>Set frames</summary>
+    public void SetFrames(List<TextureObstacle> textureObstacles)
+    {
+        Frames.Clear();
+        Frames.AddRange(textureObstacles);
+
+        AmountFrame = Frames.Count;
     }
 }

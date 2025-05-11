@@ -1,110 +1,164 @@
-﻿using EntityLib;
-using MapLib;
-using ScreenLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ScreenLib;
 using SFML.System;
-using EntityLib.Player;
-using SFML.Graphics;
 using HitBoxLib.Segment.SignsTypeSide;
 using HitBoxLib.PositionObject;
 using ProtoRender.Object;
+using ProtoRender.Map;
+using HitBoxLib.HitBoxSegment;
+using System;
+
 
 
 namespace MoveLib.Move;
+/// <summary>
+/// Provides collision detection logic for units and obstacles on the map.
+/// </summary>
 public static class Collision
 {
     private static int _radiusCheckTouch = Screen.Setting.Tile;
-    /// <summary>Collisions hitbox radius definition</summary>
-    public static int RadiusCheckTouch 
+
+    /// <summary>
+    /// Gets or sets the tile-based radius used to check nearby obstacles for collision.
+    /// </summary>
+    public static int RadiusCheckTouch
     {
         get => _radiusCheckTouch;
         set => _radiusCheckTouch = value * Screen.Setting.Tile;
     }
 
-    public static bool CollisionZ(IObject obstacle, Entity entity)
+    /// <summary>
+    /// Checks for collision along the Z-axis between a unit and an obstacle.
+    /// </summary>
+    /// <param name="obstacleBox">HitBox of the obstacle.</param>
+    /// <param name="unitBox">HitBox of the unit.</param>
+    /// <returns>True if the Z ranges overlap, otherwise false.</returns>
+    public static bool CheckZCollision(HitBox obstacleBox, HitBox unitBox)
     {
-        double entityDown = (entity.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
-        double entityUp = (entity.HitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
-        double obstacleDown = (obstacle.HitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0);
-        double obstacleUp = (obstacle.HitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0);
-
-
-
-        if (entityDown >= obstacleDown && entityUp <= obstacleUp) 
-        {
-            return true;
-        }
-        else if (entityDown >= obstacleDown && entityDown <= obstacleUp && entityUp >= obstacleUp)
-        {
-            return true;
-        }
-
-        return false;
-    }
-    public static bool IsCollision(IObject obstacle, Entity entity, double nextX, double nextY)
-    {
-        double originalEntityX = entity.X.Axis;
-        double originalEntityY = entity.Y.Axis;
-
-        entity.X.Axis = nextX;
-        entity.Y.Axis = nextY;
-
-        var entityHitBox = entity.HitBox;
-        var obstacleHitBox = obstacle.HitBox;
-
-        double entityMinX = (entityHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-        double entityMaxX = (entityHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-        double obstacleMinX = (obstacleHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-        double obstacleMaxX = (obstacleHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-
-        double entityMinY = (entityHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-        double entityMaxY = (entityHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
-        double obstacleMinY = (obstacleHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-        double obstacleMaxY = (obstacleHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
-
-
-        bool isCollidingX = entityMaxX >= obstacleMinX && entityMinX <= obstacleMaxX;
-        bool isCollidingY = entityMaxY >= obstacleMinY && entityMinY <= obstacleMaxY;
-        bool isCollidingZ = CollisionZ(obstacle, entity);
-
-
-        entity.X.Axis = originalEntityX;
-        entity.Y.Axis = originalEntityY;
-      
-
-        bool generalColliding = false;
-
-        if ((isCollidingX && isCollidingY) == true && isCollidingZ == true)
-            generalColliding = true;
-        else
-            generalColliding = false;
-
-        return generalColliding && !obstacle.IsPassability;
+        double unitMinZ = unitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0;
+        double unitMaxZ = unitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0;
+        double obsMinZ = obstacleBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0;
+        double obsMaxZ = obstacleBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0;
+        return (unitMinZ <= obsMinZ && (unitMaxZ >= obsMaxZ || unitMaxZ <= obsMaxZ && unitMaxZ >= obsMinZ)) ||
+               (unitMinZ >= obsMinZ && (unitMinZ <= obsMaxZ && (unitMaxZ >= obsMaxZ || unitMaxZ <= obsMaxZ && unitMaxZ >= obsMinZ)));
     }
 
-    private static bool IsTouch(Map Map, Entity entity, double nextX, double nextY)
+    /// <summary>
+    /// Determines whether the unit's hitbox collides with an obstacle's hitbox at the given next position.
+    /// </summary>
+    /// <returns>True if a collision occurs and the obstacle is impassable.</returns>
+    public static bool IsCollidingWithObstacle(IObject obstacle, IUnit unit, double nextX, double nextY)
     {
-        var (playerCellX, playerCellY) = Screen.Mapping(entity.X.Axis, entity.Y.Axis);
+        double originalX = unit.X.Axis;
+        double originalY = unit.Y.Axis;
 
-        int minX = playerCellX - RadiusCheckTouch;
-        int maxX = playerCellX + RadiusCheckTouch;
-        int minY = playerCellY - RadiusCheckTouch;
-        int maxY = playerCellY + RadiusCheckTouch;
+        unit.X.Axis = nextX;
+        unit.Y.Axis = nextY;
+
+        var obsBox = obstacle.HitBox;
+        var unitBox = unit.HitBox;
+
+        double unitMinX = unitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0;
+        double unitMaxX = unitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0;
+        double obsMinX = obsBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0;
+        double obsMaxX = obsBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0;
+
+        double unitMinY = unitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0;
+        double unitMaxY = unitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0;
+        double obsMinY = obsBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0;
+        double obsMaxY = obsBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0;
+
+        bool overlapX = unitMaxX >= obsMinX && unitMinX <= obsMaxX;
+        bool overlapY = unitMaxY >= obsMinY && unitMinY <= obsMaxY;
+        bool overlapZ = CheckZCollision(obsBox, unitBox);
+
+        unit.X.Axis = originalX;
+        unit.Y.Axis = originalY;
+
+        return (overlapX && overlapY && overlapZ) && !obstacle.IsPassability;
+    }
+
+    /// <summary>
+    /// Returns the 3D collision point if a collision occurs.
+    /// </summary>
+    /// <returns>The collision point or null if no collision.</returns>
+    public static Vector3f? GetCollisionPoint(IObject obstacle, IUnit unit, double nextX, double nextY)
+    {
+        double originalX = unit.X.Axis;
+        double originalY = unit.Y.Axis;
+
+        unit.X.Axis = nextX;
+        unit.Y.Axis = nextY;
+
+        var unitBox = unit.HitBox;
+        var obsBox = obstacle.HitBox;
+
+        double unitMinX = unitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0.0;
+        double unitMaxX = unitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0.0;
+        double unitMinY = unitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0.0;
+        double unitMaxY = unitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0.0;
+        double unitMinZ = unitBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0.0;
+        double unitMaxZ = unitBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0.0;
+
+        double obsMinX = obsBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0.0;
+        double obsMaxX = obsBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0.0;
+        double obsMinY = obsBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0.0;
+        double obsMaxY = obsBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0.0;
+        double obsMinZ = obsBox[CoordinatePlane.Z, SideSize.Smaller]?.Side ?? 0.0;
+        double obsMaxZ = obsBox[CoordinatePlane.Z, SideSize.Larger]?.Side ?? 0.0;
+
+        unit.X.Axis = originalX;
+        unit.Y.Axis = originalY;
+
+        bool overlapX = unitMaxX >= obsMinX && unitMinX <= obsMaxX;
+        bool overlapY = unitMaxY >= obsMinY && unitMinY <= obsMaxY;
+        bool overlapZ = CheckZCollision(obsBox, unitBox);
+
+        if (overlapX && overlapY && overlapZ)
+        {
+            double intersectMinX = (unitMinX + obsMinX) / 2;
+            double intersectMaxX = (unitMaxX + obsMaxX) / 2;
+
+            double intersectMinY = (unitMinY + obsMinY) / 2;
+            double intersectMaxY = (unitMaxY + obsMaxY) / 2;
+
+            double intersectMinZ = (unitMinZ + obsMinZ) / 2;
+            double intersectMaxZ = (unitMaxZ + obsMaxZ) / 2;
+
+            double collisionX = (intersectMinX + intersectMaxX) / 2.0;
+            double collisionY = (intersectMinY + intersectMaxY) / 2.0;
+            double collisionZ = (intersectMinZ + intersectMaxZ) / 2.0;
+
+            return new Vector3f((float)collisionX, (float)collisionY, (float)collisionZ);
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Checks if there are any collisions around the given unit in the target direction.
+    /// </summary>
+    private static bool HasNearbyCollision(IMap map, IUnit unit, double nextX, double nextY, List<IObject> ignoreList)
+    {
+        var (cellX, cellY) = Screen.Mapping(unit.X.Axis, unit.Y.Axis);
+
+        int minX = cellX - RadiusCheckTouch;
+        int maxX = cellX + RadiusCheckTouch;
+        int minY = cellY - RadiusCheckTouch;
+        int maxY = cellY + RadiusCheckTouch;
 
         for (int x = minX; x <= maxX; x += Screen.Setting.Tile)
         {
             for (int y = minY; y <= maxY; y += Screen.Setting.Tile)
             {
-                if (!Map.Obstacles.ContainsKey((x, y)))
+                if (!map.Obstacles.ContainsKey((x, y)))
                     continue;
 
-                foreach (var obstacle in Map.Obstacles[(x, y)])
+                foreach (var obstacle in map.Obstacles[(x, y)])
                 {
-                    if (IsCollision(obstacle, entity, nextX, nextY))
+                    if (obstacle == unit || ignoreList.Contains(obstacle))
+                        continue;
+
+                    if (IsCollidingWithObstacle(obstacle, unit, nextX, nextY))
                         return true;
                 }
             }
@@ -113,15 +167,81 @@ public static class Collision
         return false;
     }
 
-
-    public static void IsCollision(Map Map, Entity entity, double nextX, double nextY)
+    /// <summary>
+    /// Returns the first object the unit will collide with, and the point of collision.
+    /// </summary>
+    private static (IObject?, Vector3f?) GetFirstCollision(IMap map, IUnit unit, double nextX, double nextY, List<IUnit> ignoreList)
     {
-        double deltaX = Setting.MinDistanceFromWall / 2 * Math.Sign(nextX);
-        double deltaY = Setting.MinDistanceFromWall / 2 * Math.Sign(nextY);
+        var (cellX, cellY) = Screen.Mapping(unit.X.Axis, unit.Y.Axis);
 
-        if(nextX != 0 && !IsTouch(Map, entity, entity.X.Axis + nextX + deltaX, entity.Y.Axis))
-            entity.X.Axis += nextX;
-        if (nextY != 0 && !IsTouch(Map, entity, entity.X.Axis, entity.Y.Axis + nextY + deltaY))
-            entity.Y.Axis += nextY;
+        int minX = cellX - RadiusCheckTouch;
+        int maxX = cellX + RadiusCheckTouch;
+        int minY = cellY - RadiusCheckTouch;
+        int maxY = cellY + RadiusCheckTouch;
+
+        for (int x = minX; x <= maxX; x += Screen.Setting.Tile)
+        {
+            for (int y = minY; y <= maxY; y += Screen.Setting.Tile)
+            {
+                if (!map.Obstacles.ContainsKey((x, y)))
+                    continue;
+
+                foreach (var obstacle in map.Obstacles[(x, y)])
+                {
+                    if (obstacle == unit || ignoreList.Contains(obstacle))
+                        continue;
+
+                    var point = GetCollisionPoint(obstacle, unit, nextX, nextY);
+                    if (point != null)
+                        return (obstacle, point);
+                }
+            }
+        }
+
+        return (null, null);
+    }
+
+    /// <summary>
+    /// Attempts to move the unit and detects if a collision occurs.
+    /// </summary>
+    /// <returns>True if there was a collision; otherwise, false.</returns>
+    public static bool IsCollision(IMap map, IUnit unit, double nextX, double nextY, List<IObject> ignoreList)
+    {
+        double offsetX = unit.MinDistanceFromWall / 2 * Math.Sign(nextX);
+        double offsetY = unit.MinDistanceFromWall / 2 * Math.Sign(nextY);
+
+        bool collisionX = nextX != 0 && HasNearbyCollision(map, unit, unit.X.Axis + nextX + offsetX, unit.Y.Axis, ignoreList);
+        bool collisionY = nextY != 0 && HasNearbyCollision(map, unit, unit.X.Axis, unit.Y.Axis + nextY + offsetY, ignoreList);
+
+        if (!collisionX)
+            unit.X.Axis += nextX;
+
+        if (!collisionY)
+            unit.Y.Axis += nextY;
+
+        return collisionX || collisionY;
+    }
+
+    /// <summary>
+    /// Attempts to move the unit and returns the first object it collides with and the collision point.
+    /// </summary>
+    /// <returns>Tuple containing the colliding object and collision point if any.</returns>
+    public static (IObject? Obj, Vector3f? Coordinate) GetCollisionDetails(IMap map, IUnit unit, double nextX, double nextY, List<IUnit> ignoreList)
+    {
+        double offsetX = unit.MinDistanceFromWall / 2 * Math.Sign(nextX);
+        double offsetY = unit.MinDistanceFromWall / 2 * Math.Sign(nextY);
+
+        var collisionX = GetFirstCollision(map, unit, unit.X.Axis + nextX + offsetX, unit.Y.Axis, ignoreList);
+        var collisionY = GetFirstCollision(map, unit, unit.X.Axis, unit.Y.Axis + nextY + offsetY, ignoreList);
+
+        if (nextX != 0 && collisionX.Item1 == null)
+            unit.X.Axis += nextX;
+
+        if (nextY != 0 && collisionY.Item1 == null)
+            unit.Y.Axis += nextY;
+
+        return collisionX.Item1 != null ? collisionX :
+               collisionY.Item1 != null ? collisionY :
+               (null, null);
     }
 }

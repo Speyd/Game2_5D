@@ -30,7 +30,7 @@ public static class Adder
     }
     public static void AddTexture(SpriteObstacle sprite, string path)
     {
-        sprite.Animation.AddFrame(ImageLoader.LoadFrame(path));
+        sprite.Animation.AddFrames(ImageLoader.TexturesLoad(path));
     }
     public static void AddTextureFromFolder(SpriteObstacle sprite, 
         string path, bool isDirectory, bool folderAccounting)

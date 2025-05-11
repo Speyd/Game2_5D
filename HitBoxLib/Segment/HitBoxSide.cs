@@ -7,6 +7,7 @@ using HitBoxLib.PositionObject;
 using HitBoxLib.Segment.SignsTypeSide;
 
 namespace HitBoxLib.HitBoxSegment;
+/// <summary>Hitbox side</summary>
 public class HitBoxSide
 {
     /// <summary>
@@ -40,7 +41,10 @@ public class HitBoxSide
     /// </summary>
     public SideSize SideSize { get; init; }
 
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HitBoxSide"/> class by copying values from another instance.
+    /// </summary>
+    /// <param name="hitBoxSide">The instance to copy from.</param>
     public HitBoxSide(HitBoxSide hitBoxSide)
     {
         SideSize = hitBoxSide.SideSize;
@@ -48,8 +52,14 @@ public class HitBoxSide
         CoordinatePlane = hitBoxSide.CoordinatePlane;
         Side = hitBoxSide.Side;
         OrginalSide = hitBoxSide.OrginalSide;
-        Offset = hitBoxSide.Offset;
+        _offset = hitBoxSide.Offset;
     }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HitBoxSide"/> class using a coordinate, side size, and offset.
+    /// </summary>
+    /// <param name="coordinate">The coordinate from which to derive the side value.</param>
+    /// <param name="sideSize">The size of the side (Smaller or Larger).</param>
+    /// <param name="offset">The offset to apply to the side.</param>
     public HitBoxSide(Coordinate coordinate, SideSize sideSize, double offset)
     {
         SideSize = sideSize;
@@ -59,6 +69,12 @@ public class HitBoxSide
         OrginalSide = Side;
         Offset = offset;
     }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HitBoxSide"/> class with a given coordinate plane, side size, and offset.
+    /// </summary>
+    /// <param name="coordinatePlane">The coordinate plane (X, Y, or Z).</param>
+    /// <param name="sideSize">The size of the side (Smaller or Larger).</param>
+    /// <param name="offset">The offset to apply to the side.</param>
     public HitBoxSide(CoordinatePlane coordinatePlane, SideSize sideSize, double offset)
     {
         SideSize = sideSize;
@@ -66,6 +82,11 @@ public class HitBoxSide
         CoordinatePlane = coordinatePlane;
         Offset = offset;
     }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="HitBoxSide"/> class with default values.
+    /// </summary>
+    /// <param name="coordinatePlane">The coordinate plane (X, Y, or Z).</param>
+    /// <param name="sideSize">The size of the side (Smaller or Larger).</param>
     public HitBoxSide(CoordinatePlane coordinatePlane, SideSize sideSize)
     {
         SideSize = sideSize;
@@ -76,7 +97,14 @@ public class HitBoxSide
         Offset = 0;
     }
 
-
+    /// <summary>
+    /// Sets a new offset and updates the side value using the provided coordinate.
+    /// </summary>
+    /// <param name="coordinate">The coordinate used to calculate the original side value.</param>
+    /// <param name="offset">The offset to apply.</param>
+    /// <exception cref="Exception">
+    /// Thrown if the coordinate's plane does not match the side's coordinate plane.
+    /// </exception>
     public void SetOffset(Coordinate coordinate, double offset)
     {
         if (coordinate.CoordinatePlane != CoordinatePlane)
@@ -86,11 +114,22 @@ public class HitBoxSide
         Offset = offset;
         Side = OrginalSide + offset;
     }
+    /// <summary>
+    /// Sets a new offset using the existing original side value.
+    /// </summary>
+    /// <param name="offset">The offset to apply to the original side.</param>
     public void SetOffset(double offset)
     {
         Offset = offset;
         Side = OrginalSide + Offset;
     }
+    /// <summary>
+    /// Sets the side value based on a new coordinate, using the existing offset.
+    /// </summary>
+    /// <param name="coordinate">The coordinate used to update the original side value.</param>
+    /// <exception cref="Exception">
+    /// Thrown if the coordinate's plane does not match the side's coordinate plane.
+    /// </exception>
     public void SetSide(Coordinate coordinate)
     {
         if (coordinate.CoordinatePlane != CoordinatePlane)

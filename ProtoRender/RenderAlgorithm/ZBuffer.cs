@@ -11,9 +11,19 @@ using SFML.Window;
 
 
 namespace ProtoRender.RenderAlgorithm;
+/// <summary>
+/// A static class that manages Z-buffer rendering by storing and sorting drawable objects based on their depth.
+/// </summary>
 public class ZBuffer
 {
+    /// <summary>
+    /// A thread-safe collection that stores tuples of depth and drawable objects with optional render states.
+    /// </summary>
     private static ConcurrentBag<(double, (Drawable, RenderStates?))> zBuffer = new();
+
+    /// <summary>
+    /// Sorts all stored drawables by their depth in descending order and adds them to the render pipeline.
+    /// </summary>
     public static void Render()
     {
         var sortedBuffer = zBuffer.AsParallel().OrderByDescending(kv => kv.Item1);
@@ -25,8 +35,14 @@ public class ZBuffer
         zBuffer.Clear();
     }
 
+    /// <summary>
+    /// Adds a drawable object to the Z-buffer with the specified depth and optional render state.
+    /// </summary>
+    /// <param name="drawable">The drawable object to be rendered.</param>
+    /// <param name="depth">The depth value used for sorting. Higher values are rendered first.</param>
+    /// <param name="renderStates">Optional rendering states associated with the drawable.</param>
     public static void AddToZBuffer(Drawable drawable, double depth, RenderStates? renderStates = null)
     {
-        zBuffer.Add((depth,(drawable, renderStates)));
+        zBuffer.Add((depth, (drawable, renderStates)));
     }
 }

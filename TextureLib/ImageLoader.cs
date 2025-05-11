@@ -11,8 +11,10 @@ namespace TextureLib
     /// <summary>Uploads and checks images</summary>
     public static class ImageLoader
     {
-        private static Dictionary<string, Func<string, TextureObstacle>> frameExtensions;
-        private static Dictionary<string, Func<string, List<TextureObstacle>>> multiFrameExtensions;
+        /// <summary>A dictionary of image types (which only store one frame in themselves) and a method that will be called when it is added</summary>
+        public static Dictionary<string, Func<string, TextureObstacle>> frameExtensions;
+        /// <summary>A dictionary of image types (which several frames store in themselves) and a method that will be called when it is added</summary>
+        public static Dictionary<string, Func<string, List<TextureObstacle>>> multiFrameExtensions;
 
         static ImageLoader()
         {
@@ -97,7 +99,7 @@ namespace TextureLib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error when enabling gif: {ex.Message}");
+                Console.WriteLine($"Error when enabling multi frame type: {ex.Message}");
             }
             finally
             {
@@ -176,7 +178,9 @@ namespace TextureLib
             foreach (var file in files)
             {
                 IsTrueImagePath(file);
-                frames.Add(new TextureObstacle(file));
+                var texture = TextureLoad(file);
+                if(texture is not null)
+                    frames.AddRange(texture);
             }
 
             return frames;

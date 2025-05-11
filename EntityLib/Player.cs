@@ -11,21 +11,26 @@ using System.Reflection.Metadata;
 
 
 namespace EntityLib.Player;
-public class Player : Entity
-{
-    public delegate void ControlAction();
-    /// <summary>Delegate for calling the method that services the buttons</summary>
-    public ControlAction OnControlAction;
 
-    public Player(double X = 0, float Y = 0, double entityFov = Math.PI / 3)
+/// <summary>Player</summary>
+//public class Player : Entity
+//{
+//    /// <summary>A delegate that causes keystrokes to be pressed</summary>
+//    public delegate void ControlAction();
+//    /// <summary>Delegate for calling the method that services the buttons</summary>
+//    public ControlAction? OnControlAction;
 
-        :base(X, Y, entityFov)
-    {}
+//    /// <summary>Player сlass constructor</summary>
+//    public Player(double X = 0, float Y = 0, double entityFov = Math.PI / 3)
 
-    public void MakePressed()
-    {
-        OnControlAction?.Invoke();
-    }
+//        :base(X, Y, entityFov)
+//    {}
+
+//    /// <summary>Make Pressed</summary>
+//    public void MakePressed()
+//    {
+//        OnControlAction?.Invoke();
+//    }
 
 
-}
+//}

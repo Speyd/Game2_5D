@@ -48,11 +48,11 @@ public class FPS : RenderText
         fpsTimer += deltaTime;
         if (fpsTimer >= 0.1f)
         {
-            renderText.DisplayedString = "FPS: " + Fps.ToString("0");
+            Text.DisplayedString = "FPS: " + Fps.ToString("0");
             fpsTimer = 0f;
         }
 
-        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, renderText);
+        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, Text);
     }
 
     /// <summary>Get deltaTime</summary>

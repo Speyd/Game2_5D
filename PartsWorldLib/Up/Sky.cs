@@ -1,5 +1,5 @@
-﻿using EntityLib.Player;
-using NGenerics.Sorting;
+﻿using NGenerics.Sorting;
+using ProtoRender.Object;
 using ScreenLib;
 using ScreenLib.Output;
 using SFML.Graphics;
@@ -10,7 +10,6 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Formats.Asn1.AsnWriter;
 
 
 namespace PartsWorldLib.Up;
@@ -36,12 +35,12 @@ public class Sky : IUpPart
         RenderSprite = new Sprite(Texture);
     }
 
-    public void Render(Player player)
+    public void Render(IUnit unit)
     {
         if (Texture is null)
             return;
 
-        float angleInDegrees = (float)(player.Angle * normAngle) % 360;
+        float angleInDegrees = (float)(unit.Angle * normAngle) % 360;
         if (angleInDegrees < 0) angleInDegrees += 360;
         float skyOffset = -(angleInDegrees * Screen.ScreenWidth / 360);
 

@@ -5,13 +5,13 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using EntityLib.Player;
 using ScreenLib;
 using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
 using EffectLib;
 using TextureLib;
+using ProtoRender.Object;
 
 namespace PartsWorldLib.Down;
 public class TexturedFloor : IDownPart
@@ -80,23 +80,23 @@ public class TexturedFloor : IDownPart
         Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
         Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
     }
-    private void SetDynamicUniformShader(Player player)
+    private void SetDynamicUniformShader(IUnit unit)
     {
         Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
 
-        Shader.SetUniform("u_playerPos", player.Position);
-        Shader.SetUniform("u_playerDir", player.Direction);
-        Shader.SetUniform("u_playerPlane", player.Plane);
-        Shader.SetUniform("u_verticalAngle", (float)player.VerticalAngle);
+        Shader.SetUniform("u_playerPos", new Vector2f((float)unit.X.Axis, (float)unit.Y.Axis));
+        Shader.SetUniform("u_playerDir", unit.Direction);
+        Shader.SetUniform("u_playerPlane", unit.Plane);
+        Shader.SetUniform("u_verticalAngle", (float)unit.VerticalAngle);
     }
 
-    public void Render(Player player)
+    public void Render(IUnit unit)
     {
-        uint halfHeight = (uint)RenderPartsWorld.NormalizeHeigthDownPart(player);
+        uint halfHeight = (uint)RenderPartsWorld.NormalizeHeigthDownPart(unit);
         FirstStepRender.Clear(ClearColor);
         SecondStepRender.Clear(ClearColor);
 
-        SetDynamicUniformShader(player);
+        SetDynamicUniformShader(unit);
         Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), new Color(255, 255, 255));
         Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, halfHeight), new Color(255, 255, 255));
@@ -105,7 +105,7 @@ public class TexturedFloor : IDownPart
         FirstStepRender.Draw(Vertices, new RenderStates(Shader));
         FirstStepRender.Display();
 
-        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, player.VerticalAngle));
+        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, unit.VerticalAngle));
         SecondStepRender.Display();
         Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, Sprite);
     }

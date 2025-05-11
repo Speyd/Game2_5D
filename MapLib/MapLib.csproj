@@ -11,7 +11,7 @@
     <Product>EnginePseudo3D</Product>
     <Company>Speyd</Company>
     <Authors>Speyd</Authors>
-    <Version>1.0.6</Version>
+    <Version>1.5.6</Version>
     <Copyright>Speyd</Copyright>
     <Description>This is a library for creating and using a world map.</Description>
     <PackageIcon>iconNuGet.png</PackageIcon>
@@ -36,10 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EnginePseudo3D.EntityLib" Version="1.0.3" />
-	<PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.0.6" />
-	<PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.2" />
-	<PackageReference Include="EnginePseudo3D.TextureLib" Version="1.0.9" />
+	<PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.6.0" />
+	<PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.3" />
+	<PackageReference Include="EnginePseudo3D.TextureLib" Version="1.1.2" />
   </ItemGroup>
 
 </Project>

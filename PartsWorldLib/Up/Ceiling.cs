@@ -1,4 +1,4 @@
-﻿using EntityLib.Player;
+﻿using ProtoRender.Object;
 using ScreenLib;
 using ScreenLib.Output;
 using SFML.Graphics;
@@ -24,9 +24,9 @@ public class Ceiling : IUpPart
         : this(new SFML.Graphics.Color(100, 149, 237))
     { }
 
-    public void Render(Player player)
+    public void Render(IUnit unit)
     {
-        float normalizeHeight =  RenderPartsWorld.NormalizeHeigthUpPart(player);
+        float normalizeHeight =  RenderPartsWorld.NormalizeHeigthUpPart(unit);
 
         Vertices[0] = new Vertex(new Vector2f(0, 0), ColorFilling);
         Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, 0), ColorFilling);

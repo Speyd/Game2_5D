@@ -1,19 +1,9 @@
-﻿using EntityLib;
-using EntityLib.Player;
-using ScreenLib;
+﻿using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MiniMapLib;
-using MapLib;
 using ProtoRender.Map;
+using ProtoRender.Object;
 
 namespace MiniMapLib.ObjectInMap.Obstacles;
 internal class ObstacleOutput
@@ -21,8 +11,7 @@ internal class ObstacleOutput
     //----------Setting------------
     private SettingMap.Setting Setting { get; init; }
 
-    private delegate void Render(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization);
-    private delegate void ParallelRender(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization);
+    private delegate void Render(IUnit unit, RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization, bool IsParallel = false);
 
     /// <summary>Minimum number of objects on the minimap after which to connect Parallel</summary>
     private const int minParallelRenderObject = 100;
@@ -37,15 +26,9 @@ internal class ObstacleOutput
         {
             _renderMode = value;
             SetRenderDelegate();
-            SetParallelRenderDelegate();
         }
     }
     private Render? RenderDelegate { get; set; } = null;
-    private ParallelRender? ParallelRenderDelegate { get; set; } = null;
-
-    //---------Player----------
-    private Entity Player {  get; init; }
-
 
     //----------Сoordinates------------
     /// <summary>Player coordinates converted to minimap coordinates</summary>
@@ -59,9 +42,8 @@ internal class ObstacleOutput
     private readonly ConcurrentBag<RectangleShape> renderQueue = new ConcurrentBag<RectangleShape>();
 
 
-    public ObstacleOutput(Entity player, SettingMap.Setting setting, DisplayRenderMode displayRender = DisplayRenderMode.PlayersVisibilityArea)
+    public ObstacleOutput(SettingMap.Setting setting, DisplayRenderMode displayRender = DisplayRenderMode.UnitVisibilityArea)
     {
-        Player = player;
         Setting = setting;
 
         RectangleShape = new RectangleShape();
@@ -79,34 +61,18 @@ internal class ObstacleOutput
                 RenderDelegate = RenderEntireArea; break;
             case DisplayRenderMode.SpecificArea:
                 RenderDelegate = RenderSpecificArea; break;
-            case DisplayRenderMode.PlayersVisibilityArea:
-                RenderDelegate = RenderPlayersVisibilityArea; break;
+            case DisplayRenderMode.UnitVisibilityArea:
+                RenderDelegate = RenderUnitVisibilityArea; break;
             default:
                 RenderDelegate = RenderEntireArea; break;
         }
     }
-    private void SetParallelRenderDelegate()
+    private void SetMapСoordinatesUnit(IUnit unit)
     {
-        switch (_renderMode)
-        {
-            case DisplayRenderMode.EntireArea:
-                ParallelRenderDelegate = ParallelRenderEntireArea; break;
-            case DisplayRenderMode.SpecificArea:
-                ParallelRenderDelegate = ParallelRenderSpecificArea; break;
-            case DisplayRenderMode.PlayersVisibilityArea:
-                ParallelRenderDelegate = ParallelRenderPlayersVisibilityArea; break;
-            default:
-                ParallelRenderDelegate = ParallelRenderEntireArea; break;
-        }
+        MapPlayer.X = (int)(unit.X.Axis / Setting.MapScale);
+        MapPlayer.Y = (int)(unit.Y.Axis / Setting.MapScale);
     }
-    private void SetMapСoordinatesPlayer()
-    {
-        MapPlayer.X = (int)(Player.X.Axis / Setting.MapScale);
-        MapPlayer.Y = (int)(Player.Y.Axis / Setting.MapScale);
-    }
-
-    #region UpdateMaterial
-    private void UpdateMaterial(IMiniMapRenderable obstacle)
+    private void UpdateMaterial(RectangleShape RectangleShape, IMiniMapRenderable obstacle)
     {
         switch (Setting.OutputRenderMethod)
         {
@@ -116,19 +82,9 @@ internal class ObstacleOutput
                 obstacle.FillingColorShape(RectangleShape, Setting.OutLine); break;
         }
     }
-    private void ParallelUpdateMaterial(RectangleShape RectangleShape, IMiniMapRenderable obstacle)
-    {
-        switch (Setting.OutputRenderMethod)
-        {
-            case OutputRenderMethod.Texture:
-                obstacle.FillingTextureShape(RectangleShape); break;
-            case OutputRenderMethod.Color:
-                obstacle.FillingColorShape(RectangleShape, Setting.OutLine); break;
-        }
-    }
-    #endregion
 
-    #region RectangleShape
+
+
     bool IsOutOfBounds(RenderTexture window, RectangleShape rect)
     {
         Vector2f pos = rect.Position;
@@ -138,118 +94,56 @@ internal class ObstacleOutput
         return (pos.X + size.X < 0 || pos.Y + size.Y < 0 ||
                 pos.X > windowSize.X || pos.Y > windowSize.Y);
     }
-    private void SetRectangleShape(RenderTexture Window, IMiniMapRenderable obstacle, float normalizator)
+    private void SetRectangleShape(RenderTexture Window, 
+        Vector2f mapObstacle, IMiniMapRenderable obstacle,
+        float normalizator, bool IsParallel = false)
     {
-        RectangleShape = new RectangleShape();
-
         float sizeNormalization = obstacle.SizeOffsetMap(normalizator);
-        float positionNormalization = obstacle.CoordinatesOffsetMap(normalizator);
-
-        RectangleShape.Size = new Vector2f(sizeNormalization, sizeNormalization);
-        RectangleShape.Position = new Vector2f(
-            (float)(Setting.CenterX - (MapObstacle.X - MapPlayer.X) - positionNormalization),
-            (float)(Setting.CenterY - (MapObstacle.Y - MapPlayer.Y) - positionNormalization)
-        );
-
-        if (IsOutOfBounds(Window, RectangleShape))
+        if (float.IsNaN(sizeNormalization) || sizeNormalization <= 0)
             return;
 
-        UpdateMaterial(obstacle);
-        Window.Draw(RectangleShape);
-    }
-    private void ParallelSetRectangleShape(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float normalizator)
-    {
-       
-        RectangleShape RectangleShape = new RectangleShape();
-
-        float sizeNormalization = obstacle.SizeOffsetMap(normalizator);
         float positionNormalization = obstacle.CoordinatesOffsetMap(normalizator);
+        if (float.IsNaN(positionNormalization))
+            return;
 
-        RectangleShape.Size = new Vector2f(sizeNormalization, sizeNormalization);
-        RectangleShape.Position = new Vector2f(
+        var shape = new RectangleShape();
+        shape.Size = new Vector2f(sizeNormalization, sizeNormalization);
+        shape.Position = new Vector2f(
             (float)(Setting.CenterX - (mapObstacle.X - MapPlayer.X) - positionNormalization),
             (float)(Setting.CenterY - (mapObstacle.Y - MapPlayer.Y) - positionNormalization)
         );
 
-        if (IsOutOfBounds(Window, RectangleShape))
+        if (IsOutOfBounds(Window, shape))
             return;
 
-        ParallelUpdateMaterial(RectangleShape, obstacle);
-        renderQueue.Add(RectangleShape);
-    }
-    #endregion
+        UpdateMaterial(shape, obstacle);
 
-    #region SpecificArea
-    private void RenderSpecificArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
-    {
-        double distance = Math.Sqrt(Math.Pow(MapObstacle.X - MapPlayer.X, 2) + Math.Pow(MapObstacle.Y - MapPlayer.Y, 2));
-
-        if (distance <= Player.MaxRenderTile / Screen.Setting.Tile * Setting.MapTile)
-            SetRectangleShape(Window, obstacle, sizeNormalization);
+        if (IsParallel)
+            renderQueue.Add(shape);
+        else
+            Window.Draw(shape);
     }
-    private void ParallelRenderSpecificArea(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization)
+
+    private void RenderSpecificArea(IUnit unit, RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization, bool IsParallel = false)
     {
         double distance = Math.Sqrt(Math.Pow(mapObstacle.X - MapPlayer.X, 2) + Math.Pow(mapObstacle.Y - MapPlayer.Y, 2));
 
-        if (distance <= Player.MaxRenderTile / Screen.Setting.Tile * Setting.MapTile)
-            ParallelSetRectangleShape(Window, mapObstacle, obstacle, sizeNormalization);
+        if (distance <= unit.MaxRenderTile / Screen.Setting.Tile * Setting.MapTile)
+            SetRectangleShape(Window, mapObstacle, obstacle, sizeNormalization, IsParallel);
     }
-    #endregion
-
-    #region EntireArea
-    private void RenderEntireArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
+    private void RenderEntireArea(IUnit unit, RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization, bool IsParallel = false)
     {
-        SetRectangleShape(Window, obstacle, sizeNormalization);
+        SetRectangleShape(Window, mapObstacle, obstacle, sizeNormalization);
     }
-    private void ParallelRenderEntireArea(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization)
+    private void RenderUnitVisibilityArea(IUnit unit, RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization, bool IsParallel = false)
     {
-        ParallelSetRectangleShape(Window, mapObstacle, obstacle, sizeNormalization);
-    }
-    #endregion
+        double angleToObstacle = DataPipes.MathUtils.NormalizeAngleDifference(unit.Angle, DataPipes.MathUtils.CalculateAngleToTarget(mapObstacle, MapPlayer));
 
-    #region PlayersVisibilityArea
-    public double NormalizationAngle(double spriteAngle)
-    {
-       
-        double angleDifference = spriteAngle - Player.Angle;
-
-        if (angleDifference < -Math.PI) angleDifference += 2 * Math.PI;
-        if (angleDifference > Math.PI) angleDifference -= 2 * Math.PI;
-        return angleDifference;
+        if (Math.Abs(angleToObstacle) <= unit.HalfFov)
+            RenderSpecificArea(unit, Window, mapObstacle, obstacle, sizeNormalization);
     }
 
 
-    public double CalculationObstacleAngle()
-    {
-        double dx = MapObstacle.X - MapPlayer.X;
-        double dy = MapObstacle.Y - MapPlayer.Y;
-
-        return Math.Atan2(dy, dx);
-    }
-    public double ParallelCalculationObstacleAngle(Vector2f mapObstacle)
-    {
-        double dx = mapObstacle.X - MapPlayer.X;
-        double dy = mapObstacle.Y - MapPlayer.Y;
-
-        return Math.Atan2(dy, dx);
-    }
-
-
-    private void RenderPlayersVisibilityArea(RenderTexture Window, IMiniMapRenderable obstacle, float sizeNormalization)
-    {
-        double angleToObstacle = NormalizationAngle(CalculationObstacleAngle());
-
-        if (Math.Abs(angleToObstacle) <= Player.HalfFov)
-            RenderSpecificArea(Window, obstacle, sizeNormalization);
-    }
-    private void ParallelRenderPlayersVisibilityArea(RenderTexture Window, Vector2f mapObstacle, IMiniMapRenderable obstacle, float sizeNormalization)
-    {
-        double angleToObstacle = NormalizationAngle(ParallelCalculationObstacleAngle(mapObstacle));
-
-        if (Math.Abs(angleToObstacle) <= Player.HalfFov)
-            ParallelRenderSpecificArea(Window, mapObstacle, obstacle, sizeNormalization);
-    }
-    #endregion
 
     public void RenderQueue(RenderTexture Window)
     {
@@ -260,47 +154,80 @@ internal class ObstacleOutput
 
         renderQueue.Clear();
     }
-    private void ParallelCyclicRender(Map map, RenderTexture Window)
+    private void ParallelCyclicRender(IMap map, IUnit unit, RenderTexture Window)
     {
-        if (ParallelRenderDelegate is null)
+        if (RenderDelegate is null)
             return;
 
-        Parallel.ForEach(map.Obstacles.Values, Screen.Setting.ParallelOptions, obstacles =>
+        var obstacleValues = map.Obstacles.Values
+         .Select(obstaclesList =>
+         {
+             lock (obstaclesList)
+             {
+                 return obstaclesList.ToList();
+             }
+         })
+         .ToList();
+
+
+        Parallel.ForEach(obstacleValues, Screen.Setting.ParallelOptions, obstacles =>
         {
             float sizeNormalization = Setting.MapTile / obstacles.Count;
             foreach (var obstacle in obstacles)
             {
+                if (obstacle == unit)
+                    continue;
+
                 var mapObstacle = obstacle.ConversionToMapCoordinates(Setting.MapTile);
-                ParallelRenderDelegate(Window, mapObstacle, obstacle, sizeNormalization);
+                RenderDelegate(unit, Window, mapObstacle, obstacle, sizeNormalization, true);
             }
         });
+
         RenderQueue(Window);
     }
-    private void CyclicRender(Map map, RenderTexture Window)
+
+    private void CyclicRender(IMap map, IUnit unit, RenderTexture Window)
     {
         if (RenderDelegate is null)
             return;
 
-        foreach (var obstacles in map.Obstacles.Values)
+        var obstacleValues = map.Obstacles.Values
+        .Select(obstaclesList =>
+        {
+            lock (obstaclesList)
+            {
+                return obstaclesList.ToList();
+            }
+        })
+        .ToList();
+
+
+        foreach (var obstacles in obstacleValues)
         {
             float sizeNormalization = Setting.MapTile / obstacles.Count;
             foreach (var obstacle in obstacles)
             {
-                MapObstacle = obstacle.ConversionToMapCoordinates(Setting.MapTile);
-                RenderDelegate(Window, obstacle, sizeNormalization);
+                if (obstacle == unit)
+                    continue;
+
+                var mapObstacle = obstacle.ConversionToMapCoordinates(Setting.MapTile);
+                RenderDelegate(unit, Window, mapObstacle, obstacle, sizeNormalization, false);
             }
-        };
+        }
+
+        RenderQueue(Window);
     }
 
-    public void RenderObstacle(Map map, RenderTexture Window)
+
+    public void RenderObstacle(IMap map, IUnit unit, RenderTexture Window)
     {
         if (RenderDelegate is null)
             return;
 
-        SetMapСoordinatesPlayer();
+        SetMapСoordinatesUnit(unit);
         if (map.Obstacles.Count >= minParallelRenderObject)
-            ParallelCyclicRender(map, Window);
+            ParallelCyclicRender(map, unit, Window);
         else
-            CyclicRender(map, Window);
+            CyclicRender(map, unit, Window);
     }
 }

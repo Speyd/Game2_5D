@@ -1,5 +1,4 @@
-﻿using EntityLib.Player;
-using PartsWorldLib.Down;
+﻿using PartsWorldLib.Down;
 using PartsWorldLib.Up;
 using ScreenLib;
 using System;
@@ -10,6 +9,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using TextureLib;
+using ProtoRender.Object;
 
 namespace PartsWorldLib;
 public class RenderPartsWorld
@@ -33,23 +33,23 @@ public class RenderPartsWorld
     { }
 
 
-    public static float NormalizeHeigthDownPart(Player player)
+    public static float NormalizeHeigthDownPart(IUnit unit)
     {
-        if (player.VerticalAngle >= 0)
-            return Screen.Setting.HalfHeight / (float)(player.VerticalAngle + 1);
+        if (unit.VerticalAngle >= 0)
+            return Screen.Setting.HalfHeight / (float)(unit.VerticalAngle + 1);
         else
-            return Screen.Setting.HalfHeight * (float)(Math.Abs(player.VerticalAngle) + 1);
+            return Screen.Setting.HalfHeight * (float)(Math.Abs(unit.VerticalAngle) + 1);
     }
-    public static float NormalizeHeigthUpPart(Player player)
+    public static float NormalizeHeigthUpPart(IUnit unit)
     {
-        if (player.VerticalAngle >= 0)
-            return Screen.Setting.HalfHeight / (float)(player.VerticalAngle + 1);
+        if (unit.VerticalAngle >= 0)
+            return Screen.Setting.HalfHeight / (float)(unit.VerticalAngle + 1);
         else
-            return Screen.Setting.HalfHeight * (float)(Math.Abs(player.VerticalAngle) + 1);
+            return Screen.Setting.HalfHeight * (float)(Math.Abs(unit.VerticalAngle) + 1);
     }
-    public void Render(Player player)
+    public void Render(IUnit unit)
     {
-        UpPart?.Render(player);
-        DownPart?.Render(player);
+        UpPart?.Render(unit);
+        DownPart?.Render(unit);
     }
 }

@@ -1,5 +1,4 @@
 ﻿using SFML.Graphics;
-using EntityLib;
 using ScreenLib;
 using SFML.System;
 using ProtoRender.RenderInterface;
@@ -14,11 +13,15 @@ using ProtoRender.Object;
 namespace ObstacleLib;
 public abstract class Obstacle : IObject
 {
-    public virtual Action<IObject, double, double>? OnPositionChanged { get; set; }
-    
+    public Action<IObject>? OnPositionChanged { get; set; }
+
     public virtual Coordinate X { get; init; }
     public virtual Coordinate Y { get; init; }
     public virtual Coordinate Z { get; init; }
+
+    public int CellX { get; set; }
+    public int CellY { get; set; }
+
 
     public virtual HitBox HitBox { get; init; } = new HitBox();
 
@@ -73,7 +76,7 @@ public abstract class Obstacle : IObject
     /// <summary>The passability of an object through the current object</summary>
     public virtual bool IsPassability { get; set; }
     /// <summary>Possibility to add an object to the same cell where the current object is located</summary>
-    public virtual bool IsSingleAddable { get; init; } = true;
+    public virtual bool IsSingleAddable { get; set; } = false;
 
 
 
@@ -83,13 +86,20 @@ public abstract class Obstacle : IObject
         IsPassability = isPassability;
 
         X = new Coordinate(CoordinatePlane.X, HitBox);
+        X.AfterMoveAxis = UpdateCoordinate;
+
         Y = new Coordinate(CoordinatePlane.Y, HitBox);
+        Y.AfterMoveAxis = UpdateCoordinate;
+
         Z = new Coordinate(CoordinatePlane.Z, HitBox);
     }
 
 
-
-    public abstract void Render(Result result, Entity entity);
+    private void UpdateCoordinate()
+    {
+        OnPositionChanged?.Invoke(this);
+    }
+    public abstract void Render(Result result, IUnit unit);
     public abstract IObject GetCopy();
 
     #region IMapAdder
@@ -120,7 +130,7 @@ public abstract class Obstacle : IObject
     {
         return (float)ray * Screen.Setting.Scale;
     }
-    public abstract Vector2f GetPositionOnScreen(Result result, Entity entity);
+    public abstract CoordinateOnScreen GetPositionOnScreen(Result result, IUnit unit);
     #endregion
 
     #region IMiniMapRenderable
@@ -142,8 +152,8 @@ public abstract class Obstacle : IObject
     public virtual RenderInfo GetRenderHitBoxInfo()
     {
         RenderInfo hitboxObjectInfo = new RenderInfo();
-        hitboxObjectInfo.position = new Vector2f((float)X.Axis, (float)Y.Axis);
-        hitboxObjectInfo.body = HitBox.MainHitBox;
+        hitboxObjectInfo.position = new Vector3f((float)X.Axis, (float)Y.Axis, (float)Z.Axis);
+        hitboxObjectInfo.hitBox = HitBox;
         hitboxObjectInfo.worldToScreenY = WorldToScreenSideY;
         hitboxObjectInfo.worldToScreenX = WorldToScreenX;
 
