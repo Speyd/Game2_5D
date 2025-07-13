@@ -1,12 +1,6 @@
-﻿using ScreenLib;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextureLib;
+using TextureLib.Textures.Pair;
 
 
 namespace ProtoRender.Object;
@@ -38,7 +32,13 @@ public interface IDrawable
     /// </summary>
     /// <param name="heightObj">The raw height value.</param>
     /// <returns>The height scaled to match the rendering standard.</returns>
-    public float BringingToStandard(float heightObj);
+    public float BringingToStandardHeight(float heightObj);
+    /// <summary>
+    /// Adjusts the given object width to a standard rendering scale.
+    /// </summary>
+    /// <param name="widthObj">The raw width value.</param>
+    /// <returns>The width scaled to match the rendering standard.</returns>
+    public float BringingToStandardWidth(float widthObj);
 
     /// <summary>
     /// Calculates an adjusted multiplier based on the base multiplier value for consistent texture mapping or lighting.

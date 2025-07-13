@@ -1,9 +1,4 @@
 ﻿using SFML.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.System;
 
 
@@ -31,7 +26,6 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
         }
     }
 
-
     private float _maxZoom = 1.2f;
     /// <summary>
     /// Maximum allowed zoom value.
@@ -48,36 +42,6 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
         }
     }
 
-    /// <summary>
-    /// Updates the zoom level to a specified value, clamping it between the min and max zoom limits.
-    /// </summary>
-    /// <param name="value">The new zoom value to be set.</param>
-    public void UpdateZoom(float value)
-    {
-        if (value < _minZoom)
-            _zoom = _minZoom;
-        else if (value > _maxZoom)
-            _zoom = _maxZoom;
-        else
-            _zoom = value;
-    }
-    /// <summary>
-    /// Updates the zoom level by applying a multiplicative factor.
-    /// This allows zooming in or out incrementally.
-    /// </summary>
-    /// <param name="mult">The multiplicative zoom factor.</param>
-    public void UpdateZoomMult(float mult)
-    {
-        float newZoom = _zoom += mult;
-
-        if (newZoom < _minZoom)
-            _zoom = _minZoom;
-        else if (newZoom > _maxZoom)
-            _zoom = _maxZoom;
-        else
-            _zoom = newZoom;
-    }
-
     private float _zoom = 1;
     /// <summary>
     /// The current zoom level, which is clamped between the minimum and maximum zoom values.
@@ -87,14 +51,19 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
         get => _zoom;
         set => UpdateZoom(value);
     }
+
     /// <summary>
     /// The view used for zooming and setting the view of the minimap.
     /// </summary>
     private View View { get; init; } = new View();
+
     /// <summary>
     /// Flag that determines if zooming is allowed or not.
     /// </summary>
     public bool IsZooming { get; set; } = true;
+
+
+
     /// <summary>
     /// Applies the current zoom level to the given window's view, effectively zooming in or out.
     /// </summary>
@@ -110,5 +79,36 @@ public class ZoomMiniMap(SettingMap.Setting Setting)
 
         view.Zoom(Zoom);
         Window.SetView(view);
+    }
+
+    /// <summary>
+    /// Updates the zoom level to a specified value, clamping it between the min and max zoom limits.
+    /// </summary>
+    /// <param name="value">The new zoom value to be set.</param>
+    public void UpdateZoom(float value)
+    {
+        if (value < _minZoom)
+            _zoom = _minZoom;
+        else if (value > _maxZoom)
+            _zoom = _maxZoom;
+        else
+            _zoom = value;
+    }
+
+    /// <summary>
+    /// Updates the zoom level by applying a multiplicative factor.
+    /// This allows zooming in or out incrementally.
+    /// </summary>
+    /// <param name="mult">The multiplicative zoom factor.</param>
+    public void UpdateZoomMult(float mult)
+    {
+        float newZoom = _zoom += mult;
+
+        if (newZoom < _minZoom)
+            _zoom = _minZoom;
+        else if (newZoom > _maxZoom)
+            _zoom = _maxZoom;
+        else
+            _zoom = newZoom;
     }
 }

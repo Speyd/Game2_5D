@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using HitBoxLib.PositionObject;
 using HitBoxLib.Segment.SignsTypeSide;
@@ -10,6 +11,7 @@ namespace HitBoxLib.HitBoxSegment;
 /// <summary>Hitbox side</summary>
 public class HitBoxSide
 {
+
     /// <summary>
     /// Hitbox side axis
     /// </summary>
@@ -67,7 +69,8 @@ public class HitBoxSide
         CoordinatePlane = coordinate.CoordinatePlane;
         Side = coordinate.Axis;
         OrginalSide = Side;
-        Offset = offset;
+        SetOffset(offset);
+
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="HitBoxSide"/> class with a given coordinate plane, side size, and offset.
@@ -78,9 +81,19 @@ public class HitBoxSide
     public HitBoxSide(CoordinatePlane coordinatePlane, SideSize sideSize, double offset)
     {
         SideSize = sideSize;
-
         CoordinatePlane = coordinatePlane;
-        Offset = offset;
+
+        SetOffset(offset);
+    }
+
+    [JsonConstructor]
+    public HitBoxSide(CoordinatePlane coordinatePlane, int side, int orginalSide, float offset, SideSize sideSize)
+    {
+        CoordinatePlane = coordinatePlane;
+        Side = side;
+        OrginalSide = orginalSide;
+        _offset = offset;
+        SideSize = sideSize;
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="HitBoxSide"/> class with default values.
@@ -137,6 +150,14 @@ public class HitBoxSide
 
         OrginalSide = coordinate.Axis;
         Side = coordinate.Axis + Offset;
+    } /// <summary>
+      /// Sets the side value based on a new coordinate, using the existing offset.
+      /// </summary>
+      /// <param name="coordinate">The coordinate used to update the original side value.</param>
+    public void SetSide(double coordinate)
+    {
+        OrginalSide = coordinate;
+        Side = coordinate + Offset;
     }
 
 }

@@ -1,10 +1,5 @@
 ﻿using FpsLib;
 using ScreenLib;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace MoveLib.Angle;
@@ -14,6 +9,7 @@ namespace MoveLib.Angle;
 /// </summary>
 public static class MoveAngle
 {
+    private static double SensitivityRelativeFPS = 1;
     /// <summary>
     /// Rotates the unit's horizontal angle based on a directional input.
     /// </summary>
@@ -23,8 +19,8 @@ public static class MoveAngle
     /// </param>
     public static void TurnAngle(ProtoRender.Object.IUnit unit, int direction)
     {
-        double normalizedMoveSpeedAngel = unit.MoveSpeedAngel * Screen.ScreenRatio;
-        unit.Angle -= normalizedMoveSpeedAngel * direction;
+        double normalizedMoveSpeedAngel = SensitivityRelativeFPS * Screen.ScreenRatio;
+        unit.Angle -= Screen.ScreenRatio * direction;
 
         if (unit.Angle > Math.PI)
             unit.Angle -= 2 * Math.PI;
@@ -40,7 +36,7 @@ public static class MoveAngle
     public static void ResetAngle(ProtoRender.Object.IUnit unit)
     {
         double normalizedMoveSpeedAngel = unit.MouseSensitivity * Screen.ScreenRatio;
-        unit.MoveSpeedAngel = 1 * FPS.GetDeltaTime() * normalizedMoveSpeedAngel;
+        SensitivityRelativeFPS = FPS.GetDeltaTime() * normalizedMoveSpeedAngel;
 
         unit.Angle = unit.TempAngle % (2 * Math.PI);
         unit.VerticalAngle = unit.TempVerticalAngle;

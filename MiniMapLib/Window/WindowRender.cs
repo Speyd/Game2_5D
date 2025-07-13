@@ -41,13 +41,16 @@ public class WindowRender
         Screen.HeightChangesFun += ResetWindowSize;
         Setting.MapScaleChangesFun += ResetWindowSize;
 
-        uint sizeX = (uint)(Screen.ScreenWidth / (Setting.MapScale * (Math.PI / 2)));
-        uint sizeY = (uint)(Screen.ScreenHeight / (Setting.MapScale / (Math.PI / 2)));
+        uint sizeX = (uint)(Screen.ScreenWidth / (Setting.MapScaleX * (Math.PI / 2)));
+        uint sizeY = (uint)(Screen.ScreenHeight / (Setting.MapScaleY / (Math.PI / 2)));
 
         Window = new RenderTexture(sizeX, sizeY);
         Setting.SetCenterWindow(Window);
 
-        RenderSprite = new Sprite();
+        RenderSprite = new Sprite()
+        {
+            Origin = new Vector2f(sizeX / 2f, sizeY / 2f)
+        };
     }
     /// <summary>
     /// Resets the size of the render window based on the current screen size and map scale.
@@ -55,10 +58,8 @@ public class WindowRender
     /// </summary>
     private void ResetWindowSize()
     {
-        uint sizeX = (uint)(Screen.ScreenWidth / (Setting.MapScale * (Math.PI / 2)));
-        uint sizeY = (uint)(Screen.ScreenHeight / (Setting.MapScale / (Math.PI / 2)));
-
-        Window = new RenderTexture(sizeX, sizeY);
+        var size = Setting.GetWindowSize();
+        Window = new RenderTexture((uint)size.X, (uint)size.Y);
         Setting.SetCenterWindow(Window);
     }
     /// <summary>
@@ -71,6 +72,8 @@ public class WindowRender
         Window.Display();
 
         RenderSprite.Texture = Window.Texture;
+        Vector2u textureSize = Window.Texture.Size;
+        RenderSprite.Origin = new Vector2f(textureSize.X / 2f, textureSize.Y / 2f);
         RenderSprite.Position = coordinates;
     }
 }

@@ -83,6 +83,12 @@ public class UniqueDictionary<KEY, VALUE>
     {
         return myMap.ContainsKey(key);
     }
+    /// <summary>Clear Map</summary>
+    public void Clear()
+    {
+        myMap.Clear();
+    }
+
     /// <summary>Get dictionary</summary>
     public Dictionary<KEY, VALUE> GetUniqueDictionary() => myMap;
     /// <summary>Print dictionary</summary>

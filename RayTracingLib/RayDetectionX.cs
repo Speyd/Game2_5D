@@ -1,18 +1,11 @@
 ﻿using ScreenLib;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextureLib;
-using HitBoxLib;
+using TextureLib.Textures.Pair;
 using HitBoxLib.PositionObject;
 using HitBoxLib.Segment.SignsTypeSide;
 using ProtoRender.RenderAlgorithm;
-using DataPipes;
 using ProtoRender.Object;
+
 
 namespace RayTracingLib.Detection;
 /// <summary>

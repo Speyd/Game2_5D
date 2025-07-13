@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj": {
-      "version": "1.6.1",
+      "version": "2.1.2",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\DrawLib\\DrawLib.csproj",
         "projectName": "EnginePseudo3D.DrawLib",
@@ -52,11 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.RayTracingLib": {
               "target": "Package",
-              "version": "[1.6.8, )"
-            },
-            "EnginePseudo3D.ScreenLib": {
-              "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[2.2.9, )"
             }
           },
           "imports": [

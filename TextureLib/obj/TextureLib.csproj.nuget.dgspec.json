@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj": {
-      "version": "1.1.2",
+      "version": "1.6.2",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\TextureLib\\TextureLib.csproj",
         "projectName": "EnginePseudo3D.TextureLib",
@@ -52,15 +52,15 @@
           "dependencies": {
             "EnginePseudo3D.DataPipes": {
               "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[1.2.9, )"
             },
             "EnginePseudo3D.ScreenLib": {
               "target": "Package",
-              "version": "[1.0.3, )"
+              "version": "[1.0.6, )"
             },
-            "SixLabors.ImageSharp": {
+            "Magick.NET-Q8-AnyCPU": {
               "target": "Package",
-              "version": "[3.1.8, )"
+              "version": "[14.6.0, )"
             }
           },
           "imports": [

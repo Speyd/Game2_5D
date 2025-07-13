@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
-      "version": "1.6.8",
+      "version": "2.2.9",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
         "projectName": "EnginePseudo3D.RayTracingLib",
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[1.6.0, )"
+              "version": "[2.3.0, )"
             }
           },
           "imports": [

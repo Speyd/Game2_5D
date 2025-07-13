@@ -4,6 +4,7 @@ using SFML.System;
 using RayTracingLib.Detection;
 using SFML.Graphics;
 using ProtoRender.Object;
+using System.Collections.Concurrent;
 
 
 namespace DrawLib;
@@ -13,112 +14,102 @@ namespace DrawLib;
 /// </summary>
 public static class Drawing
 {
-    static HitPoint hitPoint = new HitPoint();
-
+    private static readonly ConcurrentDictionary<Type, Action<IObject?, IUnit, Drawable>> _renderers = new ();
+    private static readonly ConcurrentDictionary<Type, Action<IUnit, Drawable>> _renderersOnMap = new();
     /// <summary>
-    /// Draws a point on the object based on hit detection, texture, and height.
+    /// Registers a custom draw function for a specific type of <see cref="Drawable"/>.
+    /// This allows dynamic dispatch of rendering logic for different drawable types.
     /// </summary>
-    /// <param name="obstacle">The object that the ray intersects with.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="heightObj">The height of the object for calculating the point's position.</param>
-    /// <param name="colorFill">The color fill for the drawn point.</param>
-    public static void DrawingObjectPoint(IObject? obstacle, IUnit unit, int heightObj, SFML.Graphics.Color colorFill)
+    /// <typeparam name="T">The type of the drawable object.</typeparam>
+    /// <param name="drawFunc">The draw function to invoke for the given type.</param>
+    public static void Register<T>(Action<IObject?, IUnit, T> drawFunc) where T : Drawable
+    {
+        _renderers[typeof(T)] = (obstacle, unit, drawable) => drawFunc(obstacle, unit, (T)drawable);
+    }
+    /// <summary>
+    /// Registers a custom draw function for a specific type of <see cref="Drawable"/>.
+    /// This allows dynamic dispatch of rendering logic for different drawable types.
+    /// </summary>
+    /// <typeparam name="T">The type of the drawable object.</typeparam>
+    /// <param name="drawFunc">The draw function to invoke for the given type.</param>
+    public static void RegisterOnMap<T>(Action<IUnit, T> drawFunc) where T : Drawable
+    {
+        _renderersOnMap[typeof(T)] = (unit, drawable) => drawFunc(unit, (T)drawable);
+    }
+
+    static Drawing()
+    {
+        Register<Sprite>(DrawingSprite);
+        Register<CircleShape>(DrawingCircle);
+
+        RegisterOnMap<Sprite>(DrawingSpriteOnMap);
+        RegisterOnMap<CircleShape>(DrawingCircleOnMap);
+    }
+
+
+    static HitPoint hitPoint = new HitPoint();
+    /// <summary>
+    /// Renders a <see cref="CircleShape"/> on a specified obstacle, adjusting for hit detection and texture mapping.
+    /// </summary>
+    /// <param name="obstacle">The obstacle that the ray intersects.</param>
+    /// <param name="unit">The unit from which the ray originates.</param>
+    /// <param name="circleShape">The base circle shape to draw.</param>
+    public static void DrawingCircle(IObject? obstacle, IUnit unit, CircleShape circleShape)
     {
         if (obstacle is not null && obstacle is IDrawable drawable)
         {
             hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, unit);
+            float radius = circleShape.Radius;
 
             float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
-            float height = drawable.BringingToStandard(heightObj);
-            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, height);
+            float newRadius = (drawable.BringingToStandardHeight(radius) + drawable.BringingToStandardWidth(radius)) / 2;
+            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, newRadius);
 
             if (drawable.IsInsideTexture(textureX, textureY))
                 return;
 
-            float addHeight = height >= heightObj ? 0f : heightObj;
+            float addHeight = newRadius >= radius ? 0f : radius;
             Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
 
-            CircleShape point = new CircleShape(height)
+            CircleShape point = new CircleShape(circleShape)
             {
-                FillColor = colorFill,
+                Radius = newRadius,
                 Position = pointPosition
             };
 
-            drawable.DrawObject(point);
+            drawable.DrawObjectAsync(point);
         }
     }
-
     /// <summary>
-    /// Asynchronous version of <see cref="DrawingObjectPoint"/>. Draws a point on the object based on hit detection, texture, and height.
+    /// Performs raycasting from a unit's position on the given map and draws a <see cref="CircleShape"/> on the detected obstacle.
     /// </summary>
-    /// <param name="obstacle">The object that the ray intersects with.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="heightObj">The height of the object for calculating the point's position.</param>
-    /// <param name="colorFill">The color fill for the drawn point.</param>
-    public static async Task DrawingObjectPointAsync(IObject? obstacle, IUnit unit, int heightObj, SFML.Graphics.Color colorFill)
+    /// <param name="map">The map containing obstacles.</param>
+    /// <param name="unit">The unit from which the ray is cast.</param>
+    /// <param name="point">The circle shape to draw.</param>
+    public static void DrawingCircleOnMap(IUnit unit, CircleShape point)
     {
-        await Task.Run(() =>
-        {
-            if (obstacle is not null && obstacle is IDrawable drawable)
-            {
-                hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, unit);
-
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
-                float height = drawable.BringingToStandard(heightObj);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, height);
-
-                if (drawable.IsInsideTexture(textureX, textureY))
-                    return;
-
-                float addHeight = height >= heightObj ? 0f : heightObj;
-                Vector2f pointPosition = new Vector2f(textureX + addHeight, textureY);
-
-                CircleShape point = new CircleShape(height)
-                {
-                    FillColor = colorFill,
-                    Position = pointPosition
-                };
-
-                drawable.DrawObjectAsync(point);
-            }
-        });
+        IObject? obstacle = Raycast.RaycastFun(unit).Item1;
+        DrawingCircle(obstacle, unit, point);
     }
 
     /// <summary>
-    /// Draws a point on the map based on raycasting and the hit object detection.
+    /// Base vertical scale factor for all sprites (relative to their original size).
+    /// Used to standardize the height of rendered objects.
     /// </summary>
-    /// <param name="map">The map to cast the ray on.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="heightObj">The height of the object for calculating the point's position.</param>
-    /// <param name="colorFill">The color fill for the drawn point.</param>
-    public static void DrawingPoint(IMap map, IUnit unit, int heightObj, SFML.Graphics.Color colorFill)
-    {
-        IObject? obstacle = Raycast.RaycastFun(map, unit).Item1;
-        DrawingObjectPoint(obstacle, unit, heightObj, colorFill);
-    }
+    public static float baseHeightScaleSprite = 0.4f;
 
     /// <summary>
-    /// Asynchronous version of <see cref="DrawingPoint"/>. Draws a point on the map based on raycasting and the hit object detection.
+    /// Base horizontal scale factor for all sprites (relative to their original size).
+    /// Helps ensure consistent visual width for objects in the scene.
     /// </summary>
-    /// <param name="map">The map to cast the ray on.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="heightObj">The height of the object for calculating the point's position.</param>
-    /// <param name="colorFill">The color fill for the drawn point.</param>
-    public static async Task DrawingPointAsync(IMap map, IUnit unit, int heightObj, SFML.Graphics.Color colorFill)
-    {
-        IObject? obstacle = Raycast.RaycastFun(map, unit).Item1;
-        await DrawingObjectPointAsync(obstacle, unit, heightObj, colorFill);
-    }
-
+    public static float baseWidthScaleSprite = 0.4f;
     /// <summary>
-    /// Draws a sprite on the object based on hit detection, texture, and height.
+    /// Renders a <see cref="Sprite"/> on a specified obstacle with appropriate scaling and positioning based on texture mapping.
     /// </summary>
-    /// <param name="obstacle">The object that the ray intersects with.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="sprite">The sprite to draw on the object.</param>
-    public static void DrawingObjectSprite(IObject? obstacle, IUnit unit, Sprite sprite)
+    /// <param name="obstacle">The obstacle that the ray intersects.</param>
+    /// <param name="unit">The unit from which the ray originates.</param>
+    /// <param name="sprite">The sprite to render.</param>
+    public static void DrawingSprite(IObject? obstacle, IUnit unit, Sprite sprite)
     {
         if (obstacle is not null && obstacle is IDrawable drawable)
         {
@@ -126,78 +117,69 @@ public static class Drawing
 
             float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
 
-            float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
-            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, height);
+            float height = drawable.BringingToStandardHeight(sprite.Texture.Size.Y);
+            float width = drawable.BringingToStandardWidth(sprite.Texture.Size.X);
 
+            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, 0);
             if (drawable.IsInsideTexture(textureX, textureY))
                 return;
 
-            float addHeight = height >= sprite.Texture.Size.Y ? 0f : sprite.Texture.Size.Y;
+            float scaleY = (height / (sprite.Texture.Size.Y / sprite.Scale.Y));
+            float scaleX = (width / (sprite.Texture.Size.X / sprite.Scale.X));  
+            
+            float x = textureX - (width - sprite.Texture.Size.X) / 2;
+            float y = textureY - (sprite.Texture.Size.Y * scaleY) / 2;
 
-            float x = textureX - sprite.Texture.Size.X / 2 + addHeight;
-            float y = textureY + sprite.Texture.Size.X / 2;
-            Vector2f dotPosition = new Vector2f(x, y);
-            sprite.Position = dotPosition;
-
-            drawable.DrawObject(sprite);
+            SFML.Graphics.Sprite newSprite = new SFML.Graphics.Sprite(sprite)
+            {
+                Scale = new Vector2f(scaleX, scaleY),
+                Origin = new Vector2f(0, 0),
+                Position = new Vector2f(x, y),
+            };
+            drawable.DrawObjectAsync(newSprite);
         }
     }
 
     /// <summary>
-    /// Asynchronous version of <see cref="DrawingObjectSprite"/>. Draws a sprite on the object based on hit detection, texture, and height.
+    /// Performs raycasting from a unit's position on the given map and draws a <see cref="Sprite"/> on the detected obstacle.
     /// </summary>
-    /// <param name="obstacle">The object that the ray intersects with.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="sprite">The sprite to draw on the object.</param>
-    public static async Task DrawingObjectSpriteAsync(IObject? obstacle, IUnit unit, Sprite sprite)
+    /// <param name="map">The map containing obstacles.</param>
+    /// <param name="unit">The unit from which the ray is cast.</param>
+    /// <param name="sprite">The sprite to render.</param>
+    public static void DrawingSpriteOnMap(IUnit unit, Sprite sprite)
     {
-        await Task.Run(() =>
-        {
-            if (obstacle is not null && obstacle is IDrawable drawable)
-            {
-                hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, unit);
-
-                float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
-
-                float height = drawable.BringingToStandard(sprite.Texture.Size.Y);
-                float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, height);
-
-                if (drawable.IsInsideTexture(textureX, textureY))
-                    return;
-
-                float addHeight = height >= sprite.Texture.Size.Y ? 0f : sprite.Texture.Size.Y;
-
-                float x = textureX - sprite.Texture.Size.X / 2 + addHeight;
-                float y = textureY + sprite.Texture.Size.X / 2;
-                Vector2f dotPosition = new Vector2f(x, y);
-                sprite.Position = dotPosition;
-
-                drawable.DrawObjectAsync(sprite);
-            }
-        });
+        IObject? obstacle = Raycast.RaycastFun(unit).Item1;
+        DrawingSprite(obstacle, unit, sprite);
     }
 
     /// <summary>
-    /// Draws a sprite on the map based on raycasting and the hit object detection.
+    /// Draws a generic <see cref="Drawable"/> object by invoking the registered rendering logic based on its runtime type.
     /// </summary>
-    /// <param name="map">The map to cast the ray on.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="sprite">The sprite to draw on the map.</param>
-    public static void DrawingSprite(IMap map, IUnit unit, Sprite sprite)
+    /// <param name="obstacle">The obstacle that the ray intersects.</param>
+    /// <param name="unit">The unit from which the ray originates.</param>
+    /// <param name="drawable">The drawable object to render.</param>
+    /// <exception cref="NotSupportedException">Thrown when no renderer is registered for the drawable type.</exception>
+    public static void DrawingObject(IObject? obstacle, IUnit unit, Drawable drawable)
     {
-        IObject? obstacle = Raycast.RaycastFun(map, unit).Item1;
-        DrawingObjectSprite(obstacle, unit, sprite);
-    }
+        if (drawable is null)
+            throw new ArgumentNullException(nameof(drawable));
 
+        var type = drawable.GetType();
+
+        if (_renderers.TryGetValue(type, out var renderer))
+            renderer(obstacle, unit, drawable);
+        else
+            throw new NotSupportedException($"No renderer registered for drawable type {type.Name}");
+    }
     /// <summary>
-    /// Asynchronous version of <see cref="DrawingSprite"/>. Draws a sprite on the map based on raycasting and the hit object detection.
+    /// Performs raycasting from a unit on the map and draws a generic <see cref="Drawable"/> object on the detected obstacle.
     /// </summary>
-    /// <param name="map">The map to cast the ray on.</param>
-    /// <param name="unit">The unit interacting with the ray.</param>
-    /// <param name="sprite">The sprite to draw on the map.</param>
-    public static async Task DrawingSpriteAsync(IMap map, IUnit unit, Sprite sprite)
+    /// <param name="map">The map containing obstacles.</param>
+    /// <param name="unit">The unit performing the raycast.</param>
+    /// <param name="drawable">The drawable object to render.</param>
+    public static void DrawingObjectOnMap(IUnit unit, Drawable drawable)
     {
-        IObject? obstacle = Raycast.RaycastFun(map, unit).Item1;
-        await DrawingObjectSpriteAsync(obstacle, unit, sprite);
+        IObject? obstacle = Raycast.RaycastFun(unit).Item1;
+        DrawingObject(obstacle, unit, drawable);
     }
 }

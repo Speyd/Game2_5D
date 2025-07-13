@@ -8,7 +8,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageId>EnginePseudo3D.TextureLib</PackageId>
     <Title>EnginePseudo3D.TextureLib</Title>
-    <Version>1.1.2</Version>
+    <Version>1.6.2</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Product>EnginePseudo3D</Product>
@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
-     <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.0.3" />
-     <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.3" />
-     <PackageReference Include="SixLabors.ImageSharp" Version="3.1.8" />
+     <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.2.9" />
+     <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.6" />
+	 <PackageReference Include="Magick.NET-Q8-AnyCPU" Version="14.6.0" />
   </ItemGroup>
 
 </Project>

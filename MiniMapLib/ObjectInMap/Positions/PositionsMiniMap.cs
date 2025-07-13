@@ -11,6 +11,9 @@ namespace MiniMapLib.ObjectInMap.Positions;
 /// </summary>
 public enum PositionsMiniMap
 {
+    /// <summary>None position.</summary>
+    None,
+
     /// <summary>Minimap is displayed in the upper-left corner of the screen.</summary>
     UpperLeftCorner,
 

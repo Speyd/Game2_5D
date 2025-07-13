@@ -1,24 +1,42 @@
 ﻿namespace AnimationLib;
+using System.Diagnostics;
+using TextureLib.Textures;
+
 /// <summary>
 /// Class for handling the current frame. Defines the frame for animation
 /// </summary>
 public static class AnimationManager
 {
+    /// Base time unit in milliseconds used for animation timing calculations.
+    /// Typically represents the duration of one second (1000 milliseconds).
+    /// </summary>
+    public const float baseMilliseconds = 1000.0f;
+
     /// <summary>
     /// Selects a specific frame (animation) to render
     /// </summary>
     public static void TextureAnimation(AnimationState state)
     {
-        state.FrameCounter -= 1;
-        if (state.FrameCounter <= 0)
+        if (state.Stopwatch == null)
         {
-            state.Index = (state.Index + 1) % state.AmountFrame;
-            state.FrameCounter = state.Speed;
+            state.Stopwatch = Stopwatch.StartNew();
+            state.LastFrameTime = 0;
         }
 
-        if (state.AmountFrame > 0)
+        double millisecondsPerFrame = baseMilliseconds / state.Speed;
+
+        long elapsed = state.Stopwatch.ElapsedMilliseconds;
+        if (elapsed - state.LastFrameTime >= millisecondsPerFrame)
         {
-            state.CurrentFrame = state.Frames[state.Index];
+            state.Index = (state.Index + 1) % state.CountFrame;
+            state.LastFrameTime = elapsed;
+            if (state.CountFrame > 0)
+            {
+                var frame = state.Frames[state.Index];
+                state.CurrentFrame = !frame.IsLoaded ? TextureWrapper.Placeholder : state.Frames[state.Index];
+            }
+            else
+                state.CurrentFrame = TextureWrapper.Placeholder;
         }
     }
     /// <summary>
@@ -31,13 +49,16 @@ public static class AnimationManager
         if (spriteDegreeAngle < 0)
             spriteDegreeAngle += 360;
 
-        int totalDirections = state.AmountFrame;
+        int totalDirections = state.CountFrame;
         if (totalDirections == 0) return;
 
         double sectorSize = 360.0 / totalDirections;
 
         int textureIndex = (int)(spriteDegreeAngle / sectorSize) % totalDirections;
-        state.CurrentFrame = state.Frames[(totalDirections - 1 - textureIndex + totalDirections) % totalDirections];
+
+        var frame = state.Frames[(totalDirections - 1 - textureIndex + totalDirections) % totalDirections];
+        state.CurrentFrame = !frame.IsLoaded? TextureWrapper.Placeholder: frame;
+
     }
 
     /// <summary>
@@ -49,9 +70,11 @@ public static class AnimationManager
     /// <param name="spriteAngle">The angle of rotation of the sprite (used for static display).</param>
     public static void DefiningDesiredSprite(AnimationState state, double spriteAngle)
     {
-        if (state.IsAnimation && state.AmountFrame > 1)
+        if (state.IsAnimation && state.CountFrame > 1)
             TextureAnimation(state);
-        else if(!state.IsAnimation && state.AmountFrame > 0)
+        else if(!state.IsAnimation && state.CountFrame > 0)
             TextureNonAnimation(state, spriteAngle);
+        else
+            state.CurrentFrame = TextureWrapper.Placeholder;
     }
 }

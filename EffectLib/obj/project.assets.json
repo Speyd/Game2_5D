@@ -722,7 +722,24 @@
           }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.3": {
+      "EnginePseudo3D.DataPipes/1.2.9": {
+        "type": "package",
+        "dependencies": {
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1"
+        },
+        "compile": {
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "EnginePseudo3D.ScreenLib/1.0.6": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
@@ -1025,15 +1042,30 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.3": {
-      "sha512": "Q8X5LBdpLw/stPcrEW+H4r5Fbdcbe83xboVqhI2zH72B8TerzSL5vx9iKe51wf7C8pKFenWVoPq/12JJ+bb1eA==",
+    "EnginePseudo3D.DataPipes/1.2.9": {
+      "sha512": "R7j87oVKZh8Hwe1CeZYGHjLmhr9TUam/T3wPRGnxHCxyTrptGpjYoaPIrpS9aLWZGnIvrDSPSabql38/B+Oj1A==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.3",
+      "path": "enginepseudo3d.datapipes/1.2.9",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README_DataPipes.md",
+        "enginepseudo3d.datapipes.1.2.9.nupkg.sha512",
+        "enginepseudo3d.datapipes.nuspec",
+        "iconNuGet.png",
+        "lib/net8.0/DataPipes.dll",
+        "lib/net8.0/DataPipes.xml"
+      ]
+    },
+    "EnginePseudo3D.ScreenLib/1.0.6": {
+      "sha512": "u1mr3fNnCmmSgr7Yct5UZLFq5A0mePG/LHKxAsgZxyZpIRa/mVpvkypsV4uDqZkyTG8mf9tG6hMVJzOBylBTUg==",
+      "type": "package",
+      "path": "enginepseudo3d.screenlib/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.3.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.6.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
         "lib/net8.0/ScreenLib.dll",
@@ -1129,7 +1161,8 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.ScreenLib >= 1.0.3",
+      "EnginePseudo3D.DataPipes >= 1.2.9",
+      "EnginePseudo3D.ScreenLib >= 1.0.6",
       "SFML.Graphics >= 2.6.1"
     ]
   },
@@ -1138,7 +1171,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.0.4",
+    "version": "1.1.7",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\EffectLib\\EffectLib.csproj",
       "projectName": "EnginePseudo3D.EffectLib",
@@ -1183,9 +1216,13 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "EnginePseudo3D.DataPipes": {
+            "target": "Package",
+            "version": "[1.2.9, )"
+          },
           "EnginePseudo3D.ScreenLib": {
             "target": "Package",
-            "version": "[1.0.3, )"
+            "version": "[1.0.6, )"
           },
           "SFML.Graphics": {
             "target": "Package",

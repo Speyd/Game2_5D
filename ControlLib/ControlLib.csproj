@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.ControlLib</PackageId>
     <Title>EnginePseudo3D.ControlLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.6.4</Version>
+    <Version>1.8.9</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -31,10 +31,8 @@
     </None>
   </ItemGroup>
 
-  <ItemGroup>
-	  
-	  <PackageReference Include="EnginePseudo3D.MoveLib" Version="1.6.4" />	  
-	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.3" />
+  <ItemGroup>	  
+	  <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.6" />
   </ItemGroup>
 
 </Project>

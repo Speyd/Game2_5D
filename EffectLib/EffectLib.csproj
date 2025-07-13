@@ -7,7 +7,7 @@
     <Nullable>enable</Nullable>
     <PackageId>EnginePseudo3D.EffectLib</PackageId>
     <Title>EnginePseudo3D.EffectLib</Title>
-    <Version>1.0.4</Version>
+    <Version>1.1.7</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Product>EnginePseudo3D</Product>
@@ -32,8 +32,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="EnginePseudo3D.DataPipes" Version="1.2.9" />
     <PackageReference Include="SFML.Graphics" Version="2.6.1" />
-    <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.3" />
+    <PackageReference Include="EnginePseudo3D.ScreenLib" Version="1.0.6" />
   </ItemGroup>
 
 </Project>

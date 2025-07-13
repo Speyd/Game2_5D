@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj": {
-      "version": "1.4.1",
+      "version": "1.6.0",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
         "projectName": "EnginePseudo3D.FpsLib",
@@ -50,9 +50,9 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
-            "EnginePseudo3D.ProtoRender": {
+            "SFML.System": {
               "target": "Package",
-              "version": "[1.6.0, )"
+              "version": "[2.6.1, )"
             }
           },
           "imports": [

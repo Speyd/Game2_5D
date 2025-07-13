@@ -2,12 +2,6 @@
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MiniMapLib.SettingMap;
 /// <summary>
@@ -26,6 +20,131 @@ public class Setting
     public float CenterY { get; private set; }
 
     /// <summary>
+    /// Width of a single map tile in minimap coordinates, based on scale.
+    /// </summary>
+    public float MapTileX { get; private set; }
+
+    /// <summary>
+    /// Height of a single map tile in minimap coordinates, based on scale.
+    /// </summary>
+    public float MapTileY { get; private set; }
+
+    internal float Tile { get; set; }
+
+
+    /// <summary>
+    /// Event triggered when the map scale changes.
+    /// </summary>
+    public Action MapScaleChangesFun;
+
+    private float _mapScaleX;
+    /// <summary>
+    /// Horizontal scale factor of the minimap.
+    /// Changing it updates tile sizes and triggers <see cref="MapScaleChangesFun"/>.
+    /// </summary>
+    public float MapScaleX
+    {
+        get => _mapScaleX;
+        set
+        {
+            _mapScaleX = value;
+            UpdateMapTileSizes();
+            MapScaleChangesFun?.Invoke();
+        }
+    }
+
+    private float _mapScaleY;
+    /// <summary>
+    /// Vertical scale factor of the minimap.
+    /// Changing it updates tile sizes and triggers <see cref="MapScaleChangesFun"/>.
+    /// </summary>
+    public float MapScaleY
+    {
+        get => _mapScaleY;
+        set
+        {
+            _mapScaleY = value;
+            UpdateMapTileSizes();
+            MapScaleChangesFun?.Invoke();
+        }
+    }
+    internal float Scale { get; set; }
+
+    private PositionsMiniMap _positions = PositionsMiniMap.None;
+    /// <summary>
+    /// The position of the minimap on the screen.
+    /// </summary>
+    public PositionsMiniMap Positions
+    {
+        get => _positions;
+        set
+        {
+            if (_positions == PositionsMiniMap.None && _positions != value)
+                IsRender = true;
+
+            _positions = value;
+            SetPosition();
+        }
+    }
+
+
+    /// <summary>
+    /// Coordinates of the minimap in the window.
+    /// </summary>
+    public Vector2f CoordinatesInWindow { get; set; }
+
+    /// <summary>
+    /// Determines whether the minimap is rendered or hidden.
+    /// </summary>
+    public bool IsRender { get; set; } = true;
+
+    /// <summary>
+    /// The background color of the minimap. Default is blue.
+    /// </summary>
+    public Color BackgroundColor { get; set; } = Color.Blue;
+
+
+    /// <summary>
+    /// Constructor to create the settings by providing the render window, position, and scale.
+    /// </summary>
+    /// <param name="Window">The render window.</param>
+    /// <param name="positions">The position of the minimap.</param>
+    /// <param name="mapScale">The scale of the minimap (default is 5).</param>
+    public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
+    {
+        MapScaleX = mapScale;
+        MapScaleY = mapScale;
+        Positions = positions;
+
+        SetCenterWindow(Window);
+    }
+
+    /// <summary>
+    /// Constructor to create the settings by providing only position and scale.
+    /// </summary>
+    /// <param name="positions">The position of the minimap.</param>
+    /// <param name="mapScale">The scale of the minimap (default is 5).</param>
+    public Setting(PositionsMiniMap positions = PositionsMiniMap.None, float mapScale = 5)
+    {
+        MapScaleX = mapScale;
+        MapScaleY = mapScale;
+        Positions = positions;
+
+        CenterX = 1;
+        CenterY = 1;
+
+        Screen.WidthChangesFun += SetPosition;
+        Screen.HeightChangesFun += SetPosition;
+    }
+
+
+
+    private void SetPosition()
+    {
+        PositionDefinition.SetPosition(this);
+    }
+
+    /// <summary>
     /// Sets the center of the minimap window based on the given render window size.
     /// </summary>
     /// <param name="Window">The render window whose size is used to calculate the center.</param>
@@ -36,122 +155,25 @@ public class Setting
     }
 
     /// <summary>
-    /// The map tile size.
-    /// </summary>
-    public float MapTile { get; private set; }
-
-    //----------------MapScale----------------
-    /// <summary>
     /// Adjusts the map tile size based on the scale of the minimap.
     /// </summary>
-    private void SetMiniMapTile()
+    private void UpdateMapTileSizes()
     {
-        MapTile = Screen.Setting.Tile / MapScale;
+        MapTileX = Screen.Setting.Tile / MapScaleX;
+        MapTileY = Screen.Setting.Tile / MapScaleY;
+
+        Scale = MapScaleX > MapScaleY ? MapScaleX : MapScaleY;
+        Tile = MapTileX < MapTileY ? MapTileX : MapTileY;
     }
 
     /// <summary>
-    /// Event triggered when the map scale changes.
+    /// Get Window size
     /// </summary>
-    public Action MapScaleChangesFun;
-
-    private float _mapScale;
-
-    /// <summary>
-    /// The scale of the minimap.
-    /// </summary>
-    public float MapScale
+    public Vector2f GetWindowSize()
     {
-        get => _mapScale;
-        set
-        {
-            _mapScale = value;
-            MapScaleChangesFun();  // Triggers the map scale change method.
-        }
-    }
+        uint sizeX = (uint)(Screen.ScreenWidth / MapScaleX);
+        uint sizeY = (uint)(Screen.ScreenHeight / MapScaleY);
 
-    private PositionsMiniMap _positions = PositionsMiniMap.LowerLeftCorner;
-
-    /// <summary>
-    /// The position of the minimap on the screen.
-    /// </summary>
-    public PositionsMiniMap Positions
-    {
-        get => _positions;
-        set
-        {
-            _positions = value;
-            SetPosition(); // Updates the minimap position when the position is changed.
-        }
-    }
-
-    /// <summary>
-    /// Coordinates of the minimap in the window.
-    /// </summary>
-    public Vector2f CoordinatesInWindow { get; set; }
-
-    /// <summary>
-    /// The rendering method for the minimap.
-    /// </summary>
-    public OutputRenderMethod OutputRenderMethod { get; set; }
-
-    /// <summary>
-    /// The outline thickness used for the map's borders.
-    /// </summary>
-    public int OutLine { get; set; } = 1;
-
-    /// <summary>
-    /// Constructor to create the settings by providing the render window, position, and scale.
-    /// </summary>
-    /// <param name="Window">The render window.</param>
-    /// <param name="positions">The position of the minimap.</param>
-    /// <param name="mapScale">The scale of the minimap (default is 5).</param>
-    public Setting(RenderTexture Window, PositionsMiniMap positions, float mapScale = 5)
-    {
-        MapScaleChangesFun += SetMiniMapTile; // Subscribe to the map scale change event.
-
-        MapScale = mapScale;
-        Positions = positions;
-
-        SetCenterWindow(Window); // Set the window center.
-    }
-
-    /// <summary>
-    /// Constructor to create the settings by providing only position and scale.
-    /// </summary>
-    /// <param name="positions">The position of the minimap.</param>
-    /// <param name="mapScale">The scale of the minimap (default is 5).</param>
-    public Setting(PositionsMiniMap positions, float mapScale = 5)
-    {
-        MapScaleChangesFun += SetMiniMapTile;
-
-        MapScale = mapScale;
-        Positions = positions;
-
-        CenterX = 1;
-        CenterY = 1;
-
-        // Subscribe to screen size changes for updating the minimap position.
-        Screen.WidthChangesFun += SetPosition;
-        Screen.HeightChangesFun += SetPosition;
-    }
-
-    /// <summary>
-    /// Sets the position of the minimap based on the selected position type.
-    /// </summary>
-    public void SetPosition()
-    {
-        switch (Positions)
-        {
-            case PositionsMiniMap.LowerLeftCorner:
-                CoordinatesInWindow = PositionDefinition.GetLowerLeftCorner(this); break;
-            case PositionsMiniMap.LowerRightCorner:
-                CoordinatesInWindow = PositionDefinition.GetLowerRightCorner(this); break;
-            case PositionsMiniMap.UpperRightCorner:
-                CoordinatesInWindow = PositionDefinition.GetUpperRightCorner(this); break;
-            case PositionsMiniMap.UpperLeftCorner:
-                CoordinatesInWindow = PositionDefinition.GetUpperLeftCorner(this); break;
-            default:
-                CoordinatesInWindow = PositionDefinition.GetUpperRightCorner(this); break;
-        }
+        return new Vector2f(sizeX, sizeY);
     }
 }

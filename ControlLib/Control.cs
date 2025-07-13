@@ -1,8 +1,8 @@
 ﻿using ScreenLib;
-using MoveLib.Angle;
-using ProtoRender.Object;
-using System.Collections.Concurrent;
+using ControlLib.Buttons;
 using System.Collections.Immutable;
+using ControlLib.Mouse;
+
 
 namespace ControlLib;
 /// <summary>
@@ -13,8 +13,27 @@ public class Control
     /// <summary>
     /// List of all key bindings.
     /// </summary>
-    private ImmutableList<BottomBinding> Bindings = ImmutableList<BottomBinding>.Empty;
-    private CancellationTokenSource _cts = new();
+    private ImmutableList<ButtonBinding> Bindings = ImmutableList<ButtonBinding>.Empty;
+    /// <summary>
+    /// Gets or sets a value indicating whether all control inputs should be temporarily ignored.
+    /// When set to <c>true</c>, input processing will be paused; when <c>false</c>, normal input handling resumes.
+    /// </summary>
+    public bool FreezeControlsKey { get; set; } = false;
+
+    private bool _freezeControlsMouse = false;
+    public bool FreezeControlsMouse 
+    {
+        get => _freezeControlsMouse;
+        set
+        {
+            _freezeControlsMouse = value;
+            Screen.Window.MouseMoved -= MouseControl.OnMouseMoved;
+
+            if (value == false)
+                Screen.Window.MouseMoved += MouseControl.OnMouseMoved;
+        }
+    }
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Control"/> class and sets up mouse behavior.
@@ -22,15 +41,15 @@ public class Control
     public Control()
     {
         Screen.Window.SetMouseCursorVisible(false);
-        Screen.Window.MouseMoved += MoveMouse.OnMouseMoved;
+
+        Screen.Window.MouseMoved -= MouseControl.OnMouseMoved;
+        Screen.Window.MouseMoved += MouseControl.OnMouseMoved;
     }
-
-
     /// <summary>
     /// Adds a new key binding to the control system.
     /// </summary>
     /// <param name="bottomBinding">The binding to add.</param>
-    public void AddBottomBind(BottomBinding bottomBinding)
+    public void AddBottomBind(ButtonBinding bottomBinding)
     {
         ImmutableInterlocked.Update(ref Bindings, list => list.Add(bottomBinding));
     }
@@ -38,32 +57,28 @@ public class Control
     /// Removes a specific key binding that matches the given binding.
     /// </summary>
     /// <param name="bottomBinding">The binding to remove.</param>
-    public void DeleteBottomBind(BottomBinding bottomBinding)
+    public void DeleteBottomBind(ButtonBinding bottomBinding)
     {
-        List<Bottom> deleteBind = bottomBinding.Bottoms;
-
+        var targetKeys = bottomBinding.Buttons.Select(b => b.Key).ToHashSet();
         foreach (var binding in Bindings)
         {
-            List<Bottom> bindBottom = binding.Bottoms;
-
-            int countSimilarities = 0;
-            foreach (var item in deleteBind)
+            var bindingKeys = binding.Buttons.Select(b => b.Key).ToHashSet();
+            if (bindingKeys.SetEquals(targetKeys))
             {
-                foreach (var item2 in bindBottom)
-                {
-                    if (item.Key == item2.Key)
-                        countSimilarities++;
-                }
-            }
-
-            if (countSimilarities == bindBottom.Count)
-            {
-                ImmutableInterlocked.Update(ref Bindings, list => list.Remove(bottomBinding));
-                return;
+                ImmutableInterlocked.Update(ref Bindings, list => list.Remove(binding));
+                break;
             }
         }
     }
-
+    /// <summary>
+    /// Removes a specific key binding that matches the given binding.
+    /// </summary>
+    /// <param name="bottomBinding">The binding to remove.</param>
+    public void DeleteReferenceBottomBind(ButtonBinding bottomBinding)
+    {
+        ImmutableInterlocked.Update(ref Bindings, list =>
+        list.RemoveAll(binding => ReferenceEquals(binding, bottomBinding)));
+    }
     /// <summary>
     /// Removes a binding based on its action name.
     /// </summary>
@@ -76,9 +91,14 @@ public class Control
     /// <summary>
     /// Checks and executes all registered bindings sequentially.
     /// </summary>
-    public void MakePressed(IUnit unit)
+    public void MakePressed(IMouseControllable target)
     {
-        MoveLib.Angle.MoveMouse.SetControlledUnit(unit);
+        if (!FreezeControlsMouse)
+            MouseControl.SetControlledTarget(target);
+        if (FreezeControlsKey)
+            return;
+
+        MouseControl.SetControlledTarget(target);
         foreach (var binding in Bindings)
         {
             binding.Listen();
@@ -88,37 +108,18 @@ public class Control
     /// <summary>
     /// Checks and executes all registered bindings in parallel.
     /// </summary>
-    public void MakePressedParallel(IUnit unit)
+    public void MakePressedParallel(IMouseControllable target)
     {
+        if (!FreezeControlsMouse)
+            MouseControl.SetControlledTarget(target);
+        if (FreezeControlsKey)
+            return;
+
         var snapshot = Bindings;
-        MoveLib.Angle.MoveMouse.SetControlledUnit(unit);
         Parallel.ForEach(snapshot, binding =>
         {
             binding.Listen();
         });
     }
-    /// <summary>
-    /// Checks and executes all registered bindings in async.
-    /// </summary>
-    public async Task MakePressedAsync(IUnit unit)
-    {
-        MoveLib.Angle.MoveMouse.SetControlledUnit(unit);
-        await Task.Run(() =>
-        {
-            while (!_cts.IsCancellationRequested)
-            {
-                var snapshot = Bindings;
-                Parallel.ForEach(snapshot, binding =>
-                {
-                    binding.Listen();
-                });
-
-                Thread.Sleep(10);
-            }
-        });
-    }/// <summary>
-     /// Stop MakePressedAsync.
-     /// </summary>
-    public void StopMakePressed() => _cts.Cancel();
 }
 

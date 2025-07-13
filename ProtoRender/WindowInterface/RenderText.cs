@@ -16,9 +16,10 @@ namespace ProtoRender.WindowInterface;
 public class RenderText
 {
     /// <summary>
-    /// Gets or sets the font used to render the text.
+    /// Gets or sets the file path to the font resource used for rendering the text.
+    /// This path is used to retrieve the font from the shared <see cref="FontCache"/>.
     /// </summary>
-    public Font Font { get; set; }
+    public string FontPath { get; set; }
 
     /// <summary>
     /// Gets or sets the SFML Text object that contains the rendered string.
@@ -37,12 +38,10 @@ public class RenderText
     /// <exception cref="Exception">Thrown when the font file cannot be loaded.</exception>
     public RenderText(string text, uint size, Vector2f position, string pathToFont, Color color)
     {
-        if (File.Exists(pathToFont))
-            Font = new Font(pathToFont);
-        else
-            throw new Exception("Error load text Font");
+        FontPath = pathToFont;
+        Font font = FontCache.GetFont(pathToFont);
 
-        Text = new Text(text, Font, size);
+        Text = new Text(text, font, size);
         Text.FillColor = color;
         Text.Position = position;
     }
@@ -53,8 +52,10 @@ public class RenderText
     /// <param name="renderText">Object of <see cref="RenderText"/> class</param>
     public RenderText(RenderText renderText)
     {
-        Font = renderText.Font;
-        Text = new Text(renderText.Text.DisplayedString, Font, renderText.Text.CharacterSize)
+        FontPath = renderText.FontPath;
+        Font font = FontCache.GetFont(renderText.FontPath);
+
+        Text = new Text(renderText.Text.DisplayedString, font, renderText.Text.CharacterSize)
         {
             FillColor = renderText.Text.FillColor,
             Position = renderText.Text.Position

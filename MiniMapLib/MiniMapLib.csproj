@@ -12,7 +12,7 @@
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
-    <Version>1.5.2</Version>
+    <Version>2.1.8</Version>
     <Description>This is a library for creating and rendering a minimap.</Description>
     <PackageIcon>iconNuGet.png</PackageIcon>
     <RepositoryUrl>https://github.com/Speyd/Game2_5D/tree/Version_3_0/MiniMapLib</RepositoryUrl>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EnginePseudo3D.ProtoRender" Version="1.6.0" />
+    <PackageReference Include="EnginePseudo3D.ProtoRender" Version="2.3.0" />
     <PackageReference Include="SFML.Net" Version="2.6.1" />
   </ItemGroup>
 

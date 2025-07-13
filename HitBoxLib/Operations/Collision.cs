@@ -157,20 +157,46 @@ public static class Collision
     /// <param name="isCollidingX">collision on the X axis</param>
     /// <param name="isCollidingY">collision on the Y axis</param>
     public static bool IsTouches2D(bool isCollidingX, bool isCollidingY) => isCollidingX && isCollidingY;
+
+
+
     /// <summary>Checks for dropouts on all axes</summary>
     /// <param name="renderInfoObj">Info about Hitbox object</param>
     /// <param name="observerInfo">Info about observer</param>
     /// <param name="box">Box of Hitbox</param>
     /// <param name="currentRayX">X coordinate ray</param>
     /// <param name="currentRayY">Y coordinate ray</param>
-    public static bool IsRayTouchesObject(RenderInfo renderInfoObj, ObserverInfo observerInfo, Box box, double currentRayX, double currentRayY)
+    public static (bool result, double coordinateZ) IsRayTouchesObject(RenderInfo renderInfoObj, ObserverInfo observerInfo, Box box, double currentRayX, double currentRayY)
     {
         bool isCollidingX = IsRayTouchesObjectX(box, currentRayX);
         bool isCollidingY = IsRayTouchesObjectY(box, currentRayY);
         var isCollidingZ = IsRayTouchesObjectZ(renderInfoObj, observerInfo, box);
 
-        return IsTouches3D(isCollidingX, isCollidingY, isCollidingZ.result);
+        return (IsTouches3D(isCollidingX, isCollidingY, isCollidingZ.result), isCollidingZ.coordinate);
     }
+    /// <summary>Checks for dropouts on all axes</summary>
+    /// <param name="renderInfoObj">Info about Hitbox object</param>
+    /// <param name="observerInfo">Info about observer</param>
+    /// <param name="hitBox">Hitbox</param>
+    /// <param name="currentRayX">X coordinate ray</param>
+    /// <param name="currentRayY">Y coordinate ray</param>
+    public static (bool result, double coordinateZ) IsRayTouchesObject(RenderInfo renderInfoObj, ObserverInfo observerInfo, HitBox hitBox, double currentRayX, double currentRayY)
+    {
+        var mainToucheHitBox = IsRayTouchesObject(renderInfoObj, observerInfo, hitBox.MainHitBox, currentRayX, currentRayY);
+        if (mainToucheHitBox.result)
+            return mainToucheHitBox;
+
+        foreach (var box in hitBox.SegmentedHitbox)
+        {
+            var segmentToucheHitBox = IsRayTouchesObject(renderInfoObj, observerInfo, box, currentRayX, currentRayY);
+            if (segmentToucheHitBox.result)
+                return segmentToucheHitBox;
+        }
+
+        return (false, 0);
+    }
+
+
     /// <summary>Checks for dropouts on all axes</summary>
     /// <param name="box">Box of Hitbox</param>
     /// <param name="currentRayX">X coordinate ray</param>
@@ -184,6 +210,29 @@ public static class Collision
 
         return IsTouches3D(isCollidingX, isCollidingY, isCollidingZ);
     }
+    /// <summary>Checks for dropouts on all axes</summary>
+    /// <param name="hitBox">Hitbox</param>
+    /// <param name="currentRayX">X coordinate ray</param>
+    /// <param name="currentRayY">Y coordinate ray</param>
+    /// <param name="currentRayZ">Z coordinate ray</param>
+    public static bool IsRayTouchesObject(HitBox hitBox, double currentRayX, double currentRayY, double? currentRayZ)
+    {
+        bool mainToucheHitBox = IsRayTouchesObject(hitBox.MainHitBox, currentRayX, currentRayY, currentRayZ);
+        if (mainToucheHitBox)
+            return true;
+
+        foreach(var box in hitBox.SegmentedHitbox)
+        {
+            bool segmentToucheHitBox = IsRayTouchesObject(box, currentRayX, currentRayY, currentRayZ);
+            if (segmentToucheHitBox)
+                return true;
+        }
+
+        return false;
+    }
+
+
+
     /// <summary>Checks for dropouts on X-Y axes</summary>
     /// <param name="box">Box of Hitbox</param>
     /// <param name="currentRayX">X coordinate ray</param>
@@ -194,5 +243,24 @@ public static class Collision
         bool isCollidingY = IsRayTouchesObjectY(box, currentRayY);
 
         return IsTouches2D(isCollidingX, isCollidingY);
+    }
+    /// <summary>Checks for dropouts on X-Y axes</summary>
+    /// <param name="hitBox">Hitbox</param>
+    /// <param name="currentRayX">X coordinate ray</param>
+    /// <param name="currentRayY">Y coordinate ray</param>
+    public static bool IsRayTouchesObject(HitBox hitBox, double currentRayX, double currentRayY)
+    {
+        bool mainToucheHitBox = IsRayTouchesObject(hitBox.MainHitBox, currentRayX, currentRayY);
+        if (mainToucheHitBox)
+            return true;
+
+        foreach (var box in hitBox.SegmentedHitbox)
+        {
+            bool segmentToucheHitBox = IsRayTouchesObject(box, currentRayX, currentRayY);
+            if (segmentToucheHitBox)
+                return true;
+        }
+
+        return false;
     }
 }

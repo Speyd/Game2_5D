@@ -1,12 +1,6 @@
-﻿
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextureLib;
+using TextureLib.Textures;
 
 
 namespace ProtoRender.Map;
@@ -33,7 +27,7 @@ public interface IMiniMapRenderable
     /// <summary>
     /// Gets or sets the texture used to represent the object on the minimap, if any.
     /// </summary>
-    public TextureObstacle? TextureInMiniMap { get; set; }
+    public TextureWrapper? TextureInMiniMap { get; set; }
 
     /// <summary>
     /// Fills the given rectangle shape with a solid color and optional outline for minimap rendering.
@@ -51,21 +45,21 @@ public interface IMiniMapRenderable
     /// <summary>
     /// Calculates the size offset based on a base offset and the current size scale.
     /// </summary>
-    /// <param name="baseOffset">The base size offset.</param>
+    /// <param name="offset">The base size offset.</param>
     /// <returns>The scaled size offset for the minimap.</returns>
-    float SizeOffsetMap(float baseOffset);
+    Vector2f SizeOffsetMap(Vector2f offset);
 
     /// <summary>
     /// Calculates the position offset based on a base offset and the current position scale.
     /// </summary>
-    /// <param name="baseOffset">The base position offset.</param>
+    /// <param name="offset">The base position offset.</param>
     /// <returns>The scaled position offset for the minimap.</returns>
-    float CoordinatesOffsetMap(float baseOffset);
+    Vector2f CoordinatesOffsetMap(Vector2f offset);
 
     /// <summary>
     /// Converts world or map coordinates to minimap coordinates based on the tile size.
     /// </summary>
     /// <param name="mapTile">The size of a single map tile.</param>
     /// <returns>The position on the minimap corresponding to the object's world position.</returns>
-    Vector2f ConversionToMapCoordinates(float mapTile);
+    Vector2f ConversionToMapCoordinates(Vector2f mapTile);
 }

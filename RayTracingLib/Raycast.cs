@@ -129,40 +129,45 @@ public static class Raycast
     }
 
 
+    private static bool RayHitsObjectBounds(IUnit unit, IObject ownerBox, HitBoxLib.HitBoxSegment.Box box)
+    {
+        float minX = (float)(box[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
+        float maxX = (float)(box[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
+        float minY = (float)(box[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
+        float maxY = (float)(box[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
+
+        List<double> tValues = GetIntersectionParameter(unit, minX, maxX, minY, maxY);
+
+        foreach (var tValue in tValues)
+        {
+            if (tValue < 0) continue;
+
+            double x = unit.X.Axis + tValue * unit.Direction.X;
+            double y = unit.Y.Axis + tValue * unit.Direction.Y;
+
+            var result = CheckIntersection(ownerBox, unit, x, y, new Sides(minX, maxX, minY, maxY));
+            if (result.IsTouch)
+                return true;
+        }
+
+        return false;
+    }
     /// <summary>
     /// Checks for ray intersections with objects in a cell
     /// </summary>
-    private static void DetailedSearchInCell(ConcurrentBag<IObject> colisionObject, List<IObject> objs, IUnit unit)
+    private static void DetailedSearchInCell(ConcurrentBag<IObject> colisionObject, List<IObject> objs, IUnit unit, bool useIgnoreList = true)
     {
 
         foreach (var obj in objs)
         {
-            if (obj == unit)
+            if (obj == unit || (useIgnoreList && unit.IgnoreCollisionObjects.ContainsKey(obj)))
                 continue;
 
             Vector3f obstaclePos = new Vector3f((float)obj.X.Axis, (float)obj.Y.Axis, (float)obj.Z.Axis);
-            var mainHitBox = obj.HitBox.MainHitBox;
-
-            float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0);
-            float maxX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Larger]?.Side ?? 0);
-            float minY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Smaller]?.Side ?? 0);
-            float maxY = (float)(mainHitBox[CoordinatePlane.Y, SideSize.Larger]?.Side ?? 0);
-
-            List<double> tValues = GetIntersectionParameter(unit, minX, maxX, minY, maxY);
-
-            foreach (var tValue in tValues)
+            if (RayHitsObjectBounds(unit, obj, obj.HitBox.MainHitBox))
             {
-                if (tValue < 0) continue;
-
-                double x = unit.X.Axis + tValue * unit.Direction.X;
-                double y = unit.Y.Axis + tValue * unit.Direction.Y;
-
-                var result = CheckIntersection(obj, unit, x, y, new Sides(minX, maxX, minY, maxY));
-                if (result.IsTouch)
-                {
-                    colisionObject.Add(obj);
-                    break;
-                }
+                colisionObject.Add(obj);
+                break;
             }
         }
     }
@@ -207,14 +212,29 @@ public static class Raycast
         return nearestObstacle;
     }
 
+    private static List<HitBoxLib.HitBoxSegment.Box> GetAllTouchedBoxes(IUnit unit, IObject touchedObject)
+    {
+        List<HitBoxLib.HitBoxSegment.Box> boxes = new() { touchedObject.HitBox.MainHitBox };
+        foreach(var box in touchedObject.HitBox.SegmentedHitbox)
+        {
+            if (RayHitsObjectBounds(unit, touchedObject, box))
+                boxes.Add(box);
+        }
+
+        return boxes;
+    }
+
     /// <summary>
     /// Basic Ray Tracing Method
     /// </summary>
-    public static (IObject?, Vector3f) RaycastFun(IMap map, IUnit unit)
+    public static (IObject?, Vector3f, List<HitBoxLib.HitBoxSegment.Box>) RaycastFun(IUnit unit, bool useIgnoreList = true)
     {
+        if (unit.Map is null)
+            return default;
+
         int tileSize = Screen.Setting.Tile;
-        int mapWidth = map.Setting.MapTileWidth;
-        int mapHeight = map.Setting.MapTileHeight;
+        int mapWidth = unit.Map.Setting.MapTileWidth;
+        int mapHeight = unit.Map.Setting.MapTileHeight;
 
 
         double dx = unit.Direction.X, dy = unit.Direction.Y;
@@ -246,16 +266,21 @@ public static class Raycast
                     {
                         int scanX = gridX + x * tileSize;
                         int scanY = gridY + y * tileSize;
-                        if (map.Obstacles.TryGetValue((scanX, scanY), out var objects))
-                            DetailedSearchInCell(collisions, objects, unit);
+
+                        if (!unit.Map.Obstacles.TryGetValue((scanX, scanY), out var value))
+                            continue;
+
+                        DetailedSearchInCell(collisions, value.Keys.ToList(), unit, useIgnoreList);
                     }
                 }
             });
 
 
-            var nearestObstacle = GetFirstTouchedObject(map, collisions, unit);
+            var nearestObstacle = GetFirstTouchedObject(unit.Map, collisions, unit);
             if (nearestObstacle.Item1 != null)
-                return (nearestObstacle.Item1, (nearestObstacle.Item2.Coordinate));
+            {
+                return (nearestObstacle.Item1, nearestObstacle.Item2.Coordinate, GetAllTouchedBoxes(unit, nearestObstacle.Item1));
+            }
 
             if (tMaxX < tMaxY)
             {

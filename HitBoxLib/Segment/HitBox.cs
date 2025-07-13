@@ -101,13 +101,15 @@ public class HitBox
         return addedHitBox;
     }
 
+
     /// <summary>
-    /// Checks whether all sides are included in the provided segment hitbox (as dictionary).
+    /// Checks whether all sides are included in the provided segment hitbox.
     /// </summary>
-    /// <param name="segmentHitBox">The dictionary of hitbox sides to check.</param>
+    /// <param name="segmentBox">The segment box to check.</param>
     /// <returns><c>true</c> if all sides are present; otherwise, <c>false</c>.</returns>
-    public bool IsAllSidesIncludedMainHitbox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox)
+    public bool IsAllSidesIncludedMainHitbox(Box segmentBox)
     {
+        var segmentHitBox = segmentBox.Body;
         foreach (var coordinatePlane in coordinatePlanes)
         {
             foreach (var sideSize in sideSizes)
@@ -125,76 +127,40 @@ public class HitBox
         }
         return true;
     }
-    /// <summary>
-    /// Checks whether all sides are included in the provided segment hitbox.
-    /// </summary>
-    /// <param name="segmentHitBox">The segment box to check.</param>
-    /// <returns><c>true</c> if all sides are present; otherwise, <c>false</c>.</returns>
-    public bool IsAllSidesIncludedMainHitbox(Box segmentHitBox)
-    {
-        return IsAllSidesIncludedMainHitbox(segmentHitBox.Body);
-    }
 
     /// <summary>
-    /// Checks whether all coordinates in the provided segment hitbox are within the bounds of the main hitbox.
+    /// Checks whether the given segment box stays entirely within the bounds of the MainHitBox.
+    /// This ensures no segment side exceeds the limits of the main hitbox.
     /// </summary>
-    /// <param name="segmentHitBox">The dictionary of hitbox sides to check.</param>
-    /// <returns><c>true</c> if all coordinates are within bounds; otherwise, <c>false</c>.</returns>
-    public bool IsAllCoordinateIncludedMainHitbox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox)
+    /// <param name="segment">The segment box to check.</param>
+    /// <returns><c>true</c> if the segment is within bounds; otherwise, <c>false</c>.</returns>
+    public bool IsSegmentWithinMain(Box segment)
     {
-        if (IsAllSidesIncludedMainHitbox(segmentHitBox) == false)
+        if (IsAllSidesIncludedMainHitbox(segment) == false)
             return false;
 
         foreach (var coordinatePlane in coordinatePlanes)
         {
-            foreach (var segment in segmentHitBox)
-            {
-                if (segment.Value.CoordinatePlane != coordinatePlane)
-                    continue;
+            var mainMin = MainHitBox[coordinatePlane, SideSize.Smaller]?.Offset ?? double.MinValue;
+            var mainMax = MainHitBox[coordinatePlane, SideSize.Larger]?.Offset ?? double.MaxValue;
 
-                if (segment.Value.SideSize == SideSize.Smaller &&
-                       segment.Value.Side < MainHitBox[coordinatePlane, SideSize.Smaller]?.Side)
-                {
-                    return false;
-                }
-                else if (segment.Value.SideSize == SideSize.Larger &&
-                    segment.Value.Side > MainHitBox[coordinatePlane, SideSize.Larger]?.Side)
-                {
-                    return false;
-                }
-            }
+            var segMin = segment[coordinatePlane, SideSize.Smaller]?.Offset ?? double.MaxValue;
+            var segMax = segment[coordinatePlane, SideSize.Larger]?.Offset ?? double.MinValue;
+
+            if (segMin < mainMin || segMin > mainMax ||
+                segMax > mainMax || segMax < mainMin)
+                return false;
         }
 
         return true;
     }
-    /// <summary>
-    /// Checks whether all coordinates in the provided segment hitbox are within the bounds of the main hitbox.
-    /// </summary>
-    /// <param name="segmentHitBox">The segment hitbox to check.</param>
-    /// <returns><c>true</c> if all coordinates are within bounds; otherwise, <c>false</c>.</returns>
-    public bool IsAllCoordinateIncludedMainHitbox(Box segmentHitBox)
+
+    private void ResetSideSegmentHitBox(Box segmentHitBox)
     {
-        if (IsAllSidesIncludedMainHitbox(segmentHitBox) == false)
-            return false;
-
-        foreach (var coordinatePlane in coordinatePlanes)
+        foreach (var body in MainHitBox.Body)
         {
-            foreach (var sideSize in sideSizes)
-            {
-                if (sideSize == SideSize.Smaller &&
-                       segmentHitBox[coordinatePlane, sideSize]?.Side < MainHitBox[coordinatePlane, sideSize]?.Side)
-                {
-                    return false;
-                }
-                else if (sideSize == SideSize.Larger &&
-                    segmentHitBox[coordinatePlane, sideSize]?.Side > MainHitBox[coordinatePlane, sideSize]?.Side)
-                {
-                    return false;
-                }
-            }
+            segmentHitBox[body.Value.CoordinatePlane, body.Value.SideSize]?.SetSide(body.Value.OrginalSide);
         }
-
-        return true;
     }
     /// <summary>
     /// Adds a segment hitbox if it fits within the main hitbox.
@@ -202,25 +168,12 @@ public class HitBox
     /// <param name="segmentHitBox">The segment hitbox to add.</param>
     public void AddSegmentHitBox(Box segmentHitBox)
     {
-        if (IsAllCoordinateIncludedMainHitbox(segmentHitBox) == false)
+        if (IsSegmentWithinMain(segmentHitBox) == false)
             return;
 
+        ResetSideSegmentHitBox(segmentHitBox);
         SegmentedHitbox.Add(segmentHitBox);
     }
-    /// <summary>
-    /// Adds a segment hitbox from dictionary if it fits within the main hitbox.
-    /// </summary>
-    /// <param name="segmentHitBox">The dictionary of hitbox sides.</param>
-    /// <param name="title">The title for the new segment box.</param>
-    public void AddSegmentHitBox(Dictionary<(CoordinatePlane, SideSize), HitBoxSide> segmentHitBox, string title)
-    {
-
-        if (IsAllCoordinateIncludedMainHitbox(segmentHitBox) == false)
-            return;
-        Box box = new Box(segmentHitBox, title);
-        SegmentedHitbox.Add(box);
-    }
-
 
     /// <summary>
     /// Sets an offset value for a specific side of the main hitbox.
@@ -298,6 +251,18 @@ public class HitBox
         get
         {
             return MainHitBox[plane, sideSize];
+        }
+    }
+    /// <summary>
+    /// Gets a list of <see cref="HitBoxSide"/>s from the box that match the specified coordinate plane.
+    /// </summary>
+    /// <param name="plane">The coordinate plane to filter by.</param>
+    /// <returns>A list of hitbox sides on the specified plane.</returns>
+    public List<HitBoxSide> this[CoordinatePlane plane]
+    {
+        get
+        {
+            return MainHitBox[plane];
         }
     }
 

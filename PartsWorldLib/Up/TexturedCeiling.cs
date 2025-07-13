@@ -1,108 +1,108 @@
 ﻿using ScreenLib;
-using ScreenLib.Output;
 using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Numerics;
-using EffectLib;
-using TextureLib;
 using ProtoRender.Object;
+using EffectLib.EffectCore;
+using TextureLib.Loader.ImageProcessing;
+using TextureLib.Textures;
 
 namespace PartsWorldLib.Up;
-public class TexturedCeiling : IUpPart
+/// <summary>
+/// Renders a textured ceiling segment using a shader and supports distance-based visual effects.
+/// Inherits core rendering logic from <see cref="StageSurface"/> and implements <see cref="IUpPart"/>.
+/// </summary>
+public class TexturedCeiling : StageSurface, IUpPart
 {
-    public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
-    private RenderTexture FirstStepRender { get; set; }
-    private RenderTexture SecondStepRender { get; set; }
+    /// <summary>
+    /// Gets or sets the base vertical offset applied to the ceiling in camera units (negative values move it upward).
+    /// </summary>
+    public float OffsetCameraY { get; set; } = -1f;
+    /// <summary>
+    /// Gets or sets the attenuation factor used when calculating the vertical offset for the ceiling.
+    /// </summary>
+    public float OffsetCameraYAttenuation { get; set; } = 2f;
 
-    private Sprite Sprite { get; set; }
-    private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TexturedCeiling"/> class using file paths.
+    /// </summary>
+    /// <param name="pathTexture">The file path to the ceiling texture.</param>
+    /// <param name="pathShader">The file path to the ceiling shader.</param>
+    /// <param name="options">Optional parameters for advanced loading behavior.</param>
+    public TexturedCeiling(string pathTexture, string pathShader, ImageLoadOptions? options = null)
+        : base(pathTexture, pathShader, options)
+    { }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TexturedCeiling"/> class with existing texture and shader objects.
+    /// </summary>
+    /// <param name="texture">The <see cref="Texture"/> used for the ceiling surface.</param>
+    /// <param name="shader">The <see cref="Shader"/> used to apply visual effects.</param>
+    public TexturedCeiling(Texture texture, Shader shader)
+        : base(texture, shader)
+    { }
 
-    /// <summary> Floor Mapping Shader </summary>
-    public Shader Shader { get; set; }
-    /// <summary> Texture Floor</summary>
-    public Texture? Texture { get; set; }
-
-
-    /// <summary> Scale texture </summary>
-    public float Scale { get; set; } = 0.2f;
-    /// <summary> Texture scrolling speed while walking </summary>
-    public int Raising { get; set; } = 2;
-    /// <summary> Serves to normalize the position of an object by height </summary>
-    public float DivisionCoefficient { get; set; } = 2.1f;
-    /// <summary> Normalizes the distance coefficient when the vertical angle is greater than 0</summary>
-    public float NormalAngleGreaterZero { get; set; } = 1.8f;
-    /// <summary> Limiter for DivisionCoefficient</summary>
-    public float MaxDivisionCoefficient { get; set; } = 3;
-
-    public TexturedCeiling(string texturePath, string shaderSettingPath)
+    private float CalculateOffsetY(IUnit unit)
     {
-        if (!File.Exists(texturePath))
-            throw new Exception("Error path textureCeiling");
+        float y = 1;
+        if (UseObjectHeight)
+        {
+            y = unit.Z.Axis < 0 ? (float)(unit.Z.Axis / Screen.Setting.VerticalTile) : -0.5f;
+            y = (float)(OffsetCameraY / (y * OffsetCameraYAttenuation));
+        }
 
-        Texture = new Texture(texturePath);
-
-
-        if (!File.Exists(shaderSettingPath))
-            throw new Exception("Error path shaderCeiling");
-
-        Shader = new Shader(null, null, shaderSettingPath);
-        SetStaticUniformShader();
-
-
-        FirstStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-        SecondStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-
-
-        Sprite = new Sprite(SecondStepRender.Texture);
+        return y;
     }
 
-    private void SetStaticUniformShader()
+    /// <summary>
+    /// Sets the required shader uniform parameters based on the specified unit's position, angle, and height.
+    /// </summary>
+    /// <param name="unit">The unit providing the camera’s angle, position, and height data.</param>
+    private void SetUniform(IUnit unit)
     {
-        if (Shader.IsAvailable)
-            Console.WriteLine("Shaders are supported!");
-        else
-            Console.WriteLine("Shaders are NOT supported!");
+        if (Shader is null)
+            return;
+        if(TextureSurface?.Texture is null)
+            TextureSurface = TextureWrapper.Placeholder;
 
-        Shader.SetUniform("u_texture", Texture);
-        Shader.SetUniform("u_Raising", Raising);
-        Shader.SetUniform("u_textureScale", Scale);
-        Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
-        Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
-        Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
+        Shader.SetUniform("renderTexture", TextureSurface.Texture);
+        Shader.SetUniform("resolution", new Vector2f(Screen.Window.Size.X, Screen.Window.Size.Y));
+        Shader.SetUniform("angle", (float)unit.Angle);
+        Shader.SetUniform("verticalAngle", (float)unit.VerticalAngle);
+        Shader.SetUniform("originPosition", unit.OriginPosition / Screen.Setting.Tile * TextureScrollingSpeed);
+        Shader.SetUniform("FOV", (float)unit.Fov / FovScaleFactor);
+        Shader.SetUniform("scale", Scale);
+        Shader.SetUniform("upFactor", UpAngleFactor);
+        Shader.SetUniform("downFactor", DownAngleFactor);
+        Shader.SetUniform("downLogScale", DownAngleLogScale);
+        Shader.SetUniform("offsetY", CalculateOffsetY(unit));
+
+        EffectUtils.ApplyEffect(Effect, Shader);
+        if (Effect is null && EffectManager.CurrentEffect is null)
+            baseEffect.Apply(Shader);
     }
-    private void SetDynamicUniformShader(IUnit unit)
+
+    /// <summary>
+    /// Renders the ceiling segment for the given unit.
+    /// Clears and redraws the internal render texture, applies shader uniforms,
+    /// and enqueues the result into the background render queue.
+    /// </summary>
+    /// <param name="unit">The unit whose position and viewing direction determine the rendering.</param>
+    public override void Render(IUnit? unit)
     {
-        Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
+        if (unit is null || Shader is null)
+            return;
 
-        Shader.SetUniform("u_playerPos", new Vector2f((float)unit.X.Axis, (float)unit.Y.Axis));
-        Shader.SetUniform("u_playerDir", unit.Direction);
-        Shader.SetUniform("u_playerPlane", unit.Plane);
-        Shader.SetUniform("u_verticalAngle", (float)unit.VerticalAngle);     
-    }
+        RenderTexture.Clear(ClearColor);
 
-    public void Render(IUnit unit)
-    {
-        FirstStepRender.Clear(ClearColor);
-        SecondStepRender.Clear(ClearColor);
+        uint halfHeight = (uint)RenderPartsWorld.NormalizeHeigthUpPart(unit);
+        Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), Color.White);
+        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), Color.White);
+        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, 0), Color.White);
+        Vertices[3] = new Vertex(new Vector2f(0, 0), Color.White);
 
+        SetUniform(unit);
+        RenderTexture.Draw(Vertices, new RenderStates(Shader));
+        RenderTexture.Display();
 
-        SetDynamicUniformShader(unit);
-
-        Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), new Color(255, 255, 255));
-        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), new Color(255, 255, 255));
-        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, 0), new Color(255, 255, 255));
-        Vertices[3] = new Vertex(new Vector2f(0, 0), new Color(255, 255, 255));
-
-        FirstStepRender.Draw(Vertices, new RenderStates(Shader));
-        FirstStepRender.Display();
-
-        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, unit.VerticalAngle));
-        SecondStepRender.Display();
-        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, Sprite);
+        Screen.OutputPriority?.AddToPriority(OutputLayer, Sprite);
     }
 }

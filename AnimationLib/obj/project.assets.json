@@ -722,7 +722,7 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.0.3": {
+      "EnginePseudo3D.DataPipes/1.2.9": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.1",
@@ -739,7 +739,7 @@
           }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.3": {
+      "EnginePseudo3D.ScreenLib/1.0.6": {
         "type": "package",
         "dependencies": {
           "NGenerics": "1.5.3",
@@ -756,12 +756,12 @@
           }
         }
       },
-      "EnginePseudo3D.TextureLib/1.1.2": {
+      "EnginePseudo3D.TextureLib/1.6.2": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.0.3",
-          "EnginePseudo3D.ScreenLib": "1.0.3",
-          "SixLabors.ImageSharp": "3.1.7"
+          "EnginePseudo3D.DataPipes": "1.2.9",
+          "EnginePseudo3D.ScreenLib": "1.0.6",
+          "Magick.NET-Q8-AnyCPU": "14.6.0"
         },
         "compile": {
           "lib/net8.0/TextureLib.dll": {
@@ -770,6 +770,72 @@
         },
         "runtime": {
           "lib/net8.0/TextureLib.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Magick.NET-Q8-AnyCPU/14.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Magick.NET.Core": "14.6.0"
+        },
+        "compile": {
+          "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/netstandard20/Magick.NET-Q8-AnyCPU.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so": {
+            "assetType": "native",
+            "rid": "linux-musl-x64"
+          },
+          "runtimes/linux-x64/native/Magick.Native-Q8-x64.dll.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/osx-arm64/native/Magick.Native-Q8-arm64.dll.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/Magick.Native-Q8-x64.dll.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-arm64/native/Magick.Native-Q8-arm64.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/Magick.Native-Q8-x64.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/Magick.Native-Q8-x86.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Magick.NET.Core/14.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Magick.NET.Core.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Magick.NET.Core.dll": {
             "related": ".xml"
           }
         }
@@ -862,22 +928,6 @@
           "lib/netstandard2.0/SFML.Window.dll": {
             "related": ".xml"
           }
-        }
-      },
-      "SixLabors.ImageSharp/3.1.7": {
-        "type": "package",
-        "compile": {
-          "lib/net6.0/SixLabors.ImageSharp.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net6.0/SixLabors.ImageSharp.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "build/_._": {}
         }
       }
     }
@@ -1076,49 +1126,98 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.0.3": {
-      "sha512": "7N1HENBAeq1HK4Ju7kF65sYiVWzxGBjo64OwUc6p1vQkKrJnguOs7ZYw0kucIDH9oejOO9zXq3YyrTqYB+h+zw==",
+    "EnginePseudo3D.DataPipes/1.2.9": {
+      "sha512": "R7j87oVKZh8Hwe1CeZYGHjLmhr9TUam/T3wPRGnxHCxyTrptGpjYoaPIrpS9aLWZGnIvrDSPSabql38/B+Oj1A==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.0.3",
+      "path": "enginepseudo3d.datapipes/1.2.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.0.3.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.2.9.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
         "lib/net8.0/DataPipes.dll",
         "lib/net8.0/DataPipes.xml"
       ]
     },
-    "EnginePseudo3D.ScreenLib/1.0.3": {
-      "sha512": "Q8X5LBdpLw/stPcrEW+H4r5Fbdcbe83xboVqhI2zH72B8TerzSL5vx9iKe51wf7C8pKFenWVoPq/12JJ+bb1eA==",
+    "EnginePseudo3D.ScreenLib/1.0.6": {
+      "sha512": "u1mr3fNnCmmSgr7Yct5UZLFq5A0mePG/LHKxAsgZxyZpIRa/mVpvkypsV4uDqZkyTG8mf9tG6hMVJzOBylBTUg==",
       "type": "package",
-      "path": "enginepseudo3d.screenlib/1.0.3",
+      "path": "enginepseudo3d.screenlib/1.0.6",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_ScreenLib.md",
-        "enginepseudo3d.screenlib.1.0.3.nupkg.sha512",
+        "enginepseudo3d.screenlib.1.0.6.nupkg.sha512",
         "enginepseudo3d.screenlib.nuspec",
         "iconNuGet.png",
         "lib/net8.0/ScreenLib.dll",
         "lib/net8.0/ScreenLib.xml"
       ]
     },
-    "EnginePseudo3D.TextureLib/1.1.2": {
-      "sha512": "bSGejMoGRz3ckaTPXqaUlP+lIbxDxflWn3u62la4010MWIKWVisG29cx77fax1uYqNKll4UBX+gQSlMWZmz+wA==",
+    "EnginePseudo3D.TextureLib/1.6.2": {
+      "sha512": "OOelHmHuJdGh3IitmuvK01DZgKfu2uTUkTcI5zuxbdWNeC2D7wRSiwBPj5Lpp0p69kH6l8Uz3jNo8KVGEwOYQg==",
       "type": "package",
-      "path": "enginepseudo3d.texturelib/1.1.2",
+      "path": "enginepseudo3d.texturelib/1.6.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_TextureLib.md",
-        "enginepseudo3d.texturelib.1.1.2.nupkg.sha512",
+        "enginepseudo3d.texturelib.1.6.2.nupkg.sha512",
         "enginepseudo3d.texturelib.nuspec",
         "iconNuGet.png",
         "lib/net8.0/TextureLib.dll",
         "lib/net8.0/TextureLib.xml"
+      ]
+    },
+    "Magick.NET-Q8-AnyCPU/14.6.0": {
+      "sha512": "B0/qIiJ3Y+saxSLVOcPCBQe/5UZYU0FedxXu+ZvSL7DXOhEzbcOgnaTtUhpUZhMWSOB/zrkduKFHnCj+7W0GOg==",
+      "type": "package",
+      "path": "magick.net-q8-anycpu/14.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Magick.NET.icon.png",
+        "Notice.linux-musl.txt",
+        "Notice.linux.txt",
+        "Notice.osx.txt",
+        "Notice.win.txt",
+        "build/netstandard20/Magick.NET-Q8-AnyCPU.targets",
+        "buildTransitive/netstandard20/Magick.NET-Q8-AnyCPU.targets",
+        "docs/Readme.md",
+        "lib/net8.0/Magick.NET-Q8-AnyCPU.dll",
+        "lib/net8.0/Magick.NET-Q8-AnyCPU.xml",
+        "lib/netstandard20/Magick.NET-Q8-AnyCPU.dll",
+        "lib/netstandard20/Magick.NET-Q8-AnyCPU.xml",
+        "magick.net-q8-anycpu.14.6.0.nupkg.sha512",
+        "magick.net-q8-anycpu.nuspec",
+        "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so",
+        "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so",
+        "runtimes/linux-x64/native/Magick.Native-Q8-x64.dll.so",
+        "runtimes/osx-arm64/native/Magick.Native-Q8-arm64.dll.dylib",
+        "runtimes/osx-x64/native/Magick.Native-Q8-x64.dll.dylib",
+        "runtimes/win-arm64/native/Magick.Native-Q8-arm64.dll",
+        "runtimes/win-x64/native/Magick.Native-Q8-x64.dll",
+        "runtimes/win-x86/native/Magick.Native-Q8-x86.dll"
+      ]
+    },
+    "Magick.NET.Core/14.6.0": {
+      "sha512": "hyXMoLiq6iHooL54iTYzKtiWOAQOiwrwVMeoglGifwYAduAzVfeG+/BxgIz1SaxfczBfQFlcWKTrRU0RNBucUw==",
+      "type": "package",
+      "path": "magick.net.core/14.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Copyright.txt",
+        "Magick.NET.icon.png",
+        "docs/Readme.md",
+        "lib/net8.0/Magick.NET.Core.dll",
+        "lib/net8.0/Magick.NET.Core.xml",
+        "lib/netstandard20/Magick.NET.Core.dll",
+        "lib/netstandard20/Magick.NET.Core.xml",
+        "magick.net.core.14.6.0.nupkg.sha512",
+        "magick.net.core.nuspec"
       ]
     },
     "NGenerics/1.5.3": {
@@ -1206,27 +1305,11 @@
         "sfml.window.2.6.1.nupkg.sha512",
         "sfml.window.nuspec"
       ]
-    },
-    "SixLabors.ImageSharp/3.1.7": {
-      "sha512": "9fIOOAsyLFid6qKypM2Iy0Z3Q9yoanV8VoYAHtI2sYGMNKzhvRTjgFDHonIiVe+ANtxIxM6SuqUzj0r91nItpA==",
-      "type": "package",
-      "path": "sixlabors.imagesharp/3.1.7",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "LICENSE",
-        "build/SixLabors.ImageSharp.props",
-        "lib/net6.0/SixLabors.ImageSharp.dll",
-        "lib/net6.0/SixLabors.ImageSharp.xml",
-        "sixlabors.imagesharp.128.png",
-        "sixlabors.imagesharp.3.1.7.nupkg.sha512",
-        "sixlabors.imagesharp.nuspec"
-      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.TextureLib >= 1.1.2"
+      "EnginePseudo3D.TextureLib >= 1.6.2"
     ]
   },
   "packageFolders": {
@@ -1234,7 +1317,7 @@
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.1.9",
+    "version": "1.6.5",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
       "projectName": "EnginePseudo3D.AnimationLib",
@@ -1281,7 +1364,7 @@
         "dependencies": {
           "EnginePseudo3D.TextureLib": {
             "target": "Package",
-            "version": "[1.1.2, )"
+            "version": "[1.6.2, )"
           }
         },
         "imports": [

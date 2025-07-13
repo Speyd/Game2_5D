@@ -13,6 +13,7 @@ public class OutputPriority(RenderWindow window)
 {
     /// <summary>Object tree</summary>
     public SortedDictionary<OutputPriorityType, List<(Drawable, RenderStates?)>> TreePriority { get; init; } = new();
+    private readonly object _lock = new();
 
     /// <summary>
     /// Adds an object to the rendering order
@@ -22,18 +23,29 @@ public class OutputPriority(RenderWindow window)
     /// <param name="state">State of the object being rendered</param>
     public void AddToPriority(OutputPriorityType priority, Drawable drawObject, RenderStates? state = null)
     {
-        if (!TreePriority.TryGetValue(priority, out var list))
+        lock (_lock)
         {
-            list = new List<(Drawable, RenderStates?)>();
-            TreePriority[priority] = list;
-        }
+            if (!TreePriority.TryGetValue(priority, out var list))
+            {
+                list = new List<(Drawable, RenderStates?)>();
+                TreePriority[priority] = list;
+            }
 
-        list.Add((drawObject, state));
+            list.Add((drawObject, state));
+        }
     }
     /// <summary> Drawing the render tree </summary>
     public void DrawingByPriority()
     {
-        foreach (var pair in TreePriority)
+        List<KeyValuePair<OutputPriorityType, List<(Drawable, RenderStates?)>>> prioritySnapshot;
+
+        lock (_lock)
+        {
+            prioritySnapshot = TreePriority.ToList();
+            TreePriority.Clear();
+        }
+
+        foreach (var pair in prioritySnapshot)
         {
             foreach (var sprite in pair.Value)
             {
@@ -43,7 +55,5 @@ public class OutputPriority(RenderWindow window)
                     window.Draw(sprite.Item1);
             }
         }
-
-        TreePriority.Clear();
     }
 }

@@ -10,12 +10,12 @@ public class Setting
     /// <summary>
     /// Gets the width of the map in cell units.
     /// </summary>
-    public int MapWidth { get; init; }
+    public int MapWidth { get; internal set; }
 
     /// <summary>
     /// Gets the height of the map in cell units.
     /// </summary>
-    public int MapHeight { get; init; }
+    public int MapHeight { get; internal set; }
 
     /// <summary>
     /// Gets the width of the map in pixels, calculated as MapWidth * Screen.Setting.Tile.

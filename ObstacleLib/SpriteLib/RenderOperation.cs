@@ -1,18 +1,12 @@
-﻿using HitBoxLib.HitBoxSegment;
-using ScreenLib;
-using SFML.Graphics;
+﻿using ScreenLib;
 using SFML.System;
-using SixLabors.ImageSharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using EffectLib;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
+using EffectLib.EffectCore;
+using System.Drawing;
+using SFML.Graphics;
+
 
 namespace ObstacleLib.SpriteLib.Render;
 internal static class RenderOperation
@@ -36,9 +30,20 @@ internal static class RenderOperation
         uint heightTexture = sprite.Animation.CurrentFrame.Height;
 
 
-        sprite.RenderSprite = new SFML.Graphics.Sprite(sprite.Animation.CurrentFrame.Texture);
-        sprite.RenderSprite.Color = VisualEffectHelper.VisualEffect.TransformationColor(sprite.Distance);
-        sprite.RenderSprite.Origin = new Vector2f(widthTexture / 2, heightTexture / 2);
+        SFML.Graphics.Color effectColor = EffectUtils.ApplyEffect(sprite.Effect, Obstacle.BaseEffectColor, (float)sprite.Distance / Screen.Setting.Tile) ?? SFML.Graphics.Color.White;
+        sprite.RenderSprite.Color = effectColor;
+
+        var frame = sprite.Animation.CurrentFrame;
+        if (sprite.RenderSprite.Texture != frame.Texture)
+            sprite.RenderSprite.Texture = frame.Texture;
+
+        if (sprite.RenderSprite.TextureRect != sprite.Animation.MaxFrameRect)
+            sprite.RenderSprite.TextureRect = sprite.Animation.MaxFrameRect;
+
+        Vector2f origin = new Vector2f(widthTexture / 2f, heightTexture / 2f);
+        if (sprite.RenderSprite.Origin != origin)
+            sprite.RenderSprite.Origin = origin;
+
         sprite.RenderSprite.Position = GetPositionOnScreen(sprite, unit, height);
         
         sprite.RenderSprite.Scale = new Vector2f

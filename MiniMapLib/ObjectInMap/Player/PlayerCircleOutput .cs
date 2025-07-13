@@ -1,21 +1,21 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace MiniMapLib.ObjectInMap.Player;
-internal class PlayerCircleOutput
+/// <summary>
+/// Responsible for rendering the player as a circle on the minimap.
+/// </summary>
+public class PlayerCircleOutput
 {
-    //----------Setting MiniMap------------
     private SettingMap.Setting Setting { get; init; }
 
 
-    //----------Setting Circle------------
     private int radiusCircle;
+    /// <summary>
+    /// Radius of the player circle. Minimum is 5.
+    /// Changing this also updates the <see cref="EntityShape"/> radius and origin.
+    /// </summary>
     public int RadiusCircle
     {
         get => radiusCircle;
@@ -26,12 +26,22 @@ internal class PlayerCircleOutput
         }
     }
 
-    public Color ColorCircle { get; set; } = Color.Red;
+    /// <summary>
+    /// Fill color of the player circle. Default is <see cref="Color.Red"/>.
+    /// </summary>
+    public Color Color { get; set; } = Color.Red;
 
-    //-----------------Circle--------------------
-    private CircleShape EntityShape { get; init; }
+    /// <summary>
+    /// Internal SFML shape used to render the player circle.
+    /// </summary>
+    public CircleShape EntityShape { get; init; }
 
 
+    /// <summary>
+    /// Creates a <see cref="PlayerCircleOutput"/> with the specified settings and radius.
+    /// </summary>
+    /// <param name="setting">The minimap settings to use.</param>
+    /// <param name="radiusCircle">Initial radius of the circle. Default is 5.</param>
     public PlayerCircleOutput(SettingMap.Setting setting, int radiusCircle = 5)
     {
         Setting = setting;
@@ -41,15 +51,17 @@ internal class PlayerCircleOutput
     }
 
 
-
+    /// <summary>
+    /// Renders the player circle on the given render texture at the center of the minimap.
+    /// </summary>
+    /// <param name="renderTexture">The render texture to draw the circle on.</param>
     public void RenderEntityShape(RenderTexture renderTexture)
     {
         float x = Setting.CenterX - RadiusCircle;
         float y = Setting.CenterY - RadiusCircle;
 
         EntityShape.Position = new Vector2f(x, y);
-
-        EntityShape.FillColor = ColorCircle;
+        EntityShape.FillColor = Color;
 
         renderTexture.Draw(EntityShape);
     }

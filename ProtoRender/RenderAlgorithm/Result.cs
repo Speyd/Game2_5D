@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ProtoRender.RenderInterface;
 using DataPipes.Pool;
 using SFML.System;
+using System.Numerics;
 
 
 namespace ProtoRender.RenderAlgorithm;
@@ -55,6 +56,8 @@ public class Result : IResettable
     /// Gets or sets the previous position of the object detected by the ray.
     /// </summary>
     public CoordinateOnScreen? PositionPreviousObject { get; set; } = null;
+
+    public Vector2 Normal { get; set; } = Vector2.Zero;
 
     /// <summary>
     /// Calculates and sets rendering-related parameters based on observer and raycasting data.

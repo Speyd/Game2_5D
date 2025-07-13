@@ -1,9 +1,7 @@
 ﻿using ScreenLib;
 using ScreenLib.Output;
-using SFML.Graphics;
 using MiniMapLib.SettingMap;
 using MiniMapLib.ObjectInMap.Player;
-using MiniMapLib.ObjectInMap.Positions;
 using MiniMapLib.Window;
 using MiniMapLib.ObjectInMap.Obstacles;
 using ProtoRender.Object;
@@ -17,70 +15,61 @@ namespace MiniMapLib;
 /// </summary>
 public class MiniMap
 {
-    //-------------------Window--------------------
+    /// <summary>
+    /// Gets or sets the output rendering layer priority for this surface.
+    /// Determines on which layer the ceiling is drawn.
+    /// </summary>
+    public OutputPriorityType OutputLayer { get; set; } = OutputPriorityType.Interface;
+
     /// <summary>
     /// The main window used for rendering the minimap.
     /// </summary>
-    private WindowRender MiniMapWindow { get; init; }
+    public WindowRender MiniMapWindow { get; init; }
 
     /// <summary>
     /// The window used for rendering the border around the minimap.
     /// </summary>
-    private WindowRender BorderMapWindow { get; init; }
-
-    //-------------------Custom--------------------
-    /// <summary>
-    /// The background color of the minimap. Default is blue.
-    /// </summary>
-    public Color BackgroundColor { get; set; } = Color.Blue;
+    public WindowRender BorderMapWindow { get; init; }
 
     /// <summary>
     /// The border surrounding the minimap, including the option for a custom path.
     /// </summary>
-    private Border Border { get; init; }
+    public Border Border { get; init; }
 
-    //-----------------Setting------------------
     /// <summary>
     /// The settings for the minimap, including scale and position.
     /// </summary>
     public MiniMapLib.SettingMap.Setting Setting { get; init; }
 
     /// <summary>
-    /// Determines whether the minimap is rendered or hidden.
-    /// </summary>
-    public bool IsRender { get; set; } = true;
-
-    /// <summary>
     /// The player's position rendered as a circle on the minimap.
     /// </summary>
-    private PlayerCircleOutput PlayerCircle { get; init; }
+    public PlayerCircleOutput PlayerCircle { get; init; }
 
     /// <summary>
     /// The player's direction rendered as a line on the minimap.
     /// </summary>
-    private PlayerLineOutput PlayerLine { get; init; }
+    public PlayerLineOutput PlayerLine { get; init; }
 
-    //----------------Barriers------------------
     /// <summary>
     /// Represents obstacles in the game world rendered on the minimap.
     /// </summary>
-    private ObstacleOutput Obstacle { get; init; }
+    public ObstacleOutput Obstacle { get; init; }
 
-    //------------------Zoom--------------------
     /// <summary>
     /// The zoom functionality for the minimap.
     /// </summary>
     public ZoomMiniMap Zoom { get; init; }
 
+
+
     /// <summary>
     /// Initializes the minimap with the given parameters, including the player's unit, map scale, position, and optional custom border.
     /// </summary>
-    /// <param name="mapScale">The scale of the minimap.</param>
-    /// <param name="positionMiniMap">The position of the minimap on the screen.</param>
     /// <param name="pathBorder">An optional custom border path for the minimap.</param>
-    public MiniMap(float mapScale, PositionsMiniMap positionMiniMap, string? pathBorder = null)
+    public MiniMap(string? pathBorder = null)
     {
-        Setting = new MiniMapLib.SettingMap.Setting(positionMiniMap, mapScale);
+        Setting = new MiniMapLib.SettingMap.Setting();
         MiniMapWindow = new WindowRender(Setting);
 
         BorderMapWindow = new WindowRender(Setting);
@@ -94,6 +83,8 @@ public class MiniMap
         Zoom = new ZoomMiniMap(Setting);
     }
 
+
+
     /// <summary>
     /// Renders the minimap by drawing the player’s position, obstacles, zoom, and borders.
     /// </summary>
@@ -101,10 +92,10 @@ public class MiniMap
     /// <param name="unit">Genaral unit in minimap.</param>
     public void Render(IMap map, IUnit unit)
     {
-        if (!IsRender)
+        if (!Setting.IsRender)
             return;
 
-        MiniMapWindow.Window.Clear(BackgroundColor);
+        MiniMapWindow.Window.Clear(Setting.BackgroundColor);
 
         // Rendering player position and sight
         PlayerLine.RenderLineSight(MiniMapWindow.Window, unit.Direction);
@@ -122,8 +113,8 @@ public class MiniMap
         BorderMapWindow.SetRenderSprite(Setting.CoordinatesInWindow);
 
         // Add windows to the screen output queue
-        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, MiniMapWindow.RenderSprite);
-        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Interface, BorderMapWindow.RenderSprite);
+        Screen.OutputPriority?.AddToPriority(OutputLayer, MiniMapWindow.RenderSprite);
+        Screen.OutputPriority?.AddToPriority(OutputLayer, BorderMapWindow.RenderSprite);
     }
 
     /// <summary>
@@ -131,7 +122,7 @@ public class MiniMap
     /// </summary>
     public void Hide()
     {
-        IsRender = !IsRender;
+        Setting.IsRender = !Setting.IsRender;
     }
 }
 

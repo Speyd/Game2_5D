@@ -245,39 +245,41 @@ public static class Screen
         Window.Position = new Vector2i(posX, posY);
     }
     /// <summary>
-    /// Calculates the window width minus the specified percentage of the total window width.
+    /// Calculates the specified percentage of the total screen width.
     /// </summary>
-    /// <param name="percent">The percentage of the screen width to subtract.</param>
-    /// <returns>The remaining width in pixels.</returns>
-    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0.</exception>
+    /// <param name="percent">The percentage (1–100) of the screen width to return.</param>
+    /// <returns>The calculated width in pixels.</returns>
+    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0, or greater than 100.</exception>
     public static uint GetPercentWidth(int percent)
     {
-        if (percent <= 0)
+        if (percent <= 0 || percent > 100)
             throw new Exception("Error percent value 'GetPercentWidth'");
 
-        return (uint)(ScreenWidth - ((ScreenWidth / 100) * percent));
+        return (uint)((ScreenWidth / 100.0) * percent);
     }
+
     /// <summary>
-    /// Calculates the height of the window minus the specified percentage of the total window height.
+    /// Calculates the specified percentage of the total screen height.
     /// </summary>
-    /// <param name="percent">The percentage of the screen height to subtract.</param>
-    /// <returns>The remaining height in pixels.</returns>
-    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0.</exception>
+    /// <param name="percent">The percentage (1–100) of the screen height to return.</param>
+    /// <returns>The calculated height in pixels.</returns>
+    /// <exception cref="Exception">Thrown if the percentage is less than or equal to 0, or greater than 100.</exception>
     public static uint GetPercentHeight(int percent)
     {
-        if (percent <= 0)
+        if (percent <= 0 || percent > 100)
             throw new Exception("Error percent value 'GetPercentHeight'");
 
-        return (uint)(ScreenHeight - ((ScreenHeight / 100) * percent));
+        return (uint)((ScreenHeight / 100.0) * percent);
     }
 
     /// <summary>
-    /// Преобразует координаты (x, y) в целочисленные координаты, кратные размеру тайла.
+    /// Converts (x, y) coordinates to integer coordinates that are multiples of the tile size,
+    /// using the tile value from the settings.
     /// </summary>
-    /// <param name="x">Координата X.</param>
-    /// <param name="y">Координата Y.</param>
-    /// <param name="tile">Размер тайла.</param>
-    /// <returns>Кортеж (X, Y), где обе координаты округлены до ближайшего значения, кратного tile.</returns>
+    /// <param name="x">The X coordinate.</param>
+    /// <param name="y">The Y coordinate.</param>
+    /// <param name="tile">Tile world</param>
+    /// <returns>A tuple of (X, Y), where both coordinates are rounded to the nearest multiple of Setting.Tile.</returns>
     public static ValueTuple<int, int> Mapping(double x, double y, int tile)
     {
         return new ValueTuple<int, int>(

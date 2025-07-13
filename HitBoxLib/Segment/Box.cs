@@ -78,14 +78,14 @@ public class Box
     /// <summary>
     /// Gets a list of <see cref="HitBoxSide"/>s from the box that match the specified coordinate plane.
     /// </summary>
-    /// <param name="side">The coordinate plane to filter by.</param>
+    /// <param name="plane">The coordinate plane to filter by.</param>
     /// <returns>A list of hitbox sides on the specified plane.</returns>
-    public List<HitBoxSide> this[CoordinatePlane side]
+    public List<HitBoxSide> this[CoordinatePlane plane]
     {
         get
         {
-            return Body.Where(pair => pair.Value.CoordinatePlane == side)
-                 .Where(pair => pair.Key.Item1 == side)
+            return Body.Where(pair => pair.Value.CoordinatePlane == plane)
+                 .Where(pair => pair.Key.Item1 == plane)
                 .Select(pair => pair.Value)
                 .ToList();
         }
@@ -94,16 +94,16 @@ public class Box
     /// <summary>
     /// Gets the <see cref="HitBoxSide"/> associated with the specified coordinate plane and side size.
     /// </summary>
-    /// <param name="side">The coordinate plane.</param>
+    /// <param name="plane">The coordinate plane.</param>
     /// <param name="sideSize">The size of the side (e.g., smaller or larger).</param>
     /// <returns>
     /// The corresponding hitbox side, or <c>null</c> if no match is found.
     /// </returns>
-    public HitBoxSide? this[CoordinatePlane side, SideSize sideSize]
+    public HitBoxSide? this[CoordinatePlane plane, SideSize sideSize]
     {
         get
         {
-            if (Body.TryGetValue((side, sideSize), out var hitBoxSide))
+            if (Body.TryGetValue((plane, sideSize), out var hitBoxSide))
                 return hitBoxSide;
 
             return null;

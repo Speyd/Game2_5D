@@ -1,46 +1,58 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace MiniMapLib.ObjectInMap.Player;
-internal class PlayerLineOutput
+/// <summary>
+/// Represents a line indicating the player's sight direction on the minimap.
+/// Responsible for rendering a directional line starting from the player's position.
+/// </summary>
+public class PlayerLineOutput
 {
-    //----------Setting MiniMap------------
+    /// <summary>
+    /// Minimap settings containing configuration such as center position.
+    /// </summary>
     private SettingMap.Setting Setting { get; init; }
 
+    /// <summary>
+    /// Length of the line representing the player's sight.
+    /// </summary>
+    public int Length { get; set; } = 50;
 
-    //-------------Setting Line----------------
-    public int SizeMainRayX { get; set; } = 50;
-    public int SizeMainRayY { get; set; } = 50;
+    /// <summary>
+    /// Color of the sight line. Default is green.
+    /// </summary>
+    public SFML.Graphics.Color Color { get; set; } = SFML.Graphics.Color.Green;
 
-    //----------------Line------------------
+    /// <summary>
+    /// Internal vertex array used to draw the line.
+    /// </summary>
     private VertexArray Line { get; init; }
 
 
-    public PlayerLineOutput(SettingMap.Setting setting,
-                            int sizeMainRayX = 50, int sizeMainRayY = 50)
+    /// <summary>
+    /// Creates a new instance of <see cref="PlayerLineOutput"/> using the specified minimap settings.
+    /// </summary>
+    /// <param name="setting">The minimap settings to use for positioning.</param>
+    public PlayerLineOutput(SettingMap.Setting setting)
     {
         Setting = setting;
-
-        SizeMainRayX = sizeMainRayX;
-        SizeMainRayY = sizeMainRayY;
-
         Line = new VertexArray(PrimitiveType.Lines, 2);
     }
 
 
+    /// <summary>
+    /// Renders the player's sight line on the given render texture in the specified direction.
+    /// </summary>
+    /// <param name="renderTexture">The render texture on which to draw the line.</param>
+    /// <param name="Dir">The normalized direction vector indicating the sight direction.</param>
     public void RenderLineSight(RenderTexture renderTexture, Vector2f Dir)
     {
-        Line[0] = new Vertex(new Vector2f(Setting.CenterX, Setting.CenterY), Color.Green);
+        Line[0] = new Vertex(new Vector2f(Setting.CenterX, Setting.CenterY), Color);
 
-        float endX = (float)(Setting.CenterX - SizeMainRayX * Dir.X);
-        float endY = (float)(Setting.CenterY - SizeMainRayY * Dir.Y);
-        Line[1] = new Vertex(new Vector2f(endX, endY), Color.Green);
+        float endX = (float)(Setting.CenterX - Length * Dir.X);
+        float endY = (float)(Setting.CenterY - Length * Dir.Y);
+        Line[1] = new Vertex(new Vector2f(endX, endY), Color);
 
         renderTexture.Draw(Line);
     }

@@ -7,13 +7,35 @@ using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Data.HitBoxObject;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.Map;
-using TextureLib;
+using TextureLib.Textures;
 using ProtoRender.Object;
+using EffectLib.EffectCore;
+
 
 namespace ObstacleLib;
-public abstract class Obstacle : IObject
+public abstract class Obstacle : IObject, IEffectUser
 {
+    /// <summary>
+    /// Globally unique identifier for the object.
+    /// </summary>
+    public Guid UUID { get; set; } = Guid.NewGuid();
+
     public Action<IObject>? OnPositionChanged { get; set; }
+    private IMap? _map = null;
+    public IMap? Map 
+    {
+        get => _map;
+        set
+        {
+            if (_map is not null && _map != value)
+            {
+                _map.DeleteObstacle(this);
+                if (value is not null)
+                    value.AddObstacle(CellX, CellY, this);
+            }
+            _map = value;
+        }
+    }
 
     public virtual Coordinate X { get; init; }
     public virtual Coordinate Y { get; init; }
@@ -23,7 +45,18 @@ public abstract class Obstacle : IObject
     public int CellY { get; set; }
 
 
-    public virtual HitBox HitBox { get; init; } = new HitBox();
+    private HitBox _hitBox = new HitBox();
+    public virtual HitBox HitBox 
+    {
+        get => _hitBox;
+        set
+        {
+            _hitBox = value;
+            X.SetHitBox(value);
+            Y.SetHitBox(value);
+            Z.SetHitBox(value);
+        }
+    } 
 
 
     //--------------------Shift-------------------------
@@ -52,12 +85,15 @@ public abstract class Obstacle : IObject
         }
     }
 
-    public void SetShifts(double shifts)
+    public static readonly SFML.Graphics.Color BaseEffectColor = new SFML.Graphics.Color(200, 200, 200);
+    public virtual IEffect? Effect { get; set; } = null;
+
+    public virtual void SetShifts(double shifts)
     {
         ShiftCubedX = shifts;
         ShiftCubedY = shifts;
     }
-    public void SetShifts(double shiftsX, double shiftsY)
+    public virtual void SetShifts(double shiftsX, double shiftsY)
     {
         ShiftCubedX = shiftsX;
         ShiftCubedY = shiftsY;
@@ -67,20 +103,25 @@ public abstract class Obstacle : IObject
 
     //------------------Map Setting-----------------
     public virtual SFML.Graphics.Color ColorInMap { get; set; }
-    public virtual TextureObstacle? TextureInMiniMap { get; set; }
+    public virtual TextureWrapper? TextureInMiniMap { get; set; }
     public virtual float SizeScale { get; set; } = 1;
     public virtual float PositionScale { get; set; } = 1;
 
 
     //-------------------Collision Setting--------------------
     /// <summary>The passability of an object through the current object</summary>
-    public virtual bool IsPassability { get; set; }
+    public virtual bool IsPassability { get; set; } = false;
+    /// <summary>
+    /// If true, ignores collisions with objects marked as MainBox (primary bounding boxes),
+    /// allowing them to be bypassed during collision checks.
+    ///</summary>
+    public virtual bool IgnoreCollisonMainBox { get; set; } = false;
     /// <summary>Possibility to add an object to the same cell where the current object is located</summary>
     public virtual bool IsSingleAddable { get; set; } = false;
 
 
 
-    public Obstacle(double x, double y, SFML.Graphics.Color colorInMap, bool isPassability)
+    public Obstacle(SFML.Graphics.Color colorInMap, bool isPassability)
     {
         ColorInMap = colorInMap;
         IsPassability = isPassability;
@@ -93,7 +134,27 @@ public abstract class Obstacle : IObject
 
         Z = new Coordinate(CoordinatePlane.Z, HitBox);
     }
+    public Obstacle(Obstacle obstacle)
+        :this(obstacle.ColorInMap, obstacle.IsPassability)
+    {
+        HitBox = new HitBox(obstacle.HitBox);
 
+        X.UpdateInfo(obstacle.X, HitBox);
+        Y.UpdateInfo(obstacle.Y, HitBox);
+        Z.UpdateInfo(obstacle.Z, HitBox);
+
+        ColorInMap = obstacle.ColorInMap;
+        if(obstacle.TextureInMiniMap is not null)
+            TextureInMiniMap = new TextureWrapper(obstacle.TextureInMiniMap.PathTexture, true); ;
+
+        IsPassability = obstacle.IsPassability;
+        IsSingleAddable = obstacle.IsSingleAddable;
+        IgnoreCollisonMainBox = obstacle.IgnoreCollisonMainBox;
+
+        SizeScale = obstacle.SizeScale;
+        PositionScale = obstacle.PositionScale;
+        Effect = obstacle.Effect;
+    }
 
     private void UpdateCoordinate()
     {
@@ -101,6 +162,8 @@ public abstract class Obstacle : IObject
     }
     public abstract void Render(Result result, IUnit unit);
     public abstract IObject GetCopy();
+    public abstract IObject GetDeepCopy();
+
 
     #region IMapAdder
     public abstract void HandleObjectAddition(double x, double y, bool resetHitBoxSide);
@@ -136,9 +199,9 @@ public abstract class Obstacle : IObject
     #region IMiniMapRenderable
     public abstract void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1);
     public abstract void FillingTextureShape(RectangleShape rectangleShape);
-    public abstract Vector2f ConversionToMapCoordinates(float mapTile);
-    public virtual float CoordinatesOffsetMap(float baseOffset) => baseOffset / PositionScale;
-    public virtual float SizeOffsetMap(float baseOffset) => baseOffset / SizeScale;
+    public abstract Vector2f ConversionToMapCoordinates(Vector2f mapTile);
+    public virtual Vector2f CoordinatesOffsetMap(Vector2f baseOffset) => baseOffset / PositionScale;
+    public virtual Vector2f SizeOffsetMap(Vector2f baseOffset) => baseOffset / SizeScale;
     #endregion
 
     #region IHitBoxProcessor
@@ -159,5 +222,9 @@ public abstract class Obstacle : IObject
 
         return hitboxObjectInfo;
     }
+    #endregion
+
+    #region ITextureProvider
+    public abstract TextureWrapper? GetUsedTexture(IUnit? observer = null);
     #endregion
 }

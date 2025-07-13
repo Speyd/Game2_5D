@@ -6,9 +6,10 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v8.0": {
-      "EffectLib/1.0.4": {
+      "EffectLib/1.1.7": {
         "dependencies": {
-          "EnginePseudo3D.ScreenLib": "1.0.3",
+          "EnginePseudo3D.DataPipes": "1.2.9",
+          "EnginePseudo3D.ScreenLib": "1.0.6",
           "SFML.Graphics": "2.6.1"
         },
         "runtime": {
@@ -909,15 +910,27 @@
           }
         }
       },
-      "EnginePseudo3D.ScreenLib/1.0.3": {
+      "EnginePseudo3D.DataPipes/1.2.9": {
+        "dependencies": {
+          "SFML.Graphics": "2.6.1",
+          "SFML.System": "2.6.1"
+        },
+        "runtime": {
+          "lib/net8.0/DataPipes.dll": {
+            "assemblyVersion": "1.2.9.0",
+            "fileVersion": "1.2.9.0"
+          }
+        }
+      },
+      "EnginePseudo3D.ScreenLib/1.0.6": {
         "dependencies": {
           "NGenerics": "1.5.3",
           "SFML.Net": "2.6.1"
         },
         "runtime": {
           "lib/net8.0/ScreenLib.dll": {
-            "assemblyVersion": "1.0.3.0",
-            "fileVersion": "1.0.3.0"
+            "assemblyVersion": "1.0.6.0",
+            "fileVersion": "1.0.6.0"
           }
         }
       },
@@ -988,7 +1001,7 @@
     }
   },
   "libraries": {
-    "EffectLib/1.0.4": {
+    "EffectLib/1.1.7": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -1000,12 +1013,19 @@
       "path": "csfml/2.6.1",
       "hashPath": "csfml.2.6.1.nupkg.sha512"
     },
-    "EnginePseudo3D.ScreenLib/1.0.3": {
+    "EnginePseudo3D.DataPipes/1.2.9": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Q8X5LBdpLw/stPcrEW+H4r5Fbdcbe83xboVqhI2zH72B8TerzSL5vx9iKe51wf7C8pKFenWVoPq/12JJ+bb1eA==",
-      "path": "enginepseudo3d.screenlib/1.0.3",
-      "hashPath": "enginepseudo3d.screenlib.1.0.3.nupkg.sha512"
+      "sha512": "sha512-R7j87oVKZh8Hwe1CeZYGHjLmhr9TUam/T3wPRGnxHCxyTrptGpjYoaPIrpS9aLWZGnIvrDSPSabql38/B+Oj1A==",
+      "path": "enginepseudo3d.datapipes/1.2.9",
+      "hashPath": "enginepseudo3d.datapipes.1.2.9.nupkg.sha512"
+    },
+    "EnginePseudo3D.ScreenLib/1.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-u1mr3fNnCmmSgr7Yct5UZLFq5A0mePG/LHKxAsgZxyZpIRa/mVpvkypsV4uDqZkyTG8mf9tG6hMVJzOBylBTUg==",
+      "path": "enginepseudo3d.screenlib/1.0.6",
+      "hashPath": "enginepseudo3d.screenlib.1.0.6.nupkg.sha512"
     },
     "NGenerics/1.5.3": {
       "type": "package",

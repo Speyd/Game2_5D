@@ -1,6 +1,6 @@
 ﻿using FpsLib;
-using ProtoRender.Map;
 using ProtoRender.Object;
+
 
 namespace MoveLib.Move;
 /// <summary>
@@ -13,7 +13,6 @@ public static class MovePositions
     /// Attempts to move the unit in a given direction with collision detection,
     /// based on its speed and current facing direction.
     /// </summary>
-    /// <param name="map">The game map containing obstacles.</param>
     /// <param name="unit">The unit to move.</param>
     /// <param name="directionX">
     /// The horizontal component of the input direction (e.g., -1 for left, 1 for right).
@@ -21,9 +20,8 @@ public static class MovePositions
     /// <param name="directionY">
     /// The vertical component of the input direction (e.g., -1 for backward, 1 for forward).
     /// </param>
-    public static void Move(IMap map, IUnit unit, double directionX, double directionY)
+    public static void Move(IUnit unit, double directionX, double directionY)
     {
-
         double speed = unit.MoveSpeed * FPS.GetDeltaTime();
 
         double cosAngle = unit.Direction.X;
@@ -37,7 +35,7 @@ public static class MovePositions
 
         lock (unit)
         {
-            Collision.IsCollision(map, unit, rx, ry, unit.IgnoreCollisionObjects.Keys.ToList());
+            Collision.IsCollisionObject(unit, rx, ry, unit.IgnoreCollisionObjects.Keys.ToList());
         }
     }
 }

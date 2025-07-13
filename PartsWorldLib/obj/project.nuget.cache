@@ -1,23 +1,25 @@
 {
   "version": 2,
-  "dgSpecHash": "NsSY3SCNLoM=",
+  "dgSpecHash": "en5zvdeJTXE=",
   "success": true,
   "projectFilePath": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Admin\\.nuget\\packages\\csfml\\2.6.1\\csfml.2.6.1.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.datapipes\\1.0.3\\enginepseudo3d.datapipes.1.0.3.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.effectlib\\1.0.4\\enginepseudo3d.effectlib.1.0.4.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.hitboxlib\\1.3.1\\enginepseudo3d.hitboxlib.1.3.1.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.protorender\\1.6.0\\enginepseudo3d.protorender.1.6.0.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.screenlib\\1.0.3\\enginepseudo3d.screenlib.1.0.3.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.texturelib\\1.1.2\\enginepseudo3d.texturelib.1.1.2.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.controllib\\1.8.9\\enginepseudo3d.controllib.1.8.9.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.datapipes\\1.2.9\\enginepseudo3d.datapipes.1.2.9.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.effectlib\\1.1.7\\enginepseudo3d.effectlib.1.1.7.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.hitboxlib\\1.6.6\\enginepseudo3d.hitboxlib.1.6.6.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.protorender\\2.3.0\\enginepseudo3d.protorender.2.3.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.screenlib\\1.0.6\\enginepseudo3d.screenlib.1.0.6.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\enginepseudo3d.texturelib\\1.6.2\\enginepseudo3d.texturelib.1.6.2.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\magick.net-q8-anycpu\\14.6.0\\magick.net-q8-anycpu.14.6.0.nupkg.sha512",
+    "C:\\Users\\Admin\\.nuget\\packages\\magick.net.core\\14.6.0\\magick.net.core.14.6.0.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\ngenerics\\1.5.3\\ngenerics.1.5.3.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.audio\\2.6.1\\sfml.audio.2.6.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.graphics\\2.6.1\\sfml.graphics.2.6.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.net\\2.6.1\\sfml.net.2.6.1.nupkg.sha512",
     "C:\\Users\\Admin\\.nuget\\packages\\sfml.system\\2.6.1\\sfml.system.2.6.1.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.1\\sfml.window.2.6.1.nupkg.sha512",
-    "C:\\Users\\Admin\\.nuget\\packages\\sixlabors.imagesharp\\3.1.7\\sixlabors.imagesharp.3.1.7.nupkg.sha512"
+    "C:\\Users\\Admin\\.nuget\\packages\\sfml.window\\2.6.1\\sfml.window.2.6.1.nupkg.sha512"
   ],
   "logs": []
 }

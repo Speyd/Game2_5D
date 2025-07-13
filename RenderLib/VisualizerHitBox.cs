@@ -35,31 +35,24 @@ public static class VisualizerHitBox
     /// <summary>
     /// Renders the hitboxes of obstacles on the map based on the configured <see cref="VisualizerType"/> and distance limit.
     /// </summary>
-    /// <param name="map">The game map containing obstacles to check for rendering.</param>
     /// <param name="unit">The unit performing the rendering, typically the player or observer.</param>
-    public static void Render(IMap map, ProtoRender.Object.IUnit unit)
+    public static void Render(ProtoRender.Object.IUnit unit)
     {
+        if (unit.Map is null)
+            return;
+
         float index = indexStepDepth;
         float step = indexStepDepth;
-
         ObserverInfo observerInfo = unit.GetObserverInfo();
-        var obstacleValues = map.Obstacles.Values
-        .Select(obstaclesList =>
-        {
-            lock (obstaclesList)
-            {
-                return obstaclesList.ToList();
-            }
-        })
-        .ToList();
 
-        Parallel.ForEach(obstacleValues, Screen.Setting.ParallelOptions, obstList =>
+        Parallel.ForEach(unit.Map.Obstacles.Values, Screen.Setting.ParallelOptions, obstList =>
         {
-            Parallel.ForEach(obstList, Screen.Setting.ParallelOptions, obstacle =>
+            foreach(var obstacle in obstList.Keys)
             {
                 RenderInfo hitboxObjectInfo = obstacle.GetRenderHitBoxInfo();
                 if (IsDistanceLimited && MathUtils.CalculateDistance(hitboxObjectInfo.position, observerInfo.position) > unit.MaxRenderTile)
                     return;
+
                 foreach(var box in HitBoxLib.Operations.Render.BuildHitBoxMesh(hitboxObjectInfo, observerInfo))
                 {
                     switch (VisualizerType)
@@ -76,7 +69,7 @@ public static class VisualizerHitBox
                     }
                     index += step;
                 }
-            });
+            }
         });
     }
 }

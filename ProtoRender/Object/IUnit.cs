@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using SFML.System;
-using ProtoRender.Map;
+﻿using SFML.System;
+using ControlLib;
+using ControlLib.Mouse;
 
 namespace ProtoRender.Object;
 /// <summary>
@@ -16,16 +11,12 @@ namespace ProtoRender.Object;
 /// representing an entity that has both the characteristics of an object in the world (e.g., position, passability)
 /// and the ability to observe the environment (e.g., field of view, direction, rendering).
 /// </remarks>
-public interface IUnit : IObject, IObserver, IMovable
+public interface IUnit : IObject, IObserver, IMovable, IMouseControllable, IControlHandler
 {
     /// <summary>
     /// Gets the origin position of the unit, typically representing its initial spawn or reference point.
     /// </summary>
     Vector2f OriginPosition { get; }
-    /// <summary>
-    /// The map object to which this object belongs
-    /// </summary>
-    IMap? Map { get; set; }
     /// <summary>
     /// Creates a copy of the unit with the same properties as the current instance.
     /// </summary>

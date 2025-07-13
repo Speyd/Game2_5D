@@ -1,44 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SFML.Graphics;
+﻿using SFML.Graphics;
 using ScreenLib;
 using SFML.System;
-using TextureLib;
+using TextureLib.Textures;
 using ObstacleLib.TexturedWallLib.Render;
 using HitBoxLib.PositionObject;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
-using EffectLib;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
-using ObstacleLib.SpriteLib;
-using DataPipes;
 using ProtoRender.RenderInterface;
-using ObstacleLib.BlankWallLib;
-
+using RayTracingLib.Detection;
+using TextureLib.Textures.Pair;
+using EffectLib.EffectCore;
+using TextureLib.Loader.ImageProcessing;
 
 namespace ObstacleLib.TexturedWallLib;
 public class TexturedWall : Obstacle, IWall, IDrawable
 {
     //----------------------Textures--------------------------
-    public MultiTexturedObject MultiTextured { get; init; }
+    public MultiSideTexture MultiSide { get; internal set; }
     public TexturedPair? CurrentRenderTexture { get; set; } = null;
 
     //----------------------Setting---------------------
     /// <summary>Current wall level in world wall level</summary>
-    public int LvlWall { get; private set; } = IWall.minLvlWall;
-
+    public int LvlWall { get; internal set; } = IWall.minLvlWall;
 
 
     #region Constructor
     private static SFML.Graphics.Color GetDefaultWallColor() => SFML.Graphics.Color.Red;
     private string GetFirstTextureOrThrow()
     {
-        return MultiTextured.UniqueTexture.GetFirstValue()?.Base.PathTexture
+        return MultiSide.UniqueTexture.GetFirstValue()?.Base.PathTexture
                ?? throw new Exception("Error loading Texture (TexturedWall)");
     }
     private void InitializeWall()
@@ -47,77 +39,121 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
     }
 
-    public TexturedWall(params string[] texturePaths)
-       : base(0, 0, GetDefaultWallColor(), false)
+    public TexturedWall()
+       : base(GetDefaultWallColor(), false)
+    {
+        MultiSide = new MultiSideTexture();
+        InitializeWall();
+    }
+    public TexturedWall(ImageLoadOptions? options = null, bool createNewTexture = true, params string[] texturePaths)
+       : base(GetDefaultWallColor(), false)
     {
         if (texturePaths.Length == 0)
             throw new ArgumentException("At least one texture path must be provided.");
 
-        MultiTextured = new MultiTexturedObject(texturePaths);
-        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+        MultiSide = new MultiSideTexture(options, createNewTexture, texturePaths);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
 
         InitializeWall();
     }
-    public TexturedWall(bool isPassability = false, params string[] texturePaths)
-       : base(0, 0, GetDefaultWallColor(), isPassability)
+    public TexturedWall(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+        : base(GetDefaultWallColor(), false)
+    {
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
+
+        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+
+        InitializeWall();
+    }
+    public TexturedWall(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+        : base(GetDefaultWallColor(), false)
+    {
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
+
+        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+
+        InitializeWall();
+    }
+    public TexturedWall(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+        : base(GetDefaultWallColor(), false)
+    {
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
+
+        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+
+        InitializeWall();
+    }
+    public TexturedWall(TexturedWall texturedWall, ImageLoadOptions? options = null, bool createNewTexture = true)
+        : base(texturedWall)
+    {
+        MultiSide = new MultiSideTexture(texturedWall.MultiSide, options, createNewTexture);
+        CurrentRenderTexture = null;
+
+        LvlWall = texturedWall.LvlWall;
+    }
+    
+
+    public TexturedWall(ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null, params string[] texturePaths)
+       : base(GetDefaultWallColor(), false)
     {
         if (texturePaths.Length == 0)
             throw new ArgumentException("At least one texture path must be provided.");
 
-        MultiTextured = new MultiTexturedObject(texturePaths);
-        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+        MultiSide = new MultiSideTexture(sharedSides ?? new(), options, texturePaths);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
 
         InitializeWall();
     }
-    public TexturedWall(List<(ObjectSide, string)> textures, bool isPassability = false)
-        : base(0, 0, GetDefaultWallColor(), isPassability)
+    public TexturedWall(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
+        : base(GetDefaultWallColor(), false)
     {
         if (textures == null || textures.Count == 0)
             throw new ArgumentException("Texture list cannot be empty.");
 
-        MultiTextured = new MultiTexturedObject(textures);
-        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
 
         InitializeWall();
     }
-    public TexturedWall(List<(ObjectSide, TextureObstacle)> textures, bool isPassability = false)
-        : base(0, 0, GetDefaultWallColor(), isPassability)
+    public TexturedWall(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
+        : base(GetDefaultWallColor(), false)
     {
         if (textures == null || textures.Count == 0)
             throw new ArgumentException("Texture list cannot be empty.");
 
-        MultiTextured = new MultiTexturedObject(textures);
-        TextureInMiniMap = new TextureObstacle(GetFirstTextureOrThrow());
+        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
 
         InitializeWall();
     }
-
-    public TexturedWall(TexturedWall texturedWall)
-        : base(0, 0, SFML.Graphics.Color.Black, false)
+    public TexturedWall(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
+        : base(GetDefaultWallColor(), false)
     {
-        HitBox = new HitBox(texturedWall.HitBox);
+        if (textures == null || textures.Count == 0)
+            throw new ArgumentException("Texture list cannot be empty.");
 
-        X.UpdateInfo(texturedWall.X, HitBox);
-        Y.UpdateInfo(texturedWall.Y, HitBox);
-        Z.UpdateInfo(texturedWall.Z, HitBox);
+        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
+        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
 
-        ColorInMap = texturedWall.ColorInMap;
-        TextureInMiniMap = texturedWall.TextureInMiniMap is not null ? new TextureObstacle(texturedWall.TextureInMiniMap) : null;
-
-        IsPassability = texturedWall.IsPassability;
-        IsSingleAddable = texturedWall.IsSingleAddable;
-
-        SizeScale = texturedWall.SizeScale;
-        PositionScale = texturedWall.PositionScale;
-
-        MultiTextured = new MultiTexturedObject(texturedWall.MultiTextured);
+        InitializeWall();
+    }
+    public TexturedWall(TexturedWall texturedWall, bool isPassability = false, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
+        : base(texturedWall)
+    {
+        MultiSide = new MultiSideTexture(texturedWall.MultiSide, sharedSides ?? new(), options);
         CurrentRenderTexture = null;
 
         LvlWall = texturedWall.LvlWall;
     }
     #endregion
 
-    #region MapAdder_Implementation
+    #region MapAdder
     private void UpdateBaseHeightHitBox()
     {
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile);
@@ -138,7 +174,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     }
     #endregion
 
-    #region IMiniMapRenderable_Implementation
+    #region IMiniMapRenderable
     public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
     {
         rectangleShape.OutlineThickness = OutlineThickness;
@@ -146,21 +182,21 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     }
     public override void FillingTextureShape(RectangleShape rectangleShape)
     {
-        if (TextureInMiniMap is not null)
+        if (TextureInMiniMap is not null && TextureInMiniMap.IsLoaded)
             rectangleShape.Texture = TextureInMiniMap.Texture;
         else
             rectangleShape.FillColor = ColorInMap;
     }
-    public override Vector2f ConversionToMapCoordinates(float mapTile)
+    public override Vector2f ConversionToMapCoordinates(Vector2f mapTile)
     {
-        float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
-        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
+        float x = (float)X.Axis / Screen.Setting.Tile * mapTile.X;
+        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile.Y;
 
         return new Vector2f(x, y);
     }
     #endregion
 
-    #region IRenderable_Implementation
+    #region IRenderable
     public override CoordinateOnScreen GetPositionOnScreen(Result result, IUnit unit)
     {
         float positionX = WorldToScreenX(result.Ray);
@@ -181,7 +217,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
     #endregion
 
-    #region IWall_Implementation
+    #region IWall
     public bool IsOffScreen(Result result, CoordinateOnScreen position, int heightTexture, Vector2f scale)
     {
         if (result.PositionPreviousObject is not null && position.Top > result.PositionPreviousObject.Value.Top && position.Bottom < result.PositionPreviousObject.Value.Bottom)
@@ -203,25 +239,33 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     }
     #endregion
 
-    #region IDrawable_Implementation
+    #region IDrawable
     public float CalculateTextureX(Vector2f UV, ObjectSide side)
     {
-        CurrentRenderTexture = MultiTextured[side];
+        CurrentRenderTexture = MultiSide[side];
         if (CurrentRenderTexture is null)
             throw new Exception("CurrentRenderTexture is null (GetTextureCoordinate)");
 
         float textureX = UV.X > UV.Y ? UV.X : UV.Y;
         textureX *= CurrentRenderTexture.Base.Width / Screen.Setting.Scale;
 
-        return textureX - (float)Math.Pow(CurrentRenderTexture.Base.Height / TextureObstacle.BaseHeight, 4.5f);
+        return textureX;
     }      
-    public float BringingToStandard(float heightObj)
+    public float BringingToStandardHeight(float heightObj)
     {
         if (CurrentRenderTexture is null)
-            throw new Exception("CurrentRenderTexture is null(BringingToStandard)");
+            throw new Exception("CurrentRenderTexture is null(BringingToStandardHeight)");
 
-        heightObj *= TextureObstacle.DifferenceHeight(CurrentRenderTexture.Base.Height);
+        heightObj *= TextureWrapper.DifferenceHeight(CurrentRenderTexture.Base.Height);
         return heightObj;
+    }
+    public float BringingToStandardWidth(float widthtObj)
+    {
+        if (CurrentRenderTexture is null)
+            throw new Exception("CurrentRenderTexture is null(BringingToStandardWidth)");
+
+        widthtObj *= TextureWrapper.DifferenceWidth(CurrentRenderTexture.Base.Width);
+        return widthtObj;
     }
     public float GetAveragedMult(float baseMult)
     {
@@ -230,7 +274,7 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
 
         float newMult = baseMult * Screen.ScreenRatio;
-        newMult *= (float)TextureObstacle.BaseHeight / CurrentRenderTexture.Base.Height;
+        newMult *= (float)TextureWrapper.BaseHeight / CurrentRenderTexture.Base.Height;
 
         return newMult;
     }
@@ -281,9 +325,23 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     }
     #endregion
 
+    #region ITextureProvider
+    public override TextureWrapper? GetUsedTexture(IUnit? observer = null)
+    {
+        if (observer is null || MultiSide.UniqueTexture.Count == 0)
+            return TextureInMiniMap;
+
+        return MultiSide[RayDetectionX.DetermineObjectSides(this, observer)]?.Base;
+    }
+    #endregion
+
     public override IObject GetCopy()
     {
-        return new TexturedWall(this);
+        return new TexturedWall(this, true);
+    }
+    public override IObject GetDeepCopy()
+    {
+        return new TexturedWall(this, false);
     }
 
     public override void Render(Result result, IUnit unit)
@@ -292,25 +350,28 @@ public class TexturedWall : Obstacle, IWall, IDrawable
     }
     public void RenderMultiWall(Result result, IUnit unit, ObjectSide objectSide)
     {
-        RenderInternal(result, unit, MultiTextured[objectSide]);
+        RenderInternal(result, unit, MultiSide[objectSide]);
     }
 
 
     private void RenderInternal(Result result, IUnit unit, TexturedPair? currentRenderTexture)
     {
-        if (currentRenderTexture is null)
-            return;
+        TextureWrapper texture;
+        if (currentRenderTexture is null || !currentRenderTexture.Base.IsLoaded)
+            texture = TextureWrapper.Placeholder;
+        else
+            texture = currentRenderTexture.Base;
 
-        IntRect textureRect = TextureObstacle.SetIntegerRectangle((int)result.Offset, Screen.Setting.Tile, currentRenderTexture.Base);
+        IntRect textureRect = TextureWrapper.SetIntegerRectangle((int)result.Offset, Screen.Setting.Tile, texture);
         CoordinateOnScreen position = GetPositionOnScreen(result, unit);
-        Vector2f scale = RenderOperation.CalculationTextureScale(result, currentRenderTexture);
+        Vector2f scale = RenderOperation.CalculationTextureScale(result, texture);
 
         if (IsOffScreen(result, position, textureRect.Height, scale))
             return;
 
         VertexArray vertexArray = new VertexArray(PrimitiveType.Quads, 4);
 
-        SFML.Graphics.Color blackoutColor = VisualEffectHelper.VisualEffect.TransformationColor(result.Depth);
+        SFML.Graphics.Color effectColor = EffectUtils.ApplyEffect(Effect, BaseEffectColor, (float)result.Depth / Screen.Setting.Tile) ?? SFML.Graphics.Color.White;
 
         Vector2f topLeftTexCoords = new Vector2f(textureRect.Left, textureRect.Top);
         Vector2f topRightTexCoords = new Vector2f(textureRect.Left + textureRect.Width, textureRect.Top);
@@ -322,12 +383,15 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         Vector2f bottomRightPosition = new Vector2f(position.X + scale.X * textureRect.Width, position.Top + scale.Y * textureRect.Height);
         Vector2f bottomLeftPosition = new Vector2f(position.X, position.Top + scale.Y * textureRect.Height);
 
-        vertexArray[0] = new Vertex(topLeftPosition, blackoutColor, topLeftTexCoords);
-        vertexArray[1] = new Vertex(topRightPosition, blackoutColor, topRightTexCoords);
-        vertexArray[2] = new Vertex(bottomRightPosition, blackoutColor, bottomRightTexCoords);
-        vertexArray[3] = new Vertex(bottomLeftPosition, blackoutColor, bottomLeftTexCoords);
+        vertexArray[0] = new Vertex(topLeftPosition, effectColor, topLeftTexCoords);
+        vertexArray[1] = new Vertex(topRightPosition, effectColor, topRightTexCoords);
+        vertexArray[2] = new Vertex(bottomRightPosition, effectColor, bottomRightTexCoords);
+        vertexArray[3] = new Vertex(bottomLeftPosition, effectColor, bottomLeftTexCoords);
 
-        RenderStates renderStates = new RenderStates(currentRenderTexture.Mod.Texture);
+        var renderTexture = currentRenderTexture is null || !currentRenderTexture.Base.IsLoaded || currentRenderTexture.Mod.Texture is null
+            ? TextureWrapper.Placeholder.Texture
+            : currentRenderTexture.Mod.Texture;
+        RenderStates renderStates = new RenderStates(renderTexture);
 
         result.Depth += (LvlWall + 1) * 0.01;
         ZBuffer.AddToZBuffer(vertexArray, result.Depth, renderStates);

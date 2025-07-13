@@ -46,6 +46,7 @@ public static class Render
 
         MultHeight = Screen.ScreenHeight / (baseScreenHeightForHitBox * MultHeight);
     }
+
     static Render()
     {
         SetNewMult();

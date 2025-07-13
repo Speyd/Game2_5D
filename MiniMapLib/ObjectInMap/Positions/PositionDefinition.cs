@@ -20,8 +20,8 @@ public static class PositionDefinition
     /// </summary>
     public static float GetLowerY(MiniMapLib.SettingMap.Setting Setting)
     {
-        float mapHeight = Screen.ScreenHeight / Setting.MapScale;
-        return Screen.ScreenHeight - mapHeight * (float)(Math.PI / 2);
+        float mapHeight = Screen.ScreenHeight / Setting.MapScaleY;
+        return Screen.ScreenHeight - mapHeight + Setting.GetWindowSize().Y / 2;
     }
 
     /// <summary>
@@ -29,8 +29,8 @@ public static class PositionDefinition
     /// </summary>
     public static float GetLowerX(MiniMapLib.SettingMap.Setting Setting)
     {
-        float mapWidth = Screen.ScreenWidth / Setting.MapScale;
-        return Screen.ScreenWidth - mapWidth / (float)(Math.PI / 2);
+        float mapWidth = Screen.ScreenWidth / Setting.MapScaleX;
+        return Screen.ScreenWidth - mapWidth + Setting.GetWindowSize().X / 2;
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public static class PositionDefinition
     /// </summary>
     public static Vector2f GetLowerLeftCorner(MiniMapLib.SettingMap.Setting Setting)
     {
-        return new Vector2f(0, GetLowerY(Setting));
+        return new Vector2f(Setting.GetWindowSize().X / 2, GetLowerY(Setting));
     }
 
     /// <summary>
@@ -54,7 +54,7 @@ public static class PositionDefinition
     /// </summary>
     public static Vector2f GetUpperRightCorner(MiniMapLib.SettingMap.Setting Setting)
     {
-        return new Vector2f(GetLowerX(Setting), 0);
+        return new Vector2f(GetLowerX(Setting), Setting.GetWindowSize().Y / 2);
     }
 
     /// <summary>
@@ -62,6 +62,29 @@ public static class PositionDefinition
     /// </summary>
     public static Vector2f GetUpperLeftCorner(MiniMapLib.SettingMap.Setting Setting)
     {
-        return new Vector2f(0, 0);
+        var size = Setting.GetWindowSize();
+        return new Vector2f(size.X / 2, size.Y / 2);
+    }
+
+    /// <summary>
+    /// Sets the position of the minimap based on the selected position type.
+    /// </summary>
+    public static void SetPosition(MiniMapLib.SettingMap.Setting Setting)
+    {
+        switch (Setting.Positions)
+        {
+            case PositionsMiniMap.None:
+                Setting.IsRender = false; break;
+            case PositionsMiniMap.LowerLeftCorner:
+                Setting.CoordinatesInWindow = GetLowerLeftCorner(Setting); break;
+            case PositionsMiniMap.LowerRightCorner:
+                Setting.CoordinatesInWindow = GetLowerRightCorner(Setting); break;
+            case PositionsMiniMap.UpperRightCorner:
+                Setting.CoordinatesInWindow = GetUpperRightCorner(Setting); break;
+            case PositionsMiniMap.UpperLeftCorner:
+                Setting.CoordinatesInWindow = GetUpperLeftCorner(Setting); break;
+            default:
+                Setting.CoordinatesInWindow = GetUpperRightCorner(Setting); break;
+        }
     }
 }

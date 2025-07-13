@@ -1,72 +1,51 @@
 ﻿using ScreenLib;
 using SFML.Graphics;
-using System;
-using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SFML.System;
-using System.Numerics;
 using ObstacleLib.BlankWallLib.Render;
-using HitBoxLib;
 using HitBoxLib.PositionObject;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using EffectLib;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
-using ObstacleLib.SpriteLib;
-using TextureLib;
+using TextureLib.Textures;
 using ProtoRender.RenderInterface;
+using ObstacleLib.SpriteLib;
+using EffectLib.EffectCore;
 
 
 namespace ObstacleLib.BlankWallLib;
 public class BlankWall : Obstacle, IWall
 {
     //--------------------Color For Render------------------
-    public Color StandartColorFilling { get; set; }
+    public Color ColorFilling { get; set; }
 
     #region Constructor
-    public BlankWall(Color color, bool isPassability = false)
-        : base(0, 0, color, isPassability)
+    public BlankWall(Color color)
+        : base(color, false)
     {
-        StandartColorFilling = color;
+        ColorFilling = color;
 
         UpdateBaseHeightHitBox();
         Z.Axis = 0;
     }
-    public BlankWall(byte r, byte g, byte b, bool isPassability = false)
-        : base(0, 0, new Color(r, g, b), isPassability)
+    public BlankWall(byte r, byte g, byte b)
+        : base(new Color(r, g, b), false)
     {
-        StandartColorFilling = new Color(r, g, b);
+        ColorFilling = new Color(r, g, b);
 
         UpdateBaseHeightHitBox();
         Z.Axis = 0;
     }
     public BlankWall(BlankWall blankWall)
-       : base(0, 0, SFML.Graphics.Color.Black, false)
+       : base(blankWall)
     {
-        HitBox = new HitBox(blankWall.HitBox);
-
-        X.UpdateInfo(blankWall.X, HitBox);
-        Y.UpdateInfo(blankWall.Y, HitBox);
-        Z.UpdateInfo(blankWall.Z, HitBox);
-
-        ColorInMap = blankWall.ColorInMap;
-        StandartColorFilling = blankWall.StandartColorFilling;
-        TextureInMiniMap = blankWall.TextureInMiniMap is not null ? new TextureObstacle(blankWall.TextureInMiniMap) : null;
-
-        IsPassability = blankWall.IsPassability;
-        IsSingleAddable = blankWall.IsSingleAddable;
-
-        SizeScale = blankWall.SizeScale;
-        PositionScale = blankWall.PositionScale;
+        ColorFilling = blankWall.ColorFilling;
     }
     #endregion
 
 
-    #region MapAdder_Implementation
+    #region MapAdder
     private void UpdateBaseHeightHitBox()
     {
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(Screen.Setting.HalfVerticalTile);
@@ -87,7 +66,7 @@ public class BlankWall : Obstacle, IWall
     }
     #endregion
 
-    #region IMiniMapRenderable_Implementation
+    #region IMiniMapRenderable
     public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
     {
         rectangleShape.OutlineThickness = OutlineThickness;
@@ -105,16 +84,16 @@ public class BlankWall : Obstacle, IWall
         rectangleShape.FillColor = ColorInMap;
     }
 
-    public override Vector2f ConversionToMapCoordinates(float mapTile)
+    public override Vector2f ConversionToMapCoordinates(Vector2f mapTile)
     {
-        float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
-        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
+        float x = (float)X.Axis / Screen.Setting.Tile * mapTile.X;
+        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile.Y;
 
         return new Vector2f(x, y);
     }
     #endregion
 
-    #region IRenderable_Implementation
+    #region IRenderable
     public override CoordinateOnScreen GetPositionOnScreen(Result result, IUnit unit)
     {
         float positionX = WorldToScreenX(result.Ray);
@@ -133,7 +112,7 @@ public class BlankWall : Obstacle, IWall
     }
     #endregion
 
-    #region IWall_Implementation
+    #region IWall
     public bool IsOffScreen(Result result, CoordinateOnScreen position, int heightTexture, Vector2f scale)
     {
         if (result.PositionPreviousObject is not null && position.Top > result.PositionPreviousObject.Value.Top && position.Bottom < result.PositionPreviousObject.Value.Bottom)
@@ -147,7 +126,15 @@ public class BlankWall : Obstacle, IWall
     }
     #endregion
 
+    #region ITextureProvider
+    public override TextureWrapper? GetUsedTexture(IUnit? observer = null) => null;
+    #endregion
+
     public override IObject GetCopy()
+    {
+        return new BlankWall(this);
+    }
+    public override IObject GetDeepCopy()
     {
         return new BlankWall(this);
     }
@@ -159,9 +146,10 @@ public class BlankWall : Obstacle, IWall
         if (IsOffScreen(result, position, 1, scale))
             return;
 
-        Color ColorFilling = VisualEffectHelper.VisualEffect.TransformationColor(StandartColorFilling, result.Depth);
+        SFML.Graphics.Color effectColor = EffectUtils.ApplyEffect(Effect, ColorFilling, (float)result.Depth / Screen.Setting.Tile) ?? SFML.Graphics.Color.White;
+
         VertexArray renderWall = new VertexArray(PrimitiveType.Quads, 4);
-        RenderOperation.UpdateVertices(renderWall, scale, position, ColorFilling);
+        RenderOperation.UpdateVertices(renderWall, scale, position, effectColor);
 
         ZBuffer.AddToZBuffer(renderWall, result.Depth);
     }

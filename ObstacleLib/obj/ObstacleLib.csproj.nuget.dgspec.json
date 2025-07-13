@@ -5,7 +5,7 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj": {
-      "version": "1.7.4",
+      "version": "2.6.6",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ObstacleLib\\ObstacleLib.csproj",
         "projectName": "EnginePseudo3D.ObstacleLib",
@@ -52,15 +52,15 @@
           "dependencies": {
             "EnginePseudo3D.AnimationLib": {
               "target": "Package",
-              "version": "[1.1.9, )"
+              "version": "[1.6.5, )"
             },
             "EnginePseudo3D.EffectLib": {
               "target": "Package",
-              "version": "[1.0.4, )"
+              "version": "[1.1.7, )"
             },
             "EnginePseudo3D.RayTracingLib": {
               "target": "Package",
-              "version": "[1.6.8, )"
+              "version": "[2.2.9, )"
             }
           },
           "imports": [

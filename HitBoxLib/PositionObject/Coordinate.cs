@@ -125,4 +125,10 @@ public class Coordinate
         hitBox.SetSide(this);
         AfterMoveAxis?.Invoke();
     }
+
+    public void SetHitBox(HitBox hitBox)
+    {
+        _hitBox = hitBox;
+        hitBox.SetSide(this);
+    }
 }

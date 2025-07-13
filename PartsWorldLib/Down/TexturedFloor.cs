@@ -1,112 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
-using ScreenLib;
-using ScreenLib.Output;
+﻿using ScreenLib;
+using TextureLib.Loader.ImageProcessing;
 using SFML.Graphics;
 using SFML.System;
-using EffectLib;
-using TextureLib;
 using ProtoRender.Object;
+using EffectLib.EffectCore;
+using TextureLib.Textures;
 
 namespace PartsWorldLib.Down;
-public class TexturedFloor : IDownPart
+/// <summary>
+/// Renders a textured floor segment using a shader and supports distance-based visual effects.
+/// Inherits common surface rendering logic from <see cref="StageSurface"/> and implements <see cref="IDownPart"/>.
+/// </summary>
+public class TexturedFloor : StageSurface, IDownPart
 {
-    public VertexArray Vertices = new VertexArray(PrimitiveType.Quads, 4);
-    private RenderTexture FirstStepRender { get; set; }
-    private RenderTexture SecondStepRender { get; set; }
+    /// <summary>
+    /// Gets or sets the base vertical offset applied to the floor in camera units.
+    /// </summary>
+    public float OffsetCameraY { get; set; } = 1f;
 
-    private Sprite Sprite { get; set; }
-    private Color ClearColor { get; set; } = new Color(0, 0, 0, 0);
-    /// <summary> Floor Mapping Shader </summary>
-    public Shader Shader { get; set; }
-    /// <summary> Texture Floor</summary>
-    private Texture _texture;
-    public Texture Texture 
+    /// <summary>
+    /// Gets or sets the attenuation factor applied when calculating the vertical camera offset.
+    /// </summary>
+    public float OffsetCameraYAttenuation { get; set; } = 5f;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TexturedFloor"/> class with file paths.
+    /// </summary>
+    /// <param name="pathTexture">The file path to the floor texture.</param>
+    /// <param name="pathShader">The file path to the floor shader.</param>
+    /// <param name="options">Optional parameters for advanced loading behavior.</param>
+    public TexturedFloor(string pathTexture, string pathShader, ImageLoadOptions? options = null)
+        : base(pathTexture, pathShader, options)
+    { }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TexturedFloor"/> class with existing texture and shader.
+    /// </summary>
+    /// <param name="texture">The texture to use for the floor.</param>
+    /// <param name="shader">The shader to use for rendering effects.</param>
+    public TexturedFloor(Texture texture, Shader shader)
+        : base(texture, shader)
+    { }
+
+    private float CalculateOffsetY(IUnit unit)
     {
-        get => _texture;
-        set
+        float y = 1;
+        if (UseObjectHeight)
         {
-            _texture = value;
-            FirstStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
-            SecondStepRender = new RenderTexture((uint)Screen.ScreenWidth, (uint)Screen.ScreenHeight);
+            y = unit.Z.Axis > 0 ? (float)(unit.Z.Axis / Screen.Setting.VerticalTile) : 0f;
+            y = y >= OffsetCameraY ? (float)(OffsetCameraY / (y * OffsetCameraYAttenuation)) : OffsetCameraY - y;
         }
+
+        return y;
     }
 
-
-    /// <summary> Scale texture </summary>
-    public float Scale { get; set; } = 0.2f;
-    /// <summary> Texture scrolling speed while walking </summary>
-    public int Raising { get; set; } = 2;
-    /// <summary> Serves to normalize the position of an object by height </summary>
-    public float DivisionCoefficient { get; set; } = 2.1f;
-    /// <summary> Normalizes the distance coefficient when the vertical angle is greater than 0</summary>
-    public float NormalAngleGreaterZero { get; set; } = 1.8f;
-    /// <summary> Limiter for DivisionCoefficient</summary>
-    public float MaxDivisionCoefficient { get; set; } = 3;
-
-
-    public TexturedFloor(string texturePath, string shaderSettingPath)
+    /// <summary>
+    /// Sets all required shader uniform parameters based on the specified unit's state.
+    /// </summary>
+    /// <param name="unit">The unit providing angle, position, and height data.</param>
+    private void SetUniform(IUnit unit)
     {
-        if (!File.Exists(texturePath))
-            throw new Exception("Error path textureFloor"); 
+        if (Shader is null)
+            return;
+        if (TextureSurface?.Texture is null)
+            TextureSurface = TextureWrapper.Placeholder;
 
-        Texture = new Texture(texturePath);
+        Shader.SetUniform("renderTexture", TextureSurface.Texture);
+        Shader.SetUniform("resolution", new Vector2f(Screen.Window.Size.X, Screen.Window.Size.Y));
+        Shader.SetUniform("angle", (float)unit.Angle);
+        Shader.SetUniform("verticalAngle", (float)unit.VerticalAngle);
+        Shader.SetUniform("originPosition", unit.OriginPosition / Screen.Setting.Tile * TextureScrollingSpeed);
+        Shader.SetUniform("FOV", (float)unit.Fov / FovScaleFactor);
+        Shader.SetUniform("scale", Scale);
+        Shader.SetUniform("upFactor", UpAngleFactor);
+        Shader.SetUniform("downFactor", DownAngleFactor);
+        Shader.SetUniform("downLogScale", DownAngleLogScale);
+        Shader.SetUniform("offsetY", CalculateOffsetY(unit));
 
-        if (!File.Exists(shaderSettingPath))
-            throw new Exception("Error path shaderFloor");
-
-        Shader = new Shader(null, null, shaderSettingPath);
-        SetStaticUniformShader();
-
-        Sprite = new Sprite(SecondStepRender?.Texture);
+        EffectUtils.ApplyEffect(Effect, Shader);
+        if (Effect is null && EffectManager.CurrentEffect is null)
+            baseEffect.Apply(Shader);
     }
 
-    private void SetStaticUniformShader()
+    /// <summary>
+    /// Renders the floor segment for the given unit. Clears and redraws the internal render texture,
+    /// applies shader uniforms, and enqueues the result into the background render queue.
+    /// </summary>
+    /// <param name="unit">The unit whose position and view determine the rendering.</param>
+    public override void Render(IUnit? unit)
     {
-        if (Shader.IsAvailable)
-            Console.WriteLine("Shaders are supported!");
-        else
-            Console.WriteLine("Shaders are NOT supported!");
+        if (unit is null || Shader is null)
+            return;
 
-        Shader.SetUniform("u_texture", Texture);
-        Shader.SetUniform("u_Raising", Raising);
-        Shader.SetUniform("u_textureScale", Scale);
-        Shader.SetUniform("u_DivisionCoef", DivisionCoefficient);
-        Shader.SetUniform("u_normalAngleGreaterZero", NormalAngleGreaterZero);
-        Shader.SetUniform("u_maxDivisionCoef", MaxDivisionCoefficient);
-    }
-    private void SetDynamicUniformShader(IUnit unit)
-    {
-        Shader.SetUniform("u_screenSize", new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight));
+        RenderTexture.Clear(ClearColor);
 
-        Shader.SetUniform("u_playerPos", new Vector2f((float)unit.X.Axis, (float)unit.Y.Axis));
-        Shader.SetUniform("u_playerDir", unit.Direction);
-        Shader.SetUniform("u_playerPlane", unit.Plane);
-        Shader.SetUniform("u_verticalAngle", (float)unit.VerticalAngle);
-    }
-
-    public void Render(IUnit unit)
-    {
         uint halfHeight = (uint)RenderPartsWorld.NormalizeHeigthDownPart(unit);
-        FirstStepRender.Clear(ClearColor);
-        SecondStepRender.Clear(ClearColor);
+        Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), Color.White);
+        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), Color.White);
+        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, halfHeight), Color.White);
+        Vertices[3] = new Vertex(new Vector2f(0, halfHeight), Color.White);
 
-        SetDynamicUniformShader(unit);
-        Vertices[0] = new Vertex(new Vector2f(0, Screen.ScreenHeight), new Color(255, 255, 255));
-        Vertices[1] = new Vertex(new Vector2f(Screen.ScreenWidth, Screen.ScreenHeight), new Color(255, 255, 255));
-        Vertices[2] = new Vertex(new Vector2f(Screen.ScreenWidth, halfHeight), new Color(255, 255, 255));
-        Vertices[3] = new Vertex(new Vector2f(0, halfHeight), new Color(255, 255, 255));
+        SetUniform(unit);
+        RenderTexture.Draw(Vertices, new RenderStates(Shader));
+        RenderTexture.Display();
 
-        FirstStepRender.Draw(Vertices, new RenderStates(Shader));
-        FirstStepRender.Display();
-
-        SecondStepRender.Draw(Vertices, VisualEffectHelper.VisualEffect.TransformationColor(FirstStepRender.Texture, unit.VerticalAngle));
-        SecondStepRender.Display();
-        Screen.OutputPriority?.AddToPriority(OutputPriorityType.Background, Sprite);
+        Screen.OutputPriority?.AddToPriority(OutputLayer, Sprite);
     }
 }

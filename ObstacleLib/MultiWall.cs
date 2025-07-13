@@ -3,15 +3,9 @@ using ObstacleLib.TexturedWallLib.Render;
 using ScreenLib;
 using SFML.Graphics;
 using SFML.System;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TextureLib;
-using HitBoxLib;
+using TextureLib.Textures;
+using TextureLib.Textures.Pair;
 using HitBoxLib.PositionObject;
-using static System.Formats.Asn1.AsnWriter;
 using HitBoxLib.HitBoxSegment;
 using HitBoxLib.Segment.SignsTypeSide;
 using ProtoRender.RenderAlgorithm;
@@ -27,54 +21,52 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     /// <summary>Current wall levels being processed</summary>
     private int CurrentLevelWall { get; set; } = 0;
 
+    /// <summary>
+    /// The base vertical offset (along the Z axis) between wall levels in world coordinates.
+    /// Defaults to half the height of a tile.
+    /// </summary>
     private double _baseOffset = Screen.Setting.HalfVerticalTile;
+
+    /// <summary>
+    /// Gets or sets the base vertical offset between levels of the wall stack.
+    /// Changing this value will automatically recalculate the Z coordinates of all wall levels.
+    /// </summary>
     public double BaseOffset
     {
         get => _baseOffset;
-        set 
+        set
         {
             _baseOffset = value;
-            ResetZ();        
-        }        
-    } 
+            ResetZ();
+        }
+    }
 
 
     #region Constructor
-    public MultiWall() : base(0, 0, Color.Red, false) 
+    public MultiWall()
+        : base(Color.Red, false) 
     {
         Z.AfterMoveAxis += ResetZ;
     }
     public MultiWall(List<TexturedWall> walls) 
-        : base(0, 0, Color.Red, false)
+        : base(Color.Red, false)
     {
         AddLevelWall(walls);
+        Z.AfterMoveAxis += ResetZ;
     }
-    public MultiWall(MultiWall multiWall)
-       : base(0, 0, SFML.Graphics.Color.Black, false)
+    public MultiWall(MultiWall multiWall, bool createNewTexture = true)
+       : base(multiWall)
     {
-        HitBox = new HitBox(multiWall.HitBox);
-
-        X.UpdateInfo(multiWall.X, HitBox);
-        Y.UpdateInfo(multiWall.Y, HitBox);
-        Z.UpdateInfo(multiWall.Z, HitBox);
-
-        ColorInMap = multiWall.ColorInMap;
-        TextureInMiniMap = multiWall.TextureInMiniMap is not null ? new TextureObstacle(multiWall.TextureInMiniMap) : null;
-
-        IsPassability = multiWall.IsPassability;
-        IsSingleAddable = multiWall.IsSingleAddable;
-
-        SizeScale = multiWall.SizeScale;
-        PositionScale = multiWall.PositionScale;
+        Z.AfterMoveAxis += ResetZ;
 
         foreach (var wall in multiWall.Walls)
-            Walls.Add(new TexturedWall(wall));
+            Walls.Add(new TexturedWall(wall, createNewTexture));
 
         CurrentLevelWall = multiWall.CurrentLevelWall;
     }
     #endregion
 
-    #region IDrawable_Implementation
+    #region IDrawable
     public float CalculateTextureX(Vector2f UV, ObjectSide side)
     {
         if (Walls.Count == 0)
@@ -109,11 +101,17 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
 
         return 0;
     }
-    public float BringingToStandard(float heightObj)
+    public float BringingToStandardWidth(float heightObj)
     {
         if (Walls.Count == 0) return 0;
 
-        return Walls.First().BringingToStandard(heightObj);
+        return Walls.First().BringingToStandardWidth(heightObj);
+    }
+    public float BringingToStandardHeight(float heightObj)
+    {
+        if (Walls.Count == 0) return 0;
+
+        return Walls.First().BringingToStandardHeight(heightObj);
     }
     public float GetAveragedMult(float baseMult)
     {
@@ -130,7 +128,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
         var baseTexure = wall.Base;
         if (textureX < 0 || textureX > baseTexure.Width)
             return true;
-        else if (textureY < 0 || textureY > baseTexure.Height)
+        else if (textureY < 0 || textureY - (CurrentLevelWall * baseTexure.Height) > baseTexure.Height)
             return true;
 
         return false;
@@ -152,7 +150,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     }
     #endregion
 
-    #region MapAdder_Implementation
+    #region MapAdder
     private void UpdateHeightHitBox(double newZ)
     {
         HitBox.MainHitBox[CoordinatePlane.Z, SideSize.Smaller]?.SetOffset(newZ);
@@ -161,7 +159,6 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     private void UpdateHeight()
     {
         UpdateHeightHitBox(Walls.Count * BaseOffset);
-
         Z.Axis = (Walls.Count - 1) * BaseOffset;
     }
     private void HandleObjectAdditionWalls(double x, double y, bool resetHitBoxSide)
@@ -186,7 +183,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     }
     #endregion
 
-    #region IMiniMapRenderable_Implementation
+    #region IMiniMapRenderable
     public override void FillingColorShape(RectangleShape rectangleShape, float OutlineThickness = 1)
     {
         rectangleShape.OutlineThickness = OutlineThickness;
@@ -198,11 +195,9 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
         {
             foreach (var wall in Walls)
             {
-                TextureObstacle? textureInMap = wall.MultiTextured.UniqueTexture.GetFirstValue()?.Base;
-
-                if (textureInMap is not null)
+                if (wall.TextureInMiniMap is not null)
                 {
-                    rectangleShape.Texture = textureInMap.Texture;
+                    rectangleShape.Texture = wall.TextureInMiniMap.Texture;
                     return;
                 }
             }
@@ -210,16 +205,16 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
 
         rectangleShape.FillColor = ColorInMap;
     }
-    public override Vector2f ConversionToMapCoordinates(float mapTile)
+    public override Vector2f ConversionToMapCoordinates(Vector2f mapTile)
     {
-        float x = (float)X.Axis / Screen.Setting.Tile * mapTile;
-        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile;
+        float x = (float)X.Axis / Screen.Setting.Tile * mapTile.X;
+        float y = (float)Y.Axis / Screen.Setting.Tile * mapTile.Y;
 
         return new Vector2f(x, y);
     }
     #endregion
 
-    #region IRenderable_Implementation
+    #region IRenderable
     public void ProcessForRendering(List<InfoObject> infoObject, double coordinate, double depth, double maxDepth)
     {
         if (depth < maxDepth)
@@ -235,9 +230,20 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     }
     #endregion
 
+    #region ITextureProvider
+    public override TextureWrapper? GetUsedTexture(IUnit? observer = null)
+    {
+        return CurrentLevelWall >= Walls.Count ? null : Walls[CurrentLevelWall].GetUsedTexture(observer);
+    }
+    #endregion
+
     public override IObject GetCopy()
     {
         return new MultiWall(this);
+    }
+    public override IObject GetDeepCopy()
+    {
+        return new MultiWall(this, false);
     }
     public override void Render(Result result, IUnit unit)
     {
@@ -261,6 +267,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
     public void AddLevelWall(TexturedWall wall)
     {
         wall.HandleObjectAddition(X.Axis, Y.Axis);
+        wall.Effect = Effect;
         Walls.Add(wall);
 
         UpdateHeight();
@@ -273,6 +280,7 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
         foreach (var wall in walls)
         {
             wall.HandleObjectAddition(X.Axis, Y.Axis);
+            wall.Effect = Effect;
             Walls.Add(wall);
         }
         UpdateHeight();

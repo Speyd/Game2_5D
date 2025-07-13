@@ -13,6 +13,10 @@ namespace ProtoRender.Map;
 public interface IMap
 {
     /// <summary>
+    /// Globally unique identifier for the object.
+    /// </summary>
+    public Guid UUID { get; set; }
+    /// <summary>
     /// Represents configuration settings for a 2D map, including dimensions in both grid cells and pixels.
     /// </summary>
     Setting Setting { get; }
@@ -20,7 +24,7 @@ public interface IMap
     /// <summary>
     /// Gets the collection of obstacles on the map, organized by cell coordinates.
     /// </summary>
-    ConcurrentDictionary<(int, int), List<IObject>> Obstacles { get; init; }
+    ConcurrentDictionary<(int, int), ConcurrentDictionary<IObject, byte>> Obstacles { get; init; }
 
     /// <summary>
     /// Adds an obstacle to the map at the specified cell coordinates.
@@ -95,5 +99,9 @@ public interface IMap
     /// <param name="coo">The tuple containing X and Y cell coordinates.</param>
     /// <returns>True if the coordinates are valid; otherwise, false.</returns>
     bool CheckTrueCoordinates((int, int) coo);
+
+    void SetWidthMap(int width);
+    void SetHeightMap(int height);
+
 }
 
