@@ -8,7 +8,7 @@ namespace MiniMapLib.Window;
 /// It manages the zoom limits, updates the zoom based on user input or programmatic changes,
 /// and applies the zoom to the minimap's view.
 /// </summary>
-public class ZoomMiniMap(SettingMap.Setting Setting)
+public class ZoomMiniMap(Setting.SettingWindow Setting)
 {
     private float _minZoom = 0.1f;
     /// <summary>

@@ -10,6 +10,7 @@ namespace HitBoxLib.PositionObject;
 /// <summary>Coordinat object</summary>
 public class Coordinate
 {
+
     private double _axis = 0;
     /// <summary>Axis coordinate</summary>
     public double Axis
@@ -17,21 +18,65 @@ public class Coordinate
         get => _axis;
         set => SetAxis(value, _hitBox);
     }
+
+
     /// <summary>Stores a list of methods that are called when the coordinate changes.</summary>
     public Action? AfterMoveAxis {  get; set; }
+
     /// <summary>
     /// Stores a list of methods that are called before the coordinate changes.
     /// </summary>
     public Action? BeforeMoveAxis { get; set; }
+
+
+
+    private float stopTimer = 0f;
+    /// <summary>
+    /// The delay in seconds after which the movement is considered stopped.
+    /// </summary>
+    
+    public float StopDelay { get; set; } = 0.1f;
+    /// <summary>
+    /// CancellationTokenSource used for stopping the movement watcher task.
+    /// </summary>
+    private CancellationTokenSource? stopCts = null;
+
+    /// <summary>
+    /// Interval in milliseconds at which the movement watcher checks if the object has stopped.
+    /// </summary>
+    public static int StopWatcherIntervalMs { get; set; } = 10;
+
+
+    /// <summary>
+    /// Indicates whether the coordinate is currently moving.
+    /// </summary>
+    public bool IsMoving { get; private set; } = false;
+
+    /// <summary>
+    /// Action invoked when movement starts.
+    /// </summary>
+    public Action? OnStartMove { get; set; }
+
+    /// <summary>
+    /// Action invoked when movement stops.
+    /// </summary>
+    public Action? OnStopMove { get; set; }
+
+
+
     /// <summary>
     /// Stores the previous value of the axis before the most recent change.
     /// </summary>
     public double? PreviousAxis { get; set; } = null;
+
     /// <summary>Axis coordinate in map</summary>
     public double AxisMap { get; private set; }
+
     /// <summary>Determining which axis an object belongs to</summary>
     public CoordinatePlane CoordinatePlane { get; set; }
     private HitBox _hitBox;
+
+
 
     /// <summary>
     /// Initializes a new instance of the <see cref="Coordinate"/> class with the specified coordinate plane and hitbox.
@@ -70,6 +115,7 @@ public class Coordinate
         Axis = coordinate._axis;
 
         PreviousAxis = coordinate.PreviousAxis;
+        StopDelay = coordinate.StopDelay;
     }
 
     /// <summary>
@@ -119,12 +165,50 @@ public class Coordinate
         BeforeMoveAxis?.Invoke();
 
         PreviousAxis = PreviousAxis is null? value: _axis;
+        if (!IsMoving && PreviousAxis != value)
+        {
+            IsMoving = true;
+            OnStartMove?.Invoke();
+        }
+
+        ResetWatcher();
+
         _axis = value;
         AxisMap = ScreenLib.Screen.Mapping(value) / ScreenLib.Screen.Setting.Tile;
 
         hitBox.SetSide(this);
         AfterMoveAxis?.Invoke();
     }
+
+    private void ResetWatcher()
+    {
+        stopTimer = 0f;
+
+        stopCts?.Cancel();
+        stopCts = new CancellationTokenSource();
+        var token = stopCts.Token;
+
+        StartStopWatcher(token);
+    }
+    private void StartStopWatcher(CancellationToken token)
+    {
+        Task.Run(async () =>
+        {
+            while (!token.IsCancellationRequested && IsMoving)
+            {
+                await Task.Delay(StopWatcherIntervalMs, token);
+                stopTimer += FpsLib.FPS.GetDeltaTime();
+
+                if (stopTimer >= StopDelay)
+                {
+                    IsMoving = false;
+                    OnStopMove?.Invoke();
+                    break;
+                }
+            }
+        }, token);
+    }
+
 
     public void SetHitBox(HitBox hitBox)
     {

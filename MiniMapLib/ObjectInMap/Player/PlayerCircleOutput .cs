@@ -8,7 +8,7 @@ namespace MiniMapLib.ObjectInMap.Player;
 /// </summary>
 public class PlayerCircleOutput
 {
-    private SettingMap.Setting Setting { get; init; }
+    private Setting.SettingWindow Setting { get; init; }
 
 
     private int radiusCircle;
@@ -42,7 +42,7 @@ public class PlayerCircleOutput
     /// </summary>
     /// <param name="setting">The minimap settings to use.</param>
     /// <param name="radiusCircle">Initial radius of the circle. Default is 5.</param>
-    public PlayerCircleOutput(SettingMap.Setting setting, int radiusCircle = 5)
+    public PlayerCircleOutput(Setting.SettingWindow setting, int radiusCircle = 5)
     {
         Setting = setting;
 

@@ -37,16 +37,15 @@ public class TexturedPair
     /// </summary>
     /// <param name="path">File path</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, a new RenderTexture will be created for this instance; 
     /// if false, the provided RenderTexture will be used directly.
     /// </param>
-    public TexturedPair(string path, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public TexturedPair(string path, bool creatNew, ImageLoadOptions? options = null)
     {
-        if (createNewTexture)
-            Base = ImageLoader.Load(options, true, path).First();
+        if (creatNew)
+            Base = ImageLoader.Load(options, path).First();
         else
-            _base = ImageLoader.Load(options, true, path).First();
+            _base = ImageLoader.Load(options, path).First();
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="TexturedPair"/> class
@@ -62,13 +61,13 @@ public class TexturedPair
     /// If true, a new RenderTexture will be created for this instance; 
     /// if false, the provided <paramref name="renderTexture"/> will be used directly.
     /// </param>
-    public TexturedPair(string path, RenderTexture renderTexture, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public TexturedPair(string path, RenderTexture renderTexture, bool creatNew, ImageLoadOptions? options = null)
     {
-        if(createNewTexture)
-            Base = ImageLoader.Load(options, true, path).First();
+        if (creatNew)
+            Base = ImageLoader.Load(options, path).First();
         else
         {
-            _base = ImageLoader.Load(options, true, path).First();
+            _base = ImageLoader.Load(options, path).First();
             Mod = renderTexture;
         }
     }

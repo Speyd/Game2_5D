@@ -5,12 +5,12 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj": {
-      "version": "1.9.9",
+      "version": "2.1.6",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj",
         "projectName": "EnginePseudo3D.PartsWorldLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\PartsWorldLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\PartsWorldLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -52,11 +52,11 @@
           "dependencies": {
             "EnginePseudo3D.EffectLib": {
               "target": "Package",
-              "version": "[1.1.7, )"
+              "version": "[1.1.9, )"
             },
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[2.3.0, )"
+              "version": "[2.6.4, )"
             }
           },
           "imports": [

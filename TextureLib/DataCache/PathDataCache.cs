@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using NGenerics.Extensions;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 
 
@@ -99,6 +100,43 @@ public class PathDataCache<T> : IDataCache<string, T>
 
         _cache[path] = data.ToList();
     }
+
+    /// <summary>
+    /// Appends a single item to the cache entry associated with the specified path.
+    /// Throws <see cref="FileNotFoundException"/> if the file or directory at the path does not exist.
+    /// </summary>
+    /// <param name="path">The file or directory path used as the cache key.</param>
+    /// <param name="data">The item to append to the cache entry.</param>
+    public void Append(string path, T data)
+    {
+        if (!File.Exists(path) && !Directory.Exists(path))
+            throw new FileNotFoundException($"File not found: {path}");
+
+        if(_cache.TryGetValue(path, out var value))
+            value.Add(data);
+        else
+            value = new List<T> { data };
+    }
+
+    /// <summary>
+    /// Appends a collection of items to the cache entry associated with the specified path.
+    /// Throws <see cref="FileNotFoundException"/> if the file or directory at the path does not exist.
+    /// </summary>
+    /// <param name="path">The file or directory path used as the cache key.</param>
+    /// <param name="data">The collection of items to append to the cache entry.</param>
+    public void Append(string path, IEnumerable<T> data)
+    {
+        if (!File.Exists(path) && !Directory.Exists(path))
+            throw new FileNotFoundException($"File not found: {path}");
+
+        if (_cache.TryGetValue(path, out var value))
+            value.AddRange(data);
+        else
+            value = new List<T> (data);
+    }
+
+
+
     /// <summary>
     /// Determines whether the cache contains an entry for the specified key.
     /// </summary>

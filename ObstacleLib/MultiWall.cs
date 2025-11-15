@@ -11,6 +11,7 @@ using HitBoxLib.Segment.SignsTypeSide;
 using ProtoRender.RenderAlgorithm;
 using ProtoRender.Object;
 using ProtoRender.RenderInterface;
+using TextureLib.Loader;
 
 
 namespace ObstacleLib;
@@ -54,13 +55,14 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
         AddLevelWall(walls);
         Z.AfterMoveAxis += ResetZ;
     }
-    public MultiWall(MultiWall multiWall, bool createNewTexture = true)
+    public MultiWall(MultiWall multiWall, ImageLoadOptions? options = null)
        : base(multiWall)
     {
+        options ??= new ImageLoadOptions() { CreateNew = true};
         Z.AfterMoveAxis += ResetZ;
 
         foreach (var wall in multiWall.Walls)
-            Walls.Add(new TexturedWall(wall, createNewTexture));
+            Walls.Add(new TexturedWall(wall, options));
 
         CurrentLevelWall = multiWall.CurrentLevelWall;
     }
@@ -239,11 +241,11 @@ public class MultiWall : Obstacle, IDrawable, IRayRenderable
 
     public override IObject GetCopy()
     {
-        return new MultiWall(this);
+        return new MultiWall(this, new ImageLoadOptions() { CreateNew = false });
     }
     public override IObject GetDeepCopy()
     {
-        return new MultiWall(this, false);
+        return new MultiWall(this, new ImageLoadOptions() { CreateNew = true });
     }
     public override void Render(Result result, IUnit unit)
     {

@@ -1,11 +1,11 @@
 ﻿using ScreenLib;
 using ScreenLib.Output;
-using MiniMapLib.SettingMap;
 using MiniMapLib.ObjectInMap.Player;
 using MiniMapLib.Window;
 using MiniMapLib.ObjectInMap.Obstacles;
 using ProtoRender.Object;
 using ProtoRender.Map;
+using MiniMapLib.Setting;
 
 
 namespace MiniMapLib;
@@ -25,21 +25,32 @@ public class MiniMap
     /// The main window used for rendering the minimap.
     /// </summary>
     public WindowRender MiniMapWindow { get; init; }
-
     /// <summary>
     /// The window used for rendering the border around the minimap.
     /// </summary>
     public WindowRender BorderMapWindow { get; init; }
+
+
+    /// <summary>
+    /// Configuration of the minimap logic, such as its scale and screen position.
+    /// </summary>
+    public Setting.SettingMap SettingMap { get; init; }
+    /// <summary>
+    /// Rendering configuration for the minimap window, 
+    /// including size and scale relative to the render surface.
+    /// Returns <c>null</c> if no render window is assigned.
+    /// </summary>
+    public Setting.SettingWindow? SettingWindow
+    {
+        get => MiniMapWindow is not null ? MiniMapWindow.Setting : null;
+    }
+
 
     /// <summary>
     /// The border surrounding the minimap, including the option for a custom path.
     /// </summary>
     public Border Border { get; init; }
 
-    /// <summary>
-    /// The settings for the minimap, including scale and position.
-    /// </summary>
-    public MiniMapLib.SettingMap.Setting Setting { get; init; }
 
     /// <summary>
     /// The player's position rendered as a circle on the minimap.
@@ -51,10 +62,12 @@ public class MiniMap
     /// </summary>
     public PlayerLineOutput PlayerLine { get; init; }
 
+
     /// <summary>
     /// Represents obstacles in the game world rendered on the minimap.
     /// </summary>
     public ObstacleOutput Obstacle { get; init; }
+
 
     /// <summary>
     /// The zoom functionality for the minimap.
@@ -69,18 +82,19 @@ public class MiniMap
     /// <param name="pathBorder">An optional custom border path for the minimap.</param>
     public MiniMap(string? pathBorder = null)
     {
-        Setting = new MiniMapLib.SettingMap.Setting();
-        MiniMapWindow = new WindowRender(Setting);
+        MiniMapWindow = new WindowRender();
+        SettingMap = new SettingMap();
 
-        BorderMapWindow = new WindowRender(Setting);
+        BorderMapWindow = new WindowRender(SettingWindow);
+        MiniMapWindow.AppendDependentWindows(BorderMapWindow);
         Border = new Border(pathBorder);
 
-        PlayerCircle = new PlayerCircleOutput(Setting);
-        PlayerLine = new PlayerLineOutput(Setting);
+        PlayerCircle = new PlayerCircleOutput(SettingWindow);
+        PlayerLine = new PlayerLineOutput(SettingWindow);
 
-        Obstacle = new ObstacleOutput(Setting);
+        Obstacle = new ObstacleOutput(SettingWindow);
 
-        Zoom = new ZoomMiniMap(Setting);
+        Zoom = new ZoomMiniMap(SettingWindow);
     }
 
 
@@ -92,13 +106,13 @@ public class MiniMap
     /// <param name="unit">Genaral unit in minimap.</param>
     public void Render(IMap map, IUnit unit)
     {
-        if (!Setting.IsRender)
+        if (!SettingMap.IsRender)
             return;
 
-        MiniMapWindow.Window.Clear(Setting.BackgroundColor);
+        MiniMapWindow.Window.Clear(SettingMap.BackgroundColor);
 
         // Rendering player position and sight
-        PlayerLine.RenderLineSight(MiniMapWindow.Window, unit.Direction);
+        PlayerLine.RenderLineSight(MiniMapWindow.Window, unit.LookDirection);
         PlayerCircle.RenderEntityShape(MiniMapWindow.Window);
 
         // Zoom and obstacle rendering
@@ -109,8 +123,8 @@ public class MiniMap
         Border.DrawMiniMapBorder(BorderMapWindow.Window);
 
         // Set render sprite for the windows
-        MiniMapWindow.SetRenderSprite(Setting.CoordinatesInWindow);
-        BorderMapWindow.SetRenderSprite(Setting.CoordinatesInWindow);
+        MiniMapWindow.SetRenderSprite(SettingWindow.CoordinatesInWindow);
+        BorderMapWindow.SetRenderSprite(SettingWindow.CoordinatesInWindow);
 
         // Add windows to the screen output queue
         Screen.OutputPriority?.AddToPriority(OutputLayer, MiniMapWindow.RenderSprite);
@@ -122,7 +136,7 @@ public class MiniMap
     /// </summary>
     public void Hide()
     {
-        Setting.IsRender = !Setting.IsRender;
+        SettingMap.IsRender = !SettingMap.IsRender;
     }
 }
 

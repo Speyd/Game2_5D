@@ -30,13 +30,27 @@ public class HitBoxSide
 
     private double _offset = 0;
     /// <summary>
-    /// A number that represents the offset from the center of the hitbox.
+    /// Gets the effective offset used for calculations. 
+    /// If the side is Smaller, the sign of the value is inverted 
+    /// (positive becomes negative and negative becomes positive).
+    /// If the side is Larger, the value is used as is.
     /// </summary>
     public double Offset
     {
         get => _offset;
         private set => _offset = SideSize == SideSize.Smaller ? -value : value;
     }
+
+
+
+    /// <summary>
+    /// Gets the raw offset value exactly as it was provided,
+    /// without applying any side-based adjustments. 
+    /// This is useful for debugging, serialization, or when you need
+    /// the original input magnitude regardless of whether the side is Smaller or Larger.
+    /// </summary>
+    public double OriginalOffset => SideSize == SideSize.Smaller ? -_offset : _offset;
+
 
     /// <summary>
     /// If it is the smaller side, then any Offset will be converted to a negative number and vice versa.
@@ -92,8 +106,8 @@ public class HitBoxSide
         CoordinatePlane = coordinatePlane;
         Side = side;
         OrginalSide = orginalSide;
-        _offset = offset;
         SideSize = sideSize;
+        SetOffset(offset);
     }
     /// <summary>
     /// Initializes a new instance of the <see cref="HitBoxSide"/> class with default values.

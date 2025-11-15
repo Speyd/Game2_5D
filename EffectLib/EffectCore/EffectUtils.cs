@@ -12,9 +12,9 @@ public static class EffectUtils
     /// </summary>
     /// <param name="owner">The effect to apply, or null to use the global effect.</param>
     /// <param name="shader">The shader to which the effect is applied.</param>
-    public static void ApplyEffect(IEffect owner, Shader shader)
+    public static void ApplyEffect(IEffect? owner, Shader shader)
     {
-        if (owner != null)
+        if (owner is not null)
             owner.Apply(shader);
         else
             EffectManager.CurrentEffect?.Apply(shader);
@@ -27,9 +27,9 @@ public static class EffectUtils
     /// <param name="owner">The effect to use, or null to use the global effect.</param>
     /// <param name="distance">The distance value influencing the effect intensity.</param>
     /// <returns>The resulting color from the effect, or null if no effect is available.</returns>
-    public static Color? ApplyEffect(IEffect owner, float distance)
+    public static Color? ApplyEffect(IEffect? owner, float distance)
     {
-        if (owner != null)
+        if (owner is not null)
             return owner.Apply(distance);
         else
             return EffectManager.CurrentEffect?.Apply(distance);
@@ -43,9 +43,9 @@ public static class EffectUtils
     /// <param name="baseColor">The base color before the effect is applied.</param>
     /// <param name="distance">The distance value influencing the effect intensity.</param>
     /// <returns>The resulting color after applying the effect, or null if no effect is available.</returns>
-    public static Color? ApplyEffect(IEffect owner, Color baseColor, float distance)
+    public static Color? ApplyEffect(IEffect? owner, Color baseColor, float distance)
     {
-        if (owner != null)
+        if (owner is not null)
             return owner.Apply(baseColor, distance);
         else
             return EffectManager.CurrentEffect?.Apply(baseColor, distance);

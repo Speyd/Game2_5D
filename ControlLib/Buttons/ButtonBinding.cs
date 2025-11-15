@@ -53,82 +53,70 @@ public class ButtonBinding
 
     #region Constructors
     /// <summary>
-    /// Initializes a new instance with specified keys, function, delay, and fixed parameters.
+    /// Initializes a new instance of ButtonBinding with optional buttons, function, delay, and fixed parameters.
     /// </summary>
-    /// <param name="bottoms">List of buttons to monitor for press.</param>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    /// <param name="fixedParameters">Static parameters to pass to the delegate.</param>
-    public ButtonBinding(List<Button> bottoms, Delegate executableFunction, long waitingTimeMilliseconds, object[] fixedParameters)
+    /// <param name="buttons">Buttons to monitor for press (optional).</param>
+    /// <param name="executableFunction">Delegate to execute on press (optional, default empty).</param>
+    /// <param name="waitingTimeMilliseconds">Cooldown time in milliseconds (optional, default 0).</param>
+    /// <param name="fixedParameters">Static parameters to pass to the delegate (optional).</param>
+    public ButtonBinding(
+        IEnumerable<Button>? buttons = null,
+        Delegate? executableFunction = null,
+        long waitingTimeMilliseconds = 0,
+        params object[] fixedParameters)
     {
-        Buttons = bottoms;
-        ExecutableFunction = executableFunction;
-        FixedParameters = fixedParameters;
+        Buttons = buttons?.ToList() ?? new List<Button>();
+        ExecutableFunction = executableFunction ?? (() => { });
         WaitingTimeMilliseconds = waitingTimeMilliseconds;
+        FixedParameters = fixedParameters ?? Array.Empty<object>();
     }
-    /// <summary>
-    /// Initializes a new instance with specified keys, function, and delay (no fixed parameters).
-    /// </summary>
-    /// <param name="bottoms">List of buttons to monitor for press.</param>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    public ButtonBinding(List<Button> bottoms, Delegate executableFunction, long waitingTimeMilliseconds)
-        : this(bottoms, executableFunction, waitingTimeMilliseconds, new object[0]) { }
-    /// <summary>
-    /// Initializes a new instance with specified keys and delay. Uses an empty function and no fixed parameters.
-    /// </summary>
-    /// <param name="bottoms">List of buttons to monitor for press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    public ButtonBinding(List<Button> bottoms, long waitingTimeMilliseconds)
-        : this(bottoms, () => { }, waitingTimeMilliseconds, new object[0]) { }
-    /// <summary>
-    /// Initializes a new instance with a single button and delay. Uses an empty function and no fixed parameters.
-    /// </summary>
-    /// <param name="bottom">Button to monitor for press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    public ButtonBinding(Button bottom, long waitingTimeMilliseconds)
-        : this(new List<Button> { bottom }, () => { }, waitingTimeMilliseconds, new object[0]) { }
-    /// <summary>
-    /// Initializes a new instance with a single button, function, and fixed parameters. No delay.
-    /// </summary>
-    /// <param name="bottom">Button to monitor for press.</param>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="fixedParameters">Static parameters to pass to the delegate.</param>
-    public ButtonBinding(Button bottom, Delegate executableFunction, object[] fixedParameters)
-        : this(new List<Button> { bottom }, executableFunction, 0, fixedParameters) { }
 
     /// <summary>
-    /// Initializes a new instance with no buttons, a function, and fixed parameters. No delay.
+    /// Initializes a new instance of ButtonBinding with optional buttons, function, delay, and fixed parameters.
     /// </summary>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="fixedParameters">Static parameters to pass to the delegate.</param>
-    public ButtonBinding(Delegate executableFunction, object[] fixedParameters)
-        : this(new List<Button>(), executableFunction, 0, fixedParameters) { }
-    /// <summary>
-    /// Initializes a new instance with a single button, function, and delay (no fixed parameters).
-    /// </summary>
-    /// <param name="bottom">Button to monitor for press.</param>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    public ButtonBinding(Button bottom, Delegate executableFunction, long waitingTimeMilliseconds)
-        : this(new List<Button> { bottom }, executableFunction, waitingTimeMilliseconds, new object[0]) { }
-    /// <summary>
-    /// Initializes a new instance with no buttons, a function, and delay (no fixed parameters).
-    /// </summary>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    /// <param name="waitingTimeMilliseconds">Cooldown time between presses in milliseconds.</param>
-    public ButtonBinding(Delegate executableFunction, long waitingTimeMilliseconds)
-        : this(new List<Button>(), executableFunction, waitingTimeMilliseconds, new object[0]) { }
+    /// <param name="button">Buttons to monitor for press (optional).</param>
+    /// <param name="executableFunction">Delegate to execute on press (optional, default empty).</param>
+    /// <param name="waitingTimeMilliseconds">Cooldown time in milliseconds (optional, default 0).</param>
+    /// <param name="fixedParameters">Static parameters to pass to the delegate (optional).</param>
+    public ButtonBinding(
+        Button button = null,
+        Delegate? executableFunction = null,
+        long waitingTimeMilliseconds = 0,
+        params object[] fixedParameters)
+
+        :this (new List<Button>() { button ?? new Button(VirtualKey.None) },
+             executableFunction, waitingTimeMilliseconds, fixedParameters)
+    {}
+
 
     /// <summary>
-    /// Initializes a new instance with a single button and function (no delay, no fixed parameters).
+    /// Initializes a new instance of the <see cref="ButtonBinding"/> class by copying settings 
+    /// from an existing <paramref name="buttonBinding"/> instance, with the option to override 
+    /// its executable function and fixed parameters.
     /// </summary>
-    /// <param name="bottom">Button to monitor for press.</param>
-    /// <param name="executableFunction">The delegate to execute on press.</param>
-    public ButtonBinding(Button bottom, Delegate executableFunction)
-        : this(new List<Button> { bottom }, executableFunction, 0, new object[0]) { }
+    /// <param name="buttonBinding">
+    /// The source <see cref="ButtonBinding"/> object whose button list, delay, and other 
+    /// properties will be copied.
+    /// </param>
+    /// <param name="executableFunction">
+    /// (Optional) A new delegate to execute when the bound buttons are pressed.  
+    /// If <c>null</c>, the delegate from <paramref name="buttonBinding"/> will be reused.
+    /// </param>
+    /// <param name="fixedParameters">
+    /// (Optional) New static parameters to pass to the delegate.  
+    /// If none are provided, the parameters from <paramref name="buttonBinding"/> are reused.
+    /// </param>
 
+    public ButtonBinding(ButtonBinding buttonBinding, 
+        Delegate? executableFunction = null,
+        params object[] fixedParameters)
+        : this(buttonBinding.Buttons, 
+              executableFunction ?? buttonBinding.ExecutableFunction, 
+              buttonBinding.WaitingTimeMilliseconds, 
+              fixedParameters.Length == 0? buttonBinding .FixedParameters: fixedParameters)
+    { }
     #endregion
+
 
     /// <summary>
     /// Adds a new key to the key binding if it is not already present.
@@ -220,6 +208,24 @@ public class ButtonBinding
         }
 
         if (countTurnBottom == Buttons.Count && IsReadyToPress())
+        {
+            PracticingPressing(externalParams);
+            IsPress = true;
+        }
+    }
+
+    /// <summary>
+    /// Simulates pressing the bound buttons programmatically.
+    /// </summary>
+    /// <param name="externalParams">Optional additional parameters to pass to the function.</param>
+    public void SimulatePress(params object[] externalParams)
+    {
+        if (IsFreeze || Buttons.Count == 0)
+            return;
+
+        IsPress = false;
+
+        if (IsReadyToPress())
         {
             PracticingPressing(externalParams);
             IsPress = true;

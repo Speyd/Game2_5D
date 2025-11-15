@@ -1,5 +1,6 @@
 ﻿using FpsLib;
 using ProtoRender.Object;
+using ProtoRender.Physics;
 
 
 namespace MoveLib.Move;
@@ -21,11 +22,11 @@ public static class MovePositions
     /// The vertical component of the input direction (e.g., -1 for backward, 1 for forward).
     /// </param>
     public static void Move(IUnit unit, double directionX, double directionY)
-    {
+    {     
         double speed = unit.MoveSpeed * FPS.GetDeltaTime();
 
-        double cosAngle = unit.Direction.X;
-        double sinAngle = unit.Direction.Y;
+        double cosAngle = unit.LookDirection.X;
+        double sinAngle = unit.LookDirection.Y;
 
         double rx = cosAngle * directionX - sinAngle * directionY;
         double ry = sinAngle * directionX + cosAngle * directionY;
@@ -35,7 +36,7 @@ public static class MovePositions
 
         lock (unit)
         {
-            Collision.IsCollisionObject(unit, rx, ry, unit.IgnoreCollisionObjects.Keys.ToList());
+            Collision.TryMoveWithCollision(unit, rx, ry, unit.IgnoreCollisionObjects.Keys.ToList());
         }
     }
 }

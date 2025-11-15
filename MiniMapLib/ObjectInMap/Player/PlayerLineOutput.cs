@@ -12,7 +12,7 @@ public class PlayerLineOutput
     /// <summary>
     /// Minimap settings containing configuration such as center position.
     /// </summary>
-    private SettingMap.Setting Setting { get; init; }
+    private Setting.SettingWindow Setting { get; init; }
 
     /// <summary>
     /// Length of the line representing the player's sight.
@@ -34,7 +34,7 @@ public class PlayerLineOutput
     /// Creates a new instance of <see cref="PlayerLineOutput"/> using the specified minimap settings.
     /// </summary>
     /// <param name="setting">The minimap settings to use for positioning.</param>
-    public PlayerLineOutput(SettingMap.Setting setting)
+    public PlayerLineOutput(Setting.SettingWindow setting)
     {
         Setting = setting;
         Line = new VertexArray(PrimitiveType.Lines, 2);

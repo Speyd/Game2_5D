@@ -49,6 +49,23 @@ public interface IDataCache<TKey, TValue>
     void Load(TKey key, IEnumerable<TValue> data);
 
     /// <summary>
+    /// Appends a single item to the existing cache entry under the specified key.
+    /// If the key does not exist, a new entry is created.
+    /// </summary>
+    /// <param name="key">The key under which the data is stored.</param>
+    /// <param name="data">The item to append to the cache.</param>
+    void Append(TKey key, TValue data);
+
+    /// <summary>
+    /// Appends a collection of items to the existing cache entry under the specified key.
+    /// If the key does not exist, a new entry is created.
+    /// </summary>
+    /// <param name="key">The key under which the data is stored.</param>
+    /// <param name="data">The collection of items to append to the cache.</param>
+    void Append(TKey key, IEnumerable<TValue> data);
+
+
+    /// <summary>
     /// Checks if the cache contains data for the specified key.
     /// </summary>
     /// <param name="key">The key to check for.</param>

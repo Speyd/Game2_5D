@@ -11,7 +11,7 @@ namespace TextureLib.Loader.ImageProcessing;
 ///
 /// This class is optional — if not provided, default loading behavior is used.
 /// </summary>
-public class ImageLoadOptions
+public class ImageProcessorOptions : IOptions
 {
     /// <summary>
     /// Flags specifying which color channels to filter during processing.

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SFML.System;
-using MiniMapLib.SettingMap;
 using ScreenLib;
 
 
@@ -18,33 +17,31 @@ public static class PositionDefinition
     /// <summary>
     /// Calculates the Y-coordinate for the bottom edge of the minimap.
     /// </summary>
-    public static float GetLowerY(MiniMapLib.SettingMap.Setting Setting)
+    public static float GetLowerY(Setting.SettingWindow Setting)
     {
-        float mapHeight = Screen.ScreenHeight / Setting.MapScaleY;
-        return Screen.ScreenHeight - mapHeight + Setting.GetWindowSize().Y / 2;
+        return Screen.ScreenHeight - Setting.WindowRender.Window.Size.Y / 2;
     }
 
     /// <summary>
     /// Calculates the X-coordinate for the right edge of the minimap.
     /// </summary>
-    public static float GetLowerX(MiniMapLib.SettingMap.Setting Setting)
+    public static float GetLowerX(Setting.SettingWindow Setting)
     {
-        float mapWidth = Screen.ScreenWidth / Setting.MapScaleX;
-        return Screen.ScreenWidth - mapWidth + Setting.GetWindowSize().X / 2;
+        return Screen.ScreenWidth - Setting.WindowRender.Window.Size.X / 2;
     }
 
     /// <summary>
     /// Returns the position vector for placing the minimap in the lower-left corner.
     /// </summary>
-    public static Vector2f GetLowerLeftCorner(MiniMapLib.SettingMap.Setting Setting)
+    public static Vector2f GetLowerLeftCorner(Setting.SettingWindow Setting)
     {
-        return new Vector2f(Setting.GetWindowSize().X / 2, GetLowerY(Setting));
+        return new Vector2f(Setting.WindowRender.Window.Size.X / 2, GetLowerY(Setting));
     }
 
     /// <summary>
     /// Returns the position vector for placing the minimap in the lower-right corner.
     /// </summary>
-    public static Vector2f GetLowerRightCorner(MiniMapLib.SettingMap.Setting Setting)
+    public static Vector2f GetLowerRightCorner(Setting.SettingWindow Setting)
     {
         return new Vector2f(GetLowerX(Setting), GetLowerY(Setting));
     }
@@ -52,29 +49,26 @@ public static class PositionDefinition
     /// <summary>
     /// Returns the position vector for placing the minimap in the upper-right corner.
     /// </summary>
-    public static Vector2f GetUpperRightCorner(MiniMapLib.SettingMap.Setting Setting)
+    public static Vector2f GetUpperRightCorner(Setting.SettingWindow Setting)
     {
-        return new Vector2f(GetLowerX(Setting), Setting.GetWindowSize().Y / 2);
+        return new Vector2f(GetLowerX(Setting), Setting.WindowRender.Window.Size.Y / 2);
     }
 
     /// <summary>
     /// Returns the position vector for placing the minimap in the upper-left corner.
     /// </summary>
-    public static Vector2f GetUpperLeftCorner(MiniMapLib.SettingMap.Setting Setting)
+    public static Vector2f GetUpperLeftCorner(Setting.SettingWindow Setting)
     {
-        var size = Setting.GetWindowSize();
-        return new Vector2f(size.X / 2, size.Y / 2);
+        return new Vector2f(Setting.WindowRender.Window.Size.X / 2, Setting.WindowRender.Window.Size.Y / 2);
     }
 
     /// <summary>
     /// Sets the position of the minimap based on the selected position type.
     /// </summary>
-    public static void SetPosition(MiniMapLib.SettingMap.Setting Setting)
+    public static void SetPosition(Setting.SettingWindow Setting)
     {
         switch (Setting.Positions)
         {
-            case PositionsMiniMap.None:
-                Setting.IsRender = false; break;
             case PositionsMiniMap.LowerLeftCorner:
                 Setting.CoordinatesInWindow = GetLowerLeftCorner(Setting); break;
             case PositionsMiniMap.LowerRightCorner:

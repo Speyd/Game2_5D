@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.RenderLib</PackageId>
     <Title>EnginePseudo3D.RenderLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>2.0.2</Version>
+    <Version>2.2.3</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EnginePseudo3D.ProtoRender" Version="2.3.0" />
+    <PackageReference Include="EnginePseudo3D.ProtoRender" Version="2.6.4" />
     <PackageReference Include="NGenerics" Version="1.5.3" />
     <PackageReference Include="SFML.Net" Version="2.6.1" />
   </ItemGroup>

@@ -58,7 +58,7 @@ public static class ImageProcessor
     }
 
 
-    private static void ApplyTransparentArtifactFilter(byte[]? data, int baseIndex, byte r, byte g, byte b, byte a, ImageLoadOptions options)
+    private static void ApplyTransparentArtifactFilter(byte[]? data, int baseIndex, byte r, byte g, byte b, byte a, ImageProcessorOptions options)
     {
         if(data is null) 
             return;
@@ -109,7 +109,7 @@ public static class ImageProcessor
     /// </summary>
     /// <param name="data">RGBA pixel array of the image.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    public static void ProcessColorChannels(byte[]? data, ImageLoadOptions options)
+    public static void ProcessColorChannels(byte[]? data, ImageProcessorOptions options)
     {
         if (data == null || options.ColorChannelFilter == ColorChannelFilter.None || options.ColorsAlreadyProcessed)
             return;
@@ -150,7 +150,7 @@ public static class ImageProcessor
     /// <param name="height">Height of the resulting texture.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
     /// <returns>The created SFML texture.</returns>
-    public static SFML.Graphics.Texture ConvertToTexture(MagickImage image, uint width, uint height, ImageLoadOptions options)
+    public static SFML.Graphics.Texture ConvertToTexture(MagickImage image, uint width, uint height, ImageProcessorOptions options)
     {
         byte[]? pixelData = image.GetPixels()
             .ToByteArray(0, 0, width, height, options.LoadSettingMapping);
@@ -170,7 +170,7 @@ public static class ImageProcessor
     /// <param name="height">Height of the resulting texture.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
     /// <returns>The created SFML texture.</returns>
-    public static SFML.Graphics.Texture ConvertToTexture(byte[] pixelData, uint width, uint height, ImageLoadOptions options)
+    public static SFML.Graphics.Texture ConvertToTexture(byte[] pixelData, uint width, uint height, ImageProcessorOptions options)
     {
         ProcessColorChannels(pixelData, options);
 
@@ -189,7 +189,7 @@ public static class ImageProcessor
     /// <param name="canvasHeight">Canvas height.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
     /// <returns>A new MagickImage with the composed frame.</returns>
-    public static MagickImage CreateFrame(MagickImage img, MagickImage? canvas, uint canvasWidth, uint canvasHeight, ImageLoadOptions options)
+    public static MagickImage CreateFrame(MagickImage img, MagickImage? canvas, uint canvasWidth, uint canvasHeight, ImageProcessorOptions options)
     {
         if (options.FrameLoadMode.HasFlag(FrameLoadMode.Accumulate))
         {

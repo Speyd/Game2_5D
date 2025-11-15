@@ -213,8 +213,8 @@ static public class RayDetectionX
         float distanceToPoint = 0;
         float distanceToWall = 0;
 
-        float cosAngle = unit.Direction.X;
-        float sinAngle = unit.Direction.Y;
+        float cosAngle = unit.LookDirection.X;
+        float sinAngle = unit.LookDirection.Y;
 
         var mainHitBox = obj.HitBox.MainHitBox;
         float minX = (float)(mainHitBox[CoordinatePlane.X, SideSize.Smaller]?.Side ?? 0f);
@@ -281,8 +281,8 @@ static public class RayDetectionX
     /// <returns>The side of the object hit by the ray.</returns>
     static public ObjectSide DetermineObjectSides(IObject obj, IUnit unit, Result? result = null)
     {
-        float cosAngle = (float)(result?.CosCarAngle ?? unit.Direction.X);
-        float sinAngle = (float)(result?.SinCarAngle ?? unit.Direction.Y);
+        float cosAngle = (float)(result?.CosCarAngle ?? unit.LookDirection.X);
+        float sinAngle = (float)(result?.SinCarAngle ?? unit.LookDirection.Y);
 
         return Determine(obj, unit, cosAngle, sinAngle);
     }
@@ -295,7 +295,7 @@ static public class RayDetectionX
     /// <returns>The side of the object hit by the ray.</returns>
     static public ObjectSide DetermineObjectSides(IObject obj, IUnit unit)
     {
-        return Determine(obj, unit, unit.Direction.X, unit.Direction.Y);
+        return Determine(obj, unit, unit.LookDirection.X, unit.LookDirection.Y);
     }
 }
 

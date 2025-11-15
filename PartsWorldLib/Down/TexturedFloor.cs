@@ -5,6 +5,7 @@ using SFML.System;
 using ProtoRender.Object;
 using EffectLib.EffectCore;
 using TextureLib.Textures;
+using TextureLib.Loader;
 
 namespace PartsWorldLib.Down;
 /// <summary>

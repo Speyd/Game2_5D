@@ -14,7 +14,7 @@ namespace DrawLib;
 /// </summary>
 public static class Drawing
 {
-    private static readonly ConcurrentDictionary<Type, Action<IObject?, IUnit, Drawable>> _renderers = new ();
+    private static readonly ConcurrentDictionary<Type, Action<IObject?, IUnit, Drawable>> _renderers = new();
     private static readonly ConcurrentDictionary<Type, Action<IUnit, Drawable>> _renderersOnMap = new();
     /// <summary>
     /// Registers a custom draw function for a specific type of <see cref="Drawable"/>.
@@ -125,9 +125,9 @@ public static class Drawing
                 return;
 
             float scaleY = (height / (sprite.Texture.Size.Y / sprite.Scale.Y));
-            float scaleX = (width / (sprite.Texture.Size.X / sprite.Scale.X));  
-            
-            float x = textureX - (width - sprite.Texture.Size.X) / 2;
+            float scaleX = (width / (sprite.Texture.Size.X / sprite.Scale.X));
+
+            float x = textureX - (width * scaleX) / 2;
             float y = textureY - (sprite.Texture.Size.Y * scaleY) / 2;
 
             SFML.Graphics.Sprite newSprite = new SFML.Graphics.Sprite(sprite)
@@ -143,7 +143,6 @@ public static class Drawing
     /// <summary>
     /// Performs raycasting from a unit's position on the given map and draws a <see cref="Sprite"/> on the detected obstacle.
     /// </summary>
-    /// <param name="map">The map containing obstacles.</param>
     /// <param name="unit">The unit from which the ray is cast.</param>
     /// <param name="sprite">The sprite to render.</param>
     public static void DrawingSpriteOnMap(IUnit unit, Sprite sprite)
@@ -181,5 +180,33 @@ public static class Drawing
     {
         IObject? obstacle = Raycast.RaycastFun(unit).Item1;
         DrawingObject(obstacle, unit, drawable);
+    }
+
+    /// <summary>
+    /// Calculates the drawing coordinates on the texture of an object hit by a ray.
+    /// </summary>
+    /// <param name="obstacle">The object hit by the ray. Must implement <see cref="IDrawable"/>.</param>
+    /// <param name="unit">The unit from which the ray is cast.</param>
+    /// <returns>
+    /// Returns the texture coordinates as a <see cref="Vector2f"/>.
+    /// Returns <c>null</c> if the object does not implement <see cref="IDrawable"/> 
+    /// or if the point is inside the texture (invalid for drawing).
+    /// </returns>
+    public static Vector2f? GetDrawingCoordinte(IObject? obstacle, IUnit unit)
+    {
+        if (obstacle is not null && obstacle is IDrawable drawable)
+        {
+            HitPoint hitPoint = RayDetectionX.DetermineHitObjectSides(obstacle, unit);
+
+            float textureX = drawable.CalculateTextureX(hitPoint.UV, hitPoint.TextureWallDetermine);
+            float textureY = RayDetectionY.GetTextureCoordinate(hitPoint, drawable, unit, 0);
+
+            if (drawable.IsInsideTexture(textureX, textureY))
+                return default;
+
+            return new Vector2f(textureX, textureY);
+        }
+
+        return default;
     }
 }

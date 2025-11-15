@@ -20,9 +20,20 @@ public abstract class Obstacle : IObject, IEffectUser
     /// </summary>
     public Guid UUID { get; set; } = Guid.NewGuid();
 
+    /// <summary>
+    /// Event invoked whenever the object's position changes.
+    /// Subscribers can use this to update coordinates, collision, or other map-related logic.
+    /// </summary>
     public Action<IObject>? OnPositionChanged { get; set; }
-    private IMap? _map = null;
-    public IMap? Map 
+    protected IMap? _map = null;
+
+    /// <summary>
+    /// Gets or sets the map to which this object belongs.
+    /// When the map is changed, the object is removed from the previous map
+    /// and unsubscribed from its position update events. Setting a new map
+    /// does not automatically add the object to the new map.
+    /// </summary>
+    public virtual IMap? Map 
     {
         get => _map;
         set
@@ -30,22 +41,53 @@ public abstract class Obstacle : IObject, IEffectUser
             if (_map is not null && _map != value)
             {
                 _map.DeleteObstacle(this);
-                if (value is not null)
-                    value.AddObstacle(CellX, CellY, this);
+               OnPositionChanged -= _map.UpdateCoordinatesObstacle;
             }
+
             _map = value;
         }
     }
 
+    /// <summary>
+    /// Gets the X coordinate of the object in world space.
+    /// </summary>
     public virtual Coordinate X { get; init; }
+
+    /// <summary>
+    /// Gets the Y coordinate of the object in world space.
+    /// </summary>
     public virtual Coordinate Y { get; init; }
+    
+    /// <summary>
+    /// Gets the Z coordinate of the object in world space.
+    /// </summary>
     public virtual Coordinate Z { get; init; }
 
+    /// <summary>
+    /// Indicates whether the object is currently moving along any axis (X, Y, or Z).
+    /// Returns <c>true</c> if any of the coordinates are moving; otherwise, <c>false</c>.
+    /// </summary>
+    public bool IsMoving => X.IsMoving || Y.IsMoving || Z.IsMoving;
+
+    /// <summary>
+    /// Gets or sets the column index of the map cell that contains the object,
+    /// calculated using the map's tile size.
+    /// </summary>
     public int CellX { get; set; }
+
+    /// <summary>
+    /// Gets or sets the row index of the map cell that contains the object,
+    /// calculated using the map's tile size.
+    /// </summary>
     public int CellY { get; set; }
 
 
     private HitBox _hitBox = new HitBox();
+    /// <summary>
+    /// Gets or sets the hitbox associated with this object.
+    /// Setting the hitbox also updates the hitbox reference in the X, Y, and Z coordinates
+    /// so that coordinate changes correctly update the object's collision boundaries.
+    /// </summary>
     public virtual HitBox HitBox 
     {
         get => _hitBox;
@@ -102,9 +144,28 @@ public abstract class Obstacle : IObject, IEffectUser
 
 
     //------------------Map Setting-----------------
+
+    /// <summary>
+    /// Gets or sets the color of the object as displayed on the minimap.
+    /// </summary>
     public virtual SFML.Graphics.Color ColorInMap { get; set; }
+
+    /// <summary>
+    /// Gets or sets the texture of the object for the minimap representation.
+    /// Can be null if a plain color is used instead.
+    /// </summary>
     public virtual TextureWrapper? TextureInMiniMap { get; set; }
+
+    /// <summary>
+    /// Gets or sets the scale factor for the size of the object on the minimap.
+    /// 1.0 means original size, values greater or smaller scale the object proportionally.
+    /// </summary>
     public virtual float SizeScale { get; set; } = 1;
+
+    /// <summary>
+    /// Gets or sets the scale factor for the position of the object on the minimap.
+    /// Adjusts how the object's coordinates map to the minimap.
+    /// </summary>
     public virtual float PositionScale { get; set; } = 1;
 
 
@@ -142,6 +203,9 @@ public abstract class Obstacle : IObject, IEffectUser
         X.UpdateInfo(obstacle.X, HitBox);
         Y.UpdateInfo(obstacle.Y, HitBox);
         Z.UpdateInfo(obstacle.Z, HitBox);
+
+        shiftCubedX = obstacle.ShiftCubedX;
+        shiftCubedY = obstacle.shiftCubedY;
 
         ColorInMap = obstacle.ColorInMap;
         if(obstacle.TextureInMiniMap is not null)

@@ -1133,16 +1133,16 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "D:\\.nuget\\packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.8.9",
+    "version": "1.9.3",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj",
       "projectName": "EnginePseudo3D.ControlLib",
       "projectPath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\ControlLib.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "packagesPath": "D:\\.nuget\\packages",
       "outputPath": "D:\\C++ проекты\\Game2_5D\\ControlLib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [

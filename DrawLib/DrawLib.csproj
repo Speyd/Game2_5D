@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.DrawLib</PackageId>
     <Title>EnginePseudo3D.DrawLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>2.1.2</Version>
+    <Version>2.3.8</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -32,7 +32,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="2.2.9" />
+	  <PackageReference Include="EnginePseudo3D.RayTracingLib" Version="2.5.7" />
   </ItemGroup>
 
 </Project>

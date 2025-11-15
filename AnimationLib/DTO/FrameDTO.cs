@@ -3,15 +3,19 @@ using System.Text.Json;
 using DataPipes.DTO;
 using DataPipes.DTO.Register;
 using TextureLib.Loader.ImageProcessing;
+using AnimationLib.Core;
+using AnimationLib.Core.Elements;
+using TextureLib.Loader;
+using AnimationLib.Enum;
 
 
-namespace AnimationLib;
+namespace AnimationLib.DTO;
 /// <summary>
-/// Data Transfer Object (DTO) for the <see cref="AnimationState"/> class.
+/// Data Transfer Object (DTO) for the <see cref="Frame"/> class.
 /// Used to serialize and deserialize animation state data, including frame paths,
 /// animation playback speed, current frame index, and animation toggle.
 /// </summary>
-public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<AnimationStateDTO, AnimationState>
+public class FrameDTO : IDTO<Frame>, IRegisterableDTO<FrameDTO, Frame>
 {
     /// <summary>
     /// Gets the global or shared <see cref="DTOJsonOptionsRegistry"/> instance associated with the implementing type.
@@ -21,13 +25,13 @@ public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<Animatio
     public static DTOJsonOptionsRegistry DtoTypeRegistry { get; } = new();
 
     [JsonIgnore]
-    private AnimationState animationState = new();
+    private Frame frame = new();
 
     /// <summary>
     /// The base file name used when generating a unique file name for serialization (e.g., "object_", "dto_").
     /// </summary>
     [JsonIgnore]
-    public string BaseFileName { get; } = "animationState_";
+    public string BaseFileName { get; } = "frame_";
     /// <summary>
     /// The file extension to use when generating the file name (e.g., ".json").
     /// </summary>
@@ -43,7 +47,7 @@ public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<Animatio
     /// The playback speed of the animation. 
     /// A higher value indicates slower animation playback (inverse relationship).
     /// </summary>
-    public int Speed;
+    public int SpeedAnimation;
 
     /// <summary>
     /// A list of file paths to the texture frames used in the animation.
@@ -54,49 +58,60 @@ public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<Animatio
     /// <summary>
     /// Indicates whether the animation is active (true) or disabled (false).
     /// </summary>
-    public bool IsAnimation;
+    public PlayMode PlayMode;
 
-    public ImageLoadOptionsDTO loadOptionsDTO;
+    /// <summary>
+    /// List DTO class ImageLoadOptions
+    /// </summary>
+    public ImageLoadOptionsDTO? loadOptionsDTO;
+
+    /// <summary>
+    /// Determines whether to use the maximum frame rectangle or the current frame's rectangle when rendering.
+    /// </summary>
+    public FrameRectMode RectMode;
+
+
 
     /// <summary>
     /// Parameterless constructor required for deserialization and manual population of properties.
     /// </summary>
-    public AnimationStateDTO() { }
+    public FrameDTO() { }
     /// <summary>
-    /// Initializes the DTO using an existing <see cref="AnimationState"/> instance,
+    /// Initializes the DTO using an existing <see cref="Frame"/> instance,
     /// preparing it for conversion to a serializable format.
     /// </summary>
-    /// <param name="animationState">The source <see cref="AnimationState"/> object.</param>
-    public AnimationStateDTO(AnimationState animationState)
+    /// <param name="frame">The source <see cref="Frame"/> object.</param>
+    public FrameDTO(Frame frame)
     {
-        this.animationState = animationState;
-        loadOptionsDTO = new ImageLoadOptionsDTO(animationState.LoadOptions);
+        this.frame = frame;
+        loadOptionsDTO = frame.LoadOptions is not null ? new ImageLoadOptionsDTO(frame.LoadOptions) : null;
     }
 
     /// <summary>
-    /// Converts the internal <see cref="AnimationState"/> object to a DTO format
+    /// Converts the internal <see cref="FrameDTO"/> object to a DTO format
     /// by extracting primitive values and frame paths for serialization.
     /// </summary>
     public void ToDTO()
     {
-        loadOptionsDTO.ToDTO();
+        loadOptionsDTO?.ToDTO();
 
-        Index = animationState.Index;
-        Speed = animationState.Speed;
-        IsAnimation = animationState.IsAnimation;
+        Index = frame.Index;
+        SpeedAnimation = frame.SpeedAnimation;
+        RectMode = frame.RectMode;
+        PlayMode = frame.PlayMode;
 
-        foreach (var frame in animationState.GetFrames())
+        foreach (var frame in frame.GetElements())
             Frames.Add(frame.PathTexture);
 
         Frames.Reverse();
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="AnimationStateDTO"/> from the given <see cref="AnimationState"/>.
+    /// Creates a new instance of <see cref="FrameDTO"/> from the given <see cref="FrameDTO"/>.
     /// </summary>
     /// <param name="obj">The object to convert to a DTO.</param>
-    /// <returns>A new instance of <see cref="AnimationStateDTO"/>.</returns>
-    public static AnimationStateDTO CreateDTO(AnimationState obj) => new AnimationStateDTO(obj);
+    /// <returns>A new instance of <see cref="FrameDTO"/>.</returns>
+    public static FrameDTO CreateDTO(Frame obj) => new FrameDTO(obj);
 
     /// <summary>
     /// Ensures that the DTO registration logic is initialized once per application domain.
@@ -107,7 +122,7 @@ public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<Animatio
     /// Registers custom JSON converters required for correct serialization and deserialization of DTO types.
     /// </summary>
     /// <param name="options">The <see cref="JsonSerializerOptions"/> to which converters will be added.</param>
-    public static void RegisterDTOJsonConverters(JsonSerializerOptions options) 
+    public static void RegisterDTOJsonConverters(JsonSerializerOptions options)
     {
         DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
         ImageLoadOptionsDTO.RegisterDTOJsonConverters(options);
@@ -116,25 +131,27 @@ public class AnimationStateDTO : IDTO<AnimationState>, IRegisterableDTO<Animatio
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public AnimationState ToObject()
+    public Frame ToObject()
     {
         Frames = ImageProcessor.RemoveDuplicateFrames(Frames);
 
-        AnimationState animationState = new AnimationState(loadOptionsDTO.ToObject(), true, Frames.ToArray());
-        animationState.Index = Index;
-        animationState.Speed = Speed;
-        animationState.IsAnimation = IsAnimation;
+        Frame frame = new Frame(loadOptionsDTO?.ToObject(), Frames.ToArray());
+        frame.Index = Index;
+        frame.SpeedAnimation = SpeedAnimation;
+        frame.RectMode = RectMode;
+        frame.PlayMode = PlayMode;
 
-        return animationState;
+        return frame;
     }
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public void ToObject(AnimationState animationState)
+    public void ToObject(Frame animationState)
     {
-        animationState = new AnimationState(loadOptionsDTO.ToObject(), true, Frames.ToArray());
+        animationState = new Frame(loadOptionsDTO?.ToObject(), Frames.ToArray());
         animationState.Index = Index;
-        animationState.Speed = Speed;
-        animationState.IsAnimation = IsAnimation;
+        animationState.SpeedAnimation = SpeedAnimation;
+        animationState.RectMode = RectMode;
+        animationState.PlayMode = PlayMode;
     }
 }

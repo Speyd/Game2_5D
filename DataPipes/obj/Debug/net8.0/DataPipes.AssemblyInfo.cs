@@ -15,11 +15,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for computing with data.")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.2.9.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.2.9+0ee7ab0e09db4a83741f7776262310ca55d15787")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.3.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.3.0+bbff9db10ae6abf9f249ff5f6c10038ec745f003")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("DataPipes")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.2.9.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.3.0.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/DataPipes")]
 
 // Создано классом WriteCodeFragment MSBuild.

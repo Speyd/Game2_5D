@@ -1102,7 +1102,7 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "D:\\.nuget\\packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
@@ -1111,7 +1111,7 @@
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
       "projectName": "EnginePseudo3D.ScreenLib",
       "projectPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\ScreenLib.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "packagesPath": "D:\\.nuget\\packages",
       "outputPath": "D:\\C++ проекты\\Game2_5D\\ScreenLib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [

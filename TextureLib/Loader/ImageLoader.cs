@@ -114,7 +114,7 @@ public static class ImageLoader
     private static List<TextureWrapper> LoadFrames(string path, ImageLoadOptions? options = null)
     {
         IsTrueImagePath(path);
-        options = options ?? new ImageLoadOptions();
+        options ??= new ImageLoadOptions();
 
         try
         {
@@ -122,7 +122,7 @@ public static class ImageLoader
             var (canvasWidth, canvasHeight) = ImageProcessor.CalculateCanvasSize(collection);
 
 
-            using var canvas = options.FrameLoadMode.HasFlag(FrameLoadMode.Accumulate)
+            using var canvas = options.ProcessorOptions.FrameLoadMode.HasFlag(FrameLoadMode.Accumulate)
                 ? new MagickImage(MagickColors.Transparent, canvasWidth, canvasHeight)
                 : null;
 
@@ -130,11 +130,11 @@ public static class ImageLoader
 
             for (int i = 0; i < collection.Count; i++)
             {
-                using var currentFrame = ImageProcessor.CreateFrame((MagickImage)collection[i], canvas, canvasWidth, canvasHeight, options);
+                using var currentFrame = ImageProcessor.CreateFrame((MagickImage)collection[i], canvas, canvasWidth, canvasHeight, options.ProcessorOptions);
 
                 ImageProcessor.EnsureSRGBColorSpace(currentFrame);
 
-                var texture = ImageProcessor.ConvertToTexture(currentFrame, canvasWidth, canvasHeight, options);
+                var texture = ImageProcessor.ConvertToTexture(currentFrame, canvasWidth, canvasHeight, options.ProcessorOptions);
                 var textureObstacle = new TextureWrapper(texture, path);
 
                 textures.Add(textureObstacle);
@@ -235,7 +235,7 @@ public static class ImageLoader
             SpriteDataCache.Load(path, spriteList);
         }
     }
-    private static void ApplyLoadOptions(List<TextureWrapper> frames, ImageLoadOptions? options)
+    private static void ApplyLoadOptions(List<TextureWrapper> frames, ImageProcessorOptions? options)
     {
         if (options is null || options.ColorsAlreadyProcessed || options.ColorChannelFilter is ColorChannelFilter.None)
             return;
@@ -286,7 +286,7 @@ public static class ImageLoader
             throw new Exception("ImageLoader: Nothing exists along this path!");
 
         LoadToCache(textures, path);
-        ApplyLoadOptions(textures, options);
+        ApplyLoadOptions(textures, options?.ProcessorOptions);
 
         return textures;
     }
@@ -337,20 +337,23 @@ public static class ImageLoader
     /// Asynchronously loads textures from multiple file or directory paths (params overload).
     /// </summary>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="useCache">Whether to use cached textures if available.</param>
     /// <param name="paths">File or directory paths.</param>
     /// <returns>Task returning combined list of loaded TextureWrapper objects.</returns>
-    public static Task<List<TextureWrapper>> LoadAsync(ImageLoadOptions? options = null, bool useCache = true, params string[] paths) => LoadAsync(paths.ToList(), options, useCache);
+    public static Task<List<TextureWrapper>> LoadAsync(ImageLoadOptions? options = null, params string[] paths)
+    {
+        options ??= new ImageLoadOptions();
+        return LoadAsync(paths.ToList(), options, options.UseCashe);
+    }
     /// <summary>
     /// Synchronously loads textures from multiple file or directory paths (params overload).
     /// </summary>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="useCache">Whether to use cached textures if available.</param>
     /// <param name="paths">File or directory paths.</param>
     /// <returns>Combined list of loaded TextureWrapper objects.</returns>
-    public static List<TextureWrapper> Load(ImageLoadOptions? options = null, bool useCache = true, params string[] paths)
+    public static List<TextureWrapper> Load(ImageLoadOptions? options = null, params string[] paths)
     {
-        return Load(paths.ToList(), options, useCache);
+        options ??= new ImageLoadOptions();
+        return Load(paths.ToList(), options, options.UseCashe);
     }
     #endregion
 }

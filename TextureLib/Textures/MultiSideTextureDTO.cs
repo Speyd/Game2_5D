@@ -4,6 +4,7 @@ using TextureLib.Loader.ImageProcessing;
 using DataPipes.DTO;
 using DataPipes.DTO.Register;
 using TextureLib.Textures.Pair;
+using TextureLib.Loader;
 
 namespace TextureLib.Textures;
 /// <summary>
@@ -48,7 +49,7 @@ public class MultiSideTextureDTO : IDTO<MultiSideTexture>
     /// <summary>
     /// Gets or sets the image loading options used to configure how images are processed and loaded.
     /// </summary>
-    public ImageLoadOptionsDTO LoadOptions;
+    public  ImageLoadOptionsDTO LoadOptions;
 
 
     /// <summary>

@@ -5,12 +5,12 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj": {
-      "version": "1.6.5",
+      "version": "2.0.5",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
         "projectName": "EnginePseudo3D.AnimationLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.TextureLib": {
               "target": "Package",
-              "version": "[1.6.2, )"
+              "version": "[1.7.3, )"
             }
           },
           "imports": [

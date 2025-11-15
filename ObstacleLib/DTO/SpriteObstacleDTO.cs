@@ -6,6 +6,7 @@ using DataPipes.DTO;
 using ProtoRender.Object;
 using ProtoRender.DTO;
 using DataPipes.DTO.Register;
+using AnimationLib.DTO;
 
 namespace ObstacleLib.DTO;
 /// <summary>
@@ -53,7 +54,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     /// <summary>
     /// Contains serialized animation state data for the sprite.
     /// </summary>
-    public AnimationStateDTO AnimationState = new();
+    public AnimatorDTO AnimatorDTO = new();
 
 
     /// <summary>
@@ -94,7 +95,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     {
         this.spriteObstacle = spriteObstacle;
         ObstacleDTO = new ObstacleDTO(spriteObstacle);
-        AnimationState = new AnimationStateDTO(spriteObstacle.Animation);
+        AnimatorDTO = new AnimatorDTO(spriteObstacle.Animation);
     }
 
 
@@ -105,7 +106,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     public override void ToDTO()
     {
         ObstacleDTO.ToDTO();
-        AnimationState.ToDTO();
+        AnimatorDTO.ToDTO();
 
         Scale = spriteObstacle.Scale;
         AngleToObserver = spriteObstacle.AngleToObserver;
@@ -140,7 +141,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
         DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
         IObjectDTO.DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
         ObstacleDTO.DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
-        AnimationStateDTO.DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
+        AnimatorDTO.DtoTypeRegistry.RegisterAllDTOJsonConverters(options);
     }
 
 
@@ -149,7 +150,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     /// </summary>
     public override SpriteObstacle ToObject()
     {
-        SpriteObstacle sprite = new SpriteObstacle(AnimationState.ToObject());
+        SpriteObstacle sprite = new SpriteObstacle(AnimatorDTO.ToObject());
         ObstacleDTO.ToObject(sprite, ObstacleDTO);
 
         return sprite;
@@ -161,7 +162,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     {
         if (obj is SpriteObstacle sprite)
         {
-            sprite = new SpriteObstacle(AnimationState.ToObject());
+            sprite = new SpriteObstacle(AnimatorDTO.ToObject());
             ObstacleDTO.ToObject(sprite, ObstacleDTO);
         }
     }
@@ -171,7 +172,7 @@ public class SpriteObstacleDTO : IObjectDTO, IDTO<SpriteObstacle>, IRegisterable
     /// </summary>
     public void ToObject(SpriteObstacle sprite)
     {
-        sprite = new SpriteObstacle(AnimationState.ToObject());
+        sprite = new SpriteObstacle(AnimatorDTO.ToObject());
         ObstacleDTO.ToObject(sprite, ObstacleDTO);
     }
 }

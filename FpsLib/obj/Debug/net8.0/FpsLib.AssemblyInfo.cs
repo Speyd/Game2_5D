@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for calculating and displaying the number of fps.")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.6.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.6.0+0ee7ab0e09db4a83741f7776262310ca55d15787")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.6.0+bbff9db10ae6abf9f249ff5f6c10038ec745f003")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FpsLib")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.6.0.0")]

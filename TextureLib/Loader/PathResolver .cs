@@ -12,47 +12,58 @@ namespace TextureLib.Loader;
 /// </summary>
 public static class PathResolver
 {
-    private static readonly string solutionFilePattern = "*.sln";
-    private static readonly string projectFilePattern = "*.csproj";
+    private static string? _searchPattern = null;
+    /// <summary>
+    /// Gets or sets the file search pattern (e.g., "*.json", "*.csproj") 
+    /// used to locate the root directory.
+    /// When a new non-null value is set, the <see cref="RootDirectory"/> 
+    /// is automatically updated by searching for the specified pattern.
+    /// </summary>
+    public static string? SearchPattern 
+    {
+        get => _searchPattern;
+        set
+        {
+            if (value is null)
+                return;
 
+            _searchPattern = value;
+            RootDirectory = FindRoot(value);
+        }
+    }
+
+
+    private static string? _rootDirectory = null;
     /// <summary>
     /// Gets the root directory path where the solution (.sln) file is located.
     /// </summary>
-    public static string RootDirectory { get; private set; } = FindRoot(solutionFilePattern);
+    public static string RootDirectory 
+    {
+        get => _rootDirectory ?? throw new InvalidOperationException("RootDirectory is not initialized.");
+        set => _rootDirectory = value;
+    }
 
     /// <summary>
-    /// Gets the main directory path where the solution (.sln) file is located.
-    /// Usually same as <see cref="RootDirectory"/>.
+    /// Combines a root directory with a relative resource path.
     /// </summary>
-    public static string MainDirectory { get; } = FindRoot(solutionFilePattern);
+    /// <param name="pathResource">
+    /// The relative path to the resource.
+    /// </param>
+    /// <param name="searchPattern">
+    /// An optional file search pattern (e.g., "*.json", "*.csproj").
+    /// If specified, the method searches for the nearest parent directory
+    /// that contains a file matching the pattern and uses it as the root.
+    /// If <c>null</c>, the <see cref="RootDirectory"/> is used instead.
+    /// </param>
+    /// <returns>
+    /// The combined absolute path to the resource under the resolved root directory.
+    /// </returns>
 
-    /// <summary>
-    /// Combines the <see cref="RootDirectory"/> with a relative resource path.
-    /// </summary>
-    /// <param name="pathResource">The relative path to the resource.</param>
-    /// <returns>The combined absolute path to the resource under the root directory.</returns>
-    public static string GetPath(string pathResource) =>
-        Path.Combine(RootDirectory, pathResource);
+    public static string GetPath(string pathResource, string? searchPattern = null) =>
+        Path.Combine(searchPattern is null? RootDirectory : FindRoot(searchPattern), pathResource);
 
-    /// <summary>
-    /// Combines the <see cref="MainDirectory"/> with a relative resource path.
-    /// </summary>
-    /// <param name="pathResource">The relative path to the resource.</param>
-    /// <returns>The combined absolute path to the resource under the main directory.</returns>
-    public static string GetMainPath(string pathResource) =>
-        Path.Combine(MainDirectory, pathResource);
 
-    /// <summary>
-    /// Finds and returns the directory path containing a project file (.csproj),
-    /// starting from the specified directory and moving up the directory tree.
-    /// </summary>
-    /// <param name="pathDirectory">The starting directory path to search from.</param>
-    /// <returns>The full path to the directory containing the project file.</returns>
-    /// <exception cref="DirectoryNotFoundException">
-    /// Thrown if no directory containing a .csproj file is found in the path or its parents.
-    /// </exception>
-    public static string GetPathCurrentDirectory(string pathDirectory) =>
-        FindRoot(projectFilePattern, pathDirectory);
+
 
     /// <summary>
     /// Validates whether the specified directory path exists and is not null or whitespace.
@@ -69,17 +80,6 @@ public static class PathResolver
             throw new DirectoryNotFoundException($"Directory does not exist: {pathRootDirectory}");
     }
 
-    /// <summary>
-    /// Sets a new root directory path after validation.
-    /// </summary>
-    /// <param name="pathRootDirectory">The new root directory path.</param>
-    /// <exception cref="ArgumentException">Thrown if the path is null, empty, or whitespace.</exception>
-    /// <exception cref="DirectoryNotFoundException">Thrown if the directory does not exist.</exception>
-    public static void SetRootDirectoryPath(string pathRootDirectory)
-    {
-        CheckValidDirectoryPath(pathRootDirectory);
-        RootDirectory = pathRootDirectory;
-    }
 
     /// <summary>
     /// Searches for a directory containing files matching the specified pattern,
@@ -93,13 +93,13 @@ public static class PathResolver
     /// <exception cref="DirectoryNotFoundException">
     /// Thrown if no directory containing matching files is found.
     /// </exception>
-    private static string FindRoot(string searchPattern, string? startDirectory = null)
+    public static string FindRoot(string searchPattern, string? startDirectory = null)
     {
         DirectoryInfo? dir = new DirectoryInfo(startDirectory ?? AppDomain.CurrentDomain.BaseDirectory);
 
         while (dir != null)
         {
-            if (dir.GetFiles(searchPattern).Any())
+            if (dir.GetDirectories(searchPattern).Any() || dir.GetFiles(searchPattern).Any())
                 return dir.FullName + Path.DirectorySeparatorChar;
 
             dir = dir.Parent;

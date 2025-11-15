@@ -5,6 +5,7 @@ using ProtoRender.Object;
 using EffectLib.EffectCore;
 using TextureLib.Loader.ImageProcessing;
 using TextureLib.Textures;
+using TextureLib.Loader;
 
 namespace PartsWorldLib.Up;
 /// <summary>

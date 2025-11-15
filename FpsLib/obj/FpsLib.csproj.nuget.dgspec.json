@@ -10,7 +10,7 @@
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
         "projectName": "EnginePseudo3D.FpsLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\FpsLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\FpsLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [

@@ -3,6 +3,7 @@ using System.Text.Json;
 using DataPipes.DTO;
 using DataPipes.DTO.Register;
 using ScreenLib.Output;
+using MiniMapLib.Setting;
 
 
 namespace MiniMapLib.DTO;
@@ -63,7 +64,12 @@ public class MiniMapDTO : IDTO<MiniMap>, IRegisterableDTO<MiniMapDTO, MiniMap>
     /// <summary>
     /// DTO representing the settings of the MiniMap.
     /// </summary>
-    public SettingDTO Setting { get; set; }
+    public SettingMapDTO SettingMap { get; set; }
+
+    /// <summary>
+    /// DTO representing the settings of the MiniMap.
+    /// </summary>
+    public SettingWindowDTO SettingWindow { get; set; }
 
     /// <summary>
     /// DTO representing the zoom settings of the MiniMap.
@@ -87,7 +93,9 @@ public class MiniMapDTO : IDTO<MiniMap>, IRegisterableDTO<MiniMapDTO, MiniMap>
         PlayerCircle = new PlayerCircleDTO(miniMap.PlayerCircle);
         ObstacleOutput = new ObstacleOutputDTO(miniMap.Obstacle);
         PlayerLine = new PlayerLineDTO(miniMap.PlayerLine);
-        Setting = new SettingDTO(miniMap.Setting);
+        SettingMap = new SettingMapDTO(miniMap.SettingMap);
+        SettingWindow = new SettingWindowDTO(miniMap.SettingWindow);
+
         Zoom = new ZoomDTO(miniMap.Zoom);
     }
 
@@ -103,7 +111,8 @@ public class MiniMapDTO : IDTO<MiniMap>, IRegisterableDTO<MiniMapDTO, MiniMap>
         PlayerCircle.ToDTO();
         ObstacleOutput.ToDTO();
         PlayerLine.ToDTO();
-        Setting.ToDTO();
+        SettingMap.ToDTO();
+        SettingWindow.ToDTO();
         Zoom.ToDTO();
     }
 
@@ -133,7 +142,10 @@ public class MiniMapDTO : IDTO<MiniMap>, IRegisterableDTO<MiniMapDTO, MiniMap>
     /// </summary>
     public MiniMap ToObject()
     {
-        throw new Exception($"This method has no implementation({typeof(MiniMapDTO)}).");
+        MiniMap miniMap = new MiniMap(Border.texturePath);
+        ToObject(miniMap);
+
+        return miniMap;
     }
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
@@ -141,12 +153,13 @@ public class MiniMapDTO : IDTO<MiniMap>, IRegisterableDTO<MiniMapDTO, MiniMap>
     public void ToObject(MiniMap miniMap)
     {
         miniMap.OutputLayer = outputLayer;
+        SettingWindow.ToObject(miniMap.SettingWindow);
 
         Border.ToObject(miniMap.Border);
         PlayerCircle.ToObject(miniMap.PlayerCircle);
         ObstacleOutput.ToObject(miniMap.Obstacle);
         PlayerLine.ToObject(miniMap.PlayerLine);
-        Setting.ToObject(miniMap.Setting);
+        SettingMap.ToObject(miniMap.SettingMap);
         Zoom.ToObject(miniMap.Zoom);
     }
 }

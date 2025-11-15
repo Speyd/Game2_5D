@@ -3,32 +3,61 @@ using ScreenLib;
 using SFML.System;
 using ObstacleLib.SpriteLib.Render;
 using TextureLib.Textures;
-using ObstacleLib.SpriteLib.Add;
 using ProtoRender.RenderInterface;
 using System.Collections.Concurrent;
 using ProtoRender.RenderAlgorithm;
 using DataPipes;
 using AnimationLib;
-using TextureLib.Loader.ImageProcessing;
 using ProtoRender.Object;
+using ProtoRender.Map;
+using AnimationLib.Core;
+using TextureLib.Loader;
+using AnimationLib.Core.Elements;
 
 
 namespace ObstacleLib.SpriteLib;
-public class SpriteObstacle : Obstacle, ISelfRenderable
+public class SpriteObstacle : Obstacle, ISelfRenderable, IAnimatable
 {
 
     //-------------------List Sprites Render------------------
-    public static List<SpriteObstacle> SpritesToRender { get; private set; } = new List<SpriteObstacle>();
+    public static ConcurrentDictionary<IMap, List<SpriteObstacle>> SpritesToRender { get; private set; } = new();
     private static readonly object _lock = new();
-    private static readonly object _lockAdd = new();
 
+    //-------------------Obstacle------------------
+    public override IMap? Map
+    {
+        get => _map;
+        set
+        {
+            if (_map is not null && _map != value)
+            {
+                _map.DeleteObstacle(this);
+                OnPositionChanged -= _map.UpdateCoordinatesObstacle;
+                RemoveObstacle(this);
+                AddObstacleToRenderList();
+            }
+
+            _map = value;
+        }
+    }
 
     //---------------------------Textures------------------------------
-    public AnimationState Animation { get; set; } = new();
+    public Animator Animation { get; set; } = new();
     public SFML.Graphics.Sprite RenderSprite { get; set; } = new SFML.Graphics.Sprite();
 
 
     //--------------------------Setting-----------------------------
+
+    /// <summary>
+    /// Global minimum distance constraint shared by all sprites.
+    /// </summary>
+    public static double GlobalMinDistance { get; set; } = 100;
+
+    /// <summary>
+    /// Individual minimum distance constraint, which can be set separately for each sprite.
+    /// </summary>
+    public double? PersonalMinDistance { get; set; } = null;
+
 
     private float scale = 1;
     /// <summary>Texture scale</summary>
@@ -37,54 +66,78 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
         get => scale;
         set => scale = value == 0 ? 1 : value;
     }
-    /// <summary>Size scale</summary>
+    /// <summary>Size scale in MiniMap</summary>
     public override float SizeScale { get; set; } = 2;
     /// <summary>Position scale in MiniMap</summary>
     public override float PositionScale { get; set; } = 4;
 
-    private bool IsAdded { get; set; } = false;
+    protected bool IsAdded { get; set; } = false;
     public bool IsRenderable { get; set; } = true;
 
     //---------------------Render Parameters----------------------
     /// <summary>Angle relative to this object and the observer</summary>
-    public double AngleToObserver { get; set; }
-    public double Distance { get; set; }
+    public double AngleToObserver { get; set; } = 0;
+
+
+    private double _distance = 0;
+    /// <summary>
+    /// Actual (world) distance to the object.
+    /// Setting this value also updates <see cref="ViewDistance"/>.
+    /// </summary>
+    public double Distance 
+    {
+        get => _distance;
+        set
+        {
+            _distance = value;
+            ViewDistance = value * Math.Cos(AngleToObserver);
+        }
+    }
+    /// <summary>
+    /// Distance projected onto the observer’s view direction
+    /// (used for perspective correction and sprite scaling).
+    /// </summary>
+    public double ViewDistance { get; protected set; }
 
 
     #region Constructor
-    public SpriteObstacle(List<TextureWrapper> textures)
+    public SpriteObstacle(TextureWrapper texture)
+     : this(new List<TextureWrapper> { texture }) { }
+
+    public SpriteObstacle(List<TextureWrapper> textures, ImageLoadOptions? options = null)
         : base(SFML.Graphics.Color.White, false)
     {
-        Adder.AddTextures(this, textures);
+        Animation = new Animator(textures, null, null, options);
     }
-    public SpriteObstacle(TextureWrapper texture)
-       : base(SFML.Graphics.Color.White, false)
-    {
-        Adder.AddTexture(this, texture);
-    }
-    public SpriteObstacle(List<string> paths, ImageLoadOptions? options = null)
-       : base(SFML.Graphics.Color.White, false)
-    {
-        Animation.LoadOptions = options ?? new();
-        _ = Adder.AddTexturesAsync(this, paths);
-    }
+
     public SpriteObstacle(string path, ImageLoadOptions? options = null)
-       : base(SFML.Graphics.Color.White, false)
+        : this(new List<string> { path }, options) { }
+
+    public SpriteObstacle(List<string> paths, ImageLoadOptions? options = null)
+        : base(SFML.Graphics.Color.White, false)
     {
-        Animation.LoadOptions = options ?? new();
-        _ = Adder.AddTextureAsync(this, path);
+        Animation = new Animator(options, paths.ToArray());
     }
-    public SpriteObstacle(AnimationState animationState)
-          : base(SFML.Graphics.Color.White, false)
+
+    public SpriteObstacle(AnimationClip animationClip, ImageLoadOptions? options = null)
+        : base(SFML.Graphics.Color.White, false)
     {
-        Animation = new AnimationState(animationState);
+        Animation = new Animator(animationClip, null, null, options);
     }
-    /// <summary>Constructor class AnimationState</summary>
-    /// <param name="spriteObstacle">Object of SpriteObstacle</param>
-    /// <param name="createNewTexture">true - create new texture, false - load created texture</param>
-    public SpriteObstacle(SpriteObstacle spriteObstacle, bool createNewTexture = true, bool loadAsync = false)
+    public SpriteObstacle(Frame frame, ImageLoadOptions? options = null)
+        : base(SFML.Graphics.Color.White, false)
+    {
+        Animation = new Animator(frame, null, null, options);
+    }
+    public SpriteObstacle(Animator animator, ImageLoadOptions? options = null)
+        : base(SFML.Graphics.Color.White, false)
+    {
+        Animation = options is not null && options.CreateNew ? new Animator(animator, options) : animator;
+    }
+
+    public SpriteObstacle(SpriteObstacle spriteObstacle, ImageLoadOptions? options = null)
         : base(spriteObstacle)
-    {      
+    {
         IsRenderable = spriteObstacle.IsRenderable;
         IsAdded = spriteObstacle.IsAdded;
 
@@ -92,8 +145,9 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
         AngleToObserver = spriteObstacle.AngleToObserver;
         Distance = spriteObstacle.Distance;
 
-        Animation = createNewTexture ? new AnimationState(spriteObstacle.Animation, loadAsync) : spriteObstacle.Animation;
+        Animation = options is not null && options.CreateNew ? new Animator(spriteObstacle.Animation, options) : spriteObstacle.Animation;
     }
+
     #endregion
 
     #region MapAdder
@@ -118,9 +172,9 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     {
         if (TextureInMiniMap is not null)
             rectangleShape.Texture = TextureInMiniMap.Texture;
-        else if (TextureInMiniMap is null && Animation.CountFrame > 0)
+        else if (TextureInMiniMap is null && Animation.CurrentFrame?.CountElements > 0)
         {
-            TextureInMiniMap = Animation.GetFrame(0);
+            TextureInMiniMap = Animation.CurrentFrame.GetElement(0);
             rectangleShape.Texture = TextureInMiniMap?.Texture;
         }
         else
@@ -158,52 +212,82 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     }
     public void AddObstacleToRenderList()
     {
-        lock (_lock)
+        if (IsAdded || !IsRenderable || Map is null)
+            return;
+
+        var list = SpritesToRender.GetOrAdd(Map, _ => new List<SpriteObstacle>());
+
+        lock (list)
         {
-            if (IsAdded == true || IsRenderable == false)
-                return;
-            else if (SpritesToRender.Contains(this))
+            if (list.Contains(this))
                 return;
 
-            AddObstacle(this);
+            list.Add(this);
+            list.Sort((a, b) => b.Distance.CompareTo(a.Distance));
+            IsAdded = true;
         }
     }
-    public static void AddObstacle(SpriteObstacle obj)
+    public static void AddObstacleToRenderList(SpriteObstacle obj)
     {
-        lock (_lockAdd)
-        {
-            SpritesToRender.Add(obj);
-            SpritesToRender = SpritesToRender
-            .OrderByDescending(sprite => sprite.Distance)
-            .ToList();
+        if (obj.Map is null || obj.IsAdded || !obj.IsRenderable)
+            return;
 
+        var list = SpritesToRender.GetOrAdd(obj.Map, _ => new List<SpriteObstacle>());
+
+        lock (list)
+        {
+            if (list.Contains(obj))
+                return;
+
+            list.Add(obj);
+            list.Sort((a, b) => b.Distance.CompareTo(a.Distance));
             obj.IsAdded = true;
         }
     }
+
     public static void RemoveObstacle(SpriteObstacle obj)
     {
-        lock (_lock)
+        if (obj.Map is null)
+            return;
+
+        if (SpritesToRender.TryGetValue(obj.Map, out var list))
         {
-            SpritesToRender.Remove(obj);
+            lock (list)
+            {
+                list.Remove(obj);
+                if (list.Count == 0)
+                    SpritesToRender.TryRemove(obj.Map, out _);
+            }
         }
     }
 
     public static void RenderSelfDrawableList(Result result, IUnit unit)
     {
-        if(SpritesToRender.Count == 0) 
-            return;
-
-        foreach (var sprite in SpritesToRender)
+        foreach(var sprites in SpritesToRender)
         {
-            if (sprite == unit)
-            {
-                if(sprite.Animation.IsAnimation)
-                    AnimationManager.DefiningDesiredSprite(sprite.Animation, 0);
-
+            var map = sprites.Key;
+            if (sprites.Key.ActiveAnchors.Count == 0 && unit.Map != map)
                 continue;
+
+            List<SpriteObstacle> spritesCopy;
+            lock (_lock)
+            {
+                spritesCopy = sprites.Value;
             }
 
-            sprite.Render(result, unit);
+            for (int i = spritesCopy.Count - 1; i >= 0; i--)
+            {
+                var sprite = spritesCopy[i];
+                bool skipRendering = sprite == unit || (unit.Map != map && map.ActiveAnchors.Count > 0);
+
+                if (skipRendering)
+                {
+                    sprite.Animation.Update(0);
+                    continue;
+                }
+
+                sprite.Render(result, unit);
+            }
         }
     }
     #endregion
@@ -211,7 +295,7 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     #region ITextureProvider
     public override TextureWrapper? GetUsedTexture(IUnit? observer = null)
     {
-       return Animation.GetFrame(0);
+       return Animation.CurrentFrame?.GetElement(0);
     }
     #endregion
 
@@ -221,33 +305,37 @@ public class SpriteObstacle : Obstacle, ISelfRenderable
     }
     public override IObject GetDeepCopy()
     {
-        return new SpriteObstacle(this, false);
+        return new SpriteObstacle(this, new ImageLoadOptions() { CreateNew = true });
     }
     public virtual double GetDisplayAngle(double spriteAngle)
     {
         return spriteAngle;
     }
-    public override void Render(Result result, IUnit unit)
+
+    private bool IsVisibleToUnit(IUnit unit, out double spriteAngle)
     {
         Vector2f pos = new Vector2f((float)X.Axis, (float)Y.Axis);
-        double spriteAngle = MathUtils.CalculateAngleToTarget(pos, unit.OriginPosition);
+        spriteAngle = MathUtils.CalculateAngleToTarget(pos, unit.OriginPosition);
         Distance = MathUtils.CalculateDistance(pos, unit.OriginPosition);
 
         if (Distance > unit.MaxRenderTile)
-            return;
+            return false;
 
         AngleToObserver = MathUtils.NormalizeAngleDifference(unit.Angle, spriteAngle);
-        if (Math.Abs(AngleToObserver) <= unit.Fov)
+        return Math.Abs(AngleToObserver) <= unit.Fov;
+    }
+    public override void Render(Result result, IUnit unit)
+    {
+        if (!IsVisibleToUnit(unit, out double spriteAngle))
         {
-            AnimationManager.DefiningDesiredSprite(Animation, GetDisplayAngle(spriteAngle));
-            Distance *= Math.Cos(AngleToObserver);
-            Distance = Math.Max(Distance, 0.1);
+            Animation.Update(0);
+            return;
+        }
 
-            float height = (float)(Screen.ScreenHeight / Distance) * Scale;
+        Distance = Math.Max(Distance, PersonalMinDistance ?? GlobalMinDistance);
+        Animation.Update((float)GetDisplayAngle(spriteAngle));
+        float height = (float)(Screen.ScreenHeight / ViewDistance) * Scale;
 
-            RenderOperation.DrawSprite(this, unit, height);
-        }       
-        else if (Animation.IsAnimation)
-            AnimationManager.DefiningDesiredSprite(Animation, 0);
+        RenderOperation.DrawSprite(this, unit, height);
     }
 }

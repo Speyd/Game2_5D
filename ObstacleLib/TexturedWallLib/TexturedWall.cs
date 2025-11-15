@@ -13,6 +13,9 @@ using RayTracingLib.Detection;
 using TextureLib.Textures.Pair;
 using EffectLib.EffectCore;
 using TextureLib.Loader.ImageProcessing;
+using TextureLib.DataCache;
+using TextureLib.Loader;
+using TextureLib;
 
 namespace ObstacleLib.TexturedWallLib;
 public class TexturedWall : Obstacle, IWall, IDrawable
@@ -39,117 +42,61 @@ public class TexturedWall : Obstacle, IWall, IDrawable
         Z.Axis = (LvlWall - 1) * Screen.Setting.HalfTile;
     }
 
+    public TexturedWall(MultiSideTexture multiSide, TextureWrapper? miniMapTexture = null, int lvl = IWall.minLvlWall)
+            : base(GetDefaultWallColor(), false)
+    {
+        MultiSide = multiSide;
+        TextureInMiniMap = miniMapTexture ?? new TextureWrapper(GetFirstTextureOrThrow(), true);
+        LvlWall = lvl;
+        InitializeWall();
+    }
+
     public TexturedWall()
-       : base(GetDefaultWallColor(), false)
-    {
-        MultiSide = new MultiSideTexture();
-        InitializeWall();
-    }
-    public TexturedWall(ImageLoadOptions? options = null, bool createNewTexture = true, params string[] texturePaths)
-       : base(GetDefaultWallColor(), false)
-    {
-        if (texturePaths.Length == 0)
-            throw new ArgumentException("At least one texture path must be provided.");
+        : this(new MultiSideTexture()) { }
 
-        MultiSide = new MultiSideTexture(options, createNewTexture, texturePaths);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+    public TexturedWall(ImageLoadOptions? options = null, params string[] texturePaths)
+        : this(new MultiSideTexture(options ?? new ImageLoadOptions() { CreateNew = true }, texturePaths)) { }
 
-        InitializeWall();
-    }
-    public TexturedWall(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
-        : base(GetDefaultWallColor(), false)
-    {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
+    public TexturedWall(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null)
+        : this(new MultiSideTexture(textures, options ?? new ImageLoadOptions() { CreateNew = true })) { }
 
-        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+    public TexturedWall(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null)
+        : this(new MultiSideTexture(textures, options ?? new ImageLoadOptions() { CreateNew = true })) { }
 
-        InitializeWall();
-    }
-    public TexturedWall(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
-        : base(GetDefaultWallColor(), false)
-    {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
+    public TexturedWall(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null)
+        : this(new MultiSideTexture(textures, options ?? new ImageLoadOptions() { CreateNew = true })) { }
 
-        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
-
-        InitializeWall();
-    }
-    public TexturedWall(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
-        : base(GetDefaultWallColor(), false)
-    {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
-
-        MultiSide = new MultiSideTexture(textures, options, createNewTexture);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
-
-        InitializeWall();
-    }
-    public TexturedWall(TexturedWall texturedWall, ImageLoadOptions? options = null, bool createNewTexture = true)
-        : base(texturedWall)
-    {
-        MultiSide = new MultiSideTexture(texturedWall.MultiSide, options, createNewTexture);
-        CurrentRenderTexture = null;
-
-        LvlWall = texturedWall.LvlWall;
-    }
-    
+    public TexturedWall(TexturedWall texturedWall, ImageLoadOptions? options = null)
+        : this(new MultiSideTexture(texturedWall.MultiSide, options ?? new ImageLoadOptions() { CreateNew = true }),
+               null, texturedWall.LvlWall)
+    { }
 
     public TexturedWall(ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null, params string[] texturePaths)
-       : base(GetDefaultWallColor(), false)
-    {
-        if (texturePaths.Length == 0)
-            throw new ArgumentException("At least one texture path must be provided.");
+        : this(new MultiSideTexture(sharedSides ?? new(), options ?? new ImageLoadOptions() { CreateNew = true }, texturePaths)) { }
 
-        MultiSide = new MultiSideTexture(sharedSides ?? new(), options, texturePaths);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
-
-        InitializeWall();
-    }
     public TexturedWall(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
-        : base(GetDefaultWallColor(), false)
-    {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
+        : this(new MultiSideTexture(textures, sharedSides ?? new(), options ?? new ImageLoadOptions() { CreateNew = true })) { }
 
-        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
-
-        InitializeWall();
-    }
     public TexturedWall(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
-        : base(GetDefaultWallColor(), false)
-    {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
+        : this(new MultiSideTexture(textures, sharedSides ?? new(), options ?? new ImageLoadOptions() { CreateNew = true })) { }
 
-        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
-
-        InitializeWall();
-    }
     public TexturedWall(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
-        : base(GetDefaultWallColor(), false)
+        : this(new MultiSideTexture(textures, sharedSides ?? new(), options ?? new ImageLoadOptions() { CreateNew = true })) { }
+
+    public TexturedWall(TexturedWall texturedWall, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
+       : base(texturedWall)
     {
-        if (textures == null || textures.Count == 0)
-            throw new ArgumentException("Texture list cannot be empty.");
+        options ??= new ImageLoadOptions() { CreateNew = true };
 
-        MultiSide = new MultiSideTexture(textures, sharedSides ?? new(), options);
-        TextureInMiniMap = new TextureWrapper(GetFirstTextureOrThrow(), true);
+        MultiSide = options is not null && options.CreateNew ?
+            new MultiSideTexture(texturedWall.MultiSide, sharedSides ?? new(), options):
+            texturedWall.MultiSide;
 
-        InitializeWall();
-    }
-    public TexturedWall(TexturedWall texturedWall, bool isPassability = false, ImageLoadOptions? options = null, HashSet<ObjectSide>? sharedSides = null)
-        : base(texturedWall)
-    {
-        MultiSide = new MultiSideTexture(texturedWall.MultiSide, sharedSides ?? new(), options);
-        CurrentRenderTexture = null;
+        TextureInMiniMap = texturedWall.TextureInMiniMap?.PathTexture is not null? 
+            new(texturedWall.TextureInMiniMap.PathTexture, true):
+            TextureWrapper.Placeholder;
 
-        LvlWall = texturedWall.LvlWall;
+        LvlWall = options is not null && options.CreateNew ? IWall.minLvlWall: texturedWall.LvlWall;
     }
     #endregion
 
@@ -337,11 +284,11 @@ public class TexturedWall : Obstacle, IWall, IDrawable
 
     public override IObject GetCopy()
     {
-        return new TexturedWall(this, true);
+        return new TexturedWall(this, new ImageLoadOptions() { CreateNew = false });
     }
     public override IObject GetDeepCopy()
     {
-        return new TexturedWall(this, false);
+        return new TexturedWall(this, new ImageLoadOptions() { CreateNew = true });
     }
 
     public override void Render(Result result, IUnit unit)

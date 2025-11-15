@@ -67,7 +67,7 @@ public abstract class StageSurface : IEffectUser
                 throw new FileNotFoundException($"Texture file not found: {value}");
 
             _texturePath = value;
-            _ = SetTextureAsync(ImageLoader.LoadAsync(LoadOptions, true, value));
+            _ = SetTextureAsync(ImageLoader.LoadAsync(LoadOptions, value));
         }
     }
 

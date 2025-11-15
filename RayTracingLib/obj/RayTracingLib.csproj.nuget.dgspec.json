@@ -5,12 +5,12 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj": {
-      "version": "2.2.9",
+      "version": "2.5.7",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
         "projectName": "EnginePseudo3D.RayTracingLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\RayTracingLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\RayTracingLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[2.3.0, )"
+              "version": "[2.6.4, )"
             }
           },
           "imports": [

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SFML.System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,18 @@ public interface IMovable
     /// <summary>
     /// Current movement speed of the entity (units per second).
     /// </summary>
-    public float MoveSpeed { get; set; }
+    float MoveSpeed { get; set; }
 
     /// <summary>
     /// Minimum allowed distance between the entity and nearby obstacles (collision padding).
     /// </summary>
-    public float MinDistanceFromWall { get; set; }
+    float MinDistanceFromWall { get; set; }
+
+    Vector2f MoveDirection { get; set; }
 
     /// <summary>
     /// Thread-safe collection of object to ignore during processing.
     /// </summary>
     ConcurrentDictionary<IObject, byte> IgnoreCollisionObjects { get; set; }
+
 }

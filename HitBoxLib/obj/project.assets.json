@@ -722,7 +722,7 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.2.9": {
+      "EnginePseudo3D.DataPipes/1.3.0": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.1",
@@ -735,6 +735,22 @@
         },
         "runtime": {
           "lib/net8.0/DataPipes.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "EnginePseudo3D.FpsLib/1.6.0": {
+        "type": "package",
+        "dependencies": {
+          "SFML.System": "2.6.1"
+        },
+        "compile": {
+          "lib/net8.0/FpsLib.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FpsLib.dll": {
             "related": ".xml"
           }
         }
@@ -1042,19 +1058,34 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.2.9": {
-      "sha512": "R7j87oVKZh8Hwe1CeZYGHjLmhr9TUam/T3wPRGnxHCxyTrptGpjYoaPIrpS9aLWZGnIvrDSPSabql38/B+Oj1A==",
+    "EnginePseudo3D.DataPipes/1.3.0": {
+      "sha512": "+DXk9p6SpaUofXavqBjSihAuE07jeT2sCDR/DPkTpp0H2mLOFB6n2pXuVmB7nfZwhB9GfyCRoM6AU0dIh51cwg==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.2.9",
+      "path": "enginepseudo3d.datapipes/1.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.2.9.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.3.0.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
         "lib/net8.0/DataPipes.dll",
         "lib/net8.0/DataPipes.xml"
+      ]
+    },
+    "EnginePseudo3D.FpsLib/1.6.0": {
+      "sha512": "XHu2m+J1JZCuJzh/hB6NuBt3LjZhcGWF0cHBgawfrlY0C4mmyhRXzJu0lzkphEGAcmsWTu035zwYrv1JRRh9Xw==",
+      "type": "package",
+      "path": "enginepseudo3d.fpslib/1.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README_FpsLib.md",
+        "enginepseudo3d.fpslib.1.6.0.nupkg.sha512",
+        "enginepseudo3d.fpslib.nuspec",
+        "iconNuGet.png",
+        "lib/net8.0/FpsLib.dll",
+        "lib/net8.0/FpsLib.xml"
       ]
     },
     "EnginePseudo3D.ScreenLib/1.0.6": {
@@ -1161,21 +1192,22 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.DataPipes >= 1.2.9",
+      "EnginePseudo3D.DataPipes >= 1.3.0",
+      "EnginePseudo3D.FpsLib >= 1.6.0",
       "EnginePseudo3D.ScreenLib >= 1.0.6"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "D:\\.nuget\\packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.6.6",
+    "version": "1.7.2",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj",
       "projectName": "EnginePseudo3D.HitBoxLib",
       "projectPath": "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\HitBoxLib.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "packagesPath": "D:\\.nuget\\packages",
       "outputPath": "D:\\C++ проекты\\Game2_5D\\HitBoxLib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
@@ -1217,7 +1249,11 @@
         "dependencies": {
           "EnginePseudo3D.DataPipes": {
             "target": "Package",
-            "version": "[1.2.9, )"
+            "version": "[1.3.0, )"
+          },
+          "EnginePseudo3D.FpsLib": {
+            "target": "Package",
+            "version": "[1.6.0, )"
           },
           "EnginePseudo3D.ScreenLib": {
             "target": "Package",

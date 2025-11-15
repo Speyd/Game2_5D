@@ -3,6 +3,7 @@ using DataPipes.Dictionary;
 using TextureLib.Textures.Pair;
 using NGenerics.Extensions;
 using TextureLib.Loader.ImageProcessing;
+using TextureLib.Loader;
 
 namespace TextureLib.Textures;
 /// <summary>An object that stores a dictionary of textures with unique sides</summary>
@@ -62,16 +63,15 @@ public class MultiSideTexture
     /// </summary>
     /// <param name="multiTextured">The source object to copy textures from.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">If true, creates new RenderTextures; otherwise shares where possible.</param>
-    public MultiSideTexture(MultiSideTexture multiTextured, ImageLoadOptions? options = null, bool createNewTexture = true)
-         : this(multiTextured.UniqueTexture, options, createNewTexture)
+    public MultiSideTexture(MultiSideTexture multiTextured, ImageLoadOptions? options = null)
+         : this(multiTextured.UniqueTexture, options)
     {}
  
     /// <summary>
     /// Initializes a new instance of the MultiTexturedObject class with an empty texture mapping.
     /// </summary>
-    public MultiSideTexture(ImageLoadOptions? options, bool createNewTexture, params string[] texturePaths)
-        :this(Enumerable.ToList(texturePaths), options, createNewTexture)
+    public MultiSideTexture(ImageLoadOptions? options, params string[] texturePaths)
+        :this(Enumerable.ToList(texturePaths), options)
     {}
 
     /// <summary>
@@ -79,10 +79,9 @@ public class MultiSideTexture
     /// </summary>
     /// <param name="path">The path to the texture used for all sides.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, creates separate RenderTextures for each side; otherwise, shares a single RenderTexture between all sides.
     /// </param>
-    public MultiSideTexture(string path, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(string path, ImageLoadOptions? options = null)
         : this(options)
     {
         var textures = new List<(ObjectSide, string)>
@@ -92,7 +91,7 @@ public class MultiSideTexture
             (ObjectSide.Bottom, path),
             (ObjectSide.Top, path),
         };
-        SetUniqueTexture(textures, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(textures, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -101,10 +100,9 @@ public class MultiSideTexture
     /// <param name="leftRight">Texture path for Left and Right sides.</param>
     /// <param name="bottomTop">Texture path for Bottom and Top sides.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, each side will have its own RenderTexture; otherwise, Left/Right share one and Bottom/Top share another.
     /// </param>
-    public MultiSideTexture(string leftRight, string bottomTop, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(string leftRight, string bottomTop, ImageLoadOptions? options = null)
         : this(options)
     {
         var textures = new List<(ObjectSide, string)>
@@ -115,7 +113,7 @@ public class MultiSideTexture
             (ObjectSide.Top, bottomTop),
         };
 
-        SetUniqueTexture(textures, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(textures, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -126,10 +124,9 @@ public class MultiSideTexture
     /// <param name="bottom">Texture path for the Bottom side.</param>
     /// <param name="top">Texture path for the Top side.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, creates separate RenderTextures for each side; otherwise, attempts to share based on path equality.
     /// </param>
-    public MultiSideTexture(string left, string right, string bottom, string top, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(string left, string right, string bottom, string top, ImageLoadOptions? options = null)
         : this(options)
     {
         var textures = new List<(ObjectSide, string)>
@@ -140,7 +137,7 @@ public class MultiSideTexture
             (ObjectSide.Top, top),
         };
 
-        SetUniqueTexture(textures, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(textures, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -149,10 +146,9 @@ public class MultiSideTexture
     /// </summary>
     /// <param name="paths">List of (texture path) tuples.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, creates separate RenderTextures for each side; otherwise, attempts to share based on path equality.
     /// </param>
-    public MultiSideTexture(List<string> paths, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(List<string> paths, ImageLoadOptions? options = null)
         : this(options)
     {
         var textures = new List<(ObjectSide, string)>();
@@ -187,7 +183,7 @@ public class MultiSideTexture
         }
 
 
-        SetUniqueTexture(textures, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(textures, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -196,13 +192,12 @@ public class MultiSideTexture
     /// </summary>
     /// <param name="textures">List of (ObjectSide, texture path) tuples.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    /// <param name="createNewTexture">
     /// If true, creates separate RenderTextures for each side; otherwise, attempts to share based on path equality.
     /// </param>
-    public MultiSideTexture(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(List<(ObjectSide, string)> textures, ImageLoadOptions? options = null)
         : this(options)
     {
-        SetUniqueTexture(textures, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(textures, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -215,7 +210,7 @@ public class MultiSideTexture
     /// If true, creates new unique textures for each side; 
     /// if false, shares textures across specified sides to optimize resource usage.
     /// </param>
-    public MultiSideTexture(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(List<(ObjectSide, TextureWrapper)> textures, ImageLoadOptions? options = null)
         : this(options)
     {
 
@@ -223,7 +218,7 @@ public class MultiSideTexture
             .Select(tex => (tex.Item1, tex.Item2.PathTexture))
             .ToList();
 
-        SetUniqueTexture(paths, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(paths, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -235,14 +230,14 @@ public class MultiSideTexture
     /// If true, creates new unique textures for each side; 
     /// if false, shares textures across specified sides to optimize resource usage.
     /// </param>
-    public MultiSideTexture(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(Dictionary<ObjectSide, string> textures, ImageLoadOptions? options = null)
        : this(options)
     {
         List<(ObjectSide, string)> paths = textures
             .Select(tex => (tex.Key, tex.Value))
             .ToList();
 
-        SetUniqueTexture(paths, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(paths, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -255,7 +250,7 @@ public class MultiSideTexture
     /// If true, creates new unique textures for each side; 
     /// if false, shares textures across specified sides to optimize resource usage.
     /// </param>
-    public MultiSideTexture(Dictionary<ObjectSide, TextureWrapper> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(Dictionary<ObjectSide, TextureWrapper> textures, ImageLoadOptions? options = null)
       : this(options)
     {
 
@@ -263,7 +258,7 @@ public class MultiSideTexture
             .Select(tex => (tex.Key, tex.Value.PathTexture))
             .ToList();
 
-        SetUniqueTexture(paths, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(paths, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -273,7 +268,7 @@ public class MultiSideTexture
     /// <param name="textures">Existing dictionary mapping sides to <see cref="TexturedPair"/> objects.</param>
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
     /// <param name="createNewTexture">Whether to create new RenderTextures or share them.</param>
-    public MultiSideTexture(UniqueDictionary<ObjectSide, TexturedPair> textures, ImageLoadOptions? options = null, bool createNewTexture = true)
+    public MultiSideTexture(UniqueDictionary<ObjectSide, TexturedPair> textures, ImageLoadOptions? options = null)
        : this(options)
     {
         List<(ObjectSide, string)> paths = new();
@@ -285,7 +280,7 @@ public class MultiSideTexture
                 paths.Add((key, path));
         }
 
-        SetUniqueTexture(paths, GetSharedTextureSide(createNewTexture));
+        SetUniqueTexture(paths, GetSharedTextureSide(LoadOptions.CreateNew));
     }
 
     /// <summary>
@@ -322,15 +317,6 @@ public class MultiSideTexture
     /// <param name="options">Optional parameters for advanced loading behavior.</param>
     public MultiSideTexture(MultiSideTexture multiTextured, HashSet<ObjectSide> sharedSides, ImageLoadOptions? options = null)
         : this(multiTextured.UniqueTexture, sharedSides, options)
-    { }
-
-    /// <summary>
-    /// Copies textures from another object, specifying which sides share RenderTextures.
-    /// </summary>
-    /// <param name="multiTextured">Source object to copy textures from.</param>
-    /// <param name="options">Optional parameters for advanced loading behavior.</param>
-    public MultiSideTexture(MultiSideTexture multiTextured, ImageLoadOptions? options = null)
-        : this(multiTextured.UniqueTexture, multiTextured.SharedSides, options)
     { }
 
     /// <summary>
@@ -465,19 +451,21 @@ public class MultiSideTexture
             {
                 if (!renderTextureCache.TryGetValue(path, out var sharedRt))
                 {
-                    var tp = new TexturedPair(path, LoadOptions);
+                    var tp = new TexturedPair(path, true, LoadOptions);
                     sharedRt = tp.Mod;
                     renderTextureCache[path] = sharedRt;
                     UniqueTexture.Insert(side, tp);
                 }
                 else
                 {
-                    UniqueTexture.Insert(side, new TexturedPair(path, sharedRt, LoadOptions, false));
+                    LoadOptions.CreateNew = false;
+                    UniqueTexture.Insert(side, new TexturedPair(path, sharedRt, false, LoadOptions));
                 }
             }
             else
             {
-                UniqueTexture.Insert(side, new TexturedPair(path, LoadOptions));
+                LoadOptions.CreateNew = true;
+                UniqueTexture.Insert(side, new TexturedPair(path, true, LoadOptions));
             }
         }
 

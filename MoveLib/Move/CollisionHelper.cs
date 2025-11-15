@@ -4,6 +4,7 @@ using HitBoxLib.HitBoxSegment;
 using HitBoxLib.PositionObject;
 using HitBoxLib.Segment.SignsTypeSide;
 using TextureLib.Textures.Pair;
+using MoveLib.Move.Result;
 
 
 namespace MoveLib.Move;
@@ -34,15 +35,15 @@ public static class CollisionHelper
     /// <summary>
     /// Returns whether two numeric intervals overlap.
     /// </summary>
-    private static bool IntervalsOverlap(double min1, double max1, double min2, double max2)
+    public static bool IntervalsOverlap(double min1, double max1, double min2, double max2)
     {
-        return max1 >= min2 && min1 <= max2;
+        return max1 > min2 && min1 < max2;
     }
 
     /// <summary>
     /// Gets the min and max bounds of a box along a specified coordinate plane.
     /// </summary>
-    private static (double Min, double Max) GetBounds(Box box, CoordinatePlane plane)
+    public static (double Min, double Max) GetBounds(Box box, CoordinatePlane plane)
     {
         double min = box[plane, SideSize.Smaller]?.Side ?? 0.0;
         double max = box[plane, SideSize.Larger]?.Side ?? 0.0;
@@ -63,29 +64,32 @@ public static class CollisionHelper
     /// <summary>
     /// Determines if the subject's hitbox collides with the target's box.
     /// </summary>
-    public static bool IsCollisionHitBox(IObject subject, IObject target, Box targetBox, bool ignorePassability = false)
+    public static (bool Result, CollisionAxis Axis) IsCollisionHitBox(IObject subject, Box subjectBox, IObject target, Box targetBox, bool ignorePassability = false)
     {
-        return TryGetCollision(subject, target, targetBox, ignorePassability, out _);
+        return TryGetCollision(subject, subjectBox, target, targetBox, ignorePassability, out _);
     }
 
     /// <summary>
     /// Returns the point of collision between two objects, or null if no collision occurred.
     /// </summary>
-    public static Vector3f? GetCollisionPoint(IObject subject, IObject target, Box targetBox, bool ignorePassability = false)
+    public static (Vector3f? Coordinate, CollisionAxis Axis) GetCollisionPoint(IObject subject, Box subjectBox, IObject target, Box targetBox, bool ignorePassability = false)
     {
-        return TryGetCollision(subject, target, targetBox, ignorePassability, out var data) ? data?.CollisionPoint : null;
+        var resultCollision = TryGetCollision(subject, subjectBox, target, targetBox, ignorePassability, out var data);
+        return resultCollision.Result ? (data?.CollisionPoint, resultCollision.Axis) : (null, resultCollision.Axis);
     }
+
 
     /// <summary>
     /// Checks for collision and returns the side on which the collision occurred.
     /// </summary>
-    public static (bool IsColliding, ObjectSide CollisionSide) CheckCollisionWithSide(IObject subject, IObject target, Box targetBox, bool ignorePassability = false)
+    public static (bool IsColliding, CollisionAxis Axis, ObjectSide CollisionSide) CheckCollisionWithSide(IObject subject, Box subjectBox, IObject target, Box targetBox, bool ignorePassability = false)
     {
-        if (!TryGetCollision(subject, target, targetBox, ignorePassability, out var data))
-            return (false, ObjectSide.Error);
+        var resultCollision = TryGetCollision(subject, subjectBox, target, targetBox, ignorePassability, out var data);
+        if (!resultCollision.Result)
+            return (false, resultCollision.Axis, ObjectSide.Error);
 
         if (data is null)
-            return (false, ObjectSide.Error);
+            return (false, resultCollision.Axis, ObjectSide.Error);
 
         double deltaX = data.Value.CenterA.X - data.Value.CenterB.X;
         double deltaY = data.Value.CenterA.Y - data.Value.CenterB.Y;
@@ -96,25 +100,25 @@ public static class CollisionHelper
             ? (deltaX > 0 ? ObjectSide.Left : ObjectSide.Right)
             : (deltaY > 0 ? ObjectSide.Top : ObjectSide.Bottom);
 
-        return (true, side);
+        return (true, resultCollision.Axis, side);
     }
 
     /// <summary>
     /// Checks if the subject will collide with the target at a new position.
     /// </summary>
-    public static bool IsCollidingAtPosition(IObject subject, IObject target, Box targetBox, double nextX, double nextY, bool ignorePassability = false)
+    public static (bool Result, CollisionAxis Axis) IsCollidingAtPosition(IObject subject, IObject target, Box targetBox, double nextX, double nextY, bool ignorePassability = false)
     {
-        return SimulatePosition(subject, nextX, nextY, () =>
-            IsCollisionHitBox(subject, target, targetBox, ignorePassability));
+        return SimulatePosition(subject, nextX, nextY, (Box subjectBox) =>
+            IsCollisionHitBox(subject, subjectBox, target, targetBox, ignorePassability));
     }
 
     /// <summary>
     /// Gets the collision point between subject and target if subject is moved to a new position.
     /// </summary>
-    public static Vector3f? GetCollisionPointAt(IObject subject, IObject target, Box targetBox, double nextX, double nextY, bool ignorePassability = false)
+    public static (Vector3f? Coordinate, CollisionAxis Axis) GetCollisionPointAt(IObject subject, IObject target, Box targetBox, double nextX, double nextY, bool ignorePassability = false)
     {
-        return SimulatePosition(subject, nextX, nextY, () =>
-            GetCollisionPoint(subject, target, targetBox, ignorePassability));
+        return SimulatePosition(subject, nextX, nextY, (Box subjectBox) =>
+            GetCollisionPoint(subject, subjectBox, target, targetBox, ignorePassability));
     }
 
     // ----------------- Private Helpers -----------------
@@ -122,18 +126,17 @@ public static class CollisionHelper
     /// <summary>
     /// Attempts to detect a collision between subject and target and provides detailed collision data if successful.
     /// </summary>
-    private static bool TryGetCollision(IObject subject, IObject target, Box targetBox, bool ignorePassability, out CollisionData? data)
+    private static (bool Result, CollisionAxis Axis) TryGetCollision(IObject subject, Box subjectBox, IObject target, Box targetBox, bool ignorePassability, out CollisionData? data)
     {
         data = null;
 
         if (subject?.HitBox == null || target?.HitBox == null)
-            return false;
+            return default;
 
-        var subjBox = subject.HitBox.MainHitBox;
 
-        var (subMinX, subMaxX) = GetBounds(subjBox, CoordinatePlane.X);
-        var (subMinY, subMaxY) = GetBounds(subjBox, CoordinatePlane.Y);
-        var (subMinZ, subMaxZ) = GetBounds(subjBox, CoordinatePlane.Z);
+        var (subMinX, subMaxX) = GetBounds(subjectBox, CoordinatePlane.X);
+        var (subMinY, subMaxY) = GetBounds(subjectBox, CoordinatePlane.Y);
+        var (subMinZ, subMaxZ) = GetBounds(subjectBox, CoordinatePlane.Z);
 
         var (tgtMinX, tgtMaxX) = GetBounds(targetBox, CoordinatePlane.X);
         var (tgtMinY, tgtMaxY) = GetBounds(targetBox, CoordinatePlane.Y);
@@ -145,7 +148,7 @@ public static class CollisionHelper
 
         bool colliding = overlapX && overlapY && overlapZ;
         if (!colliding || (!ignorePassability && target.IsPassability))
-            return false;
+            return (false, new (overlapX, overlapY, overlapZ));
 
         Vector3f minA = new((float)subMinX, (float)subMinY, (float)subMinZ);
         Vector3f maxA = new((float)subMaxX, (float)subMaxY, (float)subMaxZ);
@@ -161,37 +164,28 @@ public static class CollisionHelper
             HeightSum = (subMaxY - subMinY) + (tgtMaxY - tgtMinY)
         };
 
-        return true;
+        return (true, new(overlapX, overlapY, overlapZ));
     }
 
     /// <summary>
     /// Simulates the subject being at a new position, performs a collision check, and restores the original position.
     /// </summary>
-    private static T SimulatePosition<T>(IObject subject, double newX, double newY, Func<T> collisionCheck)
+    private static T SimulatePosition<T>(IObject subject, double newX, double newY, Func<Box, T> collisionCheck)
     {
-        double originalX = subject.X.Axis;
-        double originalY = subject.Y.Axis;
+        Box temp = new Box(subject.HitBox.MainHitBox);
+        CanMove(temp, newX, CoordinatePlane.X);
+        CanMove(temp, newY, CoordinatePlane.Y);
 
-        subject.X.Axis = newX;
-        subject.Y.Axis = newY;
-
-        T result = collisionCheck();
-
-        subject.X.Axis = originalX;
-        subject.Y.Axis = originalY;
+        T result = collisionCheck(temp);
 
         return result;
     }
 
-    /// <summary>
-    /// Holds data related to a collision between two objects.
-    /// </summary>
-    private struct CollisionData
+    private static void CanMove(Box box, double coord, CoordinatePlane coordinatePlane)
     {
-        public Vector3f? CollisionPoint;
-        public Vector3f CenterA;
-        public Vector3f CenterB;
-        public double WidthSum;
-        public double HeightSum;
+        foreach (HitBoxSide item in box[coordinatePlane])
+        {
+            item.SetSide(coord);
+        }
     }
 }

@@ -36,7 +36,7 @@ public interface IObserver
     /// Gets the direction of the observer, represented by a vector.
     /// <para>X = Cos(Angle), Y = Sin(Angle)</para>
     /// </summary>
-    Vector2f Direction { get; }
+    Vector2f LookDirection { get; }
 
     /// <summary>
     /// Gets the plane vector for the observer, used for calculating perpendicular direction to the observer's facing direction.

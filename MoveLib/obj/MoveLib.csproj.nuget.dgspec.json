@@ -5,12 +5,12 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj": {
-      "version": "2.1.6",
+      "version": "2.5.1",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj",
         "projectName": "EnginePseudo3D.MoveLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\MoveLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\MoveLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -56,7 +56,7 @@
             },
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[2.3.0, )"
+              "version": "[2.6.4, )"
             }
           },
           "imports": [

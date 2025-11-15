@@ -5,12 +5,12 @@
   },
   "projects": {
     "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj": {
-      "version": "2.1.8",
+      "version": "2.3.8",
       "restore": {
         "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj",
         "projectName": "EnginePseudo3D.MiniMapLib",
         "projectPath": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\MiniMapLib.csproj",
-        "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+        "packagesPath": "D:\\.nuget\\packages",
         "outputPath": "D:\\C++ проекты\\Game2_5D\\MiniMapLib\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
@@ -52,7 +52,7 @@
           "dependencies": {
             "EnginePseudo3D.ProtoRender": {
               "target": "Package",
-              "version": "[2.3.0, )"
+              "version": "[2.6.4, )"
             },
             "SFML.Net": {
               "target": "Package",

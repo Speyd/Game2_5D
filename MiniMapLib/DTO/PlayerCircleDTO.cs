@@ -38,6 +38,7 @@ public class PlayerCircleDTO : IDTO<PlayerCircleOutput>
     /// The radius of the player's circle.
     /// </summary>
     public int radiusCircle;
+
     /// <summary>
     /// Red channel value of the color.
     /// </summary>

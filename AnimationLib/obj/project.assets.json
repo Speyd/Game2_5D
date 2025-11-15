@@ -722,7 +722,7 @@
           }
         }
       },
-      "EnginePseudo3D.DataPipes/1.2.9": {
+      "EnginePseudo3D.DataPipes/1.3.0": {
         "type": "package",
         "dependencies": {
           "SFML.Graphics": "2.6.1",
@@ -756,12 +756,12 @@
           }
         }
       },
-      "EnginePseudo3D.TextureLib/1.6.2": {
+      "EnginePseudo3D.TextureLib/1.7.3": {
         "type": "package",
         "dependencies": {
-          "EnginePseudo3D.DataPipes": "1.2.9",
+          "EnginePseudo3D.DataPipes": "1.3.0",
           "EnginePseudo3D.ScreenLib": "1.0.6",
-          "Magick.NET-Q8-AnyCPU": "14.6.0"
+          "Magick.NET-Q8-AnyCPU": "14.9.1"
         },
         "compile": {
           "lib/net8.0/TextureLib.dll": {
@@ -774,10 +774,10 @@
           }
         }
       },
-      "Magick.NET-Q8-AnyCPU/14.6.0": {
+      "Magick.NET-Q8-AnyCPU/14.9.1": {
         "type": "package",
         "dependencies": {
-          "Magick.NET.Core": "14.6.0"
+          "Magick.NET.Core": "14.9.1"
         },
         "compile": {
           "lib/net8.0/Magick.NET-Q8-AnyCPU.dll": {
@@ -827,7 +827,7 @@
           }
         }
       },
-      "Magick.NET.Core/14.6.0": {
+      "Magick.NET.Core/14.9.1": {
         "type": "package",
         "compile": {
           "lib/net8.0/Magick.NET.Core.dll": {
@@ -1126,15 +1126,15 @@
         "sfml-icon.png"
       ]
     },
-    "EnginePseudo3D.DataPipes/1.2.9": {
-      "sha512": "R7j87oVKZh8Hwe1CeZYGHjLmhr9TUam/T3wPRGnxHCxyTrptGpjYoaPIrpS9aLWZGnIvrDSPSabql38/B+Oj1A==",
+    "EnginePseudo3D.DataPipes/1.3.0": {
+      "sha512": "+DXk9p6SpaUofXavqBjSihAuE07jeT2sCDR/DPkTpp0H2mLOFB6n2pXuVmB7nfZwhB9GfyCRoM6AU0dIh51cwg==",
       "type": "package",
-      "path": "enginepseudo3d.datapipes/1.2.9",
+      "path": "enginepseudo3d.datapipes/1.3.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_DataPipes.md",
-        "enginepseudo3d.datapipes.1.2.9.nupkg.sha512",
+        "enginepseudo3d.datapipes.1.3.0.nupkg.sha512",
         "enginepseudo3d.datapipes.nuspec",
         "iconNuGet.png",
         "lib/net8.0/DataPipes.dll",
@@ -1156,33 +1156,30 @@
         "lib/net8.0/ScreenLib.xml"
       ]
     },
-    "EnginePseudo3D.TextureLib/1.6.2": {
-      "sha512": "OOelHmHuJdGh3IitmuvK01DZgKfu2uTUkTcI5zuxbdWNeC2D7wRSiwBPj5Lpp0p69kH6l8Uz3jNo8KVGEwOYQg==",
+    "EnginePseudo3D.TextureLib/1.7.3": {
+      "sha512": "KnHBSqvces78lp+5WrHkARcehkQYmRWKysZAmSIfgfvJd6QjyMFydsYurNucSMV2ZPxOJNSzKx76kbBqd0FeYQ==",
       "type": "package",
-      "path": "enginepseudo3d.texturelib/1.6.2",
+      "path": "enginepseudo3d.texturelib/1.7.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README_TextureLib.md",
-        "enginepseudo3d.texturelib.1.6.2.nupkg.sha512",
+        "enginepseudo3d.texturelib.1.7.3.nupkg.sha512",
         "enginepseudo3d.texturelib.nuspec",
         "iconNuGet.png",
         "lib/net8.0/TextureLib.dll",
         "lib/net8.0/TextureLib.xml"
       ]
     },
-    "Magick.NET-Q8-AnyCPU/14.6.0": {
-      "sha512": "B0/qIiJ3Y+saxSLVOcPCBQe/5UZYU0FedxXu+ZvSL7DXOhEzbcOgnaTtUhpUZhMWSOB/zrkduKFHnCj+7W0GOg==",
+    "Magick.NET-Q8-AnyCPU/14.9.1": {
+      "sha512": "L4Z2j21Z2ZBuaboxvf0QTUJdZ0rRz98UT52ijMywTnJGmyYjaRWx+g047qONiTbWhI5cFrmiDryINuZZP7o7FA==",
       "type": "package",
-      "path": "magick.net-q8-anycpu/14.6.0",
+      "path": "magick.net-q8-anycpu/14.9.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Magick.NET.icon.png",
-        "Notice.linux-musl.txt",
-        "Notice.linux.txt",
-        "Notice.osx.txt",
-        "Notice.win.txt",
+        "Notice.txt",
         "build/netstandard20/Magick.NET-Q8-AnyCPU.targets",
         "buildTransitive/netstandard20/Magick.NET-Q8-AnyCPU.targets",
         "docs/Readme.md",
@@ -1190,7 +1187,7 @@
         "lib/net8.0/Magick.NET-Q8-AnyCPU.xml",
         "lib/netstandard20/Magick.NET-Q8-AnyCPU.dll",
         "lib/netstandard20/Magick.NET-Q8-AnyCPU.xml",
-        "magick.net-q8-anycpu.14.6.0.nupkg.sha512",
+        "magick.net-q8-anycpu.14.9.1.nupkg.sha512",
         "magick.net-q8-anycpu.nuspec",
         "runtimes/linux-arm64/native/Magick.Native-Q8-arm64.dll.so",
         "runtimes/linux-musl-x64/native/Magick.Native-Q8-x64.dll.so",
@@ -1202,10 +1199,10 @@
         "runtimes/win-x86/native/Magick.Native-Q8-x86.dll"
       ]
     },
-    "Magick.NET.Core/14.6.0": {
-      "sha512": "hyXMoLiq6iHooL54iTYzKtiWOAQOiwrwVMeoglGifwYAduAzVfeG+/BxgIz1SaxfczBfQFlcWKTrRU0RNBucUw==",
+    "Magick.NET.Core/14.9.1": {
+      "sha512": "kj3zurCDo9GvcDLbps+enS9Mjm2zltsevicZWxPDcfw5y6LnbGiOG2UpAkB//938zDhiUsubMPs6ZhJd+bRCzQ==",
       "type": "package",
-      "path": "magick.net.core/14.6.0",
+      "path": "magick.net.core/14.9.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -1216,7 +1213,7 @@
         "lib/net8.0/Magick.NET.Core.xml",
         "lib/netstandard20/Magick.NET.Core.dll",
         "lib/netstandard20/Magick.NET.Core.xml",
-        "magick.net.core.14.6.0.nupkg.sha512",
+        "magick.net.core.14.9.1.nupkg.sha512",
         "magick.net.core.nuspec"
       ]
     },
@@ -1309,20 +1306,20 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "EnginePseudo3D.TextureLib >= 1.6.2"
+      "EnginePseudo3D.TextureLib >= 1.7.3"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Admin\\.nuget\\packages\\": {},
+    "D:\\.nuget\\packages": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.6.5",
+    "version": "2.0.5",
     "restore": {
       "projectUniqueName": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
       "projectName": "EnginePseudo3D.AnimationLib",
       "projectPath": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\AnimationLib.csproj",
-      "packagesPath": "C:\\Users\\Admin\\.nuget\\packages\\",
+      "packagesPath": "D:\\.nuget\\packages",
       "outputPath": "D:\\C++ проекты\\Game2_5D\\AnimationLib\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
@@ -1364,7 +1361,7 @@
         "dependencies": {
           "EnginePseudo3D.TextureLib": {
             "target": "Package",
-            "version": "[1.6.2, )"
+            "version": "[1.7.3, )"
           }
         },
         "imports": [

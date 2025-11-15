@@ -27,6 +27,18 @@ public interface IMap
     ConcurrentDictionary<(int, int), ConcurrentDictionary<IObject, byte>> Obstacles { get; init; }
 
     /// <summary>
+    /// Stores the set of currently active world anchors mapped to their associated objects.
+    /// The <see cref="IObject"/> key represents the anchored entity, while the <see cref="byte"/> value 
+    /// is a placeholder payload (typically unused or reserved for flags).
+    /// </summary>
+    /// <remarks>
+    /// This collection is thread-safe and supports concurrent access.
+    /// An object present in this dictionary is considered to act as a world anchor,
+    /// meaning its associated world must remain active as long as the anchor exists.
+    /// </remarks>
+    ConcurrentDictionary<IObject, byte> ActiveAnchors { get; init; }
+
+    /// <summary>
     /// Adds an obstacle to the map at the specified cell coordinates.
     /// </summary>
     /// <param name="x">The X-coordinate of the cell.</param>

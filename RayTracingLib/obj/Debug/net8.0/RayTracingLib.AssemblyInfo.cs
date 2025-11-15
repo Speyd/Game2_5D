@@ -16,11 +16,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for detecting when a ray hits an object and determining the coo" +
     "rdinates of the hit on a texture.")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("2.2.9.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.2.9+0ee7ab0e09db4a83741f7776262310ca55d15787")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("2.5.7.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("2.5.7+bbff9db10ae6abf9f249ff5f6c10038ec745f003")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RayTracingLib")]
-[assembly: System.Reflection.AssemblyVersionAttribute("2.2.9.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("2.5.7.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/RayTracingLib")]
 
 // Создано классом WriteCodeFragment MSBuild.

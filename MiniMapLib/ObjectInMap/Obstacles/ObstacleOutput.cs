@@ -36,7 +36,7 @@ public partial class ObstacleOutput
     /// <summary>
     /// Settings of the map, such as tile sizes and other parameters.
     /// </summary>
-    public SettingMap.Setting Setting { get; init; }
+    public Setting.SettingWindow Setting { get; init; }
     /// <summary>
     /// Player's coordinates converted to minimap coordinates.
     /// </summary>
@@ -84,7 +84,7 @@ public partial class ObstacleOutput
     /// </summary>
     /// <param name="setting">Map settings.</param>
     /// <param name="displayRender">Initial display render mode (default: UnitVisibilityArea).</param>
-    public ObstacleOutput(SettingMap.Setting setting, DisplayRenderMode displayRender = DisplayRenderMode.UnitVisibilityArea)
+    public ObstacleOutput(Setting.SettingWindow setting, DisplayRenderMode displayRender = DisplayRenderMode.UnitVisibilityArea)
     {
         Setting = setting;
 

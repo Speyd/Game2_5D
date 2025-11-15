@@ -15,11 +15,11 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Speyd")]
 [assembly: System.Reflection.AssemblyDescriptionAttribute("This is a library for adding effects to objects in the world.")]
-[assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.7.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.7+0ee7ab0e09db4a83741f7776262310ca55d15787")]
+[assembly: System.Reflection.AssemblyFileVersionAttribute("1.1.9.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.1.9+bbff9db10ae6abf9f249ff5f6c10038ec745f003")]
 [assembly: System.Reflection.AssemblyProductAttribute("EnginePseudo3D")]
 [assembly: System.Reflection.AssemblyTitleAttribute("EffectLib")]
-[assembly: System.Reflection.AssemblyVersionAttribute("1.1.7.0")]
+[assembly: System.Reflection.AssemblyVersionAttribute("1.1.9.0")]
 [assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/Speyd/Game2_5D/tree/Version_3_0/EffectLib")]
 
 // Создано классом WriteCodeFragment MSBuild.

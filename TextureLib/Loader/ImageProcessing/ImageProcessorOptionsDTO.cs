@@ -7,11 +7,11 @@ using TextureLib.Loader.LoaderMode;
 
 namespace TextureLib.Loader.ImageProcessing;
 /// <summary>
-/// Data Transfer Object (DTO) for <see cref="ImageLoadOptions"/>, 
+/// Data Transfer Object (DTO) for <see cref="ImageProcessorOptions"/>, 
 /// used to transfer image loading configuration data between layers.
 /// Implements the <see cref="IDTO{T}"/> interface for conversion to the domain model.
 /// </summary>
-public class ImageLoadOptionsDTO : IDTO<ImageLoadOptions>
+public class ImageProcessorOptionsDTO : IDTO<ImageProcessorOptions>
 {
     /// <summary>
     /// Gets the global or shared <see cref="DTOJsonOptionsRegistry"/> instance associated with the implementing type.
@@ -21,13 +21,13 @@ public class ImageLoadOptionsDTO : IDTO<ImageLoadOptions>
     public static DTOJsonOptionsRegistry DtoTypeRegistry { get; } = new();
 
     [JsonIgnore]
-    private ImageLoadOptions options;
+    private ImageProcessorOptions options;
 
     /// <summary>
     /// The base file name used when generating a unique file name for serialization (e.g., "object_", "dto_").
     /// </summary>
     [JsonIgnore]
-    public string BaseFileName { get; } = "imageLoadOptions_";
+    public string BaseFileName { get; } = "imageProcessorOptions_";
     /// <summary>
     /// The file extension to use when generating the file name (e.g., ".json").
     /// </summary>
@@ -73,9 +73,9 @@ public class ImageLoadOptionsDTO : IDTO<ImageLoadOptions>
     /// <summary>
     /// Parameterless constructor.
     /// </summary>
-    public ImageLoadOptionsDTO()
+    public ImageProcessorOptionsDTO()
     { }
-    public ImageLoadOptionsDTO(ImageLoadOptions options)
+    public ImageProcessorOptionsDTO(ImageProcessorOptions options)
     {
         this.options = options;
     }
@@ -113,9 +113,9 @@ public class ImageLoadOptionsDTO : IDTO<ImageLoadOptions>
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public ImageLoadOptions ToObject()
+    public ImageProcessorOptions ToObject()
     {
-        var options = new ImageLoadOptions();
+        var options = new ImageProcessorOptions();
         options.ColorChannelFilter = ColorChannelFilter;
         options.ColorReplaceMode = ColorReplaceMode;
         options.FrameLoadMode = FrameLoadMode;
@@ -128,7 +128,7 @@ public class ImageLoadOptionsDTO : IDTO<ImageLoadOptions>
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public void ToObject(ImageLoadOptions options)
+    public void ToObject(ImageProcessorOptions options)
     {
         options.ColorChannelFilter = ColorChannelFilter;
         options.ColorReplaceMode = ColorReplaceMode;

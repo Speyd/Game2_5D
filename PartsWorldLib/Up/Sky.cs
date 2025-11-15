@@ -32,7 +32,7 @@ public class Sky : IUpPart
             if (File.Exists(value))
             {
                 _texturePath = value;
-                _ = SetTextureAsync(ImageLoader.LoadAsync(LoadOptions, true, value));
+                _ = SetTextureAsync(ImageLoader.LoadAsync(LoadOptions, value));
             }
         }
     }

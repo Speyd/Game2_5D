@@ -40,6 +40,14 @@ public interface IObject : IRenderable, IMiniMapRenderable, IHitBoxProcessor, IM
     /// Gets the Z coordinate of the object (elevation or depth).
     /// </summary>
     public Coordinate Z { get; init; }
+
+    /// <summary>
+    /// Indicates whether the object is currently moving along any of its coordinates: X, Y, or Z.
+    /// This flag will be true if movement occurs in any direction, including horizontal and vertical (elevation/depth).
+    /// </summary>
+    public bool IsMoving { get; }
+
+
     /// <summary>
     /// Cell in map(X axis), use Tile
     /// </summary>

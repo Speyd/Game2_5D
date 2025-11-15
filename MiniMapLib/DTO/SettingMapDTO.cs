@@ -3,8 +3,8 @@ using System.Text.Json;
 using DataPipes.DTO;
 using DataPipes.DTO.Register;
 using MiniMapLib.ObjectInMap.Player;
-using MiniMapLib.SettingMap;
 using MiniMapLib.ObjectInMap.Positions;
+using MiniMapLib.Setting;
 
 
 namespace MiniMapLib.DTO;
@@ -12,7 +12,7 @@ namespace MiniMapLib.DTO;
 /// Data Transfer Object (DTO) for the <see cref="Setting"/> class.
 /// Used to serialize and deserialize minimap settings.
 /// </summary>
-public class SettingDTO : IDTO<Setting>
+public class SettingMapDTO : IDTO<SettingMap>
 {
     /// <summary>
     /// Gets the global or shared <see cref="DTOJsonOptionsRegistry"/> instance associated with the implementing type.
@@ -22,49 +22,60 @@ public class SettingDTO : IDTO<Setting>
     public static DTOJsonOptionsRegistry DtoTypeRegistry { get; } = new();
 
     [JsonIgnore]
-    private Setting setting;
+    private SettingMap setting;
 
     /// <summary>
     /// The base file name used when generating a unique file name for serialization (e.g., "object_", "dto_").
     /// </summary>
     [JsonIgnore]
-    public string BaseFileName { get; } = "minimapSetting_";
+    public string BaseFileName { get; } = "settingMap_";
     /// <summary>
     /// The file extension to use when generating the file name (e.g., ".json").
     /// </summary>
     [JsonIgnore]
     public string BaseExtension { get; } = ".json";
 
-    /// <summary>
-    /// Horizontal scaling factor of the map.
-    /// </summary>
-    public float mapScaleX;
 
     /// <summary>
-    /// Vertical scaling factor of the map.
+    /// Determines whether the minimap is rendered or hidden.
     /// </summary>
-    public float mapScaleY;
+    public bool IsRender;
 
     /// <summary>
-    /// Positions of key elements on the minimap.
+    /// Red channel value of the color.
     /// </summary>
-    public PositionsMiniMap positions;
+    public byte R;
+
+    /// <summary>
+    /// Green channel value of the color.
+    /// </summary>
+    public byte G;
+
+    /// <summary>
+    /// Blue channel value of the color.
+    /// </summary>
+    public byte B;
+
+    /// <summary>
+    /// Alpha channel value of the color.
+    /// </summary>
+    public byte A;
 
 
     /// <summary>
     /// Parameterless constructor required for deserialization and manual population of properties.
     /// </summary>
-    public SettingDTO() { }
+    public SettingMapDTO() { }
     /// <summary>
     /// Initializes the DTO using an existing <see cref="Setting"/> instance,
     /// preparing it for conversion to a serializable format.
     /// </summary>
     /// <param name="setting">The source <see cref="Setting"/> object.</param>
-    public SettingDTO(Setting setting)
+    public SettingMapDTO(SettingMap setting)
     {
         this.setting = setting;
     }
-
+    
 
     /// <summary>
     /// Converts the internal <see cref="PlayerCircleOutput"/> object to a DTO format
@@ -72,9 +83,12 @@ public class SettingDTO : IDTO<Setting>
     /// </summary>
     public void ToDTO()
     {
-        mapScaleX = setting.MapScaleX;
-        mapScaleY = setting.MapScaleY;
-        positions = setting.Positions;
+        IsRender = setting.IsRender;
+
+        R = setting.BackgroundColor.R;
+        G = setting.BackgroundColor.G;
+        B = setting.BackgroundColor.B;
+        A = setting.BackgroundColor.A;
     }
 
     /// <summary>
@@ -94,17 +108,16 @@ public class SettingDTO : IDTO<Setting>
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public Setting ToObject()
+    public SettingMap ToObject()
     {
-        throw new Exception($"This method has no implementation({typeof(SettingDTO)}).");
+        throw new Exception($"This method has no implementation({typeof(SettingMapDTO)}).");
     }
     /// <summary>
     /// Restores the original object from its DTO representation. Used after deserialization.
     /// </summary>
-    public void ToObject(Setting setting)
+    public void ToObject(SettingMap setting)
     {
-        setting.MapScaleX = mapScaleX;
-        setting.MapScaleY = mapScaleY;
-        setting.Positions = positions;
+        setting.IsRender = IsRender;
+        setting.BackgroundColor = new SFML.Graphics.Color(R, G, B, A);
     }
 }

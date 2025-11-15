@@ -45,7 +45,30 @@ public static class TextureDataCache
     /// <param name="path">The file path key for the texture.</param>
     /// <param name="texture">The <see cref="Texture"/> instance to cache.</param>
     public static void Load(string path, Texture texture) => _cache.Load(path, texture);
-    public static void Load(string path, IEnumerable<Texture> texture) => _cache.Load(path, texture);
+    /// <summary>
+    /// Loads and adds the specified <see cref="Texture"/> into the cache under the given path.
+    /// </summary>
+    /// <param name="path">The file path key for the texture.</param>
+    /// <param name="textures">The <see cref="Texture"/> instance to cache.</param>
+    public static void Load(string path, IEnumerable<Texture> textures) => _cache.Load(path, textures);
+
+    /// <summary>
+    /// Appends a single <see cref="Texture"/> to the cache entry associated with the specified path.
+    /// In contrast to <c>Load</c>, this method adds the item to the existing entry instead of replacing it.
+    /// Throws <see cref="FileNotFoundException"/> if the file or directory at the path does not exist.
+    /// </summary>
+    /// <param name="path">The file or directory path used as the cache key.</param>
+    /// <param name="texture">The <see cref="Texture"/> to append to the cache entry.</param>
+    public static void Append(string path, Texture texture) => _cache.Append(path, texture);
+
+    /// <summary>
+    /// Appends a collection of <see cref="Texture"/> objects to the cache entry associated with the specified path.
+    /// In contrast to <c>Load</c>, this method adds the items to the existing entry instead of replacing it.
+    /// Throws <see cref="FileNotFoundException"/> if the file or directory at the path does not exist.
+    /// </summary>
+    /// <param name="path">The file or directory path used as the cache key.</param>
+    /// <param name="textures">The collection of <see cref="Texture"/> objects to append to the cache entry.</param>
+    public static void Append(string path, IEnumerable<Texture> textures) => _cache.Append(path, textures);
 
 
     public static bool ContainsKey(string path) => _cache.ContainsKey(path);

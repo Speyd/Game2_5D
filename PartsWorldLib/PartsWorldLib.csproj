@@ -9,7 +9,7 @@
     <PackageId>EnginePseudo3D.PartsWorldLib</PackageId>
     <Title>EnginePseudo3D.PartsWorldLib</Title>
     <Product>EnginePseudo3D</Product>
-    <Version>1.9.9</Version>
+    <Version>2.1.6</Version>
     <Authors>Speyd</Authors>
     <Company>Speyd</Company>
     <Copyright>Speyd</Copyright>
@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="EnginePseudo3D.EffectLib" Version="1.1.7" />
-	<PackageReference Include="EnginePseudo3D.ProtoRender" Version="2.3.0" />
+	<PackageReference Include="EnginePseudo3D.EffectLib" Version="1.1.9" />
+	<PackageReference Include="EnginePseudo3D.ProtoRender" Version="2.6.4" />
   </ItemGroup>
 
 </Project>
